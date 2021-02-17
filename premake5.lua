@@ -13,7 +13,7 @@ project "imGui"
     kind "StaticLib"
     language "C++"
     targetdir "%{prj.location}/%{cfg.system}/%{cfg.buildcfg}"
-
+    dependson{"glfw"}
     files
     {
         "%{prj.location}/*.h",
@@ -57,7 +57,7 @@ project "Opengl1"
     kind "ConsoleApp"
     language "C++"
     targetdir "bin/%{cfg.system}/%{cfg.buildcfg}"
-
+    dependson{"imGui","glfw"}
     files
     {
         "%{prj.location}/Header Files/**.h",
