@@ -56,7 +56,8 @@ project "Opengl1"
     location"Opengl1/"
     kind "ConsoleApp"
     language "C++"
-    targetdir "bin/%{cfg.system}/%{cfg.buildcfg}"
+    targetdir "bin/"
+    objdir "bin/intermediate"
     dependson{"imGui","glfw"}
     files
     {

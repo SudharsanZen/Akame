@@ -26,8 +26,8 @@ GLuint bIndex[] = { 0,1,2,2,3,0};
 int main()
 {
 	
-	const GLchar* vertexShaderDir = "D:\\Programming Projects\\OpenGL\\Project1\\opengl1\\Shaders\\vertexShader.vert";
-	const GLchar* fragmentShaderDir = "D:\\Programming Projects\\OpenGL\\Project1\\opengl1\\Shaders\\fragmentShader.frag";
+	const GLchar* vertexShaderDir = "..\\shaders\\vertexShader.vert";
+	const GLchar* fragmentShaderDir = "..\\shaders\\fragmentShader.frag";
 	
 	Window window(800,600,"Main Window",NULL);
 	

@@ -41,15 +41,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\windows\Debug\</OutDir>
-    <IntDir>obj\Debug\</IntDir>
+    <OutDir>..\bin\</OutDir>
+    <IntDir>..\bin\intermediate\Debug\</IntDir>
     <TargetName>Opengl1</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\windows\Release\</OutDir>
-    <IntDir>obj\Release\</IntDir>
+    <OutDir>..\bin\</OutDir>
+    <IntDir>..\bin\intermediate\Release\</IntDir>
     <TargetName>Opengl1</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
