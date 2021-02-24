@@ -20,19 +20,34 @@ void Mesh::createMesh(GLfloat* vert, GLuint* index, size_t vertCount, size_t ind
 {
 
 	//generate all buffers required for rendering and storing the mesh on the GPU
+
+	//generate Vertex Buffer object
 	glGenBuffers(1,&VBO);
 	glBindBuffer(GL_ARRAY_BUFFER,VBO);
 	glBufferData(GL_ARRAY_BUFFER,vertCount*sizeof(index[0]),vert,GL_STATIC_DRAW);
 	
+	//generate Index Buffer Object
 	glGenBuffers(1,&IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER,indexCount*sizeof(index[0]),index,GL_STATIC_DRAW);
 
+	//generate Vertex Attribute Object
 	glGenVertexArrays(1,&VAO);
 	glBindVertexArray(VAO);
-	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, sizeof(vert[0]) * 3,static_cast<void*>(0));
+
+	//vertex coordinate
+	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, sizeof(vert[0]) * 8,(void*)(0));
 	glEnableVertexAttribArray(0);
 
+	//vertex color 
+	glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,sizeof(vert[0])*8,(void*)(3*sizeof(vert[0])));
+	glEnableVertexAttribArray(1);
+
+	//texture coordinate
+	glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,sizeof(vert[0])*8,(void*)(6*sizeof(vert[0])));
+	glEnableVertexAttribArray(2);
+
+	//unBinding all the buffers
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 	glBindVertexArray(0);

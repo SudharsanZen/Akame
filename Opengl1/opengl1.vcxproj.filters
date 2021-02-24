@@ -18,6 +18,11 @@
     <ClInclude Include="Header Files\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Texture.h" />
+    <ClInclude Include="Header Files\Quaternion.h" />
+    <ClInclude Include="Header Files\EngineMath.h" />
+    <ClInclude Include="Header Files\GlmMath.h" />
+    <ClInclude Include="Header Files\Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Mesh.cpp">
@@ -32,5 +37,9 @@
     <ClCompile Include="Source Files\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="vendor\stb_image.cpp" />
+    <ClCompile Include="Source Files\Texture.cpp" />
+    <ClCompile Include="Source Files\Math\Quaternion.cpp" />
+    <ClCompile Include="Source Files\Math\Transform.cpp" />
   </ItemGroup>
 </Project>

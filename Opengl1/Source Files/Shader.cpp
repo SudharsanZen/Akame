@@ -6,6 +6,7 @@
 Shader::Shader(std::string vertexShaderDir, std::string fragmentShaderDir)
 {
     //contructor
+    callAfterUseProgram = [](GLuint progID) {};
     vertDir = vertexShaderDir;
     fragDir = fragmentShaderDir;
     programID = 0;
@@ -20,8 +21,11 @@ Shader::~Shader()
 void Shader::useShaderProgram()
 {
     //use created program
-    if(programID)
+    if (programID)
+    {
         glUseProgram(programID);
+        callAfterUseProgram(programID);
+    }
 }
 
 

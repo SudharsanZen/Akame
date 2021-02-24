@@ -63,6 +63,7 @@ bool Window::initialize()
 		glfwTerminate();
 		return false;
 	}
+	
 
 	
 	bufferHeight = Height;

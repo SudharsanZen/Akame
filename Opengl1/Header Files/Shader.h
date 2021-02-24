@@ -1,5 +1,6 @@
 #pragma once
 #include<iostream>
+#include<functional>
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 class Shader
@@ -20,6 +21,10 @@ public:
 	Shader(std::string vertexShaderDir,std::string fragmentShaderDir);
 	~Shader();
 	void useShaderProgram();
+	GLuint getUniformLocation(std::string varName) { return glGetUniformLocation(programID, varName.c_str()); }
+	void setUniformInteger(std::string varName,GLint value) { glUniform1i(getUniformLocation(varName),value); };
+	void setUniformMat4fv(std::string varName,GLint count,GLfloat *valuePtr) { glUniformMatrix4fv(getUniformLocation(varName),count,GL_FALSE,valuePtr); };
+	std::function<void(GLuint)> callAfterUseProgram;
 
 
 
