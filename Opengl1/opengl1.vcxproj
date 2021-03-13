@@ -90,6 +90,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Header Files\Camera.h" />
+    <ClInclude Include="Header Files\Editor\EditorUI.h" />
+    <ClInclude Include="Header Files\Engine.h" />
     <ClInclude Include="Header Files\EngineMath.h" />
     <ClInclude Include="Header Files\GlmMath.h" />
     <ClInclude Include="Header Files\Mesh.h" />
@@ -100,6 +103,8 @@
     <ClInclude Include="Header Files\Transform.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source Files\Camera.cpp" />
+    <ClCompile Include="Source Files\Editor\EditorUI.cpp" />
     <ClCompile Include="Source Files\Math\Quaternion.cpp" />
     <ClCompile Include="Source Files\Mesh.cpp" />
     <ClCompile Include="Source Files\Shader.cpp" />

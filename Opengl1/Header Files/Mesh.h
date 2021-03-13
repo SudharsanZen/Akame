@@ -8,7 +8,7 @@ private:
 	//Buffer object and Atrribute object iDs
 	GLuint VAO, VBO, IBO;
 	//number of IBO indices
-	GLuint numOfIndices;
+	GLuint numOfIndices,numOfVertices;
 
 	void clearMesh();
 public:

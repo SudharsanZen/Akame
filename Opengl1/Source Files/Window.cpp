@@ -88,17 +88,7 @@ void Window::setBufferSizeCallBackFunction(GLFWframebuffersizefun function)
 		std::cerr <<"ERROR::initialize Window first!"<<std::endl;
 }
 
-bool Window::shouldWindowClose()
-{
-	//returns true if windows close event has occured
-	if (mainWindow)
-		return glfwWindowShouldClose(mainWindow);
-	else
-	{
-		std::cerr << "ERROR::initialize window first!"<<std::endl;
-		return true;
-	}
-}
+
 
 
 
