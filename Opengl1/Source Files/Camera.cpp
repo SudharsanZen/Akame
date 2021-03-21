@@ -23,11 +23,12 @@ void Camera::use()
 
 glm::mat4 Camera::getViewMatrix()
 {
-	updateCamDir();
+	/*updateCamDir();
 	static glm::vec3 up,right;
 	right = glm::normalize(glm::cross(camDir,glm::vec3(0,1,0)));
-	up = glm::normalize(glm::cross(right,camDir));
-	return glm::lookAt(transform.position,cameraTarget,worldUp);
+	up = glm::normalize(glm::cross(right,camDir));*/
+	//return glm::lookAt(transform.position,transform.position+(transform.forward()*10.0f),transform.up());
+	return lookAt(transform,transform.position);
 
 }
 
@@ -53,7 +54,7 @@ void Camera::setCameraRotation(glm::vec3 rot)
 	transform.rotation.setEulerAngle(rot.x,rot.y,rot.z);
 }
 
-void Camera::setCameraTargetPosition(GLfloat x, GLfloat y, GLfloat z)
+/*void Camera::setCameraTargetPosition(GLfloat x, GLfloat y, GLfloat z)
 {
 	cameraTarget = glm::vec3(x,y,z) ;
 }
@@ -62,4 +63,4 @@ void Camera::setCameraTargetPosition(GLfloat x, GLfloat y, GLfloat z)
 void Camera::setCameraTargetPosition(glm::vec3 pos)
 {
 	cameraTarget = pos;
-}
+}*/

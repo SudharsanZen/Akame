@@ -74,17 +74,9 @@ float boxvertices[] = {
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
 
-template <typename T>
-T clamp(T a,T min,T max)
-{
-	if (a < min)
-		a = min;
-	if (a > max)
-		a = max;
-	return a;
-}
 
-void camTrans(Camera& cam)
+
+void flyCam(Camera& cam)
 {
 
 	static double xPrev=0, yPrev=0;
@@ -93,36 +85,34 @@ void camTrans(Camera& cam)
 	
 	if (Input::getKeyDown(GLFW_KEY_W))
 	{
-		cam.setCameraPosition(cam.getCameraPosition() + cam.getLookDir() * 0.01f);
-		cam.setCameraTargetPosition(cam.getCameraTargetPosition() + cam.getLookDir() * 0.01f);
+		cam.setCameraPosition(cam.getCameraPosition() + cam.transform.forward() * 0.01f);
+
 	}
 	if (Input::getKeyDown(GLFW_KEY_S))
 	{
-		cam.setCameraPosition(cam.getCameraPosition() - cam.getLookDir() * 0.01f);
-		cam.setCameraTargetPosition(cam.getCameraTargetPosition() - cam.getLookDir() * 0.01f);
+		cam.setCameraPosition(cam.getCameraPosition() - cam.transform.forward() * 0.01f);
+		
 	}
 	if (Input::getKeyDown(GLFW_KEY_A))
 	{
-		cam.setCameraPosition(cam.getCameraPosition() - cam.lookDirRight() * 0.01f);
-		cam.setCameraTargetPosition(cam.getCameraTargetPosition() - cam.lookDirRight() * 0.01f);
+		cam.setCameraPosition(cam.getCameraPosition() - cam.transform.right() * 0.01f);
+		
 	}
 	if (Input::getKeyDown(GLFW_KEY_D))
 	{
-		cam.setCameraPosition(cam.getCameraPosition() + cam.lookDirRight() * 0.01f);
-		cam.setCameraTargetPosition(cam.getCameraTargetPosition() + cam.lookDirRight() * 0.01f);
+		cam.setCameraPosition(cam.getCameraPosition() + cam.transform.right() * 0.01f);
+
 	}
 	Input::getMouseXY(x,y);
-	//cam.transform.rotation.setEulerAngle(0, 20, 0);
 
-	//X=clamp(X,-90.0f,90.0f);
+	
+	
 	if (Input::getMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 	{
-		cam.transform.rotation.quaternion =glm::angleAxis((float)(x-xPrev)*0.01f,cam.lookDirUp()) ;
-		cam.transform.rotation.quaternion *=glm::angleAxis((float)(y-yPrev)*0.01f,cam.lookDirRight()) ;
-		glm::vec3 camPos = cam.getCameraPosition();
-		glm::vec3 tPos = cam.getCameraTargetPosition()-camPos;
-		tPos = cam.transform.rotation*tPos;
-		cam.setCameraTargetPosition(camPos+tPos);
+		X += -(y - yPrev)*0.5f;
+		Y += -(x - xPrev)*0.5f;
+		cam.transform.rotation=Quaternion::rotationAroundAxisVector(Y,worldUp);
+		cam.transform.rotation= Quaternion::rotationAroundAxisVector(X,cam.transform.right())* cam.transform.rotation.quaternion;
 	}
 	yPrev = y;
 	xPrev = x;
@@ -175,7 +165,7 @@ int main()
 	Transform transform1(-1,0,6);
 	Transform transform2(1,0,6);
 	Transform transform3(0,0,5);
-	cam.setCameraTargetPosition(0,0,5);
+	//cam.setCameraTargetPosition(0,0,5);
 
 	while (!window.shouldWindowClose())
 	{
@@ -194,7 +184,7 @@ int main()
 			glClearColor(1,1,1,1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			
-			camTrans(cam);
+			flyCam(cam);
 			shader.useShaderProgram();
 				shader.setUniformInteger("texture1",0);
 				shader.setUniformInteger("texture2",1);

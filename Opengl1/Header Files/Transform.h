@@ -21,7 +21,7 @@ public:
 	}
 	glm::vec3 forward()
 	{
-		return rotation*worldForward;
+		return glm::normalize(rotation*worldForward);
 	}
 	glm::vec3 backward()
 	{
@@ -29,15 +29,15 @@ public:
 	}
 	glm::vec3 right()
 	{
-		return rotation*worldRight;
+		return -left();
 	}
 	glm::vec3 left()
 	{
-		return -right();
+		return glm::normalize(rotation * worldLeft);
 	}
 	glm::vec3 up()
 	{
-		return rotation * worldUp;
+		return glm::normalize(rotation * worldUp);
 	}
 	glm::vec3 down()
 	{
