@@ -1,4 +1,5 @@
 #include "Quaternion.h"
+#include<glm\glm\mat3x3.hpp>
 
 Quaternion::Quaternion(glm::quat quat)
 {
@@ -19,18 +20,19 @@ Quaternion::Quaternion(GLfloat EulerAngleX, GLfloat EulerAngleY, GLfloat EulerAn
 
 void Quaternion::setEulerAngle(GLfloat X, GLfloat Y, GLfloat Z)
 {
-	Quaternion qx = rotationAroundAxisVector(X, glm::vec3(1, 0, 0));
-	Quaternion qy = rotationAroundAxisVector(Y, glm::vec3(0, 1, 0));
-	Quaternion qz = rotationAroundAxisVector(Z, glm::vec3(0, 0, 1));
-	*this = qx * qy * qz;
+	glm::quat qx = rotationAroundAxisVector(X, worldRight);
+	glm::quat qy = rotationAroundAxisVector(Y, worldUp);
+	glm::quat qz = rotationAroundAxisVector(Z, worldForward);
+	quaternion = qx * qy;
 }
 
-Quaternion Quaternion::rotationAroundAxisVector(GLfloat angleInDegrees, glm::vec3 AxisVector)
+glm::quat Quaternion::rotationAroundAxisVector(GLfloat angleInDegrees, glm::vec3 AxisVector)
 {
 	AxisVector = glm::normalize(AxisVector);
 
 	GLfloat rad = (angleInDegrees / 360.0) * glm::pi<GLfloat>();
 
-	glm::quat quat(glm::cos(rad), glm::sin(rad) * AxisVector.x, glm::sin(rad) * AxisVector.y, glm::sin(rad) * AxisVector.z);
-	return Quaternion(quat);
+	/*glm::quat quat(glm::cos(rad), glm::sin(rad) * AxisVector.x, glm::sin(rad) * AxisVector.y, glm::sin(rad) * AxisVector.z);
+	return Quaternion(quat);*/
+	return glm::angleAxis(rad,AxisVector);
 }

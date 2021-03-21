@@ -15,10 +15,6 @@ Window::Window(int width,int height,std::string winName,Window *shareWindow=NULL
 
 Window::~Window()
 {
-	/*
-	* destory the window pointer and terminate glfw if the class is destroyed
-	*/
-	glfwDestroyWindow(mainWindow);
 	glfwTerminate();
 }
 
@@ -41,11 +37,14 @@ bool Window::initialize()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
-
+	
+	//function to destroy GLFWwindow when smart_ptr runs out of scope
+	auto glfwWindowsDestroyer = [](GLFWwindow* ptr) {glfwDestroyWindow(ptr); };
+	
 	if(share)
-		mainWindow = glfwCreateWindow(Width,Height,windowName.c_str(),NULL,share->mainWindow);
+		mainWindow.reset(glfwCreateWindow(Width, Height, windowName.c_str(), NULL, share->mainWindow.get()), glfwWindowsDestroyer);
 	else
-		mainWindow = glfwCreateWindow(Width, Height, windowName.c_str(), NULL, NULL);
+		mainWindow.reset(glfwCreateWindow(Width, Height, windowName.c_str(), NULL, NULL), glfwWindowsDestroyer);
 	
 	if (mainWindow==NULL)
 	{
@@ -53,7 +52,7 @@ bool Window::initialize()
 		glfwTerminate();
 		return false;
 	}
-	glfwMakeContextCurrent(mainWindow);
+	glfwMakeContextCurrent(mainWindow.get());
 
 
 	//load OpenGL function loader into glad
@@ -74,7 +73,7 @@ bool Window::initialize()
 	{
 		glViewport(0,0,width,height);
 	};
-	glfwSetFramebufferSizeCallback(mainWindow,frameBufferSizeCallBack);
+	glfwSetFramebufferSizeCallback(mainWindow.get(),frameBufferSizeCallBack);
 
 	return true;
 }
@@ -83,7 +82,7 @@ void Window::setBufferSizeCallBackFunction(GLFWframebuffersizefun function)
 {
 	//set custom function as a call back function of windows resize event
 	if (mainWindow)
-		glfwSetFramebufferSizeCallback(mainWindow, function);
+		glfwSetFramebufferSizeCallback(mainWindow.get(), function);
 	else
 		std::cerr <<"ERROR::initialize Window first!"<<std::endl;
 }
@@ -95,8 +94,15 @@ void Window::setBufferSizeCallBackFunction(GLFWframebuffersizefun function)
 void Window::processInput()
 {
 	/*processes all inputs given to this window*/
-	if (glfwGetKey(mainWindow, GLFW_KEY_ESCAPE))
+	if (mainWindow)
 	{
-		glfwSetWindowShouldClose(mainWindow, true);
+		if (glfwGetKey(mainWindow.get(), GLFW_KEY_ESCAPE))
+		{
+			glfwSetWindowShouldClose(mainWindow.get(), true);
+		}
+	}
+	else
+	{
+		std::cout <<"Window not intialized!\n";
 	}
 }

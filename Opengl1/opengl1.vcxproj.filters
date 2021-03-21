@@ -4,30 +4,74 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{21EB8090-0D4E-1035-B6D3-48EBA215DCB7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Editor">
+      <UniqueIdentifier>{373999AD-A39A-76BB-2C08-BD6D9868AD7A}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{E9C7FDCE-D52A-8D73-7EB0-C5296AF258F6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Editor">
+      <UniqueIdentifier>{FFE4F46E-6B46-D27C-F4B3-182F6014093C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Math">
+      <UniqueIdentifier>{6286B20A-CE9C-B0A0-1714-3CC283698128}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header Files\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Editor\EditorUI.h">
+      <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Engine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\EngineMath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\GlmMath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Quaternion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Texture.h" />
-    <ClInclude Include="Header Files\Quaternion.h" />
-    <ClInclude Include="Header Files\EngineMath.h" />
-    <ClInclude Include="Header Files\GlmMath.h" />
-    <ClInclude Include="Header Files\Transform.h" />
-    <ClInclude Include="Header Files\Engine.h" />
-    <ClInclude Include="Header Files\Editor\EditorUI.h" />
-    <ClInclude Include="Header Files\Camera.h" />
+    <ClInclude Include="Header Files\EngineMathConstants.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source Files\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Editor\EditorUI.cpp">
+      <Filter>Source Files\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Math\Quaternion.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Math\Transform.cpp">
+      <Filter>Source Files\Math</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -37,14 +81,13 @@
     <ClCompile Include="Source Files\Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="vendor\stb_image.cpp" />
-    <ClCompile Include="Source Files\Texture.cpp" />
-    <ClCompile Include="Source Files\Math\Quaternion.cpp" />
-    <ClCompile Include="Source Files\Math\Transform.cpp" />
-    <ClCompile Include="Source Files\Editor\EditorUI.cpp" />
-    <ClCompile Include="Source Files\Camera.cpp" />
+    <ClCompile Include="Source Files\stb_image.cpp" />
+    <ClCompile Include="Source Files\EngineMathConstants.cpp" />
   </ItemGroup>
 </Project>

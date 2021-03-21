@@ -10,7 +10,7 @@ class Editor
 {
 private:
 	ImGuiIO& io;
-	GLFWwindow* context;
+	std::weak_ptr<GLFWwindow> context;
 
 	//initializes imGui
 	void initImGui();

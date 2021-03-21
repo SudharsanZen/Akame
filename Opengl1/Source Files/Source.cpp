@@ -1,22 +1,9 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+#include"Engine.h"
+#include<algorithm>
 
-#include<glad\glad.h>
-#include<GLFW\glfw3.h>
-
-
-#include<imGui\backends\imgui_impl_glfw.h>
-#include<imGui\backends\imgui_impl_opengl3.h>
-
-#include<math.h>
-#include"EngineMath.h"
-#include"Window.h"
-#include"Shader.h"
-#include"Mesh.h"
-#include"Texture.h"
-#include"Editor\EditorUI.h"
-#include"Camera.h"
 
 GLfloat tvertices[] = { 
 	-0.5,-0.5,0,		0,0,
@@ -87,23 +74,58 @@ float boxvertices[] = {
 	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
 
-void camRotate(Camera& cam, GLfloat angleY)
+template <typename T>
+T clamp(T a,T min,T max)
 {
-	Quaternion rot(0, angleY, 0);
-	glm::vec3 dist = cam.getCameraPosition()-cam.getCameraTargetPosition();
-	cam.setCameraPosition(cam.getCameraTargetPosition()+rot.quaternion * dist);
+	if (a < min)
+		a = min;
+	if (a > max)
+		a = max;
+	return a;
 }
 
 void camTrans(Camera& cam)
 {
-	static float sign = -1;
-	glm::vec3 pos=cam.getCameraPosition();
-	if (pos.y > 2 || pos.y<-2)
-	{
-		sign *= -1;
-	}
 
-	cam.setCameraPosition(pos.x, pos.y + (sign * 0.001f), pos.z);
+	static double xPrev=0, yPrev=0;
+	double x = 0, y = 0;
+	static float X=0, Y=0;
+	
+	if (Input::getKeyDown(GLFW_KEY_W))
+	{
+		cam.setCameraPosition(cam.getCameraPosition() + cam.getLookDir() * 0.01f);
+		cam.setCameraTargetPosition(cam.getCameraTargetPosition() + cam.getLookDir() * 0.01f);
+	}
+	if (Input::getKeyDown(GLFW_KEY_S))
+	{
+		cam.setCameraPosition(cam.getCameraPosition() - cam.getLookDir() * 0.01f);
+		cam.setCameraTargetPosition(cam.getCameraTargetPosition() - cam.getLookDir() * 0.01f);
+	}
+	if (Input::getKeyDown(GLFW_KEY_A))
+	{
+		cam.setCameraPosition(cam.getCameraPosition() - cam.lookDirRight() * 0.01f);
+		cam.setCameraTargetPosition(cam.getCameraTargetPosition() - cam.lookDirRight() * 0.01f);
+	}
+	if (Input::getKeyDown(GLFW_KEY_D))
+	{
+		cam.setCameraPosition(cam.getCameraPosition() + cam.lookDirRight() * 0.01f);
+		cam.setCameraTargetPosition(cam.getCameraTargetPosition() + cam.lookDirRight() * 0.01f);
+	}
+	Input::getMouseXY(x,y);
+	//cam.transform.rotation.setEulerAngle(0, 20, 0);
+
+	//X=clamp(X,-90.0f,90.0f);
+	if (Input::getMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+	{
+		cam.transform.rotation.quaternion =glm::angleAxis((float)(x-xPrev)*0.01f,cam.lookDirUp()) ;
+		cam.transform.rotation.quaternion *=glm::angleAxis((float)(y-yPrev)*0.01f,cam.lookDirRight()) ;
+		glm::vec3 camPos = cam.getCameraPosition();
+		glm::vec3 tPos = cam.getCameraTargetPosition()-camPos;
+		tPos = cam.transform.rotation*tPos;
+		cam.setCameraTargetPosition(camPos+tPos);
+	}
+	yPrev = y;
+	xPrev = x;
 }
 
 int main()
@@ -122,10 +144,12 @@ int main()
 		return -1;
 	}
 	Camera cam;
+
+
 	cam.setFieldOfView(60.0f);
 	cam.setCameraPosition(0,0,0);
 	glfwSwapInterval(0);
-	GLuint VBO, VAO;
+	
 	
 	Shader shader(vertexShaderDir,fragmentShaderDir);
 	Mesh box1,box2,box3;
@@ -147,30 +171,30 @@ int main()
 	Editor mainEditor(window);
 
 	GLfloat t =0;
-	int a= 1;
-	Transform transform1(-1,0,-6);
-	Transform transform2(1,0,-6);
-	Transform transform3(0,0,-5);
-	cam.setCameraTargetPosition(0,0,-5);
+	float a= 1;
+	Transform transform1(-1,0,6);
+	Transform transform2(1,0,6);
+	Transform transform3(0,0,5);
+	cam.setCameraTargetPosition(0,0,5);
+
 	while (!window.shouldWindowClose())
 	{
+		transform1.rotation.setEulerAngle(45,45,45);
 		
-	
-	
+		
 		glm::mat4 trans1 = transform1.transformMatrix();
 		glm::mat4 trans2 = transform2.transformMatrix();
 		glm::mat4 trans3 = transform3.transformMatrix();
 		glm::mat4 proj = cam.getProjectionMatrix();
 		glm::mat4 view = cam.getViewMatrix();
-		cam.setAspectRation(window.getBufferWidth() / window.getBufferHeight());
+		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		glfwPollEvents();
 		
 			//glClearColor(0.2f,0.3f,0.3f,1.0f);
 			glClearColor(1,1,1,1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			camTrans(cam);
-			camRotate(cam,0.1f);
 			
+			camTrans(cam);
 			shader.useShaderProgram();
 				shader.setUniformInteger("texture1",0);
 				shader.setUniformInteger("texture2",1);
@@ -188,7 +212,7 @@ int main()
 
 
 
-			mainEditor.DrawUI();
+			//mainEditor.DrawUI();
 		
 		
 		window.processInput();

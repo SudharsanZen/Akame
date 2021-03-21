@@ -1,4 +1,5 @@
 #pragma once
+#include"EngineMathConstants.h"
 #include<iostream>
 #include<string>
 #include<glad/glad.h>
@@ -9,15 +10,17 @@ class Quaternion
 {
 private:
 	
-
+	
 public:
 	glm::quat quaternion;
+	
 	Quaternion(glm::quat quat);
 	Quaternion(GLfloat w, GLfloat x, GLfloat y, GLfloat z);
 	Quaternion(GLfloat EulerAngleX, GLfloat EulerAngleY, GLfloat EulerAngleZ);
-	static Quaternion rotationAroundAxisVector(GLfloat angleInDegrees, glm::vec3 AxisVector);
+	static glm::quat rotationAroundAxisVector(GLfloat angleInDegrees, glm::vec3 AxisVector);
 	void setEulerAngle(GLfloat, GLfloat, GLfloat);
 	Quaternion conjugate() { return glm::conjugate(quaternion); }
+	glm::vec3 getEulerAngle() { return glm::degrees(glm::eulerAngles(quaternion)); }
 
 
 
@@ -52,8 +55,10 @@ public:
 
 	glm::vec3 operator * (glm::vec3 const& vec3)
 	{
-		glm::quat newVec = quaternion * glm::quat(0, vec3) * glm::conjugate(quaternion);
-		return glm::vec3(newVec.x, newVec.y, newVec.z);
+		/*glm::quat newVec = quaternion * vec3 * glm::conjugate(quaternion);
+		return glm::vec3(newVec.x, newVec.y, newVec.z);*/
+		glm::vec4 pos = getMatrix() * glm::vec4(vec3, 1);
+		return glm::vec3(pos.x, pos.y, pos.z);
 	}
 
 

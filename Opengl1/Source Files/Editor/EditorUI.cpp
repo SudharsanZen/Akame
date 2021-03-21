@@ -23,7 +23,7 @@ void Editor::initImGui()
 	}
 
 	// Setup Platform/Renderer bindings
-	ImGui_ImplGlfw_InitForOpenGL(context, true);
+	ImGui_ImplGlfw_InitForOpenGL(context.lock().get(), true);
 	ImGui_ImplOpenGL3_Init("#version 150");
 }
 
@@ -52,9 +52,18 @@ void Editor::DrawUI()
 	ImGui::End();
 
 	ImGui::Render();
-	int display_w, display_h;
-	glfwGetFramebufferSize(context, &display_w, &display_h);
-	glViewport(0, 0, display_w, display_h);
+	int display_w=0, display_h=0;
+	std::shared_ptr<GLFWwindow> windowContext = context.lock();
+	if (windowContext)
+	{
+		glfwGetFramebufferSize(windowContext.get(), &display_w, &display_h);
+		glViewport(0, 0, display_w, display_h);
+	}
+	else
+	{
+		std::cout << "window context not initialized (or) is destroyed!\n";
+		return;
+	}
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

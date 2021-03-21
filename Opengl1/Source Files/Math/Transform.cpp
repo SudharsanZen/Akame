@@ -1,4 +1,5 @@
 #include "Transform.h"
+//graphics framework uses left handsided 3d-coordinate system
 
 Transform::Transform():rotation(0,0,0)
 {

@@ -94,25 +94,29 @@
     <ClInclude Include="Header Files\Editor\EditorUI.h" />
     <ClInclude Include="Header Files\Engine.h" />
     <ClInclude Include="Header Files\EngineMath.h" />
+    <ClInclude Include="Header Files\EngineMathConstants.h" />
     <ClInclude Include="Header Files\GlmMath.h" />
+    <ClInclude Include="Header Files\Input.h" />
     <ClInclude Include="Header Files\Mesh.h" />
-    <ClInclude Include="Header Files\Shader.h" />
-    <ClInclude Include="Header Files\Window.h" />
-    <ClInclude Include="Header Files\Texture.h" />
     <ClInclude Include="Header Files\Quaternion.h" />
+    <ClInclude Include="Header Files\Shader.h" />
+    <ClInclude Include="Header Files\Texture.h" />
     <ClInclude Include="Header Files\Transform.h" />
+    <ClInclude Include="Header Files\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Camera.cpp" />
     <ClCompile Include="Source Files\Editor\EditorUI.cpp" />
+    <ClCompile Include="Source Files\EngineMathConstants.cpp" />
+    <ClCompile Include="Source Files\Input.cpp" />
     <ClCompile Include="Source Files\Math\Quaternion.cpp" />
+    <ClCompile Include="Source Files\Math\Transform.cpp" />
     <ClCompile Include="Source Files\Mesh.cpp" />
     <ClCompile Include="Source Files\Shader.cpp" />
     <ClCompile Include="Source Files\Source.cpp" />
-    <ClCompile Include="Source Files\Window.cpp" />
     <ClCompile Include="Source Files\Texture.cpp" />
-    <ClCompile Include="Source Files\Math\Transform.cpp" />
-    <ClCompile Include="vendor\stb_image.cpp" />
+    <ClCompile Include="Source Files\Window.cpp" />
+    <ClCompile Include="Source Files\stb_image.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
