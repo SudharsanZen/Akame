@@ -41,51 +41,14 @@ public:
 		return mat;
 	}*/
 
-	glm::mat4 lookAt(Transform &transform,glm::vec3 &pos)
-	{
-		glm::vec3 const f(transform.forward());
-		glm::vec3 const s(transform.right());
-		glm::vec3 const u(transform.up());
-
-		glm::mat4 Result(1);
-		Result[0][0] = s.x;
-		Result[1][0] = s.y;
-		Result[2][0] = s.z;
-		Result[0][1] = u.x;
-		Result[1][1] = u.y;
-		Result[2][1] = u.z;
-		Result[0][2] = -f.x;
-		Result[1][2] = -f.y;
-		Result[2][2] = -f.z;
-		Result[3][0] = -glm::dot(s, pos);
-		Result[3][1] = -glm::dot(u, pos);
-		Result[3][2] = glm::dot(f, pos);
-		return Result;
-	}
-	/*glm::vec3 getLookDir() { updateCamDir(); return camDir; };
-	glm::vec3 lookDirRight() { updateCamDir(); return glm::cross(camDir,lookDirUp()); }
-	glm::vec3 lookDirUp() 
-	{
-		updateCamDir(); 
-		glm::vec3 up=glm::cross(camDir,worldRight);
-		if (glm::length(up)==0)
-		{
-			up = glm::cross(camDir,worldForward);
-		}
-		return up;
-	}*/
-
-
+	glm::mat4 lookAt(Transform& transform, glm::vec3& pos);
+	
 	void setCameraPosition(GLfloat x,GLfloat y,GLfloat z);
 	void setCameraPosition(glm::vec3 pos);
 	void setCameraRotation(glm::vec3 rot);
 	void setCameraRotation(glm::quat rot) { transform.rotation.quaternion =rot; }
 	glm::vec3 getCameraPosition() { return transform.position; };
 
-
-	//void setCameraTargetPosition(GLfloat x, GLfloat y, GLfloat z);
-	//void setCameraTargetPosition(glm::vec3 pos);
-	//glm::vec3 getCameraTargetPosition() { return cameraTarget; };
 
 	inline void setFieldOfView(GLfloat degrees) { this->fovy = glm::radians(degrees); };
 	inline void setAspectRation(GLfloat aspecR) { this->aspectRatio = aspecR; };

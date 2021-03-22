@@ -133,11 +133,10 @@ int main()
 		std::cout <<"ERROR::could not initialize Window!";
 		return -1;
 	}
+
 	Camera cam;
-
-
 	cam.setFieldOfView(60.0f);
-	cam.setCameraPosition(0,0,0);
+
 	glfwSwapInterval(0);
 	
 	
@@ -169,9 +168,10 @@ int main()
 
 	while (!window.shouldWindowClose())
 	{
-		transform1.rotation.setEulerAngle(45,45,45);
+		//transform1.rotation.setEulerAngle(45,45,45);
 		
-		
+		transform1.rotation.quaternion =Quaternion::rotationAroundAxisVector(0.1f,worldUp)*transform1.rotation.quaternion;
+		//transform1.rotation.quaternion =Quaternion::rotationAroundAxisVector(0.1f,transform1.right())* transform1.rotation.quaternion;
 		glm::mat4 trans1 = transform1.transformMatrix();
 		glm::mat4 trans2 = transform2.transformMatrix();
 		glm::mat4 trans3 = transform3.transformMatrix();
@@ -195,7 +195,8 @@ int main()
 				tex.use(0);
 				tex1.use(1);
 			box1.renderMesh();
-			shader.setUniformMat4fv("transform", 1, glm::value_ptr(trans2));
+			glm::mat4 pt = (trans1 * trans2);
+			shader.setUniformMat4fv("transform", 1, glm::value_ptr(pt));
 			box2.renderMesh();
 			shader.setUniformMat4fv("transform", 1, glm::value_ptr(trans3));
 			box3.renderMesh();

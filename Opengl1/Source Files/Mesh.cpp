@@ -27,7 +27,7 @@ void Mesh::createMesh(GLfloat* vert, GLuint* index, size_t vertCount, size_t ind
 	glBufferData(GL_ARRAY_BUFFER,vertCount*sizeof(index[0]),vert,GL_STATIC_DRAW);
 	
 	//generate Index Buffer Object
-	if (indexCount)
+	if (indexCount>0)
 	{
 		glGenBuffers(1, &IBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);

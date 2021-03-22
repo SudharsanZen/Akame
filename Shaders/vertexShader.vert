@@ -13,6 +13,7 @@ out vec2 texCoord;
 
 void main()
 {
+    float ambientStrength=0.1;
     gl_Position =transform*vec4(aPos, 1.0);
     gl_Position =view*gl_Position;
     gl_Position =proj*gl_Position;

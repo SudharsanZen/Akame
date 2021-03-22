@@ -37,6 +37,28 @@ glm::mat4 Camera::getProjectionMatrix()
 	return glm::perspective(fovy,aspectRatio,nearz,farz);
 }
 
+glm::mat4 Camera::lookAt(Transform& transform, glm::vec3& pos)
+{
+	glm::vec3 const f(transform.forward());
+	glm::vec3 const s(transform.right());
+	glm::vec3 const u(transform.up());
+
+	glm::mat4 Result(1);
+	Result[0][0] = s.x;
+	Result[1][0] = s.y;
+	Result[2][0] = s.z;
+	Result[0][1] = u.x;
+	Result[1][1] = u.y;
+	Result[2][1] = u.z;
+	Result[0][2] = -f.x;
+	Result[1][2] = -f.y;
+	Result[2][2] = -f.z;
+	Result[3][0] = -glm::dot(s, pos);
+	Result[3][1] = -glm::dot(u, pos);
+	Result[3][2] = glm::dot(f, pos);
+	return Result;
+}
+
 void Camera::setCameraPosition(GLfloat x, GLfloat y, GLfloat z)
 {
 	transform.position.x = x;
