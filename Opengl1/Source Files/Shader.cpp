@@ -29,51 +29,54 @@ void Shader::useShaderProgram()
 }
 
 
-GLchar** Shader::readShaderFile(std::string fileName,unsigned int &len)
+char** Shader::readShaderFile(std::string fileName,unsigned int &len)
 {
     /*read shader file content from the given location
     and then store the content in an array of strings
     with each string containing a part of the code*/
 
-    const GLuint CODE_BLOCK_SIZE=512;
+    const GLuint CODE_BLOCK_SIZE = 512;
     std::fstream file(fileName, std::ios::in);
     std::string content;
     char cnt[512];
- 
+
     if (file)
     {
         while (!file.eof())
         {
 
-            file.getline(cnt,512,file.eofbit);
+            file.getline(cnt, CODE_BLOCK_SIZE, '\n');
+
             content.append(cnt);
+            if (!file.eof())
+                content += "\n";
         }
     }
     else
     {
-        std::cout << "ERROR::SHADER_CLASS::can't open File: "<<fileName<<"\"";
+        std::cout << "ERROR::SHADER_CLASS::can't open File: " << fileName << "\"";
     }
     size_t contentLength = content.length();
-    unsigned int numOfChunks= ceil((float)contentLength / (float)(CODE_BLOCK_SIZE - 1));
+    unsigned int numOfChunks = ceil((float)contentLength / (float)(CODE_BLOCK_SIZE - 1));
 
-    char **code=new char*[numOfChunks];
+    char** code = new char* [numOfChunks];
     size_t pos = 0, i = 0;
-   
-       
+
+
     //seperate the read content into code blocks and store each blocks in char** pointer
     for (i = 0; i < numOfChunks; i++)
     {
         code[i] = new char[CODE_BLOCK_SIZE];
-        std::string sub = content.substr(i*(CODE_BLOCK_SIZE-1), CODE_BLOCK_SIZE-1);
-        sub.copy(code[i], CODE_BLOCK_SIZE-1, pos);
+        std::string sub = content.substr(i * (CODE_BLOCK_SIZE - 1), CODE_BLOCK_SIZE - 1);
+        sub.copy(code[i], CODE_BLOCK_SIZE - 1, pos);
         code[i][sub.length()] = '\0';
         //std::cout << code[i];
-        
+
     }
-    
+
     len = numOfChunks;
     return code;
-   
+
 }
 
 
@@ -83,7 +86,7 @@ bool Shader::compileShader()
     * compile the shader and set programID
     */
     GLuint v_ShaderID, f_ShaderID;
-    GLchar** vCode, ** fCode;
+    char** vCode,**fCode;
     unsigned int vCount, fCount;
     GLint success;
 
@@ -95,7 +98,8 @@ bool Shader::compileShader()
     v_ShaderID = glCreateShader(GL_VERTEX_SHADER);
     f_ShaderID = glCreateShader(GL_FRAGMENT_SHADER);
     
-   
+    
+
     //compile and add the shader
     addShader(vCode,v_ShaderID,vCount,GL_VERTEX_SHADER);
     addShader(fCode,f_ShaderID,fCount,GL_FRAGMENT_SHADER);

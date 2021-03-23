@@ -27,8 +27,8 @@ glm::mat4 Camera::getViewMatrix()
 	static glm::vec3 up,right;
 	right = glm::normalize(glm::cross(camDir,glm::vec3(0,1,0)));
 	up = glm::normalize(glm::cross(right,camDir));*/
-	//return glm::lookAt(transform.position,transform.position+(transform.forward()*10.0f),transform.up());
-	return lookAt(transform,transform.position);
+	return glm::lookAt(transform.position,transform.position+(transform.forward()*10.0f),transform.up());
+	//return lookAt(transform,transform.position);
 
 }
 

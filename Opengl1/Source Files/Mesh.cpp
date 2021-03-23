@@ -39,16 +39,16 @@ void Mesh::createMesh(GLfloat* vert, GLuint* index, size_t vertCount, size_t ind
 	glBindVertexArray(VAO);
 
 	//vertex coordinate
-	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, sizeof(vert[0]) * 5,(void*)(0));
+	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, sizeof(vert[0]) * 8,(void*)(0));
 	glEnableVertexAttribArray(0);
 
-	/*vertex color 
+	//vertex normal
 	glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,sizeof(vert[0])*8,(void*)(3*sizeof(vert[0])));
-	glEnableVertexAttribArray(1);*/
+	glEnableVertexAttribArray(1);
 
 	//texture coordinate
-	glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,sizeof(vert[0])*5,(void*)(3*sizeof(vert[0])));
-	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,sizeof(vert[0])*8,(void*)(6*sizeof(vert[0])));
+	glEnableVertexAttribArray(2);
 
 	//unBinding all the buffers
 	glBindBuffer(GL_ARRAY_BUFFER,0);
@@ -65,6 +65,8 @@ void Mesh::createMesh(GLfloat* vert, GLuint* index, size_t vertCount, size_t ind
 
 void Mesh::renderMesh()
 {
+	glad_glPointSize(2);
+	glad_glLineWidth(1);
 	//if all the buffers were successfully generated, then render the mesh
 	if ((!IBO && numOfIndices )|| !VBO || !VAO)
 	{
@@ -74,11 +76,13 @@ void Mesh::renderMesh()
 	glBindVertexArray(VAO);
 	if (numOfIndices)
 	{
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 		glDrawElements(GL_TRIANGLES, numOfIndices, GL_UNSIGNED_INT, nullptr);
 	}
 	else
 	{
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDrawArrays(GL_TRIANGLES,0,numOfVertices);
 	}
 	glBindVertexArray(0);

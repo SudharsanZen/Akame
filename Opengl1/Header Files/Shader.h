@@ -1,8 +1,10 @@
 #pragma once
 #include<iostream>
 #include<functional>
+#include<string>
 #include<glad/glad.h>
-#include<GLFW/glfw3.h>
+#include<glm/glm/glm.hpp>
+#include<EngineMath.h>
 class Shader
 {
 private:
@@ -23,6 +25,7 @@ public:
 	void useShaderProgram();
 	GLuint getUniformLocation(std::string varName) { return glGetUniformLocation(programID, varName.c_str()); }
 	void setUniformInteger(std::string varName,GLint value) { glUniform1i(getUniformLocation(varName),value); };
+	void setUniformVec3(std::string varName,const glm::vec3 &vec) { glUniform3fv(getUniformLocation(varName),1,glm::value_ptr(vec)); };
 	void setUniformMat4fv(std::string varName,GLint count,GLfloat *valuePtr) { glUniformMatrix4fv(getUniformLocation(varName),count,GL_FALSE,valuePtr); };
 	std::function<void(GLuint)> callAfterUseProgram;
 
