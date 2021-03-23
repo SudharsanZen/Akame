@@ -9,7 +9,7 @@ uniform mat4 transform;
 uniform mat4 proj;
 uniform mat4 view;
 uniform vec3 lpose;
-uniform vec3 viewPose;
+
 
 out vec2 texCoord;
 out vec3 normal;

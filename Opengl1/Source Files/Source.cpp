@@ -274,7 +274,7 @@ int main()
 	Transform transform3(0,0,5);
 	Transform transform4(0,-0.5,5);
 	Transform lineT(0,0,0);
-	glm::vec3 lightPose = glm::vec3(0, 0, 1);
+	glm::vec3 lightPose = glm::vec3(0, 2, 1);
 	Transform lit;
 	
 	lit.scale=glm::vec3(0.2,0.2,0.2);
