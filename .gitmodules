@@ -7,3 +7,4 @@
 [submodule "Opengl1/vendor/imgui"]
 	path = Opengl1/vendor/imgui
 	url = https://github.com/ocornut/imgui.git
+	branch = docking

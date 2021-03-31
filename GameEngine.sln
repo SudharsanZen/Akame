@@ -1,19 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.31005.135
-MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Opengl1", "Opengl1\Opengl1.vcxproj", "{3BE49BD1-A7C3-1A6D-B0DB-A5431C3A81CE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E00FA80F-4C24-D0C0-15A6-73208179CCF1} = {E00FA80F-4C24-D0C0-15A6-73208179CCF1}
-		{4FBECA42-DB84-3821-8E6B-5D05D07D881B} = {4FBECA42-DB84-3821-8E6B-5D05D07D881B}
+		{154B857C-0182-860D-AA6E-6C109684020F} = {154B857C-0182-860D-AA6E-6C109684020F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glfw", "glfw\src\GLFW.vcxproj", "{4FBECA42-DB84-3821-8E6B-5D05D07D881B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLFW", "glfw\src\GLFW.vcxproj", "{154B857C-0182-860D-AA6E-6C109684020F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imGui", "opengl1\vendor\imGui\imGui.vcxproj", "{E00FA80F-4C24-D0C0-15A6-73208179CCF1}"
 	ProjectSection(ProjectDependencies) = postProject
-		{4FBECA42-DB84-3821-8E6B-5D05D07D881B} = {4FBECA42-DB84-3821-8E6B-5D05D07D881B}
+		{154B857C-0182-860D-AA6E-6C109684020F} = {154B857C-0182-860D-AA6E-6C109684020F}
 	EndProjectSection
 EndProject
 Global
@@ -26,10 +24,10 @@ Global
 		{3BE49BD1-A7C3-1A6D-B0DB-A5431C3A81CE}.Debug|x64.Build.0 = Debug|x64
 		{3BE49BD1-A7C3-1A6D-B0DB-A5431C3A81CE}.Release|x64.ActiveCfg = Release|x64
 		{3BE49BD1-A7C3-1A6D-B0DB-A5431C3A81CE}.Release|x64.Build.0 = Release|x64
-		{4FBECA42-DB84-3821-8E6B-5D05D07D881B}.Debug|x64.ActiveCfg = Debug|x64
-		{4FBECA42-DB84-3821-8E6B-5D05D07D881B}.Debug|x64.Build.0 = Debug|x64
-		{4FBECA42-DB84-3821-8E6B-5D05D07D881B}.Release|x64.ActiveCfg = Release|x64
-		{4FBECA42-DB84-3821-8E6B-5D05D07D881B}.Release|x64.Build.0 = Release|x64
+		{154B857C-0182-860D-AA6E-6C109684020F}.Debug|x64.ActiveCfg = Debug|x64
+		{154B857C-0182-860D-AA6E-6C109684020F}.Debug|x64.Build.0 = Debug|x64
+		{154B857C-0182-860D-AA6E-6C109684020F}.Release|x64.ActiveCfg = Release|x64
+		{154B857C-0182-860D-AA6E-6C109684020F}.Release|x64.Build.0 = Release|x64
 		{E00FA80F-4C24-D0C0-15A6-73208179CCF1}.Debug|x64.ActiveCfg = Debug|x64
 		{E00FA80F-4C24-D0C0-15A6-73208179CCF1}.Debug|x64.Build.0 = Debug|x64
 		{E00FA80F-4C24-D0C0-15A6-73208179CCF1}.Release|x64.ActiveCfg = Release|x64
@@ -37,8 +35,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {DD11E584-57B5-446D-A22D-46E796A03411}
 	EndGlobalSection
 EndGlobal
