@@ -1,9 +1,6 @@
 [submodule "glfw"]
 	path = glfw
 	url = https://github.com/glfw/glfw.git
-[submodule "Opengl1/vendor/imgui"]
-	path = Opengl1/vendor/imgui
-	url = https://github.com/ocornut/imgui.git
 [submodule "Opengl1/vendor/glm"]
 	path = Opengl1/vendor/glm
 	url = https://github.com/g-truc/glm.git
