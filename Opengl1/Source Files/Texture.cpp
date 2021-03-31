@@ -66,7 +66,7 @@ void Texture::loadImage()
 	glBindTexture(GL_TEXTURE_2D,0);
 }
 
-void Texture::use(const GLuint &&unit)
+void Texture::use(GLuint unit)
 {
 	
 	if (textureID)

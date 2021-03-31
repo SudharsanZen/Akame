@@ -3,178 +3,8 @@
 #include<string>
 #include<algorithm>
 #include"Engine.h"
-class lines
-{
-	GLuint VBO, VAO;
-	public:
-	struct line
-	{
-		glm::vec3 st;
-		glm::vec3 end;
-	}vData;
-	lines(glm::vec3 st, glm::vec3 end)
-	{
-		//generate all buffers required for rendering and storing the mesh on the GPU
-		vData.st = st;
-		vData.end = end;
-	//generate Vertex Buffer object
-		glGenBuffers(1, &VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vData), &vData, GL_STATIC_DRAW);
-
-		//generate Vertex Attribute Object
-		glGenVertexArrays(1, &VAO);
-		glBindVertexArray(VAO);
-
-		//vertex coordinate
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)(0));
-		glEnableVertexAttribArray(0);
-
-		//unBinding all the buffers
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
-
-		
-	}
-
-	void renderMesh()
-	{
-		glad_glPointSize(2);
-		glad_glLineWidth(1);
-		//if all the buffers were successfully generated, then render the mesh
-		
-		glBindVertexArray(VAO);
-			
-			glDrawArrays(GL_LINES, 0, 2);
-		glBindVertexArray(0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
-
-
-	void clearMesh()
-	{
-		if (VBO)
-			glDeleteBuffers(1, &VBO);
-		if (VAO)
-			glDeleteVertexArrays(1, &VAO);
-
-	}
-
-};
-
-GLfloat tvertices[] = { 
-	-0.5,-0.5,0,		0,0,
-	0.5,-0.5,0,			1,0,
-	0,0.5,0 ,			0.5,1
-};
-GLuint tIndex[] = { 0,1,2 };
-
-float plane[] = {
-	// positions          // colors           // texture coords
-	 0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f,   // top right
-	 0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f,   // bottom right
-	-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-	-0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f    // top left 
-};
-
-float planevert[] = {
-	// positions            // texture coords
-	 0.5f,  0.5f, 0.0f,      1.0f, 1.0f,   // top right
-	 0.5f, -0.5f, 0.0f,     1.0f, 0.0f,   // bottom right
-	-0.5f, -0.5f, 0.0f,     0.0f, 0.0f,   // bottom left
-	-0.5f,  0.5f, 0.0f,      0.0f, 1.0f    // top left 
-};
-
-GLuint planeIndex[] = { 0,1,2,2,3,0};
-
-float boxvertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-};
-float boxNormVertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
-
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,  0.0f, 0.0f,
-
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
-
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
-};
-
+#include"temp.h"
+#include<vector>
 
 void flyCam(Camera& cam)
 {
@@ -209,14 +39,16 @@ void flyCam(Camera& cam)
 	
 	if (Input::getMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 	{
-		X += -(y - yPrev)*0.5f;
-		Y += -(x - xPrev)*0.5f;
+		X += -(y - yPrev)*0.5;
+		Y += -(x - xPrev)*0.5;
 		cam.transform.rotation=Quaternion::rotationAroundAxisVector(Y,worldUp);
 		cam.transform.rotation= Quaternion::rotationAroundAxisVector(X,cam.transform.right())* cam.transform.rotation.quaternion;
 	}
 	yPrev = y;
 	xPrev = x;
 }
+
+
 
 int main()
 {
@@ -246,19 +78,24 @@ int main()
 	Shader shader(vertexShaderDir,fragmentShaderDir);
 
 	Shader shader2(lvs,lfs);
-	Mesh box1,box2,box3,plane1,light;
-	
+	Mesh box1,box2,box3,plane1,light,sp,sp2;
+	std::vector<vert> spVec=sphere(32,32,1);
+
 	//box.createMesh(bvertices, bIndex, sizeof(bvertices) / sizeof(bvertices[0]), sizeof(bIndex));
-	box1.createMesh(boxNormVertices,NULL,sizeof(boxNormVertices)/sizeof(boxvertices[0]),0);
-	box2.createMesh(boxNormVertices,NULL,sizeof(boxNormVertices)/sizeof(boxvertices[0]),0);
-	box3.createMesh(boxNormVertices,NULL,sizeof(boxNormVertices)/sizeof(boxvertices[0]),0);
-	light.createMesh(boxNormVertices,NULL,sizeof(boxNormVertices)/sizeof(boxvertices[0]),0);
-	plane1.createMesh(plane,planeIndex,sizeof(plane)/sizeof(plane[0]),sizeof(planeIndex));
+	box1.createMesh<GLfloat,GLuint>(boxNormVertices,NULL,sizeof(boxNormVertices)/sizeof(boxNormVertices[0]),0);
+	box2.createMesh<GLfloat, GLuint>(boxNormVertices,NULL,sizeof(boxNormVertices)/sizeof(boxNormVertices[0]),0);
+	box3.createMesh<GLfloat, GLuint>(boxNormVertices,NULL,sizeof(boxNormVertices)/sizeof(boxNormVertices[0]),0);
+	light.createMesh<GLfloat, GLuint>(boxNormVertices,NULL,sizeof(boxNormVertices)/sizeof(boxNormVertices[0]),0);
+	plane1.createMesh<GLfloat, GLuint>(plane,planeIndex,sizeof(plane)/sizeof(plane[0]),sizeof(planeIndex));
+	sp2.createMesh<GLfloat, GLuint>(&spVec[0],NULL,spVec.size()*8,0);
+	//sp.createMesh<GLfloat, GLuint>(&spVec[0],NULL,spVec.size()*sizeof(GLfloat)*8,0);
 	//std::cout <<sizeof(boxNormVertices)/sizeof(boxNormVertices[0]) ;
 	Texture tex("../Assets/container.jpg",GL_RGB);
 	Texture tex1("../Assets/elephant1.png",GL_RGBA);
+	Texture tex2("../Assets/earth3k.jpg", GL_RGB);
 	tex.loadImage();
 	tex1.loadImage();
+	tex2.loadImage();
 	
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(1,1,1,1);
@@ -269,12 +106,13 @@ int main()
 
 	GLfloat t =0;
 	float a= 1;
-	Transform transform1(-1,0,6);
-	Transform transform2(1,0,6);
-	Transform transform3(0,0,5);
+	Transform transform1(-1,0.01,6);
+	Transform transform2(1,0.01,6);
+	Transform transform3(0,0.01,5);
 	Transform transform4(0,-0.5,5);
+	Transform spTrans(0,2,5);
 	Transform lineT(0,0,0);
-	glm::vec3 lightPose = glm::vec3(0, 2, 1);
+	glm::vec3 lightPose = glm::vec3(0, 2, -20);
 	Transform lit;
 	
 	lit.scale=glm::vec3(0.2,0.2,0.2);
@@ -285,12 +123,11 @@ int main()
 	glm::vec3 end = glm::vec3(0, 0, 10);
 	
 	lines l(st, end);
-	//cam.setCameraTargetPosition(0,0,5);
-	
+
 	while (!window.shouldWindowClose())
 	{
-
 		
+		spTrans.rotation= spTrans.rotation*Quaternion::rotationAroundAxisVector(0.001f,worldUp);
 		if (Input::getKeyDown(GLFW_KEY_1))
 			lightPose.y -= 0.01f;
 		if (Input::getKeyDown(GLFW_KEY_2))
@@ -303,6 +140,7 @@ int main()
 		glm::mat4 trans2 = transform2.transformMatrix();
 		glm::mat4 trans3 = transform3.transformMatrix();
 		glm::mat4 trans4 = transform4.transformMatrix();
+		glm::mat4 spT = spTrans.transformMatrix();
 		glm::mat4 ln = lineT.transformMatrix();
 		glm::mat4 lightTrans = lit.transformMatrix();
 		glm::mat4 proj = cam.getProjectionMatrix();
@@ -310,9 +148,9 @@ int main()
 		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		glfwPollEvents();
 		
-			glClearColor(0.2f,0.3f,0.3f,1.0f);
+			//glClearColor(0.2f,0.3f,0.3f,1.0f);
 			//glClearColor(1,1,1,1.0f);
-			//glClearColor(0,0,0,1.0f);
+			glClearColor(0,0,0,1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			
 			flyCam(cam);
@@ -338,19 +176,21 @@ int main()
 				box3.renderMesh();
 				shader.setUniformMat4fv("transform", 1, glm::value_ptr(trans4));
 				plane1.renderMesh();
-
-
+				shader.setUniformMat4fv("transform", 1, glm::value_ptr(spT));
+			
+				tex.use(0);
+				tex2.use(1);
+				sp2.renderMesh();
+			
 			shader2.useShaderProgram();
 				shader2.setUniformMat4fv("transform", 1, glm::value_ptr(lightTrans));
 				shader2.setUniformMat4fv("proj", 1, glm::value_ptr(proj));
 				shader2.setUniformMat4fv("view", 1, glm::value_ptr(view));
-
+				
 
 				light.renderMesh();
-				shader2.setUniformMat4fv("transform", 1, glm::value_ptr(trans4));
 				
-				l.renderMesh();
-			
+				
 
 			//mainEditor.DrawUI();
 				

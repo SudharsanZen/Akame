@@ -27,8 +27,10 @@ private:
 	void clearTextures();
 public:
 	void loadImage();
-	void use(const GLuint&& unit);
+	void use(const GLuint unit);
+	Texture() { imageDir = ""; texFormat = -1; }
 	Texture(std::string dir,GLuint imageFormat);
+	void setDir(std::string dir, GLuint imageFormat) { imageDir = dir; texFormat = imageFormat; }
 	~Texture();
 };
 

@@ -6,7 +6,7 @@
 Shader::Shader(std::string vertexShaderDir, std::string fragmentShaderDir)
 {
     //contructor
-    callAfterUseProgram = [](GLuint progID) {};
+    //callAfterUseProgram = [](GLuint progID) {};
     vertDir = vertexShaderDir;
     fragDir = fragmentShaderDir;
     programID = 0;
@@ -15,16 +15,23 @@ Shader::Shader(std::string vertexShaderDir, std::string fragmentShaderDir)
 
 Shader::~Shader()
 {
-    
+    deleteProgram();
 }
-
+void Shader::deleteProgram() 
+{
+    if (programID)
+    {
+        glDeleteProgram(programID);
+        programID = 0;
+    }
+}
 void Shader::useShaderProgram()
 {
     //use created program
     if (programID)
     {
         glUseProgram(programID);
-        callAfterUseProgram(programID);
+        //callAfterUseProgram(programID);
     }
 }
 
@@ -85,6 +92,7 @@ bool Shader::compileShader()
     /*
     * compile the shader and set programID
     */
+    deleteProgram();
     GLuint v_ShaderID, f_ShaderID;
     char** vCode,**fCode;
     unsigned int vCount, fCount;

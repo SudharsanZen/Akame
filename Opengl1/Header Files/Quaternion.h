@@ -42,7 +42,7 @@ public:
 
 
 
-	Quaternion& operator =(const Quaternion&& rhs)
+	Quaternion& operator =(const Quaternion&& rhs) noexcept
 	{
 		this->quaternion = rhs.quaternion;
 		return *this;
