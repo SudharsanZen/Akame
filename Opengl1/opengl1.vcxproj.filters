@@ -30,6 +30,9 @@
     <ClInclude Include="Header Files\EngineMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\EngineMathConstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\GlmMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -54,9 +57,9 @@
     <ClInclude Include="Header Files\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\EngineMathConstants.h" />
-    <ClInclude Include="Header Files\temp.h" />
-    <ClInclude Include="Material.h" />
+    <ClInclude Include="Header Files\temp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Camera.cpp">
@@ -64,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="Source Files\Editor\EditorUI.cpp">
       <Filter>Source Files\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\EngineMathConstants.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Input.cpp">
       <Filter>Source Files</Filter>
@@ -89,9 +95,11 @@
     <ClCompile Include="Source Files\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\stb_image.cpp" />
-    <ClCompile Include="Source Files\EngineMathConstants.cpp" />
-    <ClCompile Include="Source Files\temp.cpp" />
-    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Source Files\stb_image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\temp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

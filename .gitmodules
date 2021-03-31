@@ -4,3 +4,6 @@
 [submodule "Opengl1/vendor/glm"]
 	path = Opengl1/vendor/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "Opengl1/vendor/imgui"]
+	path = Opengl1/vendor/imgui
+	url = https://github.com/ocornut/imgui.git
