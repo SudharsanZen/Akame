@@ -60,6 +60,7 @@
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\MeshInstance.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Camera.cpp">
@@ -101,5 +102,6 @@
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\MeshInstance.cpp" />
   </ItemGroup>
 </Project>

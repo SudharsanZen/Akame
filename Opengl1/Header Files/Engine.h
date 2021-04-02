@@ -11,6 +11,7 @@
 #include"Window.h"
 #include"Shader.h"
 #include"Mesh.h"
+#include"MeshInstance.h"
 #include"Texture.h"
 #include"Editor\EditorUI.h"
 #include"Camera.h"

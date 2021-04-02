@@ -6,31 +6,36 @@
 #include"temp.h"
 #include<vector>
 
+float deltaTime;
 void flyCam(Camera& cam)
 {
 
 	static double xPrev=0, yPrev=0;
 	double x = 0, y = 0;
 	static float X=0, Y=0;
-	
+	float speed =10;
+	if (Input::getKeyDown(GLFW_KEY_LEFT_SHIFT))
+	{
+		speed *=5;
+	}
 	if (Input::getKeyDown(GLFW_KEY_W))
 	{
-		cam.setCameraPosition(cam.getCameraPosition() + cam.transform.forward() * 0.01f);
+		cam.setCameraPosition(cam.getCameraPosition() + cam.transform.forward() * speed*deltaTime);
 
 	}
 	if (Input::getKeyDown(GLFW_KEY_S))
 	{
-		cam.setCameraPosition(cam.getCameraPosition() - cam.transform.forward() * 0.01f);
+		cam.setCameraPosition(cam.getCameraPosition() - cam.transform.forward() * speed * deltaTime);
 		
 	}
 	if (Input::getKeyDown(GLFW_KEY_A))
 	{
-		cam.setCameraPosition(cam.getCameraPosition() - cam.transform.right() * 0.01f);
+		cam.setCameraPosition(cam.getCameraPosition() - cam.transform.right() * speed * deltaTime);
 		
 	}
 	if (Input::getKeyDown(GLFW_KEY_D))
 	{
-		cam.setCameraPosition(cam.getCameraPosition() + cam.transform.right() * 0.01f);
+		cam.setCameraPosition(cam.getCameraPosition() + cam.transform.right() * speed * deltaTime);
 
 	}
 	Input::getMouseXY(x,y);
@@ -52,7 +57,8 @@ void flyCam(Camera& cam)
 
 int main()
 {
-
+	deltaTime = 0;
+	float lastTime = 0;
 	stbi_set_flip_vertically_on_load(true);
 	const GLchar* vertexShaderDir = "..\\shaders\\vertexShader.vert";
 	const GLchar* fragmentShaderDir = "..\\shaders\\fragmentShader.frag";
@@ -68,7 +74,7 @@ int main()
 		return -1;
 	}
 
-	Camera cam;
+	Camera cam(60, 1, 1, 512);
 	cam.setFieldOfView(60.0f);
 	
 
@@ -78,24 +84,35 @@ int main()
 	Shader shader(vertexShaderDir,fragmentShaderDir);
 
 	Shader shader2(lvs,lfs);
-	Mesh box1,box2,box3,plane1,light,sp,sp2;
+	Mesh sp2, light;
+	
+	
 	std::vector<vert> spVec=sphere(32,32,1);
+	std::vector<Mesh*> boxes;
+	std::vector<Transform> boxT;
+	for (int i = 0; i < 10000; i++)
+	{
+		Mesh* box = new Mesh();
+		box->createMesh<GLfloat, GLuint>(boxNormVertices, NULL, sizeof(boxNormVertices) / sizeof(boxNormVertices[0]), 0);
+		//box->createMesh<GLfloat, GLuint>(&spVec[0], NULL, spVec.size() * 8, 0);
+		boxes.push_back(box);
+		int r = i / 100;
+		int c = i % 100;
+		float Zoff = 2, Xoff = 2;
+		Transform t(c * Xoff, 0, Zoff * r);
+		boxT.push_back(t);
+	}
 
-	//box.createMesh(bvertices, bIndex, sizeof(bvertices) / sizeof(bvertices[0]), sizeof(bIndex));
-	box1.createMesh<GLfloat,GLuint>(boxNormVertices,NULL,sizeof(boxNormVertices)/sizeof(boxNormVertices[0]),0);
-	box2.createMesh<GLfloat, GLuint>(boxNormVertices,NULL,sizeof(boxNormVertices)/sizeof(boxNormVertices[0]),0);
-	box3.createMesh<GLfloat, GLuint>(boxNormVertices,NULL,sizeof(boxNormVertices)/sizeof(boxNormVertices[0]),0);
 	light.createMesh<GLfloat, GLuint>(boxNormVertices,NULL,sizeof(boxNormVertices)/sizeof(boxNormVertices[0]),0);
-	plane1.createMesh<GLfloat, GLuint>(plane,planeIndex,sizeof(plane)/sizeof(plane[0]),sizeof(planeIndex));
 	sp2.createMesh<GLfloat, GLuint>(&spVec[0],NULL,spVec.size()*8,0);
 	//sp.createMesh<GLfloat, GLuint>(&spVec[0],NULL,spVec.size()*sizeof(GLfloat)*8,0);
 	//std::cout <<sizeof(boxNormVertices)/sizeof(boxNormVertices[0]) ;
 	Texture tex("../Assets/container.jpg",GL_RGB);
 	Texture tex1("../Assets/elephant1.png",GL_RGBA);
-	Texture tex2("../Assets/earth3k.jpg", GL_RGB);
+	//Texture tex2("../Assets/earth3k.jpg", GL_RGB);
 	tex.loadImage();
 	tex1.loadImage();
-	tex2.loadImage();
+	//tex2.loadImage();
 	
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(1,1,1,1);
@@ -106,19 +123,14 @@ int main()
 
 	GLfloat t =0;
 	float a= 1;
-	Transform transform1(-1,0.01,6);
-	Transform transform2(1,0.01,6);
-	Transform transform3(0,0.01,5);
-	Transform transform4(0,-0.5,5);
+	
 	Transform spTrans(0,2,5);
 	Transform lineT(0,0,0);
 	glm::vec3 lightPose = glm::vec3(0, 2, -20);
 	Transform lit;
 	
 	lit.scale=glm::vec3(0.2,0.2,0.2);
-	transform4.scale = glm::vec3(1,1,1)*5.0f;
-	transform4.rotation.setEulerAngle(90,0,0);
-
+	
 	glm::vec3 st = glm::vec3(0, 0, 0);
 	glm::vec3 end = glm::vec3(0, 0, 10);
 	
@@ -126,20 +138,17 @@ int main()
 
 	while (!window.shouldWindowClose())
 	{
-		
-		spTrans.rotation= spTrans.rotation*Quaternion::rotationAroundAxisVector(0.001f,worldUp);
+		float currTime = glfwGetTime();
+		spTrans.rotation= spTrans.rotation*Quaternion::rotationAroundAxisVector(deltaTime*1.0f,worldUp);
 		if (Input::getKeyDown(GLFW_KEY_1))
 			lightPose.y -= 0.01f;
 		if (Input::getKeyDown(GLFW_KEY_2))
 			lightPose.y += 0.01f;
 		//transform1.rotation.setEulerAngle(45,45,45);
 		lit.position = glm::vec3(lightPose.x, lightPose.y, lightPose.z);
-		transform3.rotation.quaternion =Quaternion::rotationAroundAxisVector(0.01f,worldUp)*transform3.rotation.quaternion;
+
 		//transform3.rotation.quaternion =Quaternion::rotationAroundAxisVector(0.1f,transform3.right())* transform3.rotation.quaternion;
-		glm::mat4 trans1 = transform1.transformMatrix();
-		glm::mat4 trans2 = transform2.transformMatrix();
-		glm::mat4 trans3 = transform3.transformMatrix();
-		glm::mat4 trans4 = transform4.transformMatrix();
+		
 		glm::mat4 spT = spTrans.transformMatrix();
 		glm::mat4 ln = lineT.transformMatrix();
 		glm::mat4 lightTrans = lit.transformMatrix();
@@ -161,26 +170,24 @@ int main()
 				shader.setUniformVec3("viewPose",cam.getCameraPosition());
 				shader.setUniformInteger("texture1",0);
 				shader.setUniformInteger("texture2",1);
-				shader.setUniformMat4fv("transform",1,glm::value_ptr(trans1));
 				shader.setUniformMat4fv("proj",1, glm::value_ptr(proj));
 				shader.setUniformMat4fv("view",1, glm::value_ptr(view));
-				
 				tex.use(0);
 				tex1.use(1);
-			
-				box1.renderMesh();
-			
-				shader.setUniformMat4fv("transform", 1, glm::value_ptr(trans2));
-				box2.renderMesh();
-				shader.setUniformMat4fv("transform", 1, glm::value_ptr(trans3));
-				box3.renderMesh();
-				shader.setUniformMat4fv("transform", 1, glm::value_ptr(trans4));
-				plane1.renderMesh();
+				for (int i = 0; i < boxes.size(); i++)
+				{
+					//boxT[i].rotation=boxT[i].rotation*Quaternion::rotationAroundAxisVector(10*deltaTime,worldUp);
+					glm::mat4 trans =boxT[i].transformMatrix();
+					shader.setUniformMat4fv("transform",1,glm::value_ptr(trans));
+					boxes[i]->renderMesh();
+				}
+				
 				shader.setUniformMat4fv("transform", 1, glm::value_ptr(spT));
-			
-				tex.use(0);
-				tex2.use(1);
 				sp2.renderMesh();
+			
+			
+				
+				
 			
 			shader2.useShaderProgram();
 				shader2.setUniformMat4fv("transform", 1, glm::value_ptr(lightTrans));
@@ -197,7 +204,8 @@ int main()
 		
 		window.processInput();
 		window.swapBuffers();
-		
+		deltaTime = currTime - lastTime;
+		lastTime = currTime;
 	}
 
 

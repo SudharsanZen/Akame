@@ -104,8 +104,10 @@
     <ClInclude Include="Header Files\Transform.h" />
     <ClInclude Include="Header Files\Window.h" />
     <ClInclude Include="Header Files\temp.h" />
+    <ClInclude Include="Header Files\MeshInstance.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source Files\MeshInstance.cpp" />
     <ClCompile Include="Source Files\Camera.cpp" />
     <ClCompile Include="Source Files\Editor\EditorUI.cpp" />
     <ClCompile Include="Source Files\EngineMathConstants.cpp" />
