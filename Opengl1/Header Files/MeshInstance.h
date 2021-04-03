@@ -23,6 +23,7 @@ public:
 	template<class T, class Q>
 	void createMesh(const void* vert, const void* index, GLuint vertCount, GLuint indexCount);
 	void renderMesh();
+	void updateTransformBuffer();
 	
 
 
@@ -81,13 +82,13 @@ void MeshInstance::createMesh(const void* vert, const void* index, GLuint vertCo
 
 	//setting attribite pointer for each row of matrices with 4 component in each row
 	int vecSize=sizeof(glm::vec4);
-	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(vecSize) * 4, (void*)(0));
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (void*)(0));
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(vecSize) * 4, (void*)(1*vecSize));
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (void*)(1*vecSize));
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(vecSize) * 4, (void*)(2*vecSize));
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (void*)(2*vecSize));
 	glEnableVertexAttribArray(5);
-	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(vecSize) * 4, (void*)(3*vecSize));
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (void*)(3*vecSize));
 	glEnableVertexAttribArray(6);
 
 	glVertexAttribDivisor(3, 1);

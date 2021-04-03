@@ -46,6 +46,14 @@ void MeshInstance::renderMesh()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+void MeshInstance::updateTransformBuffer()
+{
+	createMat4FromTransform();
+	glBindBuffer(GL_ARRAY_BUFFER,VBOinstance);
+	glBufferSubData(GL_ARRAY_BUFFER,0,transformList.size()*sizeof(glm::mat4),&modelMatList[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 
 void MeshInstance::clearMesh()
 {

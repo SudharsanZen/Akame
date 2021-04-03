@@ -45,7 +45,10 @@ void flyCam(Camera& cam)
 	if (Input::getMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 	{
 		X += -(y - yPrev)*0.5;
-		Y += -(x - xPrev)*0.5;
+		
+		float s =glm::dot(cam.transform.up(),worldUp);
+		int sign = s/abs(s);
+		Y += -(x - xPrev) * 0.5*(sign);
 		cam.transform.rotation=Quaternion::rotationAroundAxisVector(Y,worldUp);
 		cam.transform.rotation= Quaternion::rotationAroundAxisVector(X,cam.transform.right())* cam.transform.rotation.quaternion;
 	}
@@ -60,8 +63,8 @@ int main()
 	deltaTime = 0;
 	float lastTime = 0;
 	stbi_set_flip_vertically_on_load(true);
-	const GLchar* vertexShaderDir = "..\\shaders\\vertexShader.vert";
-	const GLchar* fragmentShaderDir = "..\\shaders\\fragmentShader.frag";
+	const GLchar* vertexShaderDir = "..\\shaders\\InstancedShader\\vertexShaderInstanced.vert";
+	const GLchar* fragmentShaderDir = "..\\shaders\\InstancedShader\\fragmentShaderInstanced.frag";
 	const GLchar* lvs = "..\\shaders\\lightShader.vert";
 	const GLchar* lfs = "..\\shaders\\lightShader.frag";
 
@@ -74,7 +77,7 @@ int main()
 		return -1;
 	}
 
-	Camera cam(60, 1, 1, 512);
+	Camera cam(60, 1, 1, 10000);
 	cam.setFieldOfView(60.0f);
 	
 
@@ -85,72 +88,67 @@ int main()
 
 	Shader shader2(lvs,lfs);
 	Mesh sp2, light;
-	
+	light.createMesh<GLfloat, GLuint>(boxNormVertices, NULL, sizeof(boxNormVertices) / sizeof(boxNormVertices[0]), 0);
 	
 	std::vector<vert> spVec=sphere(32,32,1);
-	std::vector<Mesh*> boxes;
 	std::vector<Transform> boxT;
-	for (int i = 0; i < 10000; i++)
-	{
-		Mesh* box = new Mesh();
-		box->createMesh<GLfloat, GLuint>(boxNormVertices, NULL, sizeof(boxNormVertices) / sizeof(boxNormVertices[0]), 0);
-		//box->createMesh<GLfloat, GLuint>(&spVec[0], NULL, spVec.size() * 8, 0);
-		boxes.push_back(box);
-		int r = i / 100;
-		int c = i % 100;
+	for (int i = 0; i < 100000; i++)
+	{	
+		int r = i / 316;
+		int c = i % 316;
 		float Zoff = 2, Xoff = 2;
 		Transform t(c * Xoff, 0, Zoff * r);
 		boxT.push_back(t);
 	}
+	//glEnable(GL_MULTISAMPLE); 
+	MeshInstance boxes(boxT);
+	boxes.createMesh<GLfloat,GLfloat>(boxNormVertices, NULL, sizeof(boxNormVertices) / sizeof(boxNormVertices[0]), 0);
 
-	light.createMesh<GLfloat, GLuint>(boxNormVertices,NULL,sizeof(boxNormVertices)/sizeof(boxNormVertices[0]),0);
-	sp2.createMesh<GLfloat, GLuint>(&spVec[0],NULL,spVec.size()*8,0);
-	//sp.createMesh<GLfloat, GLuint>(&spVec[0],NULL,spVec.size()*sizeof(GLfloat)*8,0);
-	//std::cout <<sizeof(boxNormVertices)/sizeof(boxNormVertices[0]) ;
 	Texture tex("../Assets/container.jpg",GL_RGB);
 	Texture tex1("../Assets/elephant1.png",GL_RGBA);
-	//Texture tex2("../Assets/earth3k.jpg", GL_RGB);
+
 	tex.loadImage();
 	tex1.loadImage();
-	//tex2.loadImage();
+
 	
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(1,1,1,1);
 
-	// Setup Dear ImGui context
-	
-	Editor mainEditor(window);
+	//Editor mainEditor(window);
 
 	GLfloat t =0;
 	float a= 1;
 	
-	Transform spTrans(0,2,5);
-	Transform lineT(0,0,0);
+
 	glm::vec3 lightPose = glm::vec3(0, 2, -20);
 	Transform lit;
 	
 	lit.scale=glm::vec3(0.2,0.2,0.2);
-	
-	glm::vec3 st = glm::vec3(0, 0, 0);
-	glm::vec3 end = glm::vec3(0, 0, 10);
-	
-	lines l(st, end);
 
+	GLdouble lt = 0;
 	while (!window.shouldWindowClose())
 	{
 		float currTime = glfwGetTime();
-		spTrans.rotation= spTrans.rotation*Quaternion::rotationAroundAxisVector(deltaTime*1.0f,worldUp);
 		if (Input::getKeyDown(GLFW_KEY_1))
 			lightPose.y -= 0.01f;
 		if (Input::getKeyDown(GLFW_KEY_2))
 			lightPose.y += 0.01f;
-		//transform1.rotation.setEulerAngle(45,45,45);
-		lit.position = glm::vec3(lightPose.x, lightPose.y, lightPose.z);
-
-		//transform3.rotation.quaternion =Quaternion::rotationAroundAxisVector(0.1f,transform3.right())* transform3.rotation.quaternion;
 		
-		glm::mat4 spT = spTrans.transformMatrix();
-		glm::mat4 ln = lineT.transformMatrix();
+		lit.position = glm::vec3(lightPose.x, lightPose.y, lightPose.z);
+		lt += deltaTime*5;
+		for (int i=0; i < boxT.size(); i++)
+		{
+			float r = i / 316;
+			float c = i % 316;
+			float y = cos((c+lt)/10)*sin((r+lt)/10);
+			
+			boxT[i].position.y=y*10;
+			
+				boxT[i].rotation = boxT[i].rotation * Quaternion::rotationAroundAxisVector(10 * deltaTime, worldUp);
+
+		}
+		boxes.updateTransformBuffer();
+
 		glm::mat4 lightTrans = lit.transformMatrix();
 		glm::mat4 proj = cam.getProjectionMatrix();
 		glm::mat4 view = cam.getViewMatrix();
@@ -174,16 +172,7 @@ int main()
 				shader.setUniformMat4fv("view",1, glm::value_ptr(view));
 				tex.use(0);
 				tex1.use(1);
-				for (int i = 0; i < boxes.size(); i++)
-				{
-					//boxT[i].rotation=boxT[i].rotation*Quaternion::rotationAroundAxisVector(10*deltaTime,worldUp);
-					glm::mat4 trans =boxT[i].transformMatrix();
-					shader.setUniformMat4fv("transform",1,glm::value_ptr(trans));
-					boxes[i]->renderMesh();
-				}
-				
-				shader.setUniformMat4fv("transform", 1, glm::value_ptr(spT));
-				sp2.renderMesh();
+				boxes.renderMesh();
 			
 			
 				
