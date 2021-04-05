@@ -41,16 +41,17 @@ void flyCam(Camera& cam)
 	Input::getMouseXY(x,y);
 
 	
-	
-	if (Input::getMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+	if (Input::getMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
-		X += -(y - yPrev)*0.5;
-		
-		float s =glm::dot(cam.transform.up(),worldUp);
-		int sign = s/abs(s);
-		Y += -(x - xPrev) * 0.5*(sign);
-		cam.transform.rotation=Quaternion::rotationAroundAxisVector(Y,worldUp);
-		cam.transform.rotation= Quaternion::rotationAroundAxisVector(X,cam.transform.right())* cam.transform.rotation.quaternion;
+		X += -(y - yPrev) * 0.5;
+		Y += -(x - xPrev) * 0.5;
+		//if (abs(Y) >= 360.0f)
+			//Y =Y+((Y>0)?-1:1)*360.0f;
+		Y = abs(Y) >= 360.0f ? 0 : Y;
+		X = abs(X) >= 360.0f ? 0 : X;
+		cam.transform.rotation = Quaternion::rotationAroundAxisVector(Y, worldUp);
+		cam.transform.rotation = Quaternion::rotationAroundAxisVector(X, cam.transform.right()) * cam.transform.rotation.quaternion;
+			std::cout << Y << std::endl;
 	}
 	yPrev = y;
 	xPrev = x;
@@ -81,7 +82,7 @@ int main()
 	cam.setFieldOfView(60.0f);
 	
 
-	glfwSwapInterval(0);
+	//glfwSwapInterval(0);
 	
 	
 	Shader shader(vertexShaderDir,fragmentShaderDir);
@@ -92,18 +93,20 @@ int main()
 	
 	std::vector<vert> spVec=sphere(32,32,1);
 	std::vector<Transform> boxT;
-	for (int i = 0; i < 100000; i++)
+	int numOfObjects = 100;
+	int sqr = sqrt(numOfObjects);
+	for (int i = 0; i < numOfObjects; i++)
 	{	
-		int r = i / 316;
-		int c = i % 316;
-		float Zoff = 2, Xoff = 2;
+		int r = i /sqr;
+		int c = i % sqr;
+		float Zoff = 1, Xoff = 1;
 		Transform t(c * Xoff, 0, Zoff * r);
 		boxT.push_back(t);
 	}
 	//glEnable(GL_MULTISAMPLE); 
 	MeshInstance boxes(boxT);
 	boxes.createMesh<GLfloat,GLfloat>(boxNormVertices, NULL, sizeof(boxNormVertices) / sizeof(boxNormVertices[0]), 0);
-
+	//boxes.createMesh<GLfloat,GLfloat>(&spVec[0], NULL,spVec.size()*8, 0);
 	Texture tex("../Assets/container.jpg",GL_RGB);
 	Texture tex1("../Assets/elephant1.png",GL_RGBA);
 
@@ -120,35 +123,24 @@ int main()
 	float a= 1;
 	
 
-	glm::vec3 lightPose = glm::vec3(0, 2, -20);
+	glm::vec3 lightPose = glm::vec3(0, 100, -20);
 	Transform lit;
 	
 	lit.scale=glm::vec3(0.2,0.2,0.2);
 
-	GLdouble lt = 0;
+	GLfloat lt = 0;
 	while (!window.shouldWindowClose())
 	{
 		float currTime = glfwGetTime();
 		if (Input::getKeyDown(GLFW_KEY_1))
-			lightPose.y -= 0.01f;
+			lightPose.y -= 10*deltaTime;
 		if (Input::getKeyDown(GLFW_KEY_2))
-			lightPose.y += 0.01f;
+			lightPose.y += 10*deltaTime;
 		
 		lit.position = glm::vec3(lightPose.x, lightPose.y, lightPose.z);
-		lt += deltaTime*5;
-		for (int i=0; i < boxT.size(); i++)
-		{
-			float r = i / 316;
-			float c = i % 316;
-			float y = cos((c+lt)/10)*sin((r+lt)/10);
-			
-			boxT[i].position.y=y*10;
-			
-				boxT[i].rotation = boxT[i].rotation * Quaternion::rotationAroundAxisVector(10 * deltaTime, worldUp);
-
-		}
-		boxes.updateTransformBuffer();
-
+		lt += deltaTime;
+		
+		
 		glm::mat4 lightTrans = lit.transformMatrix();
 		glm::mat4 proj = cam.getProjectionMatrix();
 		glm::mat4 view = cam.getViewMatrix();
@@ -164,10 +156,12 @@ int main()
 			
 			shader.useShaderProgram();
 				
-				shader.setUniformVec3("lpose",lightPose);
-				shader.setUniformVec3("viewPose",cam.getCameraPosition());
-				shader.setUniformInteger("texture1",0);
-				shader.setUniformInteger("texture2",1);
+				shader.setUniformVec3("lightPos",lightPose);
+				shader.setUniformVec3("viewPos",cam.getCameraPosition());
+				shader.setUniformInteger("tex1",0);
+				//shader.setUniformInteger("texture2",1);
+				shader.setUniformVec3("lightColor", glm::vec3(1,1,1));
+				shader.setUniformVec3("objectColor", glm::vec3(1,1,1));
 				shader.setUniformMat4fv("proj",1, glm::value_ptr(proj));
 				shader.setUniformMat4fv("view",1, glm::value_ptr(view));
 				tex.use(0);
