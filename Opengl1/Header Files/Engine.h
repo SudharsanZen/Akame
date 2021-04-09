@@ -13,6 +13,7 @@
 #include"Mesh.h"
 #include"MeshInstance.h"
 #include"Texture.h"
+#include"Material.h"
 #include"Editor\EditorUI.h"
 #include"Camera.h"
 #include"Input.h"

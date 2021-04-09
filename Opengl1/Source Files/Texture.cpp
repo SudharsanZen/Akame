@@ -3,25 +3,27 @@
 Texture::Texture(std::string dir,GLuint imageFormat)
 {
 	imageDir=dir;
-	imageData = nullptr;
 	textureID = -1;
 	Height = 0;
 	Width = 0;
 	texFormat=imageFormat;
+	imageData = nullptr;
+	loadImage();
 }
 
 
 void Texture::clearTextures()
 {
-	if (textureID)
+	if (textureID!=-1)
 	{
 
 		glDeleteTextures(1, &textureID);
-		textureID = 0;
-		Width = 0;
-		Height = 0;
+	
 		
 	}
+	textureID = -1;
+	Width = 0;
+	Height = 0;
 }
 
 void Texture::loadImage()
@@ -50,7 +52,7 @@ void Texture::loadImage()
 	}
 
 	//load image from file location into GLubyte*
-	imageData = stbi_load(imageDir.c_str(), &Width, &Height, &nrChannels, 0);
+	 imageData = stbi_load(imageDir.c_str(), &Width, &Height, &nrChannels, 0);
 
 	if(imageData)
 	{

@@ -66,6 +66,8 @@
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\StopWatch.h" />
+    <ClInclude Include="Header Files\Editor\Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Camera.cpp">
@@ -113,5 +115,7 @@
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\misc\StopWatch.cpp" />
+    <ClCompile Include="Source Files\Editor\Scene.cpp" />
   </ItemGroup>
 </Project>

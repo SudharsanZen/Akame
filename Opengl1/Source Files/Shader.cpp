@@ -10,6 +10,7 @@ Shader::Shader(std::string vertexShaderDir, std::string fragmentShaderDir)
     vertDir = vertexShaderDir;
     fragDir = fragmentShaderDir;
     programID = 0;
+    uboMatricesIndex = -1;
     compileShader();
 }
 
@@ -21,6 +22,7 @@ void Shader::deleteProgram()
 {
     if (programID)
     {
+
         glDeleteProgram(programID);
         programID = 0;
     }
@@ -30,6 +32,11 @@ void Shader::useShaderProgram()
     //use created program
     if (programID)
     {
+        if (uboMatricesIndex == -1)
+        {
+            uboMatricesIndex = glGetUniformBlockIndex(programID, "Matrices");
+        }
+        glUniformBlockBinding(programID, uboMatricesIndex, 0);
         glUseProgram(programID);
         //callAfterUseProgram(programID);
     }
@@ -136,6 +143,10 @@ bool Shader::compileShader()
     //de allocating the char** pointer to the shaderFileContent 
     freeCodePointer(vCode,vCount);
     freeCodePointer(fCode,fCount);
+
+    //getIndex of unfirom buffer for view and projection matrix
+  
+
     return true;
 }
 

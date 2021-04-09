@@ -4,10 +4,24 @@
 #include<algorithm>
 #include"Engine.h"
 #include"temp.h"
-#include<vector>
+#include"time.h"
 
+#include"stopwatch.h"
+#include<vector>
+GLuint uboMatrixBufferID;
+GLsizeiptr mat4Size = sizeof(glm::mat4);
 float deltaTime;
-void flyCam(Camera& cam)
+void updateUniformBuffer(Camera& cam)
+{
+	glm::mat4 projMat = cam.getProjectionMatrix();
+	glm::mat4 viewMat = cam.getViewMatrix();
+	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrixBufferID);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, mat4Size, glm::value_ptr(projMat));
+	glBufferSubData(GL_UNIFORM_BUFFER, mat4Size, mat4Size, glm::value_ptr(viewMat));
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+}
+void flyCam(Camera& cam, Window &window)
 {
 
 	static double xPrev=0, yPrev=0;
@@ -40,8 +54,11 @@ void flyCam(Camera& cam)
 	}
 	Input::getMouseXY(x,y);
 
+
 	
-	if (Input::getMouseButton(GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+	
+	
+	if (Input::getMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 	{
 		X += -(y - yPrev) * 0.5;
 		Y += -(x - xPrev) * 0.5;
@@ -51,8 +68,11 @@ void flyCam(Camera& cam)
 		X = abs(X) >= 360.0f ? 0 : X;
 		cam.transform.rotation = Quaternion::rotationAroundAxisVector(Y, worldUp);
 		cam.transform.rotation = Quaternion::rotationAroundAxisVector(X, cam.transform.right()) * cam.transform.rotation.quaternion;
-			std::cout << Y << std::endl;
+
+	
 	}
+	updateUniformBuffer(cam);
+	cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 	yPrev = y;
 	xPrev = x;
 }
@@ -64,11 +84,7 @@ int main()
 	deltaTime = 0;
 	float lastTime = 0;
 	stbi_set_flip_vertically_on_load(true);
-	const GLchar* vertexShaderDir = "..\\shaders\\InstancedShader\\vertexShaderInstanced.vert";
-	const GLchar* fragmentShaderDir = "..\\shaders\\InstancedShader\\fragmentShaderInstanced.frag";
-	const GLchar* lvs = "..\\shaders\\lightShader.vert";
-	const GLchar* lfs = "..\\shaders\\lightShader.frag";
-
+	
 	Window window(800,800,"Main Window",NULL);
 	
 
@@ -78,117 +94,70 @@ int main()
 		return -1;
 	}
 
+		
+	glEnable(GL_DEPTH_TEST);
+
+	
+	glGenBuffers(1,&uboMatrixBufferID);
+	glBindBuffer(GL_UNIFORM_BUFFER,uboMatrixBufferID);
+	glBufferData(GL_UNIFORM_BUFFER,2*mat4Size,NULL,GL_STATIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER,0);
+	glBindBufferRange(GL_UNIFORM_BUFFER,0,uboMatrixBufferID,0,2*mat4Size);
+
 	Camera cam(60, 1, 1, 10000);
 	cam.setFieldOfView(60.0f);
 	
-
-	//glfwSwapInterval(0);
-	
-	
-	Shader shader(vertexShaderDir,fragmentShaderDir);
-
-	Shader shader2(lvs,lfs);
-	Mesh sp2, light;
-	light.createMesh<GLfloat, GLuint>(boxNormVertices, NULL, sizeof(boxNormVertices) / sizeof(boxNormVertices[0]), 0);
-	
-	std::vector<vert> spVec=sphere(32,32,1);
-	std::vector<Transform> boxT;
-	int numOfObjects = 100;
-	int sqr = sqrt(numOfObjects);
-	for (int i = 0; i < numOfObjects; i++)
-	{	
-		int r = i /sqr;
-		int c = i % sqr;
-		float Zoff = 1, Xoff = 1;
-		Transform t(c * Xoff, 0, Zoff * r);
-		boxT.push_back(t);
-	}
-	//glEnable(GL_MULTISAMPLE); 
-	MeshInstance boxes(boxT);
-	boxes.createMesh<GLfloat,GLfloat>(boxNormVertices, NULL, sizeof(boxNormVertices) / sizeof(boxNormVertices[0]), 0);
-	//boxes.createMesh<GLfloat,GLfloat>(&spVec[0], NULL,spVec.size()*8, 0);
-	Texture tex("../Assets/container.jpg",GL_RGB);
-	Texture tex1("../Assets/elephant1.png",GL_RGBA);
-
-	tex.loadImage();
-	tex1.loadImage();
-
-	
-	glEnable(GL_DEPTH_TEST);
-	glClearColor(1,1,1,1);
-
 	//Editor mainEditor(window);
 
-	GLfloat t =0;
-	float a= 1;
-	
+	Material m1;
+	m1.setDiffuseMap("../Assets/pbr/box/diffuse.png", GL_RGBA);
+	m1.setSpecularMap("../Assets/pbr/box/roughness.png", GL_RGBA);
+	//m1.setNormalMap("../Assets/pbr/normal.jpg", GL_RGB);
 
-	glm::vec3 lightPose = glm::vec3(0, 100, -20);
-	Transform lit;
+	Mesh sp2, light;
+	light.createMesh<GLfloat, GLuint>(boxNormVertices, NULL, sizeof(boxNormVertices) / sizeof(boxNormVertices[0]), 0);
+
+	std::vector<vert> spVec = sphere(32, 32, 1);
 	
+	Mesh box;
+	box.createMesh<GLfloat,GLfloat>(boxNormVertices, NULL, sizeof(boxNormVertices) / sizeof(boxNormVertices[0]), 0);
+	//box.createMesh<GLfloat, GLfloat>(&spVec[0], NULL, spVec.size() * 8, 0);
+
+	Transform boxT(0, 0, 5);
+
+
+	glm::vec3 lightPose = glm::vec3(2,2, -2);
+	Transform lit(lightPose.x,lightPose.y,lightPose.z);
 	lit.scale=glm::vec3(0.2,0.2,0.2);
 
-	GLfloat lt = 0;
+
+	glfwSwapInterval(0);
+
+
 	while (!window.shouldWindowClose())
 	{
+
 		float currTime = glfwGetTime();
-		if (Input::getKeyDown(GLFW_KEY_1))
-			lightPose.y -= 10*deltaTime;
-		if (Input::getKeyDown(GLFW_KEY_2))
-			lightPose.y += 10*deltaTime;
-		
-		lit.position = glm::vec3(lightPose.x, lightPose.y, lightPose.z);
-		lt += deltaTime;
-		
-		
-		glm::mat4 lightTrans = lit.transformMatrix();
-		glm::mat4 proj = cam.getProjectionMatrix();
-		glm::mat4 view = cam.getViewMatrix();
-		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
+		flyCam(cam, window);
+
 		glfwPollEvents();
 		
-			//glClearColor(0.2f,0.3f,0.3f,1.0f);
+			glClearColor(0.2f,0.3f,0.3f,1.0f);
 			//glClearColor(1,1,1,1.0f);
-			glClearColor(0,0,0,1.0f);
+			//glClearColor(0,0,0,1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			
-			flyCam(cam);
-			
-			shader.useShaderProgram();
-				
-				shader.setUniformVec3("lightPos",lightPose);
-				shader.setUniformVec3("viewPos",cam.getCameraPosition());
-				shader.setUniformInteger("tex1",0);
-				//shader.setUniformInteger("texture2",1);
-				shader.setUniformVec3("lightColor", glm::vec3(1,1,1));
-				shader.setUniformVec3("objectColor", glm::vec3(1,1,1));
-				shader.setUniformMat4fv("proj",1, glm::value_ptr(proj));
-				shader.setUniformMat4fv("view",1, glm::value_ptr(view));
-				tex.use(0);
-				tex1.use(1);
-				boxes.renderMesh();
-			
-			
-				
-				
-			
-			shader2.useShaderProgram();
-				shader2.setUniformMat4fv("transform", 1, glm::value_ptr(lightTrans));
-				shader2.setUniformMat4fv("proj", 1, glm::value_ptr(proj));
-				shader2.setUniformMat4fv("view", 1, glm::value_ptr(view));
-				
+			m1.use(boxT,lightPose,cam.transform.position);
+			box.renderMesh();
 
-				light.renderMesh();
-				
-				
-
-			//mainEditor.DrawUI();
-				
-		
+			m1.use(lit, lightPose, cam.transform.position);
+			light.renderMesh();
 		window.processInput();
 		window.swapBuffers();
+
 		deltaTime = currTime - lastTime;
 		lastTime = currTime;
+
 	}
 
 

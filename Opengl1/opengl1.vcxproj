@@ -102,12 +102,15 @@
     <ClInclude Include="Header Files\MeshInstance.h" />
     <ClInclude Include="Header Files\Quaternion.h" />
     <ClInclude Include="Header Files\Shader.h" />
+    <ClInclude Include="Header Files\StopWatch.h" />
     <ClInclude Include="Header Files\Texture.h" />
     <ClInclude Include="Header Files\Transform.h" />
     <ClInclude Include="Header Files\Window.h" />
     <ClInclude Include="Header Files\temp.h" />
+    <ClInclude Include="Header Files\Editor\Scene.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source Files\Editor\Scene.cpp" />
     <ClCompile Include="Source Files\Camera.cpp" />
     <ClCompile Include="Source Files\Editor\EditorUI.cpp" />
     <ClCompile Include="Source Files\EngineMathConstants.cpp" />
@@ -117,6 +120,7 @@
     <ClCompile Include="Source Files\Math\Transform.cpp" />
     <ClCompile Include="Source Files\Mesh.cpp" />
     <ClCompile Include="Source Files\MeshInstance.cpp" />
+    <ClCompile Include="Source Files\misc\StopWatch.cpp" />
     <ClCompile Include="Source Files\Shader.cpp" />
     <ClCompile Include="Source Files\Source.cpp" />
     <ClCompile Include="Source Files\Texture.cpp" />
