@@ -56,7 +56,7 @@ project "Opengl1"
     location"Opengl1/"
     kind "ConsoleApp"
     language "C++"
-    targetdir "bin/"
+    targetdir "Opengl1/bin/"
     objdir "bin/intermediate"
     dependson{"imGui","glfw"}
     files
@@ -71,20 +71,24 @@ project "Opengl1"
         "Opengl1/vendor",
         "%{prj.location}/Header Files",
         "%{prj.location}/vendor",
-        "%{prj.location}/vendor/imGui"
+        "%{prj.location}/vendor/imGui",
+        "%{prj.location}/vendor/assimp/include",
+        "ECS/HeaderFiles"
     }
 
     libdirs
     {
         "glfw/src/Debug",
         "%{prj.location}/vendor/imGui/windows/Debug",
+        "%{prj.location}/vendor/assimp/lib/Debug"
     }
 
     links
     {
         "glfw3.lib",
         "opengl32.lib",
-        "imGui.lib"
+        "imGui.lib",
+        "assimp-vc142-mtd.lib"
     }
 
     filter "configurations:Debug"
@@ -94,6 +98,42 @@ project "Opengl1"
     filter "configurations:Release"
         defines{"NDEBUG"}
         optimize "On" 
+
+
+project "ECS"
+    location"ECS"
+    kind "StaticLib"
+    language "C++"
+    targetdir "%{prj.location}/%{cfg.system}/%{cfg.buildcfg}"
+    files
+    {
+        "%{prj.location}/HeaderFiles/**.h",
+        "%{prj.location}/SourceFiles/**.cpp",
+    }
+
+    includedirs
+    {
+        "ECS/HeaderFiles",
+    }
+
+    libdirs
+    {
+     "ECS/windows/Debug"
+    }
+
+    links
+    {
+     "ECS.lib"
+    }
+    filter "configurations:Debug"
+    defines {"DEBUG"}
+    symbols "On"
+
+    filter "configurations:Release"
+    defines{"NDEBUG"}
+    optimize "On" 
+
+    
 
 externalproject "GLFW"
     location "glfw/src/"

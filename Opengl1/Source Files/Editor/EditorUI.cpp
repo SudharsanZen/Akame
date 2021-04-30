@@ -44,12 +44,17 @@ void Editor::DrawUI()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
+	
 	ImGui::NewFrame();
 
 
 	ImGui::Begin("Demo Window");
 	ImGui::Text("Bababoye");
+
 	ImGui::End();
+
+
+
 
 	ImGui::Render();
 	int display_w=0, display_h=0;

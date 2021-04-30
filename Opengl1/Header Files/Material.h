@@ -19,14 +19,7 @@ private:
 	Shader shader;
 public:
 	
-	Material(Texture &dif):diffuse(dif)
-	{
-		diffColor = glm::vec3(1,1,1);
-		specularColor = glm::vec3(1,1,1);
-		ambientIntensity = 0.2f;
-		normalMapOn = false;
-		//shader.compileShader();
-	}
+	
 
 	Material()
 	{
@@ -34,7 +27,7 @@ public:
 		specularColor = glm::vec3(1, 1, 1);
 		ambientIntensity = 0.2f;
 		normalMapOn = false;
-		//shader.compileShader();
+		shader.compileShader();
 	}
 
 	void use(Transform &t,glm::vec3 &lightPose,glm::vec3 &viewPose)
@@ -56,9 +49,14 @@ public:
 		shader.setUniformMat4fv("transform", 1, glm::value_ptr(trans));
 	}
 	
-	void setDiffuseMap(std::string fileLocation,GLuint imageFormat)		{		diffuse		= Texture(fileLocation,imageFormat);		}
-	void setSpecularMap(std::string fileLocation, GLuint imageFormat)	{		roughness	= Texture(fileLocation, imageFormat);		}
-	void setNormalMap(std::string fileLocation, GLuint imageFormat)		{		normalMap	= Texture(fileLocation, imageFormat);	}
+	void setDiffuseMap(std::string fileLocation)		{		diffuse		= Texture(fileLocation);		}
+	void setDiffuseMap(Texture& dif)		{		diffuse		= dif;		}
+
+	void setSpecularMap(std::string fileLocation)	{		roughness	= Texture(fileLocation);		}
+	void setSpecularMap(Texture& spec)	{		roughness	= spec;		}
+
+	void setNormalMap(std::string fileLocation)		{		normalMap	= Texture(fileLocation);	    }
+	void setNormalMap(Texture& norm)		{		normalMap	= norm;	    }
 
 
 

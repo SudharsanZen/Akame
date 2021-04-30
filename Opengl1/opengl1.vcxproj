@@ -41,14 +41,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\</OutDir>
+    <OutDir>bin\</OutDir>
     <IntDir>..\bin\intermediate\Debug\</IntDir>
     <TargetName>Opengl1</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\</OutDir>
+    <OutDir>bin\</OutDir>
     <IntDir>..\bin\intermediate\Release\</IntDir>
     <TargetName>Opengl1</TargetName>
     <TargetExt>.exe</TargetExt>
@@ -58,15 +58,15 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\glfw\include;Header Files;vendor;vendor\imGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\glfw\include;Header Files;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;imGui.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\glfw\src\Debug;vendor\imGui\windows\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;imGui.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\glfw\src\Debug;vendor\imGui\windows\Debug;vendor\assimp\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -74,7 +74,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\glfw\include;Header Files;vendor;vendor\imGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\glfw\include;Header Files;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -85,13 +85,14 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;imGui.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\glfw\src\Debug;vendor\imGui\windows\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;imGui.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\glfw\src\Debug;vendor\imGui\windows\Debug;vendor\assimp\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Header Files\Camera.h" />
     <ClInclude Include="Header Files\Editor\EditorUI.h" />
+    <ClInclude Include="Header Files\Editor\Scene.h" />
     <ClInclude Include="Header Files\Engine.h" />
     <ClInclude Include="Header Files\EngineMath.h" />
     <ClInclude Include="Header Files\EngineMathConstants.h" />
@@ -100,6 +101,7 @@
     <ClInclude Include="Header Files\Material.h" />
     <ClInclude Include="Header Files\Mesh.h" />
     <ClInclude Include="Header Files\MeshInstance.h" />
+    <ClInclude Include="Header Files\Model.h" />
     <ClInclude Include="Header Files\Quaternion.h" />
     <ClInclude Include="Header Files\Shader.h" />
     <ClInclude Include="Header Files\StopWatch.h" />
@@ -107,12 +109,11 @@
     <ClInclude Include="Header Files\Transform.h" />
     <ClInclude Include="Header Files\Window.h" />
     <ClInclude Include="Header Files\temp.h" />
-    <ClInclude Include="Header Files\Editor\Scene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source Files\Editor\Scene.cpp" />
     <ClCompile Include="Source Files\Camera.cpp" />
     <ClCompile Include="Source Files\Editor\EditorUI.cpp" />
+    <ClCompile Include="Source Files\Editor\Scene.cpp" />
     <ClCompile Include="Source Files\EngineMathConstants.cpp" />
     <ClCompile Include="Source Files\Input.cpp" />
     <ClCompile Include="Source Files\Material.cpp" />
@@ -120,11 +121,12 @@
     <ClCompile Include="Source Files\Math\Transform.cpp" />
     <ClCompile Include="Source Files\Mesh.cpp" />
     <ClCompile Include="Source Files\MeshInstance.cpp" />
-    <ClCompile Include="Source Files\misc\StopWatch.cpp" />
+    <ClCompile Include="Source Files\Model.cpp" />
     <ClCompile Include="Source Files\Shader.cpp" />
     <ClCompile Include="Source Files\Source.cpp" />
     <ClCompile Include="Source Files\Texture.cpp" />
     <ClCompile Include="Source Files\Window.cpp" />
+    <ClCompile Include="Source Files\misc\StopWatch.cpp" />
     <ClCompile Include="Source Files\stb_image.cpp" />
     <ClCompile Include="Source Files\temp.cpp" />
   </ItemGroup>

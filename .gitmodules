@@ -8,3 +8,6 @@
 	path = Opengl1/vendor/imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = docking
+[submodule "Opengl1/vendor/assimp"]
+	path = Opengl1/vendor/assimp
+	url = https://github.com/assimp/assimp.git

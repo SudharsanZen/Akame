@@ -43,29 +43,12 @@ public:
 		return *this;
 	}
 
-	Texture(Texture&& obj) noexcept
-	{
-		textureID = obj.textureID;
-		imageDir =obj.imageDir;
-		Height = obj.Height;
-		Width = obj.Width;
-		texFormat = obj.texFormat;
-		obj.textureID = -1;
-		obj.clearTextures();
-		
-	}
+	Texture& operator =(const Texture& obj)=default;
 
-	Texture(const Texture& obj)
-	{
-		textureID = obj.textureID;
-		imageDir = obj.imageDir;
-		Height = obj.Height;
-		Width = obj.Width;
-		texFormat = obj.texFormat;
-	}
+
 	
 	
-	Texture(std::string dir,GLuint imageFormat);
+	Texture(std::string dir);
 	
 	
 	

@@ -1,19 +1,22 @@
 #include "Mesh.h"
 
-Mesh::Mesh()
+Mesh::Mesh(std::vector<vert> vertices,std::vector<GLuint> indices)
 {
 	//initialize all values to zero or null
 	VBO = 0;
 	VAO = 0;
 	IBO = 0;
-	numOfIndices = 0;
-	numOfVertices = 0;
+	this->vertices = vertices;
+	this->indices = indices;
+
+	numOfIndices = indices.size();
+	numOfVertices = vertices.size();
+	setupMesh();
 }
 
 Mesh::~Mesh()
 {
-	
-	clearMesh();
+	//clearMesh();
 }
 
 
@@ -59,3 +62,50 @@ void Mesh::clearMesh()
 	numOfIndices = 0;
 	numOfVertices = 0;
 }
+
+void Mesh::setupMesh()
+{
+
+	//generate all buffers required for rendering and storing the mesh on the GPU
+
+	//generate Vertex Buffer object
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, numOfVertices * sizeof(vertices[0]), &vertices[0], GL_STATIC_DRAW);
+
+	//generate Index Buffer Object
+	if (numOfIndices > 0)
+	{
+		glGenBuffers(1, &IBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numOfIndices * sizeof(indices[0]), &indices[0], GL_STATIC_DRAW);
+	}
+
+	//generate Vertex Attribute Object
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	//vertex coordinate
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vert), (void*)(offsetof(struct vert, pos)));
+	glEnableVertexAttribArray(0);
+
+	//vertex normal
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vert), (void*)(offsetof(struct vert,normal)));
+	glEnableVertexAttribArray(1);
+
+	//texture coordinate
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vert), (void*)(offsetof(struct vert,uv)));
+	glEnableVertexAttribArray(2);
+
+	//unBinding all the buffers
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+
+	if ((!IBO && numOfIndices) || !VBO || !VAO)
+		std::cout << "Error creating Mesh!\n";
+
+
+}
+

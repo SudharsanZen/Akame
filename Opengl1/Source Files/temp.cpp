@@ -1,120 +1,9 @@
 #include"temp.h"
-GLfloat tvertices[16] = {
-	-0.5,-0.5,0,		0,0,
-	0.5,-0.5,0,			1,0,
-	0,0.5,0 ,			0.5,1
-};
-GLuint tIndex[3] = { 0,1,2 };
-
-float plane[32] = {
-	// positions          // colors           // texture coords
-	 0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f,   // top right
-	 0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f,   // bottom right
-	-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-	-0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f    // top left 
-};
-
-float planevert[20] = {
-	// positions            // texture coords
-	 0.5f,  0.5f, 0.0f,      1.0f, 1.0f,   // top right
-	 0.5f, -0.5f, 0.0f,     1.0f, 0.0f,   // bottom right
-	-0.5f, -0.5f, 0.0f,     0.0f, 0.0f,   // bottom left
-	-0.5f,  0.5f, 0.0f,      0.0f, 1.0f    // top left 
-};
-
-GLuint planeIndex[6] = { 0,1,2,2,3,0 };
-
-float boxvertices[180] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-};
-float boxNormVertices[288] = {
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
-
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,  0.0f, 0.0f,
-
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
-
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
-};
 
 
 
 
-std::vector<vert> sphere(int numSegLat, int numSegLong, float radius, std::vector<GLuint>& ind)
+std::vector<vert> generateSphereVertices(int numSegLat, int numSegLong, float radius, std::vector<GLuint>& ind)
 {
 	std::vector<GLuint> index;
 	std::vector<vert> sphere;
@@ -252,7 +141,7 @@ vert vertFromIndex(int i,int j,float radius,int numSegLat,int numSegLong)
 	return v;
 
 }
-std::vector<vert> sphere(int numSegLat, int numSegLong, float radius)
+std::vector<vert> generateSphereVertices(int numSegLat, int numSegLong, float radius)
 {
 	std::vector<vert> sphere;
 	
@@ -308,50 +197,113 @@ std::vector<vert> sphere(int numSegLat, int numSegLong, float radius)
 	}
 	return sphere;
 }
-GLfloat* serializeVec(std::vector<vert> v)
+
+
+
+std::vector<vert> generateCubeVertices(int heightSeg, int widthSeg)
 {
-	size_t n = v.size() * 8;
-	GLfloat* vPtr =new GLfloat[n];
+	std::vector<vert> cube;
+	std::vector<vert> faceFront;
 
+	float h = 1.0f/(float)heightSeg;
+	float w = 1.0f/(float)widthSeg;
 
-	for (size_t i = 0; i < n; i++)
+	float z = -0.5f;
+	float x = -0.5f;
+	float y = -0.5f;
+	for (int i = 0; i < heightSeg; i++)
 	{
-		size_t pos = i / 8;
-		switch (i%8)
+		for (int j = 0; j < widthSeg; j++)
 		{
-			case 0:
-				vPtr[i] = v[pos].pos.x;
-				break;
-
-			case 1:
-				vPtr[i] = v[pos].pos.y;
-				break;
-
-			case 2:
-				vPtr[i] = v[pos].pos.z;
-				break;
-
-			case 3:
-				vPtr[i] = v[pos].normal.x;
-				break;
-
-			case 4:
-				vPtr[i] = v[pos].normal.y;
-				break;
-
-			case 5:
-				vPtr[i] = v[pos].normal.z;
-				break;
-
-			case 6:
-				vPtr[i] = v[pos].uv.x;
-				break;
-
-			case 7:
-				vPtr[i] = v[pos].uv.y;
-				break;
+			vert v1 = { {x+(1 + j) * (w),y+i * h,z},{0,0,-1},{(1+j)*w,i*h} };//(1,0)
+			vert v2 = { {x+(1 + j) * (w),y+(i+1) * h,z},{0,0,-1},{(1 + j) * (w),(i + 1) * h} };//(1,1)
+			vert v3 = { {x+(j) * (w),i* h+y,z},{0,0,-1},{(j) * (w),i * h} };//(0,0)
+			vert v4 = { {x+(j) * (w),(i+1) * h+y,z},{0,0,-1},{(j) * (w),(i + 1) * h} };//(0,1)
+			faceFront.push_back(v1);
+			faceFront.push_back(v2);
+			faceFront.push_back(v3);
+			faceFront.push_back(v2);
+			faceFront.push_back(v4);
+			faceFront.push_back(v3);
 		}
 	}
-	return vPtr;
+	cube = faceFront;
+	
+	for (int i = 1; i <4; i++)
+	{
+		Quaternion rotate = Quaternion::rotationAroundAxisVector(i * 90, worldUp);
 
+		for (int j = 0; j < faceFront.size(); j++)
+		{
+			vert v;
+			v.pos= rotate*faceFront[j].pos;
+			v.normal= rotate*faceFront[j].normal;
+			v.uv= faceFront[j].uv;
+			cube.push_back(v);
+		}
+	}
+	
+		Quaternion rotate = Quaternion::rotationAroundAxisVector(90, worldRight);
+
+		for (int j = 0; j < faceFront.size(); j++)
+		{
+			vert v;
+			v.pos = rotate * faceFront[j].pos;
+			v.normal = rotate * faceFront[j].normal;
+			v.uv = faceFront[j].uv;
+			cube.push_back(v);
+		}
+
+		rotate = Quaternion::rotationAroundAxisVector(-90, worldRight);
+
+		for (int j = 0; j < faceFront.size(); j++)
+		{
+			vert v;
+			v.pos = rotate * faceFront[j].pos;
+			v.normal = rotate * faceFront[j].normal;
+			v.uv = faceFront[j].uv;
+			cube.push_back(v);
+		}
+	
+	return cube;
+}
+
+std::vector<vert> generatePlaneVertices(int lengthSeg, int widthSeg)
+{
+	std::vector<vert> faceFront;
+
+	float h = 1.0f / (float)lengthSeg;
+	float w = 1.0f / (float)widthSeg;
+
+	float z = 0;
+	float x = -0.5f;
+	float y = -0.5f;
+	for (int i = 0; i <lengthSeg; i++)
+	{
+		for (int j = 0; j < widthSeg; j++)
+		{
+			vert v1 = { {x + (1 + j) * (w),y + i * h,z},{0,0,-1},{(1 + j) * w,i * h} };//(1,0)
+			vert v2 = { {x + (1 + j) * (w),y + (i + 1) * h,z},{0,0,-1},{(1 + j) * (w),(i + 1) * h} };//(1,1)
+			vert v3 = { {x + (j) * (w),i * h + y,z},{0,0,-1},{(j) * (w),i * h} };//(0,0)
+			vert v4 = { {x + (j) * (w),(i + 1) * h + y,z},{0,0,-1},{(j) * (w),(i + 1) * h} };//(0,1)
+			faceFront.push_back(v1);
+			faceFront.push_back(v2);
+			faceFront.push_back(v3);
+			faceFront.push_back(v2);
+			faceFront.push_back(v4);
+			faceFront.push_back(v3);
+		}
+	}
+
+	Quaternion rotate = Quaternion::rotationAroundAxisVector(-90, worldRight);
+
+	for (int j = 0; j < faceFront.size(); j++)
+	{
+		vert v;
+		v.pos = rotate * faceFront[j].pos;
+		v.normal = rotate * faceFront[j].normal;
+		v.uv = faceFront[j].uv;
+		faceFront[j] = v;
+	}
+	return faceFront;
 }

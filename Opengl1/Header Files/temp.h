@@ -5,13 +5,16 @@ class lines
 {
 	GLuint VBO, VAO;
 public:
+	glm::vec3 color;
+	Shader debugShader;
 	struct line
 	{
 		glm::vec3 st;
 		glm::vec3 end;
 	}vData;
-	lines(glm::vec3 st, glm::vec3 end)
+	lines(glm::vec3 st, glm::vec3 end,glm::vec3 color):debugShader("Shaders/DebugShader/default.vert", "Shaders/DebugShader/default.frag")
 	{
+		this->color = color;
 		//generate all buffers required for rendering and storing the mesh on the GPU
 		vData.st = st;
 		vData.end = end;
@@ -41,7 +44,9 @@ public:
 		glad_glPointSize(2);
 		glad_glLineWidth(1);
 		//if all the buffers were successfully generated, then render the mesh
-
+	
+		debugShader.useShaderProgram();
+		debugShader.setUniformVec3("color",color);
 		glBindVertexArray(VAO);
 
 		glDrawArrays(GL_LINES, 0, 2);
@@ -60,25 +65,12 @@ public:
 	}
 
 };
-extern GLfloat tvertices[16];
-extern GLuint tIndex[3];
-
-extern float plane[32];
-
-extern float planevert[20];
-
-extern GLuint planeIndex[6];
-
-extern float boxvertices[180];
-extern float boxNormVertices[288];
 
 
-struct vert
-{
-	glm::vec3 pos;
-	glm::vec3 normal;
-	glm::vec2 uv;
-};
-std::vector<vert> sphere(int numSegLat, int numSegLong, float radius, std::vector<GLuint>& ind);
-std::vector<vert> sphere(int numSegLat, int numSegLong, float radius);
-GLfloat* serializeVec(std::vector<vert> v);
+
+
+std::vector<vert> generateSphereVertices(int numSegLat, int numSegLong, float radius, std::vector<GLuint>& ind);
+std::vector<vert> generateSphereVertices(int numSegLat, int numSegLong, float radius);
+std::vector<vert> generateCubeVertices(int heightSeg=1, int widthSeg=1);
+std::vector<vert> generatePlaneVertices(int lengthSeg=1, int widthSeg=1);
+

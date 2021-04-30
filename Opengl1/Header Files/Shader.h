@@ -20,7 +20,7 @@ private:
 	void freeCodePointer(GLchar**,unsigned int);
 	void deleteProgram();
 public:
-	Shader():Shader("../shaders/default.vert", "../shaders/default.frag"){}
+	Shader():Shader("Shaders/default.vert", "Shaders/default.frag"){}
 	Shader(std::string vertexShaderDir,std::string fragmentShaderDir);
 	
 	void setShaderFileLocation(std::string vert, std::string frag) { vertDir = vert; fragDir = frag; };

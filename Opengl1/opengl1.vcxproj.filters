@@ -16,12 +16,18 @@
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{6286B20A-CE9C-B0A0-1714-3CC283698128}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\misc">
+      <UniqueIdentifier>{6434C40A-D04A-C2A0-19C2-4DC285179328}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header Files\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Editor\EditorUI.h">
+      <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Editor\Scene.h">
       <Filter>Header Files\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Engine.h">
@@ -48,10 +54,16 @@
     <ClInclude Include="Header Files\MeshInstance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Quaternion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\StopWatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Texture.h">
@@ -66,14 +78,15 @@
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\StopWatch.h" />
-    <ClInclude Include="Header Files\Editor\Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Editor\EditorUI.cpp">
+      <Filter>Source Files\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Editor\Scene.cpp">
       <Filter>Source Files\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\EngineMathConstants.cpp">
@@ -97,6 +110,9 @@
     <ClCompile Include="Source Files\MeshInstance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -109,13 +125,14 @@
     <ClCompile Include="Source Files\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\misc\StopWatch.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\misc\StopWatch.cpp" />
-    <ClCompile Include="Source Files\Editor\Scene.cpp" />
   </ItemGroup>
 </Project>

@@ -1,12 +1,11 @@
 #include "Texture.h"
 
-Texture::Texture(std::string dir,GLuint imageFormat)
+Texture::Texture(std::string dir)
 {
 	imageDir=dir;
 	textureID = -1;
 	Height = 0;
 	Width = 0;
-	texFormat=imageFormat;
 	imageData = nullptr;
 	loadImage();
 }
@@ -54,6 +53,21 @@ void Texture::loadImage()
 	//load image from file location into GLubyte*
 	 imageData = stbi_load(imageDir.c_str(), &Width, &Height, &nrChannels, 0);
 
+	 switch (nrChannels)
+	 {
+	 case 1:
+		 texFormat = GL_RED;
+		 break;
+	 case 2:
+		 texFormat =GL_RG;
+		 break;
+	 case 3:
+		 texFormat = GL_RGB;
+		 break;
+	 case 4:
+		 texFormat = GL_RGBA;
+		 break;
+	 }
 	if(imageData)
 	{
 		glTexImage2D(GL_TEXTURE_2D,0,texFormat,Width,Height,0,texFormat,GL_UNSIGNED_BYTE,imageData);

@@ -42,7 +42,7 @@ void main()
     vec3 specularStrength = texture(material.specularMap,uvCoord).xyz;
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);  
-    float spec = 2*pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    float spec = 1*pow(max(dot(viewDir, reflectDir), 0.0), 32);
     vec3 specular = specularStrength * spec * lightColor;  
         
     vec3 result = (ambient + diffuse + specular) * texture(material.diffuseMap,uvCoord).xyz;

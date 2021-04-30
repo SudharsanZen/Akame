@@ -2,6 +2,14 @@
 #include<iostream>
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
+#include<vector>
+#include<glm/glm/glm.hpp>
+struct vert
+{
+	glm::vec3 pos;
+	glm::vec3 normal;
+	glm::vec2 uv;
+};
 class Mesh
 {
 private:
@@ -9,66 +17,20 @@ private:
 	GLuint VAO, VBO, IBO;
 	//number of IBO indices
 	GLuint numOfIndices,numOfVertices;
-
+	void setupMesh();
 	void clearMesh();
 public:
-	
-	Mesh();
+	std::vector<vert> vertices;
+	std::vector<GLuint> indices;
+
+	Mesh(std::vector<vert> vertices, std::vector<unsigned int> indices);
 	~Mesh();
-	template<class T,class Q>
-	void createMesh(const void* vert, const void* index, GLuint vertCount, GLuint indexCount);
+
+
 	void renderMesh();
 	
 
 };
 
 
-
-template<class T,class Q>
-void Mesh::createMesh(const void* vert, const void* index, GLuint vertCount, GLuint indexCount)
-{
-
-	//generate all buffers required for rendering and storing the mesh on the GPU
-
-	//generate Vertex Buffer object
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertCount * sizeof(T), vert, GL_STATIC_DRAW);
-
-	//generate Index Buffer Object
-	if (indexCount > 0)
-	{
-		glGenBuffers(1, &IBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(Q), index, GL_STATIC_DRAW);
-	}
-
-	//generate Vertex Attribute Object
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	//vertex coordinate
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(T) * 8, (void*)(0));
-	glEnableVertexAttribArray(0);
-
-	//vertex normal
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(T) * 8, (void*)(3 * sizeof(T)));
-	glEnableVertexAttribArray(1);
-
-	//texture coordinate
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(T) * 8, (void*)(6 * sizeof(T)));
-	glEnableVertexAttribArray(2);
-
-	//unBinding all the buffers
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-	numOfIndices = indexCount;
-	numOfVertices = vertCount;
-	if ((!IBO && indexCount) || !VBO || !VAO)
-		std::cout << "Error creating Mesh!\n";
-
-
-}
 
