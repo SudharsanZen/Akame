@@ -9,14 +9,20 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeaderFiles\Container.h">
+    <ClInclude Include="HeaderFiles\ComponentArray.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\ComponentManager.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\ECSTYPES.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\System.h" />
+    <ClInclude Include="HeaderFiles\SystemManager.h" />
+    <ClInclude Include="HeaderFiles\ECS.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SourceFiles\Container.cpp">
-      <Filter>SourceFiles</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFiles\Source.cpp">
       <Filter>SourceFiles</Filter>
     </ClCompile>

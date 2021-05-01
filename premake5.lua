@@ -121,10 +121,6 @@ project "ECS"
      "ECS/windows/Debug"
     }
 
-    links
-    {
-     "ECS.lib"
-    }
     filter "configurations:Debug"
     defines {"DEBUG"}
     symbols "On"
