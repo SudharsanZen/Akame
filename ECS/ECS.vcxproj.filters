@@ -21,6 +21,7 @@
     <ClInclude Include="HeaderFiles\System.h" />
     <ClInclude Include="HeaderFiles\SystemManager.h" />
     <ClInclude Include="HeaderFiles\ECS.h" />
+    <ClInclude Include="SourceFiles\ECSTYPES.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Source.cpp">
