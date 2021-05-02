@@ -1,7 +1,7 @@
 #include "Window.h"
 
 
-Window::Window(int width,int height,std::string winName,Window *shareWindow=NULL)
+Window::Window(int width,int height,std::string winName,Window *shareWindow)
 {
 	/*constructor*/
 	bufferHeight = 0;

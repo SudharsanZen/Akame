@@ -28,6 +28,7 @@ public:
 	//functions for setting uniform variables
 	GLuint getUniformLocation(std::string varName) { return glGetUniformLocation(programID, varName.c_str()); }
 	void setUniformInteger(std::string varName,GLint value) { glUniform1i(getUniformLocation(varName),value); };
+
 	void setUniformVec3(std::string varName,const glm::vec3 &vec) { glUniform3fv(getUniformLocation(varName),1,glm::value_ptr(vec)); };
 	void setUniformMat4fv(std::string varName,GLint count,GLfloat *valuePtr) { glUniformMatrix4fv(getUniformLocation(varName),count,GL_FALSE,valuePtr); }
 

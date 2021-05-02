@@ -14,18 +14,19 @@ private:
 	std::shared_ptr<BehaviourSystem> behaviourSys;
 
 
-
+	glm::vec4 color;
 	Window &window;
 	GLuint uboMatrixBufferID;
 	GLsizeiptr mat4Size = sizeof(glm::mat4);
 	float deltaTime;
 	float lastTime;
-	Camera cam;
+	
 	void updateUniformBuffer(Camera& cam);
 	void flyCam(Camera& cam, Window& window);
 	friend class BehaviourSystem;
 public:
-	Scene(Window &mainWindow):cam(60, 1, 0.1f, 1000),window(mainWindow)
+	Camera cam;
+	Scene(Window &mainWindow):cam(60, 1, 0.1f, 10000),window(mainWindow)
 	{
 		deltaTime = 0;
 		lastTime = 0;
@@ -76,6 +77,10 @@ public:
 		return ecs->GetComponent<T>(entityID);
 	}
 
+	void backGroundColor(float r,float g,float b,float a)
+	{
+		this->color =glm::vec4(r,g,b,a);
+	}
 
 };
 

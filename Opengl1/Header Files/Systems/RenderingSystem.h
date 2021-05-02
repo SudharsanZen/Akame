@@ -3,7 +3,7 @@
 class RenderingSystem:public System
 {
 private:
-	glm::vec3 lightPose = glm::vec3(10, 10, 10);
+	glm::vec3 lightPose = glm::vec3(0, 0,0);
 public:
 
 	void Run(std::shared_ptr<ECS> ecs,Camera &cam)

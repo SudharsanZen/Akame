@@ -29,7 +29,7 @@ public:
 
 	void reset();
 	void renderMesh();
-	void CreateMesh(std::vector<vert> vertices, std::vector<GLuint> indices);
+	void CreateMesh(std::vector<vert> vertices, std::vector<GLuint> indices=std::vector<GLuint>());
 
 };
 

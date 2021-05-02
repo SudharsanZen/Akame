@@ -24,7 +24,7 @@ private:
 
 	
 public:
-	Window(int height,int width,std::string,Window*);
+	Window(int height,int width,std::string,Window* shr=nullptr);
 	~Window();
 	friend class Editor;
 	friend class Input;
@@ -49,7 +49,7 @@ public:
 		return bufferWidth; 
 	}
 
-	bool Window::shouldWindowClose()
+	bool Window::closeWindow()
 	{
 		//returns true if windows close event has occured
 		if (mainWindow)

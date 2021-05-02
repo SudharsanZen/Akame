@@ -8,6 +8,7 @@ private:
 	glm::vec3 diffColor;
 	std::shared_ptr<Texture> diffuse;
 
+	bool emissive=false;
 	glm::vec3 specularColor;
 	std::shared_ptr<Texture> roughness;
 
@@ -20,9 +21,13 @@ private:
 public:
 	
 	
-
+	void isEmissive(bool em)
+	{
+		emissive = em;
+	}
 	Material()
 	{
+		emissive = false;
 		diffColor = glm::vec3(1, 1, 1);
 		specularColor = glm::vec3(1, 1, 1);
 		ambientIntensity = 0.2f;
@@ -32,6 +37,7 @@ public:
 	}
 	Material(const Material& mat)
 	{
+		this->emissive = mat.emissive;
 		this->diffColor = mat.diffColor;
 		this->diffuse = mat.diffuse;
 		this->roughness = mat.roughness;
@@ -55,6 +61,11 @@ public:
 		shader->setUniformInteger("material.diffuseMap",0);
 		shader->setUniformInteger("material.specularMap",1);
 		shader->setUniformInteger("material.normalMap",2);
+		GLint a = 0;
+
+		if (emissive)
+			a = 2;
+		shader->setUniformInteger("emissive",a);
 		shader->setUniformVec3("lightColor", glm::vec3(1, 1, 1));
 		shader->setUniformVec3("objectColor", glm::vec3(1, 1, 1));
 		shader->setUniformMat4fv("transform", 1, glm::value_ptr(trans));
