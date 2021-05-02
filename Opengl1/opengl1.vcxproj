@@ -90,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Header Files\BehaviourComponent.h" />
     <ClInclude Include="Header Files\Camera.h" />
     <ClInclude Include="Header Files\Editor\EditorUI.h" />
     <ClInclude Include="Header Files\Editor\Scene.h" />
@@ -103,6 +104,9 @@
     <ClInclude Include="Header Files\MeshInstance.h" />
     <ClInclude Include="Header Files\Model.h" />
     <ClInclude Include="Header Files\Quaternion.h" />
+    <ClInclude Include="Header Files\Behaviour.h" />
+    <ClInclude Include="Header Files\Systems\BehaviourSystem.h" />
+    <ClInclude Include="Header Files\Systems\RenderingSystem.h" />
     <ClInclude Include="Header Files\Shader.h" />
     <ClInclude Include="Header Files\StopWatch.h" />
     <ClInclude Include="Header Files\Texture.h" />
@@ -122,6 +126,7 @@
     <ClCompile Include="Source Files\Mesh.cpp" />
     <ClCompile Include="Source Files\MeshInstance.cpp" />
     <ClCompile Include="Source Files\Model.cpp" />
+    <ClCompile Include="Source Files\RenderingSystem.cpp" />
     <ClCompile Include="Source Files\Shader.cpp" />
     <ClCompile Include="Source Files\Source.cpp" />
     <ClCompile Include="Source Files\Texture.cpp" />

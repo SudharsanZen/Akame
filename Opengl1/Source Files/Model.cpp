@@ -71,6 +71,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 			indices.push_back(face.mIndices[j]);
 		}
 	}
-	Mesh m(vertices,indices);
+	Mesh m;
+	m.CreateMesh(vertices,indices);
 	return m;
 }

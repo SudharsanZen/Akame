@@ -8,9 +8,21 @@ public:
 	glm::vec3 position;
 	glm::vec3 scale;
 	Quaternion rotation;
-
+	void reset()
+	{
+		position = glm::vec3(0);
+		scale = glm::vec3(1);
+		rotation.setEulerAngle(0,0,0);
+	}
 	Transform();
 	Transform(GLfloat posX,GLfloat posY,GLfloat posZ);
+	Transform& operator =(const Transform& Tran)
+	{
+		position = Tran.position;
+		scale = Tran.scale;
+		rotation.quaternion = Tran.rotation.quaternion;
+		return *this;
+	}
 	glm::mat4 transformMatrix()
 	{
 		glm::mat4 trans = glm::mat4(1.0f);

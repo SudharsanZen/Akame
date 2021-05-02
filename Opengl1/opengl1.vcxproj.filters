@@ -78,6 +78,10 @@
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Systems\RenderingSystem.h" />
+    <ClInclude Include="Header Files\Systems\BehaviourSystem.h" />
+    <ClInclude Include="Header Files\BehaviourComponent.h" />
+    <ClInclude Include="Header Files\Behaviour.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Camera.cpp">
@@ -134,5 +138,6 @@
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\RenderingSystem.cpp" />
   </ItemGroup>
 </Project>

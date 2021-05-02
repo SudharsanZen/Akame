@@ -18,17 +18,18 @@ private:
 	//number of IBO indices
 	GLuint numOfIndices,numOfVertices;
 	void setupMesh();
-	void clearMesh();
+	
 public:
 	std::vector<vert> vertices;
 	std::vector<GLuint> indices;
 
-	Mesh(std::vector<vert> vertices, std::vector<unsigned int> indices);
+	Mesh();
+
 	~Mesh();
 
-
+	void reset();
 	void renderMesh();
-	
+	void CreateMesh(std::vector<vert> vertices, std::vector<GLuint> indices);
 
 };
 

@@ -11,7 +11,7 @@ Texture::Texture(std::string dir)
 }
 
 
-void Texture::clearTextures()
+void Texture::reset()
 {
 	if (textureID!=-1)
 	{
@@ -27,7 +27,7 @@ void Texture::clearTextures()
 
 void Texture::loadImage()
 {
-	clearTextures();
+	reset();
 	//generate Texture Buffer and bind it
 	glGenTextures(1,&textureID);
 	glBindTexture(GL_TEXTURE_2D,textureID);
@@ -103,5 +103,5 @@ void Texture::use(GLuint unit)
 
 Texture::~Texture()
 {
-	clearTextures();
+	reset();
 }

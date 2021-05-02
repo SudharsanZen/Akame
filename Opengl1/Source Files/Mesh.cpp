@@ -1,17 +1,12 @@
 #include "Mesh.h"
 
-Mesh::Mesh(std::vector<vert> vertices,std::vector<GLuint> indices)
+Mesh::Mesh()
 {
 	//initialize all values to zero or null
 	VBO = 0;
 	VAO = 0;
 	IBO = 0;
-	this->vertices = vertices;
-	this->indices = indices;
-
-	numOfIndices = indices.size();
-	numOfVertices = vertices.size();
-	setupMesh();
+	
 }
 
 Mesh::~Mesh()
@@ -47,8 +42,18 @@ void Mesh::renderMesh()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+void Mesh::CreateMesh(std::vector<vert> vertices, std::vector<GLuint> indices)
+{
+	this->vertices = vertices;
+	this->indices = indices;
 
-void Mesh::clearMesh()
+	numOfIndices = indices.size();
+	numOfVertices = vertices.size();
+	setupMesh();
+}
+
+
+void Mesh::reset()
 {
 	//clear mesh from GPU memory and delte all generated buffers
 	if (IBO)

@@ -23,7 +23,7 @@ private:
 	GLubyte* imageData;
 	GLuint texFormat;
 
-	void clearTextures();
+	void reset();
 public:
 	void loadImage();
 	void use(const GLuint unit);
@@ -31,7 +31,7 @@ public:
 
 	Texture& operator =(Texture&& obj) noexcept
 	{
-		clearTextures();
+		reset();
 		textureID = obj.textureID;
 		imageDir = obj.imageDir;
 		Height = obj.Height;
@@ -39,7 +39,7 @@ public:
 		texFormat = obj.texFormat;
 
 		obj.textureID = -1;
-		obj.clearTextures();
+		obj.reset();
 		return *this;
 	}
 

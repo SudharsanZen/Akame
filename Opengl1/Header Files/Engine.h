@@ -22,3 +22,5 @@
 #include"stopwatch.h"
 #include"Model.h"
 #include"ComponentArray.h"
+#include"System.h"
+#include"ECS.h"
