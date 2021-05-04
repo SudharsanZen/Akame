@@ -7,6 +7,9 @@
     <Filter Include="Header Files\Editor">
       <UniqueIdentifier>{373999AD-A39A-76BB-2C08-BD6D9868AD7A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Systems">
+      <UniqueIdentifier>{28D220C8-1461-AA91-BD7F-BE8CA9EDBA37}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{E9C7FDCE-D52A-8D73-7EB0-C5296AF258F6}</UniqueIdentifier>
     </Filter>
@@ -21,6 +24,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header Files\Behaviour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\BehaviourComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,6 +75,12 @@
     <ClInclude Include="Header Files\StopWatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Systems\BehaviourSystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Systems\RenderingSystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -78,10 +93,7 @@
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Systems\RenderingSystem.h" />
-    <ClInclude Include="Header Files\Systems\BehaviourSystem.h" />
-    <ClInclude Include="Header Files\BehaviourComponent.h" />
-    <ClInclude Include="Header Files\Behaviour.h" />
+    <ClInclude Include="Header Files\DisplacementMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Camera.cpp">
@@ -117,6 +129,9 @@
     <ClCompile Include="Source Files\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\RenderingSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -138,6 +153,5 @@
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\RenderingSystem.cpp" />
   </ItemGroup>
 </Project>

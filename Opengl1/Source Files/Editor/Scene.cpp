@@ -101,7 +101,7 @@ void Scene::Render()
 	flyCam(cam, window);
 
 	
-
+	
 	//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	//glClearColor(1,1,1,1.0f);
 	glClearColor(color.x,color.y,color.z,color.w);
@@ -112,7 +112,7 @@ void Scene::Render()
 	//renderStuff
 		renderSys->Run(ecs,cam);
 		behaviourSys->Update(ecs,deltaTime);
-
+		fn();
 
 
 	window.processInput();

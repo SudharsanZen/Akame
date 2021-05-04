@@ -25,9 +25,11 @@ private:
 	void flyCam(Camera& cam, Window& window);
 	friend class BehaviourSystem;
 public:
+	std::function<void()> fn;
 	Camera cam;
-	Scene(Window &mainWindow):cam(60, 1, 0.1f, 10000),window(mainWindow)
+	Scene(Window &mainWindow):cam(60, 1, 0.1f, 1000),window(mainWindow)
 	{
+		fn = []() {};
 		deltaTime = 0;
 		lastTime = 0;
 
@@ -43,7 +45,7 @@ public:
 		cam.setFieldOfView(60.0f);
 		cam.transform.position = glm::vec3(5, 5, 5);
 		InitEcs();
-		glfwSwapInterval(0);
+		glfwSwapInterval(1);
 	}
 	void Render();
 

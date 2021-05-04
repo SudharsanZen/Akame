@@ -54,7 +54,7 @@ project "imGui"
 
 project "Opengl1"
     location"Opengl1/"
-    kind "ConsoleApp"
+    kind "StaticLib"
     language "C++"
     targetdir "Opengl1/bin/"
     objdir "bin/intermediate"
@@ -134,3 +134,102 @@ project "ECS"
 externalproject "GLFW"
     location "glfw/src/"
     kind "StaticLib"
+
+
+project "Planets"
+    location"Planets/"
+    kind "ConsoleApp"
+    language "C++"
+    targetdir "Planets/bin/"
+    objdir "bin/intermediate"
+    dependson{"imGui","glfw","Opengl1"}
+    files
+    {
+        "%{prj.location}/Header Files/**.h",
+        "%{prj.location}/Source Files/**.cpp",
+    }
+
+        includedirs
+    {
+        "glfw/include",
+        "Opengl1/vendor",
+        "Opengl1/Header Files",
+        "Opengl1/vendor",
+        "Opengl1/vendor/imGui",
+        "Opengl1/vendor/assimp/include",
+        "ECS/HeaderFiles"
+    }
+
+    libdirs
+    {
+        "glfw/src/Debug",
+        "Opengl1/vendor/imGui/windows/Debug",
+        "Opengl1/vendor/assimp/lib/Debug",
+        "Opengl1/bin"
+    }
+
+    links
+    {
+        "glfw3.lib",
+        "opengl32.lib",
+        "imGui.lib",
+        "assimp-vc142-mtd.lib",
+        "Opengl1.lib"
+    }
+    filter "configurations:Debug"
+        defines {"DEBUG"}
+        symbols "On"
+    
+    filter "configurations:Release"
+        defines{"NDEBUG"}
+        optimize "On" 
+
+
+project "GeoSpatialData"
+    location"GeoSpatialData/"
+    kind "ConsoleApp"
+    language "C++"
+    targetdir "GeoSpatialData/bin/"
+    objdir "bin/intermediate"
+    
+    dependson{"imGui","glfw","Opengl1"}
+    files
+    {
+        "%{prj.location}/Header Files/**.h",
+        "%{prj.location}/Source Files/**.cpp",
+    }
+
+        includedirs
+    {
+        "glfw/include",
+        "Opengl1/vendor",
+        "Opengl1/Header Files",
+        "Opengl1/vendor",
+        "Opengl1/vendor/imGui",
+        "Opengl1/vendor/assimp/include",
+        "ECS/HeaderFiles"
+    }
+
+    libdirs
+    {
+        "glfw/src/Debug",
+        "Opengl1/vendor/imGui/windows/Debug",
+        "Opengl1/vendor/assimp/lib/Debug",
+        "Opengl1/bin"
+    }
+
+    links
+    {
+        "glfw3.lib",
+        "opengl32.lib",
+        "imGui.lib",
+        "assimp-vc142-mtd.lib",
+        "Opengl1.lib"
+    }
+    filter "configurations:Debug"
+        defines {"DEBUG"}
+        symbols "On"
+    
+    filter "configurations:Release"
+        defines{"NDEBUG"}
+        optimize "On" 

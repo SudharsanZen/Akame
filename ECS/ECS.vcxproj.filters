@@ -15,15 +15,23 @@
     <ClInclude Include="HeaderFiles\ComponentManager.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\ECS.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
     <ClInclude Include="HeaderFiles\ECSTYPES.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\System.h" />
-    <ClInclude Include="HeaderFiles\SystemManager.h" />
-    <ClInclude Include="HeaderFiles\ECS.h" />
-    <ClInclude Include="SourceFiles\ECSTYPES.cpp" />
+    <ClInclude Include="HeaderFiles\System.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\SystemManager.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SourceFiles\ECSTYPES.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
     <ClCompile Include="SourceFiles\Source.cpp">
       <Filter>SourceFiles</Filter>
     </ClCompile>
