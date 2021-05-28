@@ -14,10 +14,10 @@ std::shared_ptr<Scene> scene;
 void  func()
 {
 	static Transform T;
-	T.scale=glm::vec3(4,1.5,4)*5.0f;
-	m->use(T,glm::vec3(10,10,10),scene->cam.getCameraPosition());
+	T.scale = glm::vec3(4, 1.5, 4) * 5.0f;
+	m->use(T, glm::vec3(10, 10, 10), scene->cam.getCameraPosition());
 	mesh->renderMesh();
-	
+
 }
 
 int main()
@@ -28,32 +28,28 @@ int main()
 	if (!window.initialize())
 		std::cout << "Something went wrong, can't initialize window";
 
-	scene= std::make_shared<Scene>(window);
+	scene = std::make_shared<Scene>(window);
 
 	mesh = std::make_shared<Mesh>();
-	m= std::make_shared<DisplacementMap>();
-	
-	
+	m = std::make_shared<DisplacementMap>();
+
+
 
 	m->setDisplacementMap("Assets/disp.jpg");
 	m->setDiffuseMap("Assets/diff.jpg");
 	m->setSpecularMap("Assets/disp.jpg");
 
-	
-	mesh->CreateMesh(generatePlaneVertices(200,200));
+
+	mesh->CreateMesh(generatePlaneVertices(200, 200));
 
 	scene->backGroundColor(0, 0, 0, 1);
 	scene->fn = func;
 	while (!window.closeWindow())
 	{
+		flyCam(scene->cam, scene->getDeltaTime());
+		scene->cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene->Render();
 	}
 
 	return 0;
 }
-
-
-
-
-
-

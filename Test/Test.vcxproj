@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{885894B4-7426-88BA-5DBA-F8E04927641F}</ProjectGuid>
+    <ProjectGuid>{45DC8C7C-3113-8E0D-DAFF-7310C6150A0F}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>GeoSpatialData</RootNamespace>
+    <RootNamespace>Test</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -42,15 +42,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>bin\</OutDir>
-    <IntDir>..\bin\intermediate\Debug\GeoSpatialData\</IntDir>
-    <TargetName>GeoSpatialData</TargetName>
+    <IntDir>..\bin\intermediate\Debug\Test\</IntDir>
+    <TargetName>Test</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>bin\</OutDir>
-    <IntDir>..\bin\intermediate\Release\GeoSpatialData\</IntDir>
-    <TargetName>GeoSpatialData</TargetName>
+    <IntDir>..\bin\intermediate\Release\Test\</IntDir>
+    <TargetName>Test</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

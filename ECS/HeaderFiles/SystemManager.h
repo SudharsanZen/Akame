@@ -48,10 +48,12 @@ public:
 			if ((sysSig & signature).to_ulong())
 			{
 				system->entities.insert(entity);
+				system->OnAddEntity();
 			}
 			else
 			{
 				system->entities.erase(entity);
+			
 			}
 		}
 	}

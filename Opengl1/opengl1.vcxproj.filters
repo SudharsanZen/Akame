@@ -33,6 +33,9 @@
     <ClInclude Include="Header Files\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\DisplacementMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Editor\EditorUI.h">
       <Filter>Header Files\Editor</Filter>
     </ClInclude>
@@ -93,7 +96,6 @@
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\DisplacementMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Camera.cpp">

@@ -3,7 +3,8 @@
 #include"Engine.h"
 #include"Systems/RenderingSystem.h"
 #include"Systems/BehaviourSystem.h"
-#include"BehaviourComponent.h"
+
+
 
 class Scene
 {
@@ -22,67 +23,80 @@ private:
 	float lastTime;
 	
 	void updateUniformBuffer(Camera& cam);
-	void flyCam(Camera& cam, Window& window);
 	friend class BehaviourSystem;
 public:
+	//fn will be called when Scene::Render() is called. this method will be dprecated
 	std::function<void()> fn;
+	//main camera
 	Camera cam;
-	Scene(Window &mainWindow):cam(60, 1, 0.1f, 1000),window(mainWindow)
-	{
-		fn = []() {};
-		deltaTime = 0;
-		lastTime = 0;
-
-		stbi_set_flip_vertically_on_load(true);
+	Scene(Window& mainWindow);
 	
-		//intialize global uniform buffer for storing projection and view matrix
-		glGenBuffers(1, &uboMatrixBufferID);
-		glBindBuffer(GL_UNIFORM_BUFFER, uboMatrixBufferID);
-		glBufferData(GL_UNIFORM_BUFFER, 2 * mat4Size, NULL, GL_STATIC_DRAW);
-		glBindBuffer(GL_UNIFORM_BUFFER, 0);
-		glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrixBufferID, 0, 2 * mat4Size);
-		
-		cam.setFieldOfView(60.0f);
-		cam.transform.position = glm::vec3(5, 5, 5);
-		InitEcs();
-		glfwSwapInterval(1);
-	}
+	//call this to render a frame
 	void Render();
 
+	//call this before Scene::Render() in the main window loop 
+	void OnStart()
+	{
+		behaviourSys->OnStart();
+	}
 	void InitEcs();
-	
+
+	//Creates an entity in the Scene
 	EntityID CreateEntity()
 	{
 		return ecs->CreateEntity();
 	}
 
+	//Destroys an entity in the Scene
 	void DestroyeEntity(EntityID entityID)
 	{
 		return ecs->DestroyEntity(entityID);
 	}
 
+	//Adds a component to the Given entity
 	template<typename T>
 	void AddComponent(EntityID entityID,T comp)
 	{
+		
 		ecs->AddComponent<T>(entityID, comp);
 	}
 
+	//specialization of AddComponent for BehaviourComponent for storing entityID along with the component
+	template<>
+	void AddComponent<BehaviourComponent>(EntityID entityID, BehaviourComponent comp)
+	{
+		comp.eid = entityID;
+		ecs->AddComponent<BehaviourComponent>(entityID, comp);
+	}
+
+	//Remove added component
 	template<typename T>
 	void RemoveComponent(EntityID entityID)
 	{
 		ecs.RemoveComponent<T>(entityID);
 	}
 
+	//get added component with a given entityID
 	template<typename T>
 	T& GetComponent(EntityID entityID)
 	{
 		return ecs->GetComponent<T>(entityID);
 	}
 
+	//set backGround color of the window
 	void backGroundColor(float r,float g,float b,float a)
 	{
 		this->color =glm::vec4(r,g,b,a);
 	}
 
+	~Scene()
+	{
+		std::cout <<"\n~Scene()\n";
+	}
+
+	float getDeltaTime()
+	{
+		return deltaTime;
+	}
 };
 

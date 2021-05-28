@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.31129.286
+VisualStudioVersion = 16.0.31313.79
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Opengl1", "Opengl1\Opengl1.vcxproj", "{3BE49BD1-A7C3-1A6D-B0DB-A5431C3A81CE}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -21,6 +21,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GeoSpatialData", "GeoSpatia
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Planets", "Planets\Planets.vcxproj", "{3C15F914-A8F4-77B0-B10C-03871D6BDE11}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E00FA80F-4C24-D0C0-15A6-73208179CCF1} = {E00FA80F-4C24-D0C0-15A6-73208179CCF1}
+		{4FBECA42-DB84-3821-8E6B-5D05D07D881B} = {4FBECA42-DB84-3821-8E6B-5D05D07D881B}
+		{3BE49BD1-A7C3-1A6D-B0DB-A5431C3A81CE} = {3BE49BD1-A7C3-1A6D-B0DB-A5431C3A81CE}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{45DC8C7C-3113-8E0D-DAFF-7310C6150A0F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E00FA80F-4C24-D0C0-15A6-73208179CCF1} = {E00FA80F-4C24-D0C0-15A6-73208179CCF1}
 		{4FBECA42-DB84-3821-8E6B-5D05D07D881B} = {4FBECA42-DB84-3821-8E6B-5D05D07D881B}
@@ -58,6 +65,10 @@ Global
 		{3C15F914-A8F4-77B0-B10C-03871D6BDE11}.Debug|x64.Build.0 = Debug|x64
 		{3C15F914-A8F4-77B0-B10C-03871D6BDE11}.Release|x64.ActiveCfg = Release|x64
 		{3C15F914-A8F4-77B0-B10C-03871D6BDE11}.Release|x64.Build.0 = Release|x64
+		{45DC8C7C-3113-8E0D-DAFF-7310C6150A0F}.Debug|x64.ActiveCfg = Debug|x64
+		{45DC8C7C-3113-8E0D-DAFF-7310C6150A0F}.Debug|x64.Build.0 = Debug|x64
+		{45DC8C7C-3113-8E0D-DAFF-7310C6150A0F}.Release|x64.ActiveCfg = Release|x64
+		{45DC8C7C-3113-8E0D-DAFF-7310C6150A0F}.Release|x64.Build.0 = Release|x64
 		{E00FA80F-4C24-D0C0-15A6-73208179CCF1}.Debug|x64.ActiveCfg = Debug|x64
 		{E00FA80F-4C24-D0C0-15A6-73208179CCF1}.Debug|x64.Build.0 = Debug|x64
 		{E00FA80F-4C24-D0C0-15A6-73208179CCF1}.Release|x64.ActiveCfg = Release|x64
@@ -67,6 +78,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E1ED0BB7-11F9-4C5D-A932-6E76EC5B9DE6}
+		SolutionGuid = {8C7D7550-7BC9-4DB8-A84D-F7EA7E600D03}
 	EndGlobalSection
 EndGlobal

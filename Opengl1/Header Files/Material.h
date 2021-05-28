@@ -45,29 +45,32 @@ public:
 		this->shader = mat.shader;
 		ambientIntensity = mat.ambientIntensity;
 	}
-	void use(Transform &t,glm::vec3 &lightPose,glm::vec3 &viewPose)
+	void setUniforms(glm::vec3& lightPose, glm::vec3& viewPose)
 	{
-		glm::mat4 trans =t.transformMatrix();
 		shader->useShaderProgram();
-		if(diffuse)
-			diffuse->use(0);
-		if(roughness)
-			roughness->use(1);
-		if(normalMap)
-			normalMap->use(2);
+
+		diffuse->use(0);
+
+		roughness->use(1);
+
 
 		shader->setUniformVec3("lightPos", lightPose);
 		shader->setUniformVec3("viewPos", viewPose);
-		shader->setUniformInteger("material.diffuseMap",0);
-		shader->setUniformInteger("material.specularMap",1);
-		shader->setUniformInteger("material.normalMap",2);
-		GLint a = 0;
+		shader->setUniformInteger("material.diffuseMap", 0);
+		shader->setUniformInteger("material.specularMap", 1);
+		shader->setUniformInteger("material.normalMap", 2);
 
-		if (emissive)
-			a = 2;
-		shader->setUniformInteger("emissive",a);
+
+
+		shader->setUniformInteger("emissive", (int)emissive);
 		shader->setUniformVec3("lightColor", glm::vec3(1, 1, 1));
 		shader->setUniformVec3("objectColor", glm::vec3(1, 1, 1));
+	}
+	void use(Transform &t,glm::vec3 &lightPose,glm::vec3 &viewPose)
+	{
+		setUniforms(lightPose,viewPose);
+		glm::mat4 trans =t.transformMatrix();
+		shader->setUniformVec3("viewPos", viewPose);
 		shader->setUniformMat4fv("transform", 1, glm::value_ptr(trans));
 	}
 	

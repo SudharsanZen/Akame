@@ -1,5 +1,5 @@
 #include "Camera.h"
-
+#include"Input.h"
 Camera::Camera():Camera(60,aspectRatio,0.1f,100.0f,false)
 {
 }
@@ -16,11 +16,8 @@ Camera::Camera(GLfloat fovy, GLfloat aspectRatio, GLfloat nearz, GLfloat farz, G
 	//updateCamDir();
 }
 
-void Camera::use()
-{
-	
-}
 
+//Resturns a 4x4 view matrix of type glm::mat4.
 glm::mat4 Camera::getViewMatrix()
 {
 	/*updateCamDir();
@@ -76,13 +73,59 @@ void Camera::setCameraRotation(glm::vec3 rot)
 	transform.rotation.setEulerAngle(rot.x,rot.y,rot.z);
 }
 
-/*void Camera::setCameraTargetPosition(GLfloat x, GLfloat y, GLfloat z)
+
+
+//A default implementation of a flycam.
+void flyCam(Camera& cam,float deltaTime)
 {
-	cameraTarget = glm::vec3(x,y,z) ;
+
+	static bool init = false;
+	static double xPrev = 0, yPrev = 0;
+	double x = 0, y = 0;
+	static float X = -45, Y = -135;
+	float speed = 10;
+	if (Input::getKeyDown(GLFW_KEY_LEFT_SHIFT))
+	{
+		speed *= 5;
+	}
+	if (Input::getKeyDown(GLFW_KEY_W))
+	{
+		cam.setCameraPosition(cam.getCameraPosition() + cam.transform.forward() * speed * deltaTime);
+
+	}
+	if (Input::getKeyDown(GLFW_KEY_S))
+	{
+		cam.setCameraPosition(cam.getCameraPosition() - cam.transform.forward() * speed * deltaTime);
+
+	}
+	if (Input::getKeyDown(GLFW_KEY_A))
+	{
+		cam.setCameraPosition(cam.getCameraPosition() - cam.transform.right() * speed * deltaTime);
+
+	}
+	if (Input::getKeyDown(GLFW_KEY_D))
+	{
+		cam.setCameraPosition(cam.getCameraPosition() + cam.transform.right() * speed * deltaTime);
+
+	}
+	if (init)
+		Input::getMouseXY(x, y);
+
+	if (Input::getMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS || !init)
+	{
+		init = true;
+		X += -(y - yPrev) * 0.5;
+		Y += -(x - xPrev) * 0.5;
+		//if (abs(Y) >= 360.0f)
+			//Y =Y+((Y>0)?-1:1)*360.0f;
+		Y = abs(Y) >= 360.0f ? 0 : Y;
+		X = abs(X) >= 360.0f ? 0 : X;
+		cam.transform.rotation = Quaternion::rotationAroundAxisVector(Y, worldUp);
+		cam.transform.rotation = Quaternion::rotationAroundAxisVector(X, cam.transform.right()) * cam.transform.rotation.quaternion;
+	}
+
+	
+
+	yPrev = y;
+	xPrev = x;
 }
-
-
-void Camera::setCameraTargetPosition(glm::vec3 pos)
-{
-	cameraTarget = pos;
-}*/

@@ -118,5 +118,8 @@ public:
 		return componentManager.GetComponentBitPose<T>();
 	}
 
-	
+	~ECS()
+	{
+		std::cout << "\n~ECS()\n";
+	}
 };

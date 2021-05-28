@@ -1,25 +1,23 @@
-#include<iostream>
-#include<fstream>
-#include<string>
-#include<algorithm>
 #include"Engine.h"
 #include"Editor/Scene.h"
-#include<vector>
+
 
 
 
 class EarthBehv :public Behaviour
 {
+	float offx, offz;
 	float y = 0;
 	float sunEarthAngle = 0;
 	float sunEarthDist =200;
 	EntityID sun;
-	std::shared_ptr<Scene> scene;
+	
 public:
-	EarthBehv(EntityID eid,EntityID sun,std::shared_ptr<Scene> scene):Behaviour(eid)
+	EarthBehv(EntityID sun)
 	{
-		this->scene = scene;
+		
 		this->sun = sun;
+		offx = 0, offz = 0;
 	}
 
 	void OnStart()override
@@ -36,37 +34,40 @@ public:
 		if (sunEarthAngle > 360)
 			sunEarthAngle = 0;
 
-		scene->GetComponent<Transform>(entityID).rotation.setEulerAngle(0,y,0);
+		GetComponent<Transform>().rotation.setEulerAngle(0,y,0);
 
-
-
+		
 
 		Quaternion rot = Quaternion::rotationAroundAxisVector(sunEarthAngle, worldUp);
-		glm::vec3 sunPosition = scene->GetComponent<Transform>(sun).position;
+		glm::vec3 sunPosition = GetComponent<Transform>(sun).position;
 
-		scene->GetComponent<Transform>(entityID).position = sunPosition + rot * glm::vec3(0, 0, 1)*sunEarthDist;//38.4400
+		GetComponent<Transform>().position = sunPosition + rot * ((glm::vec3(0, 0, 1)*sunEarthDist));//38.4400
 	}
 };
 class MoonBehv :public Behaviour
 {
-	std::shared_ptr<Scene> scene;
+	
 	EntityID earth;
 	float y = 0;
 	float eartMoonAng=0;
 	float distanceFromEarth =30;
+
+	
 public:
-	MoonBehv(EntityID eid,EntityID earth, std::shared_ptr<Scene> scene) :Behaviour(eid)
+	MoonBehv(EntityID earth) 
 	{
 		this->earth = earth;
-		this->scene = scene;
 	}
 	void OnStart()override
 	{
-
+		GetComponent<Transform>(entityID);
 	}
 
 	void Update(float deltaTime)override
 	{
+		Transform& transform= GetComponent<Transform>(entityID);
+		Transform& earthTransform= GetComponent<Transform>(earth);
+
 		eartMoonAng += deltaTime * 100;
 		y += 1 * deltaTime * 10;
 		if (y > 360)
@@ -74,12 +75,12 @@ public:
 		if (eartMoonAng > 360)
 			eartMoonAng = 0;
 
-		scene->GetComponent<Transform>(entityID).rotation.setEulerAngle(0, y, 0);
+		transform.rotation.setEulerAngle(0, y, 0);
 
 		Quaternion rot=Quaternion::rotationAroundAxisVector(eartMoonAng,worldUp);
-		glm::vec3 earthPosition=scene->GetComponent<Transform>(earth).position;
+		glm::vec3 earthPosition=GetComponent<Transform>(earth).position;
 		
-		scene->GetComponent<Transform>(entityID).position = earthPosition+rot*glm::vec3(0,0,1)*distanceFromEarth;//38.4400
+		transform.position = earthPosition+rot*glm::vec3(0,0,1)*distanceFromEarth;
 		
 	}
 };
@@ -87,12 +88,15 @@ public:
 int main()
 {
 	
-	Window window(800,800,"Kunal");
+	Window window(800,800,"planets");
 	
 	if (!window.initialize())
+	{
 		std::cout << "Something went wrong, can't initialize window";
+		return -1;
+	}
 	
-	std::shared_ptr<Scene> scene=std::make_shared<Scene>(window);
+	Scene scene(window);
 
 
 	Material sunMaterial;
@@ -110,41 +114,47 @@ int main()
 	earthMaterial.setSpecularMap("Assets/Demo/Planets/Earth/Specular map.jpg");
 
 
-	EntityID sun = scene->CreateEntity();
+	EntityID sun = scene.CreateEntity();
 
-	scene->AddComponent<Mesh>(sun, Mesh());
-	scene->AddComponent<Material>(sun, sunMaterial);
-	scene->AddComponent<Transform>(sun, Transform(0, 0, 0));
+	scene.AddComponent<Mesh>(sun, Mesh());
+	scene.AddComponent<Material>(sun, sunMaterial);
+	scene.AddComponent<Transform>(sun, Transform(0, 0, 0));
 
-	scene->GetComponent<Mesh>(sun).CreateMesh(generateSphereVertices(30, 30, 30));
+	scene.GetComponent<Mesh>(sun).CreateMesh(generateSphereVertices(30, 30, 30));
 
-	EntityID earth=scene->CreateEntity();
+	EntityID earth=scene.CreateEntity();
 
-	scene->AddComponent<Mesh>(earth,Mesh());
-	scene->AddComponent<Material>(earth,earthMaterial);
-	scene->AddComponent<Transform>(earth,Transform(0,0,0));
-	scene->AddComponent<BehaviourComponent>(earth,BehaviourComponent());
+	scene.AddComponent<Mesh>(earth,Mesh());
+	scene.AddComponent<Material>(earth,earthMaterial);
+	scene.AddComponent<Transform>(earth,Transform(0,0,0));
+	scene.AddComponent<BehaviourComponent>(earth,BehaviourComponent());
 
-	scene->GetComponent<Mesh>(earth).CreateMesh(generateSphereVertices(30,30,10));
-	scene->GetComponent<BehaviourComponent>(earth).setBehaviour<EarthBehv>(earth,sun,scene);
+	scene.GetComponent<Mesh>(earth).CreateMesh(generateSphereVertices(30,30,10));
+	scene.GetComponent<BehaviourComponent>(earth).setBehaviour<EarthBehv>(sun);
 
-	EntityID moon = scene->CreateEntity();
+	EntityID moon = scene.CreateEntity();
 
-	scene->AddComponent<Mesh>(moon, Mesh());
-	scene->AddComponent<Material>(moon, moonMaterial);
-	scene->AddComponent<Transform>(moon, Transform(0, 0, 0));
-	scene->AddComponent<BehaviourComponent>(moon, BehaviourComponent());
+	scene.AddComponent<Mesh>(moon, Mesh());
+	scene.AddComponent<Material>(moon, moonMaterial);
+	scene.AddComponent<Transform>(moon, Transform(0, 0, 0));
+	scene.AddComponent<BehaviourComponent>(moon, BehaviourComponent());
 
-	scene->GetComponent<Mesh>(moon).CreateMesh(generateSphereVertices(30, 30, 3));
-	scene->GetComponent<BehaviourComponent>(moon).setBehaviour<MoonBehv>(moon,earth, scene);
+	scene.GetComponent<Mesh>(moon).CreateMesh(generateSphereVertices(30, 30, 3));
+	scene.GetComponent<BehaviourComponent>(moon).setBehaviour<MoonBehv>(earth);
 
 
-	scene->backGroundColor(0.2, 0.4, 0.2, 1);
-	//scene->backGroundColor(0, 0, 0, 1);
+	scene.backGroundColor(0.2, 0.4, 0.2, 1);
+	//scene.backGroundColor(0, 0, 0, 1);
 
+	scene.OnStart();
 	while (!window.closeWindow())
-		scene->Render();
+	{
 		
+		flyCam(scene.cam, scene.getDeltaTime());
+		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
+		scene.Render();
+	}
+	
 	return 0;
 }
 

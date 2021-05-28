@@ -1,5 +1,32 @@
 #include "Editor/Scene.h"
 
+
+//constructor initia
+Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
+{
+	//initialize fn to an lambda function with no body
+	fn = []() {};
+
+	deltaTime = 0;
+	lastTime = 0;
+
+	stbi_set_flip_vertically_on_load(true);
+
+	//intialize global uniform buffer for storing projection and view matrix
+	glGenBuffers(1, &uboMatrixBufferID);
+	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrixBufferID);
+	glBufferData(GL_UNIFORM_BUFFER, 2 * mat4Size, NULL, GL_STATIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrixBufferID, 0, 2 * mat4Size);
+
+	cam.setFieldOfView(60.0f);
+	cam.transform.position = glm::vec3(5, 5, 5);
+	InitEcs();
+	glfwSwapInterval(0);
+}
+/*Call this to update the common global uniforms.
+* this updates the Projection matrix and ViewMatrix which is common to all shaders
+*/
 void Scene::updateUniformBuffer(Camera& cam)
 {
 	glm::mat4 projMat = cam.getProjectionMatrix();
@@ -11,59 +38,8 @@ void Scene::updateUniformBuffer(Camera& cam)
 
 }
 
-void Scene::flyCam(Camera& cam, Window& window)
-{
-	static bool init = false;
-	static double xPrev = 0, yPrev = 0;
-	double x = 0, y = 0;
-	static float X = -45, Y = -135;
-	float speed = 10;
-	if (Input::getKeyDown(GLFW_KEY_LEFT_SHIFT))
-	{
-		speed *= 5;
-	}
-	if (Input::getKeyDown(GLFW_KEY_W))
-	{
-		cam.setCameraPosition(cam.getCameraPosition() + cam.transform.forward() * speed * deltaTime);
 
-	}
-	if (Input::getKeyDown(GLFW_KEY_S))
-	{
-		cam.setCameraPosition(cam.getCameraPosition() - cam.transform.forward() * speed * deltaTime);
-
-	}
-	if (Input::getKeyDown(GLFW_KEY_A))
-	{
-		cam.setCameraPosition(cam.getCameraPosition() - cam.transform.right() * speed * deltaTime);
-
-	}
-	if (Input::getKeyDown(GLFW_KEY_D))
-	{
-		cam.setCameraPosition(cam.getCameraPosition() + cam.transform.right() * speed * deltaTime);
-
-	}
-	if (init)
-		Input::getMouseXY(x, y);
-
-	if (Input::getMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS || !init)
-	{
-		init = true;
-		X += -(y - yPrev) * 0.5;
-		Y += -(x - xPrev) * 0.5;
-		//if (abs(Y) >= 360.0f)
-			//Y =Y+((Y>0)?-1:1)*360.0f;
-		Y = abs(Y) >= 360.0f ? 0 : Y;
-		X = abs(X) >= 360.0f ? 0 : X;
-		cam.transform.rotation = Quaternion::rotationAroundAxisVector(Y, worldUp);
-		cam.transform.rotation = Quaternion::rotationAroundAxisVector(X, cam.transform.right()) * cam.transform.rotation.quaternion;
-	}
-
-	updateUniformBuffer(cam);
-	cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
-	yPrev = y;
-	xPrev = x;
-}
-
+//Initialize the Entity component System
 void Scene::InitEcs()
 {
 	ecs = std::make_shared<ECS>();
@@ -88,20 +64,20 @@ void Scene::InitEcs()
 	//register system and it's signature
 	renderSys=ecs->RegisterSystem<RenderingSystem>();
 	behaviourSys=ecs->RegisterSystem<BehaviourSystem>();
-
+	behaviourSys->ecs = ecs;
 	ecs->SetSystemSignature<RenderingSystem>(renderSysSig);
 	ecs->SetSystemSignature<BehaviourSystem>(behSysSig);
 
 
 }
 
+/*Render a Frame of the Scene.
+* call this inside the main window loop. 
+*/
 void Scene::Render()
 {
 	float currTime = glfwGetTime();
-	flyCam(cam, window);
 
-	
-	
 	//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	//glClearColor(1,1,1,1.0f);
 	glClearColor(color.x,color.y,color.z,color.w);
@@ -110,8 +86,9 @@ void Scene::Render()
 	glEnable(GL_DEPTH_TEST);
 
 	//renderStuff
+		updateUniformBuffer(cam);
 		renderSys->Run(ecs,cam);
-		behaviourSys->Update(ecs,deltaTime);
+		behaviourSys->Update(deltaTime);
 		fn();
 
 

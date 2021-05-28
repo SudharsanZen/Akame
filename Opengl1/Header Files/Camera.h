@@ -2,6 +2,7 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include"EngineMath.h"
+
 class Camera
 {
 	
@@ -18,28 +19,6 @@ public:
 	Camera();
 	Camera(GLfloat fovy,GLfloat aspectRatio,GLfloat nearz,GLfloat farz,GLboolean ortho=false);
 
-	void use();
-	/*glm::mat4 lookAt(Transform& transform, glm::vec3 &position)
-	{
-		glm::mat4 mat(0);
-		mat[0] = glm::vec4(transform.right(), -position.x);
-		mat[1] = glm::vec4(transform.up(), -position.y);
-		mat[2] = glm::vec4(transform.forward(), -position.z);
-		mat[3] = glm::vec4(0, 0, 0, 1);
-		float* f = glm::value_ptr(mat);
-		for (int i = 0; i < 4; i++)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				std::cout << "[" << mat[i][j] << "] ";
-			}
-			std::cout << std::endl;
-			std::cout << std::endl;
-
-		}
-
-		return mat;
-	}*/
 
 	glm::mat4 lookAt(Transform& transform, glm::vec3& pos);
 	
@@ -49,8 +28,9 @@ public:
 	void setCameraRotation(glm::quat rot) { transform.rotation.quaternion =rot; }
 	glm::vec3 getCameraPosition() { return transform.position; };
 
-
+	//sets Field of View for the camera. takes input in degrees.
 	inline void setFieldOfView(GLfloat degrees) { this->fovy = glm::radians(degrees); };
+	//sets Aspect ration of the window to render in proper proportions.
 	inline void setAspectRation(GLfloat aspecR) { this->aspectRatio = aspecR; };
 
 	glm::mat4 getViewMatrix();
@@ -58,3 +38,5 @@ public:
 
 };
 
+//A default implementation of a flycam.
+void flyCam(Camera& cam,float deltaTime);

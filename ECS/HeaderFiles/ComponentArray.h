@@ -16,7 +16,7 @@ template<typename T>
 class ComponentArray:public ComponentArrayBase
 {
 private:
-	const Entity MAXELEMENT =5000;
+	const Entity MAXELEMENT =1000;
 	//ihave a vector of a vector here
 	std::vector<std::vector<T>>	dataList;
 	std::vector<Entity>	freeList;
