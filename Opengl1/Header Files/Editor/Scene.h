@@ -73,7 +73,7 @@ public:
 	template<typename T>
 	void RemoveComponent(EntityID entityID)
 	{
-		ecs.RemoveComponent<T>(entityID);
+		ecs->RemoveComponent<T>(entityID);
 	}
 
 	//get added component with a given entityID

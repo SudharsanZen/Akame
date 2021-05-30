@@ -90,13 +90,13 @@ public:
 	
 
 	template<typename T>
-	void removeComponent(EntityID entity)
+	void RemoveComponent(EntityID entityID)
 	{
 		assert(versionOfEntity[entityID.index] == entityID.version && "trying to remove component from a non existing entity!");
 		componentManager.RemoveComponent<T>(entityID.index);
 		Signature& sigComp = signature[entityID.index];
 
-		sigComp.set(componentManager->GetComponentBitPose(), false);
+		sigComp.set(componentManager.GetComponentBitPose<T>(), false);
 		systemManager.EntitySignatureChanged(entityID.index, signature[entityID.index]);
 	}
 
