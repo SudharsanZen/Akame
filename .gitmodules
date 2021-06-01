@@ -11,3 +11,6 @@
 [submodule "Opengl1/vendor/assimp"]
 	path = Opengl1/vendor/assimp
 	url = https://github.com/assimp/assimp.git
+[submodule "Opengl1/vendor/PhysX"]
+	path = Opengl1/vendor/PhysX
+	url = https://github.com/NVIDIAGameWorks/PhysX.git
