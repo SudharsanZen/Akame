@@ -43,10 +43,10 @@ public:
 	}
 
 
-	~BehaviourComponent()
+	/*~BehaviourComponent()
 	{
 		std::cout <<"\n~BehaviourCOmponent()\n";
 		behvCount++;
 		std::cout << "count:" << behvCount;
-	}
+	}*/
 };

@@ -54,7 +54,7 @@ project "imGui"
 
 project "Opengl1"
     location"Opengl1/"
-    kind "StaticLib"
+    kind "ConsoleApp"
     language "C++"
     targetdir "Opengl1/bin/"
     objdir "bin/intermediate"
@@ -67,6 +67,12 @@ project "Opengl1"
 
     includedirs
     {
+        "Opengl1/vendor/PhysX/physx/include",
+        "Opengl1/vendor/PhysX/physx/source/physxextensions/src",
+        "Opengl1/vendor/PhysX/pxshared/include",
+        "Opengl1/vendor/PhysX/physx/source/foundation/include",
+
+
         "glfw/include",
         "Opengl1/vendor",
         "%{prj.location}/Header Files",
@@ -79,6 +85,7 @@ project "Opengl1"
     libdirs
     {
         "glfw/src/Debug",
+        "Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.mt/%{cfg.buildcfg}",
         "%{prj.location}/vendor/imGui/windows/Debug",
         "%{prj.location}/vendor/assimp/lib/Debug"
     }
@@ -88,7 +95,14 @@ project "Opengl1"
         "glfw3.lib",
         "opengl32.lib",
         "imGui.lib",
-        "assimp-vc142-mtd.lib"
+        "assimp-vc142-mtd.lib",
+        
+        "PhysX_64.lib",
+        "PhysXCommon_64.lib",
+        "PhysXCooking_64.lib",
+        "PhysXFoundation_64.lib",
+        "PhysXExtensions_static_64.lib"
+
     }
 
     filter "configurations:Debug"

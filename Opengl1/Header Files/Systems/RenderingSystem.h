@@ -8,6 +8,7 @@ public:
 
 	void Run(std::shared_ptr<ECS> ecs,Camera &cam)
 	{
+		
 		for (auto const &ent : entities)
 		{
 			Transform& t =ecs->GetComponent<Transform>(ent) ;
