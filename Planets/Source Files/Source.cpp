@@ -60,7 +60,7 @@ public:
 	}
 	void OnStart()override
 	{
-		GetComponent<Transform>(entityID);
+		
 	}
 
 	void Update(float deltaTime)override
@@ -139,9 +139,10 @@ int main()
 	scene.AddComponent<Transform>(moon, Transform(0, 0, 0));
 	scene.AddComponent<BehaviourComponent>(moon, BehaviourComponent());
 
+
 	scene.GetComponent<Mesh>(moon).CreateMesh(generateSphereVertices(30, 30, 3));
 	scene.GetComponent<BehaviourComponent>(moon).setBehaviour<MoonBehv>(earth);
-	scene.RemoveComponent<BehaviourComponent>(moon);
+
 
 	scene.backGroundColor(0.2, 0.4, 0.2, 1);
 	//scene.backGroundColor(0, 0, 0, 1);

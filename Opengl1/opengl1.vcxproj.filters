@@ -7,6 +7,9 @@
     <Filter Include="Header Files\Editor">
       <UniqueIdentifier>{373999AD-A39A-76BB-2C08-BD6D9868AD7A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{937FF6B9-7F0E-8083-282D-947E149B9029}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Systems">
       <UniqueIdentifier>{28D220C8-1461-AA91-BD7F-BE8CA9EDBA37}</UniqueIdentifier>
     </Filter>
@@ -18,6 +21,9 @@
     </Filter>
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{6286B20A-CE9C-B0A0-1714-3CC283698128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{5BA4C7A6-4733-5170-F051-656BDCBF6116}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\misc">
       <UniqueIdentifier>{6434C40A-D04A-C2A0-19C2-4DC285179328}</UniqueIdentifier>
@@ -69,6 +75,15 @@
     <ClInclude Include="Header Files\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Physics\ColliderShape.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Physics\Physics.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Physics\RigidBody3D.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Quaternion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -84,6 +99,9 @@
     <ClInclude Include="Header Files\Systems\RenderingSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Systems\RigidBodySystem.h">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,10 +114,6 @@
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Systems\RigidBodySystem.h" />
-    <ClInclude Include="Header Files\Physics\Physics.h" />
-    <ClInclude Include="Header Files\Physics\RigidBody3D.h" />
-    <ClInclude Include="Header Files\Physics\ColliderShape.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Camera.cpp">
@@ -135,7 +149,16 @@
     <ClCompile Include="Source Files\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Physics\Physics.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Physics\RigidBody3D.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\RenderingSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\RigidBodySystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Shader.cpp">
@@ -159,8 +182,5 @@
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\RigidBodySystem.cpp" />
-    <ClCompile Include="Source Files\Physics\Physics.cpp" />
-    <ClCompile Include="Source Files\Physics\RigidBody3D.cpp" />
   </ItemGroup>
 </Project>

@@ -54,7 +54,7 @@ project "imGui"
 
 project "Opengl1"
     location"Opengl1/"
-    kind "ConsoleApp"
+    kind "StaticLib"
     language "C++"
     targetdir "Opengl1/bin/"
     objdir "bin/intermediate"
@@ -167,6 +167,13 @@ project "Planets"
 
         includedirs
     {
+        "Opengl1/vendor/PhysX/physx/include",
+        "Opengl1/vendor/PhysX/physx/source/physxextensions/src",
+        "Opengl1/vendor/PhysX/pxshared/include",
+        "Opengl1/vendor/PhysX/physx/source/foundation/include",
+        "Opengl1/vendor/PhysX/physx/snippets",
+
+      
         "glfw/include",
         "Opengl1/vendor",
         "Opengl1/Header Files",
@@ -178,10 +185,12 @@ project "Planets"
 
     libdirs
     {
+        "Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}",
         "glfw/src/Debug",
         "Opengl1/vendor/imGui/windows/Debug",
         "Opengl1/vendor/assimp/lib/Debug",
         "Opengl1/bin"
+        
     }
 
     links
@@ -190,7 +199,14 @@ project "Planets"
         "opengl32.lib",
         "imGui.lib",
         "assimp-vc142-mtd.lib",
-        "Opengl1.lib"
+        "Opengl1.lib",
+        
+        "PhysX_64.lib",
+        "PhysXCommon_64.lib",
+        "PhysXCooking_64.lib",
+        "PhysXFoundation_64.lib",
+        "PhysXPvdSDK_static_64.lib",
+        "PhysXExtensions_static_64.lib"
     }
     filter "configurations:Debug"
         defines {"DEBUG"}
@@ -217,6 +233,12 @@ project "GeoSpatialData"
 
         includedirs
     {
+        "Opengl1/vendor/PhysX/physx/include",
+        "Opengl1/vendor/PhysX/physx/source/physxextensions/src",
+        "Opengl1/vendor/PhysX/pxshared/include",
+        "Opengl1/vendor/PhysX/physx/source/foundation/include",
+        "Opengl1/vendor/PhysX/physx/snippets",
+        
         "glfw/include",
         "Opengl1/vendor",
         "Opengl1/Header Files",
@@ -228,6 +250,7 @@ project "GeoSpatialData"
 
     libdirs
     {
+        "Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}",
         "glfw/src/Debug",
         "Opengl1/vendor/imGui/windows/Debug",
         "Opengl1/vendor/assimp/lib/Debug",
@@ -240,7 +263,14 @@ project "GeoSpatialData"
         "opengl32.lib",
         "imGui.lib",
         "assimp-vc142-mtd.lib",
-        "Opengl1.lib"
+        "Opengl1.lib",
+        
+        "PhysX_64.lib",
+        "PhysXCommon_64.lib",
+        "PhysXCooking_64.lib",
+        "PhysXFoundation_64.lib",
+        "PhysXPvdSDK_static_64.lib",
+        "PhysXExtensions_static_64.lib"
     }
     filter "configurations:Debug"
         defines {"DEBUG"}
@@ -268,6 +298,12 @@ project "Test"
     
             includedirs
         {
+            "Opengl1/vendor/PhysX/physx/include",
+            "Opengl1/vendor/PhysX/physx/source/physxextensions/src",
+            "Opengl1/vendor/PhysX/pxshared/include",
+            "Opengl1/vendor/PhysX/physx/source/foundation/include",
+            "Opengl1/vendor/PhysX/physx/snippets",
+            
             "glfw/include",
             "Opengl1/vendor",
             "Opengl1/Header Files",
@@ -279,6 +315,7 @@ project "Test"
     
         libdirs
         {
+            "Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}",
             "glfw/src/Debug",
             "Opengl1/vendor/imGui/windows/Debug",
             "Opengl1/vendor/assimp/lib/Debug",
@@ -288,10 +325,17 @@ project "Test"
         links
         {
             "glfw3.lib",
-            "opengl32.lib",
-            "imGui.lib",
-            "assimp-vc142-mtd.lib",
-            "Opengl1.lib"
+        "opengl32.lib",
+        "imGui.lib",
+        "assimp-vc142-mtd.lib",
+        "Opengl1.lib",
+        
+        "PhysX_64.lib",
+        "PhysXCommon_64.lib",
+        "PhysXCooking_64.lib",
+        "PhysXFoundation_64.lib",
+        "PhysXPvdSDK_static_64.lib",
+        "PhysXExtensions_static_64.lib"
         }
         filter "configurations:Debug"
             defines {"DEBUG"}

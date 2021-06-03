@@ -3,51 +3,91 @@
 #include<string>
 #include<algorithm>
 #include"Engine.h"
-#include"DisplacementMap.h"
 #include"Editor/Scene.h"
+
 #include<vector>
+
 
 
 
 int main()
 {
 
-
-	std::shared_ptr<Shader>	shader;
-	Window window(800, 800, "Test");
+	Window window(1920, 1080, "testWindow");
 
 	if (!window.initialize())
-		std::cout << "Something went wrong, can't initialize window";
-
-	std::shared_ptr<Scene>	scene = std::make_shared<Scene>(window);
-
-	int num = 2000;
-	int sq = sqrt(num);
-	Material m;
-	
-	m.setDiffuseMap("Assets/diffuse.png");
-	m.setSpecularMap("Assets/roughness.png");
-	
-	for (int i = 0; i < num; i++)
 	{
-		EntityID eid = scene->CreateEntity();
-		scene->AddComponent<Transform>(eid, Transform((i / sq) , 0, (i % sq)));
-		scene->AddComponent<Mesh>(eid,Mesh());
-		scene->AddComponent<Material>(eid,m);
-
-		scene->GetComponent<Mesh>(eid).CreateMesh(generateCubeVertices());
-	
+		std::cout << "Can't init WINDOW";
+		return -1;
 	}
-	m.setUniforms(glm::vec3(10, 10, 10), scene->cam.getCameraPosition());
-	
-	
-	
+	Scene scene(window);
+
+
+
+	EntityID plane = scene.CreateEntity();
+	EntityID box = scene.CreateEntity();
+	EntityID box1 = scene.CreateEntity();
+	EntityID sphere = scene.CreateEntity();
+
+	Material boxMat;
+	boxMat.setDiffuseMap("D:/Programming Projects/OpenGL/Project1/opengl1/Opengl1/bin/Assets/5.jpg");
+	boxMat.setSpecularMap("D:/Programming Projects/OpenGL/Project1/opengl1/Opengl1/bin/Assets/5.jpg");
+
+	Material planeMat;
+	planeMat.setDiffuseMap("D:/Programming Projects/OpenGL/Project1/opengl1/Opengl1/bin/Assets/pbr/rust/diffuse.png");
+	planeMat.setSpecularMap("D:/Programming Projects/OpenGL/Project1/opengl1/Opengl1/bin/Assets/pbr/rust/roughness.png");
+
+	scene.AddComponent<Mesh>(box, Mesh());
+	scene.GetComponent<Mesh>(box).CreateMesh(generateCubeVertices());
+	scene.AddComponent<Transform>(box, Transform(1, 2, 0));
+	scene.AddComponent<Material>(box, boxMat);
+	scene.GetComponent<Transform>(box).rotation.setEulerAngle(0, 0, 0);
+	scene.AddComponent<physics::RigidBody3D>(box, physics::RigidBody3D());
+	physics::RigidBody3D& rbdy = scene.GetComponent<physics::RigidBody3D>(box);
+	rbdy.setRigidBodyType(physics::DYNAMIC, physics::BOX);
+
+	scene.AddComponent<Mesh>(box1, Mesh());
+	scene.GetComponent<Mesh>(box1).CreateMesh(generateCubeVertices());
+	scene.AddComponent<Transform>(box1, Transform(0, 0.5, 0));
+	scene.AddComponent<Material>(box1, boxMat);
+	scene.AddComponent<physics::RigidBody3D>(box1, physics::RigidBody3D());
+	physics::RigidBody3D& rbdy1 = scene.GetComponent<physics::RigidBody3D>(box1);
+	rbdy1.setRigidBodyType(physics::DYNAMIC, physics::BOX);
+	Transform planeTransform;
+
+	planeTransform.scale *= 5.0f;
+
+	scene.AddComponent<Mesh>(plane, Mesh());
+	scene.GetComponent<Mesh>(plane).CreateMesh(generatePlaneVertices());
+	scene.AddComponent<Transform>(plane, planeTransform);
+	scene.AddComponent<Material>(plane, planeMat);
+	//scene.GetComponent<Transform>(plane).rotation.setEulerAngle(0,0,45);
+	scene.AddComponent<physics::RigidBody3D>(plane, physics::RigidBody3D());
+	physics::RigidBody3D& rbdy2 = scene.GetComponent<physics::RigidBody3D>(plane);
+	physics::ColliderShape planeShape;
+	planeShape.setColliderShape(physics::PLANE, 5, 5);
+	rbdy2.setRigidBodyType(physics::STATIC, planeShape);
+
+
+
+	glfwSwapInterval(1);
+
+	scene.OnStart();
+	scene.backGroundColor(0, 0, 0, 1);
 	while (!window.closeWindow())
 	{
-		
-		
-		scene->Render();
-	}
 
+		flyCam(scene.cam, scene.getDeltaTime());
+		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
+		scene.Render();
+
+
+	}
+	//cleanPhysics();
 	return 0;
 }
+
+
+
+
+
