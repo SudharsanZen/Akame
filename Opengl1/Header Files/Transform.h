@@ -16,6 +16,7 @@ public:
 	}
 	Transform();
 	Transform(GLfloat posX,GLfloat posY,GLfloat posZ);
+	Transform(glm::vec3 vec):Transform(vec.x,vec.y,vec.z) {};
 	Transform& operator =(const Transform& Tran)
 	{
 		position = Tran.position;

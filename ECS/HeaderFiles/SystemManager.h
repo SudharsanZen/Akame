@@ -45,7 +45,7 @@ public:
 			auto const &system= pair.second;
 			Signature const &sysSig = systemSignature[SID];
 			
-			if ((sysSig & signature).to_ulong())
+			if ((sysSig & signature)==sysSig)
 			{
 				system->entities.insert(entity);
 				system->OnAddEntity();

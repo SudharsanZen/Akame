@@ -49,7 +49,7 @@ void Scene::InitEcs()
 	ecs->RegisterComponent<Transform>();
 	ecs->RegisterComponent<Material>();
 	ecs->RegisterComponent<BehaviourComponent>();
-
+	ecs->RegisterComponent<physics::RigidBody3D>();
 
 
 	//create system signature
@@ -61,12 +61,19 @@ void Scene::InitEcs()
 	Signature behSysSig;
 	behSysSig.set(ecs->GetComponentBitPose<BehaviourComponent>(),true);
 
+	Signature physicsSysSig;
+	physicsSysSig.set(ecs->GetComponentBitPose<Transform>());
+	physicsSysSig.set(ecs->GetComponentBitPose<physics::RigidBody3D>());
+
 	//register system and it's signature
 	renderSys=ecs->RegisterSystem<RenderingSystem>();
 	behaviourSys=ecs->RegisterSystem<BehaviourSystem>();
+	physicsSys = ecs->RegisterSystem<physics::RigidBodySystem>();
 	behaviourSys->ecs = ecs;
+	physicsSys->ecs=ecs;
 	ecs->SetSystemSignature<RenderingSystem>(renderSysSig);
 	ecs->SetSystemSignature<BehaviourSystem>(behSysSig);
+	ecs->SetSystemSignature<physics::RigidBodySystem>(physicsSysSig);
 
 
 }
@@ -89,6 +96,7 @@ void Scene::Render()
 		updateUniformBuffer(cam);
 		renderSys->Run(ecs,cam);
 		behaviourSys->Update(deltaTime);
+		physicsSys->Run(deltaTime);
 		fn();
 
 

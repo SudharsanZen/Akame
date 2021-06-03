@@ -96,6 +96,10 @@
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Systems\RigidBodySystem.h" />
+    <ClInclude Include="Header Files\Physics\Physics.h" />
+    <ClInclude Include="Header Files\Physics\RigidBody3D.h" />
+    <ClInclude Include="Header Files\Physics\ColliderShape.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Camera.cpp">
@@ -155,5 +159,8 @@
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\RigidBodySystem.cpp" />
+    <ClCompile Include="Source Files\Physics\Physics.cpp" />
+    <ClCompile Include="Source Files\Physics\RigidBody3D.cpp" />
   </ItemGroup>
 </Project>

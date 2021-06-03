@@ -3,7 +3,7 @@
 #include"Engine.h"
 #include"Systems/RenderingSystem.h"
 #include"Systems/BehaviourSystem.h"
-
+#include"Systems/RigidBodySystem.h"
 
 
 class Scene
@@ -11,9 +11,10 @@ class Scene
 private:
 
 	std::shared_ptr<ECS> ecs;
+
 	std::shared_ptr<RenderingSystem> renderSys;
 	std::shared_ptr<BehaviourSystem> behaviourSys;
-
+	std::shared_ptr<physics::RigidBodySystem> physicsSys;
 
 	glm::vec4 color;
 	Window &window;
