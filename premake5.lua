@@ -293,7 +293,6 @@ project "GeoSpatialData"
         optimize "On" 
 
 
-
 project "Test"
         location"Test"
         kind "ConsoleApp"
