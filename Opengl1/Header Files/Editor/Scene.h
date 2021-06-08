@@ -1,4 +1,5 @@
 #pragma once
+
 #include"ECS.h"
 #include"Engine.h"
 #include"Systems/RenderingSystem.h"
@@ -92,9 +93,19 @@ public:
 
 	~Scene()
 	{
-		std::cout <<"\n~Scene()\n";
-	}
+		release();
 
+		_CrtDumpMemoryLeaks();
+	
+	}
+	void release()
+	{
+		std::cout << "\n~Scene()\n";
+		physicsSys.reset();
+		ecs.reset();
+		behaviourSys.reset();
+		renderSys.reset();
+	}
 	float getDeltaTime()
 	{
 		return deltaTime;

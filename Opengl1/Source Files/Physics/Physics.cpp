@@ -102,7 +102,6 @@ namespace physics
 	void Physics::cleanPhysics()
 	{
 		PX_RELEASE(mScene);
-		PX_RELEASE(mFoundation);
 		PX_RELEASE(mPhysics);
 		PX_RELEASE(mDispatcher);
 		if (mPvd)
@@ -112,5 +111,6 @@ namespace physics
 			mPvd = NULL;
 			PX_RELEASE(transport);
 		}
+		PX_RELEASE(mFoundation);
 	}
 }

@@ -74,7 +74,7 @@ namespace physics
 				colShape=ptr->mPhysics->createShape(physx::PxBoxGeometry(shape.dim.x/2,shape.dim.y/2,shape.dim.z/2), *(ptr->mMaterial));
 				break;
 			case PLANE:
-				colShape = ptr->mPhysics->createShape(physx::PxBoxGeometry(shape.dim.x/2, 0.1, shape.dim.y/2), *(ptr->mMaterial));
+				colShape = ptr->mPhysics->createShape(physx::PxBoxGeometry(shape.dim.x/2, 0.01, shape.dim.y/2), *(ptr->mMaterial));
 				break;
 			case SPHERE:
 				colShape = ptr->mPhysics->createShape(physx::PxSphereGeometry(shape.dim.x), *(ptr->mMaterial));

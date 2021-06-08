@@ -20,7 +20,13 @@ private:
 	}
 
 public:
-
+	~ComponentManager()
+	{
+		for (auto i : compIDtoArray)
+		{
+			i.second.reset();
+		}
+	}
 	ComponentManager()
 	{
 		bitPoseOfNextComponent = 0;

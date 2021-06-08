@@ -6,7 +6,7 @@ workspace "GameEngine"
         "Debug",
         "Release"
     }
-startproject "Opengl1"
+startproject "Test"
 
 project "imGui"
     location"opengl1/vendor/imGui"
@@ -56,9 +56,10 @@ project "Opengl1"
     location"Opengl1/"
     kind "StaticLib"
     language "C++"
-    targetdir "Opengl1/bin/"
+    targetdir "Opengl1/bin/%{cfg.buildcfg}"
     objdir "bin/intermediate"
     dependson{"imGui","glfw"}
+    debugdir "%{cfg.targetdir}"
     files
     {
         "%{prj.location}/Header Files/**.h",
@@ -107,6 +108,10 @@ project "Opengl1"
 
     }
 
+    debugenvs
+    {
+        "PATH=$(SolutionDir)/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};"
+    }
     filter "configurations:Debug"
         defines {"DEBUG"}
         symbols "On"
@@ -159,6 +164,7 @@ project "Planets"
     targetdir "Planets/bin/"
     objdir "bin/intermediate"
     dependson{"imGui","glfw","Opengl1"}
+    debugdir "%{cfg.targetdir}"
     files
     {
         "%{prj.location}/Header Files/**.h",
@@ -189,10 +195,13 @@ project "Planets"
         "glfw/src/Debug",
         "Opengl1/vendor/imGui/windows/Debug",
         "Opengl1/vendor/assimp/lib/Debug",
-        "Opengl1/bin"
+        "Opengl1/bin/%{cfg.buildcfg}"
         
     }
-
+    debugenvs
+    {
+        "PATH=$(SolutionDir)/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};"
+    }
     links
     {
         "glfw3.lib",
@@ -223,7 +232,7 @@ project "GeoSpatialData"
     language "C++"
     targetdir "GeoSpatialData/bin/"
     objdir "bin/intermediate"
-    
+    debugdir "%{cfg.targetdir}"
     dependson{"imGui","glfw","Opengl1"}
     files
     {
@@ -231,7 +240,7 @@ project "GeoSpatialData"
         "%{prj.location}/Source Files/**.cpp",
     }
 
-        includedirs
+    includedirs
     {
         "Opengl1/vendor/PhysX/physx/include",
         "Opengl1/vendor/PhysX/physx/source/physxextensions/src",
@@ -247,14 +256,17 @@ project "GeoSpatialData"
         "Opengl1/vendor/assimp/include",
         "ECS/HeaderFiles"
     }
-
+    debugenvs
+    {
+        "PATH=$(SolutionDir)/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};"
+    }
     libdirs
     {
         "Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}",
         "glfw/src/Debug",
         "Opengl1/vendor/imGui/windows/Debug",
         "Opengl1/vendor/assimp/lib/Debug",
-        "Opengl1/bin"
+        "Opengl1/bin/%{cfg.buildcfg}"
     }
 
     links
@@ -288,8 +300,8 @@ project "Test"
         language "C++"
         targetdir "Test/bin/"
         objdir "bin/intermediate"
-        
         dependson{"imGui","glfw","Opengl1"}
+        debugdir "%{cfg.targetdir}"
         files
         {
             "%{prj.location}/Header Files/**.h",
@@ -319,12 +331,16 @@ project "Test"
             "glfw/src/Debug",
             "Opengl1/vendor/imGui/windows/Debug",
             "Opengl1/vendor/assimp/lib/Debug",
-            "Opengl1/bin"
+            "Opengl1/bin/%{cfg.buildcfg}"
         }
-    
+        debugenvs
+        {
+            "PATH=$(SolutionDir)/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};"
+        }
+
         links
         {
-            "glfw3.lib",
+        "glfw3.lib",
         "opengl32.lib",
         "imGui.lib",
         "assimp-vc142-mtd.lib",
@@ -337,6 +353,8 @@ project "Test"
         "PhysXPvdSDK_static_64.lib",
         "PhysXExtensions_static_64.lib"
         }
+
+
         filter "configurations:Debug"
             defines {"DEBUG"}
             symbols "On"

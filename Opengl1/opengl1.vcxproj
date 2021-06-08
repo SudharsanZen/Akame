@@ -40,13 +40,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>bin\</OutDir>
+    <OutDir>bin\Debug\</OutDir>
     <IntDir>..\bin\intermediate\Debug\Opengl1\</IntDir>
     <TargetName>Opengl1</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>bin\</OutDir>
+    <OutDir>bin\Release\</OutDir>
     <IntDir>..\bin\intermediate\Release\Opengl1\</IntDir>
     <TargetName>Opengl1</TargetName>
     <TargetExt>.lib</TargetExt>

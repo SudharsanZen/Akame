@@ -17,6 +17,7 @@ Shader::Shader(std::string vertexShaderDir, std::string fragmentShaderDir)
 Shader::~Shader()
 {
     deleteProgram();
+
 }
 void Shader::deleteProgram() 
 {
