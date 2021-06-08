@@ -6,358 +6,63 @@ workspace "GameEngine"
         "Debug",
         "Release"
     }
+
+IncludeDir={}
+IncludeDir["GLFW"]="%{wks.location}/glfw/include"
+IncludeDir["vendor"]="%{wks.location}/Opengl1/vendor"
+IncludeDir["imGui"]="%{wks.location}/Opengl1/vendor/imGui"
+IncludeDir["assimp"]="%{wks.location}/Opengl1/vendor/assimp/include"
+IncludeDir["Engine"]="%{wks.location}/Opengl1/Header Files"
+IncludeDir["ECS"]="%{wks.location}/ECS/HeaderFiles"
+IncludeDir["Physx"]=[[%{wks.location}/Opengl1/vendor/PhysX/physx/include;
+%{wks.location}/Opengl1/vendor/PhysX/physx/source/physxextensions/src;
+%{wks.location}/Opengl1/vendor/PhysX/pxshared/include;
+%{wks.location}/Opengl1/vendor/PhysX/physx/source/foundation/include;
+%{wks.location}/Opengl1/vendor/PhysX/physx/snippets]]
+
+LibraryDir={}
+LibraryDir["GLFW"]="%{wks.location}/glfw/src/%{cfg.buildcfg}"
+LibraryDir["assimp"]="%{wks.location}/Opengl1/vendor/assimp/lib/%{cfg.buildcfg}"
+LibraryDir["Engine"]="%{wks.location}/Opengl1/bin/%{cfg.buildcfg}"
+LibraryDir["Physx"]="%{wks.location}/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}"
+LibraryDir["imGui"]="%{wks.location}/Opengl1/vendor/imGui/%{cfg.system}/%{cfg.buildcfg}"
+
+Liblinks={
+    "glfw3.lib",
+    "opengl32.lib",
+    "imGui.lib",
+    "assimp-vc142-mt.lib",
+    "Opengl1.lib",
+
+    "PhysX_64.lib",
+    "PhysXCommon_64.lib",
+    "PhysXCooking_64.lib",
+    "PhysXFoundation_64.lib",
+    "PhysXPvdSDK_static_64.lib",
+    "PhysXExtensions_static_64.lib"
+    }
+AllIncludeDir="%{IncludeDir.GLFW};%{IncludeDir.vendor};%{IncludeDir.imGui};%{IncludeDir.assimp};%{IncludeDir.ECS};%{IncludeDir.Engine};"..IncludeDir["Physx"]
+
+AllDebugEnvPaths="PATH=$(SolutionDir)/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};$(SolutionDir)/Opengl1/vendor/assimp/bin/%{cfg.buildcfg}"
+
 startproject "Test"
 
-project "imGui"
-    location"opengl1/vendor/imGui"
-    kind "StaticLib"
-    language "C++"
-    targetdir "%{prj.location}/%{cfg.system}/%{cfg.buildcfg}"
-    dependson{"glfw"}
-    files
-    {
-        "%{prj.location}/*.h",
-        "%{prj.location}/*.c",
-        "%{prj.location}/*.cpp",
-        "opengl1/vendor/glad/glad.c",
-        "%{prj.location}/backends/imgui_impl_opengl3.cpp",
-        "%{prj.location}/backends/imgui_impl_opengl3.h",
-        "%{prj.location}/backends/imgui_impl_glfw.h",
-        "%{prj.location}/backends/imgui_impl_glfw.cpp"
-    }
+include "premakeConf/Opengl1.lua"
+include "premakeConf/ECS.lua"
 
-    includedirs
-    {
-        "glfw/include",
-        "opengl1/vendor",
-        "%{prj.location}"
-    }
+group "Dependencies"
+    include "premakeConf/imGui.lua"
+    include "premakeConf/Dependencies.lua"
+group ""
 
-    libdirs
-    {
-        "glfw/src/Debug"        
-    }
-
-    links
-    {
-        "glfw3",
-        "opengl32"
-    }
-    filter "configurations:Debug"
-        defines {"DEBUG"}
-        symbols "On"
-    
-    filter "configurations:Release"
-        defines{"NDEBUG"}
-        optimize "On" 
+group "Samples"
+    include "premakeConf/Planets.lua"
+    include "premakeConf/GeoSpatialData.lua"
+    include "premakeConf/Test.lua"
+group ""
 
 
-project "Opengl1"
-    location"Opengl1/"
-    kind "StaticLib"
-    language "C++"
-    targetdir "Opengl1/bin/%{cfg.buildcfg}"
-    objdir "bin/intermediate"
-    dependson{"imGui","glfw"}
-    debugdir "%{cfg.targetdir}"
-    files
-    {
-        "%{prj.location}/Header Files/**.h",
-        "%{prj.location}/Source Files/**.cpp",
-    }
-
-    includedirs
-    {
-        "Opengl1/vendor/PhysX/physx/include",
-        "Opengl1/vendor/PhysX/physx/source/physxextensions/src",
-        "Opengl1/vendor/PhysX/pxshared/include",
-        "Opengl1/vendor/PhysX/physx/source/foundation/include",
-        "Opengl1/vendor/PhysX/physx/snippets",
-
-        "glfw/include",
-        "Opengl1/vendor",
-        "%{prj.location}/Header Files",
-        "%{prj.location}/vendor",
-        "%{prj.location}/vendor/imGui",
-        "%{prj.location}/vendor/assimp/include",
-        "ECS/HeaderFiles"
-    }
-
-    libdirs
-    {
-        "glfw/src/Debug",
-        "Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}",
-        "%{prj.location}/vendor/imGui/windows/Debug",
-        "%{prj.location}/vendor/assimp/lib/Debug"
-    }
-
-    links
-    {
-        "glfw3.lib",
-        "opengl32.lib",
-        "imGui.lib",
-        "assimp-vc142-mtd.lib",
-
-       
-        "PhysX_64.lib",
-        "PhysXCommon_64.lib",
-        "PhysXCooking_64.lib",
-        "PhysXFoundation_64.lib",
-        "PhysXPvdSDK_static_64.lib",
-        "PhysXExtensions_static_64.lib"
-
-    }
-
-    debugenvs
-    {
-        "PATH=$(SolutionDir)/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};"
-    }
-    filter "configurations:Debug"
-        defines {"DEBUG"}
-        symbols "On"
-    
-    filter "configurations:Release"
-        defines{"NDEBUG"}
-        optimize "On" 
 
 
-project "ECS"
-    location"ECS"
-    kind "StaticLib"
-    language "C++"
-    targetdir "%{prj.location}/%{cfg.system}/%{cfg.buildcfg}"
-    files
-    {
-        "%{prj.location}/HeaderFiles/**.h",
-        "%{prj.location}/SourceFiles/**.cpp",
-    }
-
-    includedirs
-    {
-        "ECS/HeaderFiles",
-    }
-
-    libdirs
-    {
-     "ECS/windows/Debug"
-    }
-
-    filter "configurations:Debug"
-    defines {"DEBUG"}
-    symbols "On"
-
-    filter "configurations:Release"
-    defines{"NDEBUG"}
-    optimize "On" 
-
-    
-
-externalproject "GLFW"
-    location "glfw/src/"
-    kind "StaticLib"
 
 
-project "Planets"
-    location"Planets/"
-    kind "ConsoleApp"
-    language "C++"
-    targetdir "Planets/bin/"
-    objdir "bin/intermediate"
-    dependson{"imGui","glfw","Opengl1"}
-    debugdir "%{cfg.targetdir}"
-    files
-    {
-        "%{prj.location}/Header Files/**.h",
-        "%{prj.location}/Source Files/**.cpp",
-    }
-
-        includedirs
-    {
-        "Opengl1/vendor/PhysX/physx/include",
-        "Opengl1/vendor/PhysX/physx/source/physxextensions/src",
-        "Opengl1/vendor/PhysX/pxshared/include",
-        "Opengl1/vendor/PhysX/physx/source/foundation/include",
-        "Opengl1/vendor/PhysX/physx/snippets",
-
-      
-        "glfw/include",
-        "Opengl1/vendor",
-        "Opengl1/Header Files",
-        "Opengl1/vendor",
-        "Opengl1/vendor/imGui",
-        "Opengl1/vendor/assimp/include",
-        "ECS/HeaderFiles"
-    }
-
-    libdirs
-    {
-        "Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}",
-        "glfw/src/Debug",
-        "Opengl1/vendor/imGui/windows/Debug",
-        "Opengl1/vendor/assimp/lib/Debug",
-        "Opengl1/bin/%{cfg.buildcfg}"
-        
-    }
-    debugenvs
-    {
-        "PATH=$(SolutionDir)/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};"
-    }
-    links
-    {
-        "glfw3.lib",
-        "opengl32.lib",
-        "imGui.lib",
-        "assimp-vc142-mtd.lib",
-        "Opengl1.lib",
-        
-        "PhysX_64.lib",
-        "PhysXCommon_64.lib",
-        "PhysXCooking_64.lib",
-        "PhysXFoundation_64.lib",
-        "PhysXPvdSDK_static_64.lib",
-        "PhysXExtensions_static_64.lib"
-    }
-    filter "configurations:Debug"
-        defines {"DEBUG"}
-        symbols "On"
-    
-    filter "configurations:Release"
-        defines{"NDEBUG"}
-        optimize "On" 
-
-
-project "GeoSpatialData"
-    location"GeoSpatialData/"
-    kind "ConsoleApp"
-    language "C++"
-    targetdir "GeoSpatialData/bin/"
-    objdir "bin/intermediate"
-    debugdir "%{cfg.targetdir}"
-    dependson{"imGui","glfw","Opengl1"}
-    files
-    {
-        "%{prj.location}/Header Files/**.h",
-        "%{prj.location}/Source Files/**.cpp",
-    }
-
-    includedirs
-    {
-        "Opengl1/vendor/PhysX/physx/include",
-        "Opengl1/vendor/PhysX/physx/source/physxextensions/src",
-        "Opengl1/vendor/PhysX/pxshared/include",
-        "Opengl1/vendor/PhysX/physx/source/foundation/include",
-        "Opengl1/vendor/PhysX/physx/snippets",
-        
-        "glfw/include",
-        "Opengl1/vendor",
-        "Opengl1/Header Files",
-        "Opengl1/vendor",
-        "Opengl1/vendor/imGui",
-        "Opengl1/vendor/assimp/include",
-        "ECS/HeaderFiles"
-    }
-    debugenvs
-    {
-        "PATH=$(SolutionDir)/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};"
-    }
-    libdirs
-    {
-        "Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}",
-        "glfw/src/Debug",
-        "Opengl1/vendor/imGui/windows/Debug",
-        "Opengl1/vendor/assimp/lib/Debug",
-        "Opengl1/bin/%{cfg.buildcfg}"
-    }
-
-    links
-    {
-        "glfw3.lib",
-        "opengl32.lib",
-        "imGui.lib",
-        "assimp-vc142-mtd.lib",
-        "Opengl1.lib",
-        
-        "PhysX_64.lib",
-        "PhysXCommon_64.lib",
-        "PhysXCooking_64.lib",
-        "PhysXFoundation_64.lib",
-        "PhysXPvdSDK_static_64.lib",
-        "PhysXExtensions_static_64.lib"
-    }
-    filter "configurations:Debug"
-        defines {"DEBUG"}
-        symbols "On"
-    
-    filter "configurations:Release"
-        defines{"NDEBUG"}
-        optimize "On" 
-
-
-project "Test"
-        location"Test"
-        kind "ConsoleApp"
-        language "C++"
-        targetdir "Test/bin/"
-        objdir "bin/intermediate"
-        dependson{"imGui","glfw","Opengl1"}
-        debugdir "%{cfg.targetdir}"
-        files
-        {
-            "%{prj.location}/Header Files/**.h",
-            "%{prj.location}/Source Files/**.cpp",
-        }
-    
-            includedirs
-        {
-            "Opengl1/vendor/PhysX/physx/include",
-            "Opengl1/vendor/PhysX/physx/source/physxextensions/src",
-            "Opengl1/vendor/PhysX/pxshared/include",
-            "Opengl1/vendor/PhysX/physx/source/foundation/include",
-            "Opengl1/vendor/PhysX/physx/snippets",
-            
-            "glfw/include",
-            "Opengl1/vendor",
-            "Opengl1/Header Files",
-            "Opengl1/vendor",
-            "Opengl1/vendor/imGui",
-            "Opengl1/vendor/assimp/include",
-            "ECS/HeaderFiles"
-        }
-    
-        libdirs
-        {
-            "Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}",
-            "glfw/src/Debug",
-            "Opengl1/vendor/imGui/windows/Debug",
-            "Opengl1/vendor/assimp/lib/Debug",
-            "Opengl1/bin/%{cfg.buildcfg}"
-        }
-        debugenvs
-        {
-            "PATH=$(SolutionDir)/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};"
-        }
-
-        links
-        {
-        "glfw3.lib",
-        "opengl32.lib",
-        "imGui.lib",
-        "assimp-vc142-mtd.lib",
-        "Opengl1.lib",
-        
-        "PhysX_64.lib",
-        "PhysXCommon_64.lib",
-        "PhysXCooking_64.lib",
-        "PhysXFoundation_64.lib",
-        "PhysXPvdSDK_static_64.lib",
-        "PhysXExtensions_static_64.lib"
-        }
-
-
-        filter "configurations:Debug"
-            defines {"DEBUG"}
-            symbols "On"
-        
-        filter "configurations:Release"
-            defines{"NDEBUG"}
-            optimize "On" 

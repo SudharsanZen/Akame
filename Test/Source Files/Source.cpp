@@ -96,6 +96,7 @@ int main()
 
 
 	}
+
 	std::cout <<"\ncount:"<<count<<"\n";
 
 	return 0;

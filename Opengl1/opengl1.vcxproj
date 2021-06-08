@@ -41,13 +41,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>bin\Debug\</OutDir>
-    <IntDir>..\bin\intermediate\Debug\Opengl1\</IntDir>
+    <IntDir>..\bin\Intermediate\Debug\Opengl1\</IntDir>
     <TargetName>Opengl1</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>bin\Release\</OutDir>
-    <IntDir>..\bin\intermediate\Release\Opengl1\</IntDir>
+    <IntDir>..\bin\Intermediate\Release\Opengl1\</IntDir>
     <TargetName>Opengl1</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
@@ -56,7 +56,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;..\glfw\include;Header Files;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\glfw\include;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ClCompile>
@@ -74,7 +74,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;..\glfw\include;Header Files;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\glfw\include;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -88,7 +88,7 @@
     </Link>
     <Lib>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;imGui.lib;assimp-vc142-mtd.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXCooking_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXExtensions_static_64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\glfw\src\Debug;vendor\PhysX\physx\bin\win.x86_64.vc142.md\Release;vendor\imGui\windows\Debug;vendor\assimp\lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\glfw\src\Release;vendor\PhysX\physx\bin\win.x86_64.vc142.md\Release;vendor\imGui\windows\Release;vendor\assimp\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
