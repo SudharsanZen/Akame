@@ -1,4 +1,3 @@
-
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -14,7 +13,7 @@
 
 int main()
 {
-	
+	std::string rootDir(ASSETS_ROOT_DIR);
 	Window window(1920, 1080, "testWindow");
 
 	if (!window.initialize())
@@ -31,12 +30,12 @@ int main()
 
 
 	Material boxMat;
-	boxMat.setDiffuseMap("D:/Programming Projects/OpenGL/Project1/opengl1/Opengl1/bin/Assets/pbr/box/diffuse.png");
-	boxMat.setSpecularMap("D:/Programming Projects/OpenGL/Project1/opengl1/Opengl1/bin/Assets/pbr/box/roughness.png");
+	boxMat.setDiffuseMap(rootDir+"Media/pbr/box/diffuse.png");
+	boxMat.setSpecularMap(rootDir+"Media/pbr/box/roughness.png");
 
 	Material planeMat;
-	planeMat.setDiffuseMap("D:/Programming Projects/OpenGL/Project1/opengl1/Opengl1/bin/Assets/pbr/rust/diffuse.png");
-	planeMat.setSpecularMap("D:/Programming Projects/OpenGL/Project1/opengl1/Opengl1/bin/Assets/pbr/rust/roughness.png");
+	planeMat.setDiffuseMap(rootDir+"Media/pbr/rust/diffuse.png");
+	planeMat.setSpecularMap(rootDir+"Media/pbr/rust/roughness.png");
 
 	
 

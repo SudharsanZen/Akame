@@ -2,6 +2,7 @@
 #include"glm/glm/glm.hpp"
 #include"Texture.h"
 #include"Shader.h"
+#include"engine_constants.h"
 class DisplacementMap
 {
 private:
@@ -33,7 +34,7 @@ public:
 		ambientIntensity = 0.2f;
 		normalMapOn = false;
 		
-		shader = std::make_shared<Shader>("Shaders/displacement.vert","Shaders/displacement.frag");
+		shader = std::make_shared<Shader>(ASSETS_ROOT_DIR+std::string("Shaders/displacement.vert"),ASSETS_ROOT_DIR+std::string("Shaders/displacement.frag"));
 		shader->compileShader();
 	}
 	DisplacementMap(const DisplacementMap& mat)

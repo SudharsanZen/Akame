@@ -1,3 +1,4 @@
+#define ASSETS_ROOT_DIR "../../../Assets/"
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -22,7 +23,7 @@ void  func()
 
 int main()
 {
-
+	std::string rootDir(ASSETS_ROOT_DIR);
 	Window window(800, 800, "GeoSpatial Data");
 
 	if (!window.initialize())
@@ -35,9 +36,9 @@ int main()
 
 
 
-	m->setDisplacementMap("Assets/disp.jpg");
-	m->setDiffuseMap("Assets/diff.jpg");
-	m->setSpecularMap("Assets/disp.jpg");
+	m->setDisplacementMap(rootDir + "Media/disp.jpg");
+	m->setDiffuseMap(rootDir + "Media/diff.jpg");
+	m->setSpecularMap(rootDir + "Media/disp.jpg");
 
 
 	mesh->CreateMesh(generatePlaneVertices(200, 200));

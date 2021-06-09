@@ -92,6 +92,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Header Files\engine_constants.h" />
     <ClInclude Include="Header Files\Behaviour.h" />
     <ClInclude Include="Header Files\BehaviourComponent.h" />
     <ClInclude Include="Header Files\Camera.h" />

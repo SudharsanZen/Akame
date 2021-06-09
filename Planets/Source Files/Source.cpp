@@ -1,3 +1,4 @@
+#define ASSETS_ROOT_DIR "../../../Assets/"
 #include"Engine.h"
 #include"Editor/Scene.h"
 
@@ -87,7 +88,7 @@ public:
 
 int main()
 {
-	
+	std::string rootDir(ASSETS_ROOT_DIR);
 	Window window(800,800,"planets");
 	
 	if (!window.initialize())
@@ -100,18 +101,18 @@ int main()
 
 
 	Material sunMaterial;
-	sunMaterial.setDiffuseMap("Assets/Demo/Planets/Sun/diffuse.jpg");
-	sunMaterial.setSpecularMap("Assets/Demo/Planets/Sun/Specular.jpg");
+	sunMaterial.setDiffuseMap(rootDir+"Media/Demo/Planets/Sun/diffuse.jpg");
+	sunMaterial.setSpecularMap(rootDir+"Media/Demo/Planets/Sun/Specular.jpg");
 	sunMaterial.isEmissive(true);
 
 	Material moonMaterial;
-	moonMaterial.setDiffuseMap("Assets/Demo/Planets/Moon/diffuse.jpg");
-	moonMaterial.setSpecularMap("Assets/Demo/Planets/Moon/Specular.jpg");
+	moonMaterial.setDiffuseMap(rootDir + "Media/Demo/Planets/Moon/diffuse.jpg");
+	moonMaterial.setSpecularMap(rootDir + "Media/Demo/Planets/Moon/Specular.jpg");
 
 	
 	Material earthMaterial;
-	earthMaterial.setDiffuseMap("Assets/Demo/Planets/Earth/Earth map.jpg");
-	earthMaterial.setSpecularMap("Assets/Demo/Planets/Earth/Specular map.jpg");
+	earthMaterial.setDiffuseMap(rootDir + "Media/Demo/Planets/Earth/Earth map.jpg");
+	earthMaterial.setSpecularMap(rootDir + "Media/Demo/Planets/Earth/Specular map.jpg");
 
 
 	EntityID sun = scene.CreateEntity();
