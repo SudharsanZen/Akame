@@ -87,7 +87,7 @@ int main()
 			else
 			rbdy.setRigidBodyType(physics::DYNAMIC, physics::BOX);
 		}
-		acc +=scene.getDeltaTime() ;
+		acc +=scene.getDeltaTime();
 
 
 		flyCam(scene.cam, scene.getDeltaTime());

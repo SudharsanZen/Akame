@@ -20,20 +20,23 @@ project "Planets"
     libdirs
     {
         LibraryDir
-        
+
     }
     debugenvs
     {
         AllDebugEnvPaths
     }
-    links
-    {
-        Liblinks
-    }
     filter "configurations:Debug"
         defines {"DEBUG"}
         symbols "On"
-    
+		links
+		{
+			LiblinksDebug
+		}
     filter "configurations:Release"
         defines{"NDEBUG"}
-        optimize "On" 
+        optimize "On"
+		links
+		{
+			LiblinksRelease
+		}

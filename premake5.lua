@@ -27,11 +27,26 @@ LibraryDir["Engine"]="%{wks.location}/Opengl1/bin/%{cfg.buildcfg}"
 LibraryDir["Physx"]="%{wks.location}/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}"
 LibraryDir["imGui"]="%{wks.location}/Opengl1/vendor/imGui/%{cfg.system}/%{cfg.buildcfg}"
 
-Liblinks={
+LiblinksRelease={
     "glfw3.lib",
     "opengl32.lib",
     "imGui.lib",
     "assimp-vc142-mt.lib",
+    "Opengl1.lib",
+
+    "PhysX_64.lib",
+    "PhysXCommon_64.lib",
+    "PhysXCooking_64.lib",
+    "PhysXFoundation_64.lib",
+    "PhysXPvdSDK_static_64.lib",
+    "PhysXExtensions_static_64.lib"
+    }
+
+LiblinksDebug={
+    "glfw3.lib",
+    "opengl32.lib",
+    "imGui.lib",
+    "assimp-vc142-mtd.lib",
     "Opengl1.lib",
 
     "PhysX_64.lib",

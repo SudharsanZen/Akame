@@ -4,7 +4,7 @@ project "Opengl1"
     language "C++"
     targetdir "%{wks.location}/Opengl1/bin/%{cfg.buildcfg}"
     objdir "%{wks.location}/bin/Intermediate/%{cfg.buildcfg}/%{prj.name}"
-    dependson{"imGui","glfw"}
+    dependson{"ALL_BUILD_DEP","ECS"}
     debugdir "%{cfg.targetdir}"
     files
     {
@@ -30,9 +30,6 @@ project "Opengl1"
         "glfw3.lib",
         "opengl32.lib",
         "imGui.lib",
-        "assimp-vc142-mtd.lib",
-
-       
         "PhysX_64.lib",
         "PhysXCommon_64.lib",
         "PhysXCooking_64.lib",
@@ -49,7 +46,15 @@ project "Opengl1"
     filter "configurations:Debug"
         defines {"DEBUG"}
         symbols "On"
-    
+		links
+		{
+			"assimp-vc142-mtd.lib"
+		}
+
     filter "configurations:Release"
         defines{"NDEBUG"}
-        optimize "On" 
+        optimize "On"
+		links
+		{
+			"assimp-vc142-mt.lib",
+		}

@@ -11,12 +11,12 @@ project "Test"
             "%{prj.location}/Header Files/**.h",
             "%{prj.location}/Source Files/**.cpp",
         }
-    
+
         includedirs
         {
             string.explode(AllIncludeDir,";")
         }
-    
+
         libdirs
         {
             LibraryDir
@@ -26,16 +26,18 @@ project "Test"
             AllDebugEnvPaths
         }
 
-        links
-        {
-            Liblinks
-        }
-
 
         filter "configurations:Debug"
             defines {"DEBUG"}
             symbols "On"
-        
+			links
+			{
+				LiblinksDebug
+			}
         filter "configurations:Release"
             defines{"NDEBUG"}
-            optimize "On" 
+            optimize "On"
+			links
+			{
+				LiblinksRelease
+			}
