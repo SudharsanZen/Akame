@@ -1,8 +1,5 @@
 #pragma once
-#include<iostream>
-#include"stb_image.h"
-#include"glad/glad.h"
-#include"GLFW/glfw3.h"
+#include<string>
 
 
 class Texture
@@ -13,20 +10,20 @@ private:
 	std::string imageDir;
 
 	//texture buffer reference
-	GLuint textureID;
+	unsigned int textureID;
 
 
 
 	//image height width and number of color channels
-	GLint Height, Width ,nrChannels;
+	int Height, Width ,nrChannels;
 
-	GLubyte* imageData;
-	GLuint texFormat;
+	unsigned char* imageData;
+	unsigned int texFormat;
 
 	void reset();
 public:
 	void loadImage();
-	void use(const GLuint unit);
+	void use(const unsigned int unit);
 	Texture() { imageDir = ""; texFormat = -1; }
 
 	Texture& operator =(Texture&& obj) noexcept
@@ -52,7 +49,7 @@ public:
 	
 	
 	
-	void setDir(std::string dir, GLuint imageFormat) { imageDir = dir; texFormat = imageFormat; }
+	void setDir(std::string dir, unsigned int imageFormat) { imageDir = dir; texFormat = imageFormat; }
 
 	~Texture();
 };

@@ -1,3 +1,7 @@
+
+#include<iostream>
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
 #include "MeshInstance.h"
 MeshInstance::MeshInstance(std::vector<Transform>& t_List):transformList(t_List)
 {

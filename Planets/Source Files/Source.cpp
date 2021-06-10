@@ -100,10 +100,7 @@ int main()
 	Scene scene(window);
 
 
-	Material sunMaterial;
-	sunMaterial.setDiffuseMap(rootDir+"Media/Demo/Planets/Sun/diffuse.jpg");
-	sunMaterial.setSpecularMap(rootDir+"Media/Demo/Planets/Sun/Specular.jpg");
-	sunMaterial.isEmissive(true);
+
 
 	Material moonMaterial;
 	moonMaterial.setDiffuseMap(rootDir + "Media/Demo/Planets/Moon/diffuse.jpg");
@@ -114,13 +111,19 @@ int main()
 	earthMaterial.setDiffuseMap(rootDir + "Media/Demo/Planets/Earth/Earth map.jpg");
 	earthMaterial.setSpecularMap(rootDir + "Media/Demo/Planets/Earth/Specular map.jpg");
 
-
+	Material sunMaterial;
+	sunMaterial.setDiffuseMap(rootDir + "Media/Demo/Planets/Sun/diffuse.jpg");
+	sunMaterial.setSpecularMap(rootDir + "Media/Demo/Planets/Sun/Specular.jpg");
+	sunMaterial.isEmissive(true);
 	EntityID sun = scene.CreateEntity();
 
+	//component that describes the shape
 	scene.AddComponent<Mesh>(sun, Mesh());
+	//component that describes the material
 	scene.AddComponent<Material>(sun, sunMaterial);
-	scene.AddComponent<Transform>(sun, Transform(0, 0, 0));
-
+	//component that describes the location ,size and rotation
+	scene.AddComponent<Transform>(sun, Transform(0, 0, 0)); 
+	//get the Mesh component and define it's shape, in this case a sphere
 	scene.GetComponent<Mesh>(sun).CreateMesh(generateSphereVertices(30, 30, 30));
 
 	EntityID earth=scene.CreateEntity();

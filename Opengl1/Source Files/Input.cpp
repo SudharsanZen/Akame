@@ -1,5 +1,8 @@
 #include "Input.h"
-#include "..\Header Files\Input.h"
+#include"Window.h"
+#include<GLFW/glfw3.h>
+#include<memory>
+#include<iostream>
 
 
 

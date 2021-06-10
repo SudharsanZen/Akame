@@ -1,5 +1,10 @@
 #include "Model.h"
-
+#include<iostream>
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#include<assimp/Importer.hpp>
+#include<assimp/scene.h>
+#include<assimp/postprocess.h>
 void Model::Draw()
 {
 	for (GLuint i = 0; i < meshes.size(); i++)

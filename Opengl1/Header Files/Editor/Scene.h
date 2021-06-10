@@ -1,12 +1,18 @@
 #pragma once
 
+
+
+#include"Camera.h"
+#include<functional>
 #include"ECS.h"
-#include"Engine.h"
-#include"Systems/RenderingSystem.h"
-#include"Systems/BehaviourSystem.h"
-#include"Systems/RigidBodySystem.h"
-
-
+#include"BehaviourComponent.h"
+class Window;
+class RenderingSystem;
+class BehaviourSystem;
+namespace physics 
+{
+	class RigidBodySystem;
+}
 class Scene
 {
 private:
@@ -16,11 +22,11 @@ private:
 	std::shared_ptr<RenderingSystem> renderSys;
 	std::shared_ptr<BehaviourSystem> behaviourSys;
 	std::shared_ptr<physics::RigidBodySystem> physicsSys;
-
+	
 	glm::vec4 color;
 	Window &window;
-	GLuint uboMatrixBufferID;
-	GLsizeiptr mat4Size = sizeof(glm::mat4);
+	unsigned int uboMatrixBufferID;
+	signed   long long int mat4Size = sizeof(glm::mat4);
 	float deltaTime;
 	float lastTime;
 	
@@ -37,10 +43,7 @@ public:
 	void Render();
 
 	//call this before Scene::Render() in the main window loop 
-	void OnStart()
-	{
-		behaviourSys->OnStart();
-	}
+	void OnStart();
 	void InitEcs();
 
 	//Creates an entity in the Scene
@@ -57,38 +60,24 @@ public:
 
 	//Adds a component to the Given entity
 	template<typename T>
-	void AddComponent(EntityID entityID,T comp)
-	{
-		
-		ecs->AddComponent<T>(entityID, comp);
-	}
+	void AddComponent(EntityID entityID, T comp);
 
 	//specialization of AddComponent for BehaviourComponent for storing entityID along with the component
 	template<>
-	void AddComponent<BehaviourComponent>(EntityID entityID, BehaviourComponent comp)
-	{
-		comp.eid = entityID;
-		ecs->AddComponent<BehaviourComponent>(entityID, comp);
-	}
+	void AddComponent<BehaviourComponent>(EntityID entityID, BehaviourComponent comp);
 
 	//Remove added component
 	template<typename T>
-	void RemoveComponent(EntityID entityID)
-	{
-		ecs->RemoveComponent<T>(entityID);
-	}
+	void RemoveComponent(EntityID entityID);
 
 	//get added component with a given entityID
 	template<typename T>
-	T& GetComponent(EntityID entityID)
-	{
-		return ecs->GetComponent<T>(entityID);
-	}
+	T& GetComponent(EntityID entityID);
 
 	//set backGround color of the window
-	void backGroundColor(float r,float g,float b,float a)
+	void backGroundColor(float r, float g, float b, float a)
 	{
-		this->color =glm::vec4(r,g,b,a);
+		this->color = glm::vec4(r, g, b, a);
 	}
 
 	~Scene()
@@ -98,17 +87,43 @@ public:
 		_CrtDumpMemoryLeaks();
 	
 	}
-	void release()
-	{
-		std::cout << "\n~Scene()\n";
-		physicsSys.reset();
-		ecs.reset();
-		behaviourSys.reset();
-		renderSys.reset();
-	}
+	void release();
 	float getDeltaTime()
 	{
 		return deltaTime;
 	}
 };
+
+template<typename T>
+inline void Scene::AddComponent(EntityID entityID, T comp)
+{
+
+	ecs->AddComponent<T>(entityID, comp);
+}
+
+//specialization of AddComponent for BehaviourComponent for storing entityID along with the component
+
+template<>
+inline void Scene::AddComponent(EntityID entityID, BehaviourComponent comp)
+{
+	comp.eid = entityID;
+	ecs->AddComponent<BehaviourComponent>(entityID, comp);
+}
+
+//Remove added component
+
+template<typename T>
+inline void Scene::RemoveComponent(EntityID entityID)
+{
+	ecs->RemoveComponent<T>(entityID);
+}
+
+//get added component with a given entityID
+
+template<typename T>
+inline T& Scene::GetComponent(EntityID entityID)
+{
+	return ecs->GetComponent<T>(entityID);
+}
+
 

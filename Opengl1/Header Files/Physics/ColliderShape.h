@@ -1,5 +1,5 @@
 #pragma once
-
+#include"GlmMath.h"
 
 namespace physics
 {
@@ -11,10 +11,11 @@ namespace physics
 	{
 		Shapes colShape;
 		glm::vec3 dim;
-		friend RigidBody3D;
+		friend class RigidBody3D;
+
 	public:
 		
-		ColliderShape(Shapes sp=SPHERE,GLfloat d1=1,GLfloat d2=1,GLfloat d3=1)
+		ColliderShape(Shapes sp=SPHERE,float d1=1,float d2=1,float d3=1)
 		{
 			setColliderShape(sp,d1,d2,d3);
 		}
@@ -22,7 +23,7 @@ namespace physics
 		/* for sphere d1 is the radius.
 		for box d1,d2,d3 are the length, height, and width.
 		for Plane d1 and d2 are the length and breadth.*/
-		void setColliderShape(Shapes shape, GLfloat d1, GLfloat d2 = 1, GLfloat d3 = 1)
+		void setColliderShape(Shapes shape, float d1, float d2 = 1, float d3 = 1)
 		{
 
 			colShape = shape;

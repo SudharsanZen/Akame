@@ -1,5 +1,5 @@
 #pragma once
-#include"Editor/Scene.h"
+#include"ECS.h"
 
 
 class Behaviour

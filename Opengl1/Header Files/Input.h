@@ -1,7 +1,5 @@
 #pragma once
-#include"Window.h"
-#include<gl\GL.h>
-#include<memory>
+
 class Input
 {
 private:

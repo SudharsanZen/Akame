@@ -1,11 +1,10 @@
 #pragma once
-#include<iostream>
 #include<string>
-#include<vector>
 #include"Mesh.h"
-#include<assimp/Importer.hpp>
-#include<assimp/scene.h>
-#include<assimp/postprocess.h>
+
+struct aiMesh;
+struct aiNode;
+struct aiScene;
 class Model
 {
 public:

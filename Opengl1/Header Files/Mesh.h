@@ -1,27 +1,26 @@
 #pragma once
-#include<iostream>
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
+
 #include<vector>
-#include<glm/glm/glm.hpp>
+#include"GlmMath.h"
 struct vert
 {
 	glm::vec3 pos;
 	glm::vec3 normal;
 	glm::vec2 uv;
 };
+
 class Mesh
 {
 private:
 	//Buffer object and Atrribute object iDs
-	GLuint VAO, VBO, IBO;
+	unsigned int VAO, VBO, IBO;
 	//number of IBO indices
-	GLuint numOfIndices,numOfVertices;
+	unsigned int numOfIndices,numOfVertices;
 	void setupMesh();
 	
 public:
 	std::vector<vert> vertices;
-	std::vector<GLuint> indices;
+	std::vector<unsigned int> indices;
 
 	Mesh();
 
@@ -29,7 +28,7 @@ public:
 
 	void reset();
 	void renderMesh();
-	void CreateMesh(std::vector<vert> vertices, std::vector<GLuint> indices=std::vector<GLuint>());
+	void CreateMesh(std::vector<vert> vertices, std::vector<unsigned int> indices=std::vector<unsigned int>());
 
 };
 

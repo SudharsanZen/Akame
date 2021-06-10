@@ -1,4 +1,15 @@
 #include "Editor/Scene.h"
+#include"stb_image.h"
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#include"Mesh.h"
+#include"Material.h"
+#include"Physics/RigidBody3D.h"
+#include"Window.h"
+#include"Systems/RenderingSystem.h"
+#include"Systems/BehaviourSystem.h"
+#include"Systems/RigidBodySystem.h"
+#include"ECS.h"
 
 
 //constructor initia
@@ -39,6 +50,17 @@ void Scene::updateUniformBuffer(Camera& cam)
 }
 
 
+
+//call this before Scene::Render() in the main window loop 
+
+
+//call this before Scene::Render() in the main window loop 
+
+void Scene::OnStart()
+{
+	behaviourSys->OnStart();
+}
+
 //Initialize the Entity component System
 void Scene::InitEcs()
 {
@@ -76,6 +98,17 @@ void Scene::InitEcs()
 	ecs->SetSystemSignature<physics::RigidBodySystem>(physicsSysSig);
 
 
+}
+
+
+
+void Scene::release()
+{
+	std::cout << "\n~Scene()\n";
+	physicsSys.reset();
+	ecs.reset();
+	behaviourSys.reset();
+	renderSys.reset();
 }
 
 /*Render a Frame of the Scene.

@@ -51,6 +51,8 @@ int main()
 		scene->cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene->Render();
 	}
-
+	mesh.reset();
+	m.reset();
+	scene.reset();
 	return 0;
 }

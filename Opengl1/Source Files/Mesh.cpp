@@ -1,5 +1,8 @@
-#include "Mesh.h"
 
+#include<iostream>
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#include "Mesh.h"
 Mesh::Mesh()
 {
 	//initialize all values to zero or null

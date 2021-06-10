@@ -1,5 +1,5 @@
 #pragma once
-#include"glm/glm/glm.hpp"
+#include"GlmMath.h"
 #include"Texture.h"
 #include"Shader.h"
 class Material
@@ -15,7 +15,7 @@ private:
 	bool normalMapOn;
 	std::shared_ptr<Texture> normalMap;
 
-	GLfloat ambientIntensity;
+	float ambientIntensity;
 
 	std::shared_ptr<Shader> shader;
 public:

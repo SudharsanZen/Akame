@@ -14,7 +14,7 @@ project "Test"
 
         includedirs
         {
-            string.explode(AllIncludeDir,";")
+            IncludeDir["Engine"],IncludeDir["ECS"],IncludeDir["vendor"]
         }
 
         libdirs

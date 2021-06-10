@@ -14,7 +14,7 @@
 int main()
 {
 	std::string rootDir(ASSETS_ROOT_DIR);
-	Window window(1920, 1080, "testWindow");
+	Window window(800, 800, "testWindow");
 
 	if (!window.initialize())
 	{
@@ -56,7 +56,7 @@ int main()
 
 
 
-	glfwSwapInterval(1);
+	
 	float acc = 0;
 	scene.OnStart();
 	unsigned int count = 0;

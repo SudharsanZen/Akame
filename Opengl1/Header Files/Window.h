@@ -1,10 +1,9 @@
 #pragma once
-#include<iostream>
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
 
+#include<string>
+#include<memory>
 
-
+struct GLFWwindow;
 class Window
 {
 protected:
@@ -30,46 +29,14 @@ public:
 	friend class Input;
 	
 
-	int getBufferHeight() 
-	{
-		//get windows buffer Height
-		if (mainWindow)
-			glfwGetFramebufferSize(mainWindow.get(), &bufferWidth, &bufferHeight);
-		else
-			std::cout <<"window ptr has been deleted or has not been initialized!\n";
-		return bufferHeight; 
-	}
-	int getBufferWidth() 
-	{
-		//get windows buffer width
-		if (mainWindow)
-			glfwGetFramebufferSize(mainWindow.get(), &bufferWidth, &bufferHeight); 
-		else
-			std::cout << "window ptr has been destroyed or has not been intialized!\n";
-		return bufferWidth; 
-	}
+	int getBufferHeight();
+	int getBufferWidth();
 
-	bool Window::closeWindow()
-	{
-		//returns true if windows close event has occured
-		if (mainWindow)
-			return glfwWindowShouldClose(mainWindow.get());
-		else
-		{
-			std::cerr << "ERROR::initialize window first!" << std::endl;
-			return true;
-		}
-	}
-	void swapBuffers()
-	{
-		if (mainWindow)
-			glfwSwapBuffers(mainWindow.get());
-		else
-			std::cout << "window ptr has been deleted or has not been initialized!\n";
-	}
+	bool Window::closeWindow();
+	void swapBuffers();
 
 	bool initialize();
-	void setBufferSizeCallBackFunction(GLFWframebuffersizefun function);
+	void setBufferSizeCallBackFunction(void (*function)(GLFWwindow*, int, int) );
 	void processInput();
 	
 };

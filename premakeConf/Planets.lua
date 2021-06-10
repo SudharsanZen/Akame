@@ -12,9 +12,10 @@ project "Planets"
         "%{prj.location}/Source Files/**.cpp",
     }
 
-        includedirs
+	includedirs
     {
-        string.explode(AllIncludeDir,";")
+
+            IncludeDir["Engine"],IncludeDir["ECS"],IncludeDir["vendor"]
     }
 
     libdirs

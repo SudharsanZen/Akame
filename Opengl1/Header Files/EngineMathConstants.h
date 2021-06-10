@@ -1,5 +1,5 @@
 #pragma 
-#include<glm\glm\glm.hpp>
+#include"GlmMath.h"
 extern glm::vec3 worldUp;
 extern glm::vec3 worldRight;
 extern glm::vec3 worldLeft;

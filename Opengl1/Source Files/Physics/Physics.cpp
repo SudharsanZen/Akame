@@ -1,5 +1,10 @@
 #include"Physics\Physics.h"
-
+#include<iostream>
+#include<PxPhysicsAPI.h>
+#include "snippetcommon/SnippetPrint.h"
+#include "snippetcommon/SnippetPVD.h"
+physx::PxDefaultErrorCallback gDefaultErrorCallback;
+physx::PxDefaultAllocator gDefaultAllocatorCallback;
 
 namespace physics 
 {

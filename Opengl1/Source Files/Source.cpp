@@ -5,6 +5,7 @@
 #include"Engine.h"
 #include"Editor/Scene.h"
 
+
 #include<vector>
 
 
@@ -70,7 +71,6 @@ int main()
 	
 
 	
-	glfwSwapInterval(1);
 
 	scene.OnStart();
 	scene.backGroundColor(0,0,0,1);

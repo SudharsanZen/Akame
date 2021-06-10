@@ -1,8 +1,15 @@
-#include "Window.h"
-
+#include<iostream>
+#ifdef _MSC_VER
+#define NOMINMAX
+#include <windows.h>
+#endif // _MSC_VER
+#include "window.h"
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
 
 Window::Window(int width,int height,std::string winName,Window *shareWindow)
 {
+	
 	/*constructor*/
 	bufferHeight = 0;
 	bufferWidth = 0;
@@ -16,6 +23,46 @@ Window::Window(int width,int height,std::string winName,Window *shareWindow)
 Window::~Window()
 {
 	glfwTerminate();
+}
+
+int Window::getBufferHeight()
+{
+	//get windows buffer Height
+	if (mainWindow)
+		glfwGetFramebufferSize(mainWindow.get(), &bufferWidth, &bufferHeight);
+	else
+		std::cout << "window ptr has been deleted or has not been initialized!\n";
+	return bufferHeight;
+}
+
+int Window::getBufferWidth()
+{
+	//get windows buffer width
+	if (mainWindow)
+		glfwGetFramebufferSize(mainWindow.get(), &bufferWidth, &bufferHeight);
+	else
+		std::cout << "window ptr has been destroyed or has not been intialized!\n";
+	return bufferWidth;
+}
+
+bool Window::closeWindow()
+{
+	//returns true if windows close event has occured
+	if (mainWindow)
+		return glfwWindowShouldClose(mainWindow.get());
+	else
+	{
+		std::cerr << "ERROR::initialize window first!" << std::endl;
+		return true;
+	}
+}
+
+void Window::swapBuffers()
+{
+	if (mainWindow)
+		glfwSwapBuffers(mainWindow.get());
+	else
+		std::cout << "window ptr has been deleted or has not been initialized!\n";
 }
 
 
@@ -78,7 +125,7 @@ bool Window::initialize()
 	return true;
 }
 
-void Window::setBufferSizeCallBackFunction(GLFWframebuffersizefun function)
+void Window::setBufferSizeCallBackFunction(void (*function)(GLFWwindow*, int, int))
 {
 	//set custom function as a call back function of windows resize event
 	if (mainWindow)

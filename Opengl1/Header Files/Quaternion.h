@@ -1,10 +1,6 @@
 #pragma once
 #include"EngineMathConstants.h"
-#include<iostream>
 #include<string>
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
-#include"GlmMath.h"
 #include<memory>
 class Quaternion
 {
@@ -15,21 +11,17 @@ public:
 	glm::quat quaternion;
 	
 	Quaternion(glm::quat quat);
-	Quaternion(GLfloat w, GLfloat x, GLfloat y, GLfloat z);
-	Quaternion(GLfloat EulerAngleX, GLfloat EulerAngleY, GLfloat EulerAngleZ);
-	static glm::quat rotationAroundAxisVector(GLfloat angleInDegrees, glm::vec3 AxisVector);
-	void setEulerAngle(GLfloat, GLfloat, GLfloat);
+	Quaternion(float w, float x, float y, float z);
+	Quaternion(float EulerAngleX, float EulerAngleY, float EulerAngleZ);
+	static glm::quat rotationAroundAxisVector(float angleInDegrees, glm::vec3 AxisVector);
+	void setEulerAngle(float, float, float);
 	Quaternion conjugate() { return glm::conjugate(quaternion); }
 	glm::vec3 getEulerAngle() { return glm::degrees(glm::eulerAngles(quaternion)); }
 
 
 
 
-	operator std::string()const
-	{
-
-		return std::string("quat: w:" + std::to_string(quaternion.w) + " x:" + std::to_string(quaternion.x) + " y:" + std::to_string(quaternion.y) + " z:" + std::to_string(quaternion.z));
-	}
+	operator std::string()const;
 
 	glm::mat4 getMatrix()
 	{

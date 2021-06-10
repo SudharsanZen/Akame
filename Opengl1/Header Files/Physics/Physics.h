@@ -1,13 +1,22 @@
 #pragma once
-#include<iostream>
-#include"Physics/Physics.h"
-#include"PxPhysicsAPI.h"
+
 #include"Transform.h"
-#include "snippetcommon/SnippetPrint.h"
-#include "snippetcommon/SnippetPVD.h"
+
 
 #ifndef _PHYSICS_HEADER_
 #define _PHYSICS_HEADER_
+namespace physx
+{
+	class PxVec3;
+	class PxQuat;
+	class PxTransform;
+	class PxFoundation;
+	class PxPvd;
+	class PxPhysics;
+	class PxDefaultCpuDispatcher;
+	class PxScene;
+	class PxMaterial;
+}
 namespace physics
 {
 /* a bunch of functions to do conversions of orientational data from Physx to glm*/
@@ -29,25 +38,23 @@ namespace physics
 	class Physics
 	{
 	private:
-		physx::PxDefaultErrorCallback gDefaultErrorCallback;
-		physx::PxDefaultAllocator gDefaultAllocatorCallback;
-
+		
 		physx::PxFoundation* mFoundation = NULL;
 		physx::PxPvd* mPvd = NULL;
 		physx::PxPhysics* mPhysics = NULL;
 		physx::PxDefaultCpuDispatcher* mDispatcher = NULL;
 		physx::PxScene* mScene = NULL;
 		physx::PxMaterial* mMaterial = NULL;
-		physx::PxReal mAccumulator = 0.0f;
+		float mAccumulator = 0.0f;
 
 		friend class Scene;
 		friend class RigidBodySystem;
 		friend class RigidBody3D;
 	public:
 		Physics():Physics(1.0f/60.0f) {}
-		Physics(physx::PxReal stepSize) { mStepSize = stepSize; }
+		Physics(float stepSize) { mStepSize = stepSize; }
 
-		physx::PxReal mStepSize = 1.0f / 60.0f;
+		float mStepSize = 1.0f / 60.0f;
 		
 		template<typename T>
 		void PX_RELEASE(T* x) { if (x)  x->release(); x = NULL; }
@@ -57,7 +64,7 @@ namespace physics
 
 
 
-		bool advance(physx::PxReal dt);
+		bool advance(float dt);
 
 	
 

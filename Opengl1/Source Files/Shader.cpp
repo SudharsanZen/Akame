@@ -1,7 +1,8 @@
+#include<iostream>
 #include "Shader.h"
 #include<fstream>
 #include<math.h>
-
+#include<glad/glad.h>
 
 Shader::Shader(std::string vertexShaderDir, std::string fragmentShaderDir)
 {
@@ -13,6 +14,16 @@ Shader::Shader(std::string vertexShaderDir, std::string fragmentShaderDir)
     uboMatricesIndex = -1;
     compileShader();
 }
+
+//functions for setting uniform variables
+
+unsigned int Shader::getUniformLocation(std::string varName) { return glGetUniformLocation(programID, varName.c_str()); }
+
+void Shader::setUniformInteger(std::string varName, unsigned int value) { glUniform1i(getUniformLocation(varName), value); }
+
+void Shader::setUniformVec3(std::string varName, const glm::vec3& vec) { glUniform3fv(getUniformLocation(varName), 1, glm::value_ptr(vec)); }
+
+void Shader::setUniformMat4fv(std::string varName, unsigned int count, float* valuePtr) { glUniformMatrix4fv(getUniformLocation(varName), count, GL_FALSE, valuePtr); }
 
 Shader::~Shader()
 {
@@ -171,7 +182,7 @@ void Shader::addShader(char** code,GLuint shaderID,GLuint codeCount,GLenum shade
     }
 }
 
-void Shader::freeCodePointer(GLchar** code,unsigned int len)
+void Shader::freeCodePointer(char** code,unsigned int len)
 {
     /*
     * freeing the memoryused by the code pointer.

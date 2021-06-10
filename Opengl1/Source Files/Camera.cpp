@@ -1,10 +1,13 @@
 #include "Camera.h"
 #include"Input.h"
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+
 Camera::Camera():Camera(60,aspectRatio,0.1f,100.0f,false)
 {
 }
 
-Camera::Camera(GLfloat fovy, GLfloat aspectRatio, GLfloat nearz, GLfloat farz, GLboolean ortho)
+Camera::Camera(float fovy, float aspectRatio, float nearz, float farz, GLboolean ortho)
 {
 	
 	//cameraTarget = transform.position+glm::vec3(0, 0, -3);

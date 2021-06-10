@@ -1,25 +1,22 @@
 #pragma once
-#include"Engine.h"
 
+#include"GlmMath.h"
+#include<memory>
+#include<set>
+#include"ECS.h"
+
+
+class Camera;
 class RenderingSystem:public System
 {
 private:
-	glm::vec3 lightPose = glm::vec3(10, 4,10);
+	glm::vec3 lightPose;
 public:
-
-	void Run(std::shared_ptr<ECS> ecs,Camera &cam)
+	RenderingSystem()
 	{
-		
-		for (auto const &ent : entities)
-		{
-			Transform& t =ecs->GetComponent<Transform>(ent) ;
-			Mesh& mesh =ecs->GetComponent<Mesh>(ent);
-			ecs->GetComponent<Material>(ent).use(t,lightPose,cam.transform.position);
-			mesh.renderMesh();
-
-
-		}
+		lightPose = glm::vec3(10, 4, 10);
 	}
+	void Run(std::shared_ptr<ECS> ecs, Camera& cam);
 
 };
 

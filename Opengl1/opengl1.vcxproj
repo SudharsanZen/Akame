@@ -92,7 +92,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Header Files\engine_constants.h" />
     <ClInclude Include="Header Files\Behaviour.h" />
     <ClInclude Include="Header Files\BehaviourComponent.h" />
     <ClInclude Include="Header Files\Camera.h" />
@@ -120,9 +119,12 @@
     <ClInclude Include="Header Files\Texture.h" />
     <ClInclude Include="Header Files\Transform.h" />
     <ClInclude Include="Header Files\Window.h" />
+    <ClInclude Include="Header Files\engine_constants.h" />
     <ClInclude Include="Header Files\temp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source Files\Behaviour.cpp" />
+    <ClCompile Include="Source Files\BehaviourSystem.cpp" />
     <ClCompile Include="Source Files\Camera.cpp" />
     <ClCompile Include="Source Files\Editor\EditorUI.cpp" />
     <ClCompile Include="Source Files\Editor\Scene.cpp" />

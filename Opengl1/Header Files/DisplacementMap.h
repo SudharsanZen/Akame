@@ -1,5 +1,5 @@
 #pragma once
-#include"glm/glm/glm.hpp"
+#include"GlmMath.h"
 #include"Texture.h"
 #include"Shader.h"
 #include"engine_constants.h"
@@ -16,7 +16,7 @@ private:
 	bool normalMapOn;
 	std::shared_ptr<Texture> displacementMap;
 
-	GLfloat ambientIntensity;
+	float ambientIntensity;
 
 	
 public:
@@ -63,7 +63,7 @@ public:
 		shader->setUniformInteger("material.diffuseMap", 0);
 		shader->setUniformInteger("material.specularMap", 1);
 		shader->setUniformInteger("material.dispMap", 2);
-		GLint a = 0;
+		int a = 0;
 
 		if (emissive)
 			a = 2;

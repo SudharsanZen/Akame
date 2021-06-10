@@ -1,5 +1,4 @@
 #pragma once
-#include"Engine.h"
 #include"Behaviour.h"
 static float behvCount=0;
 class BehaviourComponent

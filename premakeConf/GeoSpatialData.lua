@@ -15,7 +15,8 @@ project "GeoSpatialData"
 
     includedirs
     {
-        string.explode(AllIncludeDir,";")
+
+            IncludeDir["Engine"],IncludeDir["ECS"],IncludeDir["vendor"]
     }
     debugenvs
     {

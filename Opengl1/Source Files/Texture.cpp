@@ -1,5 +1,8 @@
 #include "Texture.h"
-
+#include"stb_image.h"
+#include"glad/glad.h"
+#include"GLFW/glfw3.h"
+#include<iostream>
 Texture::Texture(std::string dir)
 {
 	imageDir=dir;
@@ -82,7 +85,7 @@ void Texture::loadImage()
 	glBindTexture(GL_TEXTURE_2D,0);
 }
 
-void Texture::use(GLuint unit)
+void Texture::use(unsigned int unit)
 {
 	
 	if (textureID)

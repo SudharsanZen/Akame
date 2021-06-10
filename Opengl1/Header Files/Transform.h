@@ -1,6 +1,5 @@
 #pragma once
 #include"EngineMathConstants.h"
-#include"GlmMath.h"
 #include"Quaternion.h"
 class Transform
 {
@@ -15,7 +14,7 @@ public:
 		rotation.setEulerAngle(0,0,0);
 	}
 	Transform();
-	Transform(GLfloat posX,GLfloat posY,GLfloat posZ);
+	Transform(float posX,float posY,float posZ);
 	Transform(glm::vec3 vec):Transform(vec.x,vec.y,vec.z) {};
 	Transform& operator =(const Transform& Tran)
 	{
