@@ -14,11 +14,13 @@ IncludeDir["imGui"]="%{wks.location}/Opengl1/vendor/imGui"
 IncludeDir["assimp"]="%{wks.location}/Opengl1/vendor/assimp/include"
 IncludeDir["Engine"]="%{wks.location}/Opengl1/Header Files"
 IncludeDir["ECS"]="%{wks.location}/ECS/HeaderFiles"
+IncludeDir["pugixml"]="%{wks.location}/Opengl1/vendor/pugixml/src"
 IncludeDir["Physx"]=[[%{wks.location}/Opengl1/vendor/PhysX/physx/include;
 %{wks.location}/Opengl1/vendor/PhysX/physx/source/physxextensions/src;
 %{wks.location}/Opengl1/vendor/PhysX/pxshared/include;
 %{wks.location}/Opengl1/vendor/PhysX/physx/source/foundation/include;
 %{wks.location}/Opengl1/vendor/PhysX/physx/snippets]]
+
 
 LibraryDir={}
 LibraryDir["GLFW"]="%{wks.location}/glfw/src/%{cfg.buildcfg}"
@@ -26,6 +28,7 @@ LibraryDir["assimp"]="%{wks.location}/Opengl1/vendor/assimp/lib/%{cfg.buildcfg}"
 LibraryDir["Engine"]="%{wks.location}/Opengl1/bin/%{cfg.buildcfg}"
 LibraryDir["Physx"]="%{wks.location}/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}"
 LibraryDir["imGui"]="%{wks.location}/Opengl1/vendor/imGui/%{cfg.system}/%{cfg.buildcfg}"
+LibraryDir["pugixml"]="%{wks.location}/Opengl1/vendor/pugixml/src/bin/%{cfg.buildcfg}"
 
 LiblinksRelease={
     "glfw3.lib",

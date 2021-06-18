@@ -22,24 +22,22 @@ project "GeoSpatialData"
     {
         AllDebugEnvPaths
     }
-    libdirs
-    {
-        LibraryDir
-    }
+
+	libdirs
+	{
+		LibraryDir["Engine"]
+	}
+
+   links
+	{
+		"Opengl1.lib"
+	}
 
 
     filter "configurations:Debug"
         defines {"DEBUG"}
         symbols "On"
 
-		links
-		{
-			LiblinksDebug
-		}
     filter "configurations:Release"
         defines{"NDEBUG"}
         optimize "On"
-		links
-		{
-			LiblinksRelease
-		}

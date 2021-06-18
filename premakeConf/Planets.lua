@@ -19,10 +19,14 @@ project "Planets"
     }
 
     libdirs
-    {
-        LibraryDir
+	{
+		LibraryDir["Engine"]
+	}
 
-    }
+    links
+	{
+		"Opengl1.lib"
+	}
     debugenvs
     {
         AllDebugEnvPaths
@@ -30,14 +34,8 @@ project "Planets"
     filter "configurations:Debug"
         defines {"DEBUG"}
         symbols "On"
-		links
-		{
-			LiblinksDebug
-		}
+
     filter "configurations:Release"
         defines{"NDEBUG"}
         optimize "On"
-		links
-		{
-			LiblinksRelease
-		}
+

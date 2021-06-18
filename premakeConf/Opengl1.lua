@@ -22,7 +22,8 @@ project "Opengl1"
         "%{LibraryDir.GLFW}",
         "%{LibraryDir.Physx}",
         "%{LibraryDir.imGui}",
-        "%{LibraryDir.assimp}"
+        "%{LibraryDir.assimp}",
+		"%{LibraryDir.pugixml}"
     }
 
     links
@@ -35,7 +36,8 @@ project "Opengl1"
         "PhysXCooking_64.lib",
         "PhysXFoundation_64.lib",
         "PhysXPvdSDK_static_64.lib",
-        "PhysXExtensions_static_64.lib"
+        "PhysXExtensions_static_64.lib",
+		"pugixml.lib"
 
     }
 

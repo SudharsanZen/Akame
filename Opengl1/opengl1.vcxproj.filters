@@ -117,6 +117,7 @@
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\XMLReaderTest.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Behaviour.cpp">
@@ -191,5 +192,6 @@
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\XMLReader.cpp" />
   </ItemGroup>
 </Project>

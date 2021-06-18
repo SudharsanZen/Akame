@@ -14,3 +14,6 @@
 [submodule "Opengl1/vendor/PhysX"]
 	path = Opengl1/vendor/PhysX
 	url = https://github.com/SudharsanZen/PhysX.git
+[submodule "Opengl1/vendor/pugixml"]
+	path = Opengl1/vendor/pugixml
+	url = https://github.com/zeux/pugixml.git

@@ -8,11 +8,12 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-
+#include"XMLReaderTest.h"
 
 
 int main()
 {
+	printSomeShitFromXML();
 	std::string rootDir(ASSETS_ROOT_DIR);
 	Window window(800, 800, "testWindow");
 
