@@ -17,3 +17,6 @@
 [submodule "Opengl1/vendor/pugixml"]
 	path = Opengl1/vendor/pugixml
 	url = https://github.com/zeux/pugixml.git
+[submodule "Opengl1/vendor/spdlog"]
+	path = Opengl1/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git

@@ -6,10 +6,10 @@
 #include "window.h"
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
-
+#include"Log/Log.h"
 Window::Window(int width,int height,std::string winName,Window *shareWindow)
 {
-	
+	Log::Init();
 	/*constructor*/
 	bufferHeight = 0;
 	bufferWidth = 0;
@@ -18,6 +18,7 @@ Window::Window(int width,int height,std::string winName,Window *shareWindow)
 	Width = width;
 	windowName = winName;
 	share = shareWindow;
+	
 }
 
 Window::~Window()
@@ -31,7 +32,7 @@ int Window::getBufferHeight()
 	if (mainWindow)
 		glfwGetFramebufferSize(mainWindow.get(), &bufferWidth, &bufferHeight);
 	else
-		std::cout << "window ptr has been deleted or has not been initialized!\n";
+		ENGINE_CORE_ERROR("window ptr has been deleted or has not been initialized!");
 	return bufferHeight;
 }
 
@@ -41,7 +42,7 @@ int Window::getBufferWidth()
 	if (mainWindow)
 		glfwGetFramebufferSize(mainWindow.get(), &bufferWidth, &bufferHeight);
 	else
-		std::cout << "window ptr has been destroyed or has not been intialized!\n";
+		ENGINE_CORE_ERROR("window ptr has been destroyed or has not been intialized!");
 	return bufferWidth;
 }
 
@@ -52,7 +53,7 @@ bool Window::closeWindow()
 		return glfwWindowShouldClose(mainWindow.get());
 	else
 	{
-		std::cerr << "ERROR::initialize window first!" << std::endl;
+		ENGINE_CORE_ERROR("initialize window first!");
 		return true;
 	}
 }
@@ -62,7 +63,7 @@ void Window::swapBuffers()
 	if (mainWindow)
 		glfwSwapBuffers(mainWindow.get());
 	else
-		std::cout << "window ptr has been deleted or has not been initialized!\n";
+		ENGINE_CORE_ERROR("window ptr has been deleted or has not been initialized!");
 }
 
 
@@ -77,7 +78,7 @@ bool Window::initialize()
 	*/
 	if (!glfwInit())
 	{
-		std::cerr << "ERROR::GLFW::Can't initialize GLFW!"<<std::endl;
+		ENGINE_CORE_ERROR("GLFW::Can't initialize GLFW!");
 		return false;
 	}
 	glfwWindowHint(GLFW_SAMPLES, 4);
@@ -95,7 +96,7 @@ bool Window::initialize()
 	
 	if (mainWindow==NULL)
 	{
-		std::cerr << "ERROR::GLFW::Couldn't initialize Window!"<<std::endl;
+		ENGINE_CORE_ERROR("GLFW::Couldn't initialize Window!");
 		glfwTerminate();
 		return false;
 	}
@@ -105,7 +106,7 @@ bool Window::initialize()
 	//load OpenGL function loader into glad
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
-		std::cerr <<"ERROR::GLFW::Could'nt initialize glad!";
+		ENGINE_CORE_ERROR("GLFW::Could'nt initialize glad!");
 		glfwTerminate();
 		return false;
 	}
@@ -131,7 +132,7 @@ void Window::setBufferSizeCallBackFunction(void (*function)(GLFWwindow*, int, in
 	if (mainWindow)
 		glfwSetFramebufferSizeCallback(mainWindow.get(), function);
 	else
-		std::cerr <<"ERROR::initialize Window first!"<<std::endl;
+		ENGINE_CORE_ERROR("initialize Window first!");
 }
 
 
@@ -150,6 +151,6 @@ void Window::processInput()
 	}
 	else
 	{
-		std::cout <<"Window not intialized!\n";
+		ENGINE_CORE_ERROR("Window not intialized!");
 	}
 }

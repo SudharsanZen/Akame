@@ -56,7 +56,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Programming Projects\OpenGL\Project1\CustomGameEngine\Opengl1\vendor\pugixml\src;..\glfw\include;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\glfw\include;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ClCompile>
@@ -74,7 +74,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\glfw\include;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\glfw\include;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -119,12 +119,13 @@
     <ClInclude Include="Header Files\Texture.h" />
     <ClInclude Include="Header Files\Transform.h" />
     <ClInclude Include="Header Files\Window.h" />
+    <ClInclude Include="Header Files\XMLReaderTest.h" />
     <ClInclude Include="Header Files\engine_constants.h" />
     <ClInclude Include="Header Files\temp.h" />
-    <ClInclude Include="Header Files\XMLReaderTest.h" />
+    <ClInclude Include="Header Files\Log\Log.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source Files\XMLReader.cpp" />
+    <ClCompile Include="Source Files\Log\Log.cpp" />
     <ClCompile Include="Source Files\Behaviour.cpp" />
     <ClCompile Include="Source Files\BehaviourSystem.cpp" />
     <ClCompile Include="Source Files\Camera.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="Source Files\Source.cpp" />
     <ClCompile Include="Source Files\Texture.cpp" />
     <ClCompile Include="Source Files\Window.cpp" />
+    <ClCompile Include="Source Files\XMLReader.cpp" />
     <ClCompile Include="Source Files\misc\StopWatch.cpp" />
     <ClCompile Include="Source Files\stb_image.cpp" />
     <ClCompile Include="Source Files\temp.cpp" />

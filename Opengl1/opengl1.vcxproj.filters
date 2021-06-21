@@ -28,6 +28,12 @@
     <Filter Include="Source Files\misc">
       <UniqueIdentifier>{6434C40A-D04A-C2A0-19C2-4DC285179328}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Log">
+      <UniqueIdentifier>{746d9fbf-6f21-4559-8ef1-e224e0420ef3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Log">
+      <UniqueIdentifier>{f3886b70-6ab9-482a-bcba-a3004a2706d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header Files\Behaviour.h">
@@ -111,13 +117,18 @@
     <ClInclude Include="Header Files\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\XMLReaderTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\engine_constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\XMLReaderTest.h" />
+    <ClInclude Include="Header Files\Log\Log.h">
+      <Filter>Header Files\Log</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Behaviour.cpp">
@@ -183,6 +194,9 @@
     <ClCompile Include="Source Files\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\XMLReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\misc\StopWatch.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>
@@ -192,6 +206,8 @@
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\XMLReader.cpp" />
+    <ClCompile Include="Source Files\Log\Log.cpp">
+      <Filter>Source Files\misc</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

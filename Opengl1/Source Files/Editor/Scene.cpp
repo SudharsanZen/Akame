@@ -10,11 +10,12 @@
 #include"Systems/BehaviourSystem.h"
 #include"Systems/RigidBodySystem.h"
 #include"ECS.h"
-
+#include"Log/Log.h"
 
 //constructor initia
 Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 {
+	ENGINE_CORE_INFO("INITIALIZING SCENE");
 	//initialize fn to an lambda function with no body
 	fn = []() {};
 
@@ -104,7 +105,7 @@ void Scene::InitEcs()
 
 void Scene::release()
 {
-	std::cout << "\n~Scene()\n";
+	ENGINE_CORE_INFO("~Scene()");
 	physicsSys.reset();
 	ecs.reset();
 	behaviourSys.reset();

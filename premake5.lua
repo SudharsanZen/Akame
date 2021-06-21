@@ -15,6 +15,7 @@ IncludeDir["assimp"]="%{wks.location}/Opengl1/vendor/assimp/include"
 IncludeDir["Engine"]="%{wks.location}/Opengl1/Header Files"
 IncludeDir["ECS"]="%{wks.location}/ECS/HeaderFiles"
 IncludeDir["pugixml"]="%{wks.location}/Opengl1/vendor/pugixml/src"
+IncludeDir["spdlog"]="%{wks.location}/Opengl1/vendor/spdlog/include"
 IncludeDir["Physx"]=[[%{wks.location}/Opengl1/vendor/PhysX/physx/include;
 %{wks.location}/Opengl1/vendor/PhysX/physx/source/physxextensions/src;
 %{wks.location}/Opengl1/vendor/PhysX/pxshared/include;
@@ -59,7 +60,7 @@ LiblinksDebug={
     "PhysXPvdSDK_static_64.lib",
     "PhysXExtensions_static_64.lib"
     }
-AllIncludeDir="%{IncludeDir.GLFW};%{IncludeDir.vendor};%{IncludeDir.imGui};%{IncludeDir.assimp};%{IncludeDir.ECS};%{IncludeDir.Engine};"..IncludeDir["Physx"]
+AllIncludeDir="%{IncludeDir.GLFW};%{IncludeDir.vendor};%{IncludeDir.imGui};%{IncludeDir.assimp};%{IncludeDir.ECS};%{IncludeDir.Engine};%{IncludeDir.pugixml};%{IncludeDir.spdlog};"..IncludeDir["Physx"]
 
 AllDebugEnvPaths="PATH=$(SolutionDir)/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};$(SolutionDir)/Opengl1/vendor/assimp/bin/%{cfg.buildcfg}"
 
