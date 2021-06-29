@@ -2,6 +2,7 @@ project "Opengl1"
     location"%{wks.location}/Opengl1/"
     kind "StaticLib"
     language "C++"
+    cppdialect "C++17"
     targetdir "%{wks.location}/Opengl1/bin/%{cfg.buildcfg}"
     objdir "%{wks.location}/bin/Intermediate/%{cfg.buildcfg}/%{prj.name}"
     dependson{"ALL_BUILD_DEP","ECS"}

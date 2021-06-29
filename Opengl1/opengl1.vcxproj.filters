@@ -4,8 +4,14 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{21EB8090-0D4E-1035-B6D3-48EBA215DCB7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Assets">
+      <UniqueIdentifier>{E34259A5-4FA4-36B3-D811-7D6544726D72}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Editor">
       <UniqueIdentifier>{373999AD-A39A-76BB-2C08-BD6D9868AD7A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Log">
+      <UniqueIdentifier>{72AB6E6F-5EA4-8DC1-87D6-7246732E6DCD}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Physics">
       <UniqueIdentifier>{937FF6B9-7F0E-8083-282D-947E149B9029}</UniqueIdentifier>
@@ -19,6 +25,9 @@
     <Filter Include="Source Files\Editor">
       <UniqueIdentifier>{FFE4F46E-6B46-D27C-F4B3-182F6014093C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Log">
+      <UniqueIdentifier>{3AAC1C27-26A5-3B79-4FD7-20FE3B2F1B85}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Math">
       <UniqueIdentifier>{6286B20A-CE9C-B0A0-1714-3CC283698128}</UniqueIdentifier>
     </Filter>
@@ -28,14 +37,17 @@
     <Filter Include="Source Files\misc">
       <UniqueIdentifier>{6434C40A-D04A-C2A0-19C2-4DC285179328}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Log">
-      <UniqueIdentifier>{746d9fbf-6f21-4559-8ef1-e224e0420ef3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Log">
-      <UniqueIdentifier>{f3886b70-6ab9-482a-bcba-a3004a2706d0}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header Files\Assets\Asset.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Assets\AssetArray.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Assets\AssetManager.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Behaviour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -68,6 +80,9 @@
     </ClInclude>
     <ClInclude Include="Header Files\Input.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Log\Log.h">
+      <Filter>Header Files\Log</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Material.h">
       <Filter>Header Files</Filter>
@@ -126,9 +141,6 @@
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Log\Log.h">
-      <Filter>Header Files\Log</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Behaviour.cpp">
@@ -151,6 +163,9 @@
     </ClCompile>
     <ClCompile Include="Source Files\Input.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Log\Log.cpp">
+      <Filter>Source Files\Log</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Material.cpp">
       <Filter>Source Files</Filter>
@@ -206,8 +221,8 @@
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Log\Log.cpp">
-      <Filter>Source Files\misc</Filter>
-    </ClCompile>
+    <ClCompile Include="Source Files\Assets\Asset.cpp" />
+    <ClCompile Include="Source Files\Assets\AssetArray.cpp" />
+    <ClCompile Include="Source Files\Assets\AssetManager.cpp" />
   </ItemGroup>
 </Project>

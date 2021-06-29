@@ -20,8 +20,9 @@ private:
 	unsigned char* imageData;
 	unsigned int texFormat;
 
-	void reset();
+	
 public:
+	void reset();
 	void loadImage();
 	void use(const unsigned int unit);
 	Texture() { imageDir = ""; texFormat = -1; }

@@ -23,6 +23,7 @@ void physics::RigidBodySystem::Run(float deltaTime)
 
 }
 
+//set Physx transforms with Visual transform
 void physics::RigidBodySystem::setVisualToPXTransform()
 {
 	std::shared_ptr<ECS> e = ecs.lock();
@@ -36,7 +37,7 @@ void physics::RigidBodySystem::setVisualToPXTransform()
 
 	}
 }
-
+//update the visual transform with the PhysX transform
 void physics::RigidBodySystem::setPxToVisualTransform()
 {
 	glm::vec3 scale;
@@ -54,6 +55,7 @@ void physics::RigidBodySystem::setPxToVisualTransform()
 
 }
 
+//set pointers for ecs,physics when an entity is added the rbodysystem
 void physics::RigidBodySystem::OnAddEntity()
 {
 	std::shared_ptr<ECS> e = ecs.lock();

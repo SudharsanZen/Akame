@@ -59,6 +59,7 @@
       <AdditionalIncludeDirectories>..\glfw\include;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -80,6 +81,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -92,6 +94,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Header Files\Assets\Asset.h" />
+    <ClInclude Include="Header Files\Assets\AssetArray.h" />
+    <ClInclude Include="Header Files\Assets\AssetManager.h" />
     <ClInclude Include="Header Files\Behaviour.h" />
     <ClInclude Include="Header Files\BehaviourComponent.h" />
     <ClInclude Include="Header Files\Camera.h" />
@@ -103,6 +108,7 @@
     <ClInclude Include="Header Files\EngineMathConstants.h" />
     <ClInclude Include="Header Files\GlmMath.h" />
     <ClInclude Include="Header Files\Input.h" />
+    <ClInclude Include="Header Files\Log\Log.h" />
     <ClInclude Include="Header Files\Material.h" />
     <ClInclude Include="Header Files\Mesh.h" />
     <ClInclude Include="Header Files\MeshInstance.h" />
@@ -122,10 +128,11 @@
     <ClInclude Include="Header Files\XMLReaderTest.h" />
     <ClInclude Include="Header Files\engine_constants.h" />
     <ClInclude Include="Header Files\temp.h" />
-    <ClInclude Include="Header Files\Log\Log.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source Files\Log\Log.cpp" />
+    <ClCompile Include="Source Files\Assets\Asset.cpp" />
+    <ClCompile Include="Source Files\Assets\AssetArray.cpp" />
+    <ClCompile Include="Source Files\Assets\AssetManager.cpp" />
     <ClCompile Include="Source Files\Behaviour.cpp" />
     <ClCompile Include="Source Files\BehaviourSystem.cpp" />
     <ClCompile Include="Source Files\Camera.cpp" />
@@ -133,6 +140,7 @@
     <ClCompile Include="Source Files\Editor\Scene.cpp" />
     <ClCompile Include="Source Files\EngineMathConstants.cpp" />
     <ClCompile Include="Source Files\Input.cpp" />
+    <ClCompile Include="Source Files\Log\Log.cpp" />
     <ClCompile Include="Source Files\Material.cpp" />
     <ClCompile Include="Source Files\Math\Quaternion.cpp" />
     <ClCompile Include="Source Files\Math\Transform.cpp" />
