@@ -34,6 +34,10 @@ Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 	cam.setFieldOfView(60.0f);
 	cam.transform.position = glm::vec3(5, 5, 5);
 	InitEcs();
+	if (!AssetManager::isInitialized())
+	{
+		AssetManager::init();
+	}
 	glfwSwapInterval(0);
 }
 /*Call this to update the common global uniforms.

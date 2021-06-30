@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Shader name="DEFAULT">
+    <Vertex path="default.vert"/>
+    <Fragment path="default.frag"/>
+</Shader>
+<Shader name="ERROR">
+    <Vertex path="error.vert"/>
+    <Fragment path="error.frag"/>
+</Shader>

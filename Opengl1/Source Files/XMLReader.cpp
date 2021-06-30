@@ -1,8 +1,9 @@
 #include "pugixml.hpp"
 #include <iostream>
 #include "XMLReaderTest.h"
-#include"engine_constants.h"
+
 #include<spdlog/spdlog.h>
+#include"Assets/AssetManager.h"
 void printSomeShitFromXML()
 {
     spdlog::info("Welcome to spdlog!");
@@ -25,7 +26,7 @@ void printSomeShitFromXML()
     SPDLOG_TRACE("Some trace message with param {}", 42);
     SPDLOG_DEBUG("Some debug message");
     pugi::xml_document doc;
-    pugi::xml_parse_result result = doc.load_file((ASSETS_ROOT_DIR+std::string("xgconsole.xml")).c_str());
+    pugi::xml_parse_result result = doc.load_file((AssetManager::getAssetRoot() +std::string("xgconsole.xml")).c_str());
     if (!result)
     {
         std::cout <<"Cant open File";

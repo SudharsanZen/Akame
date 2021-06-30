@@ -2,7 +2,7 @@
 #include"GlmMath.h"
 #include"Texture.h"
 #include"Shader.h"
-#include"engine_constants.h"
+
 class DisplacementMap
 {
 private:
@@ -26,17 +26,7 @@ public:
 	{
 		emissive = em;
 	}
-	DisplacementMap()
-	{
-		emissive = false;
-		diffColor = glm::vec3(1, 1, 1);
-		specularColor = glm::vec3(1, 1, 1);
-		ambientIntensity = 0.2f;
-		normalMapOn = false;
-		
-		shader = std::make_shared<Shader>(ASSETS_ROOT_DIR+std::string("Shaders/displacement.vert"),ASSETS_ROOT_DIR+std::string("Shaders/displacement.frag"));
-		shader->compileShader();
-	}
+	DisplacementMap();
 	DisplacementMap(const DisplacementMap& mat)
 	{
 		this->emissive = mat.emissive;

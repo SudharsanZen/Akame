@@ -97,6 +97,7 @@
     <ClInclude Include="Header Files\Assets\Asset.h" />
     <ClInclude Include="Header Files\Assets\AssetArray.h" />
     <ClInclude Include="Header Files\Assets\AssetManager.h" />
+    <ClInclude Include="Header Files\Assets\ShaderManager.h" />
     <ClInclude Include="Header Files\Behaviour.h" />
     <ClInclude Include="Header Files\BehaviourComponent.h" />
     <ClInclude Include="Header Files\Camera.h" />
@@ -126,16 +127,17 @@
     <ClInclude Include="Header Files\Transform.h" />
     <ClInclude Include="Header Files\Window.h" />
     <ClInclude Include="Header Files\XMLReaderTest.h" />
-    <ClInclude Include="Header Files\engine_constants.h" />
     <ClInclude Include="Header Files\temp.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Assets\Asset.cpp" />
     <ClCompile Include="Source Files\Assets\AssetArray.cpp" />
     <ClCompile Include="Source Files\Assets\AssetManager.cpp" />
+    <ClCompile Include="Source Files\Assets\ShaderManager.cpp" />
     <ClCompile Include="Source Files\Behaviour.cpp" />
     <ClCompile Include="Source Files\BehaviourSystem.cpp" />
     <ClCompile Include="Source Files\Camera.cpp" />
+    <ClCompile Include="Source Files\DisplacementMap.cpp" />
     <ClCompile Include="Source Files\Editor\EditorUI.cpp" />
     <ClCompile Include="Source Files\Editor\Scene.cpp" />
     <ClCompile Include="Source Files\EngineMathConstants.cpp" />

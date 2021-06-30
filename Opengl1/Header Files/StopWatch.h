@@ -28,5 +28,11 @@ public:
 		timeElapsed = (timeElapsed * 1000000000.0);
 		std::cout << timeElapsed.count()<<std::endl;
 	}
+
+	void printNano()
+	{
+		auto t = (e.time_since_epoch().count() - st.time_since_epoch().count());
+		std::cout << t<<std::endl;
+	}
 };
 

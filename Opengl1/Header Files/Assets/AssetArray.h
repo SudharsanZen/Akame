@@ -32,7 +32,7 @@ public:
 	
 	std::shared_ptr<T> GetAsset(long long index)
 	{
-		assert(assetList.size()-1 < index && "Trying to access non existing element from the array!");
+		assert(assetList.size() > index && "Trying to access non existing element from the array!");
 		assert(refcount[index] > 0 && "Asset was destroyed dude to zero refCount!");
 		return assetList[index];
 	}
@@ -52,6 +52,7 @@ public:
 	int incrementRefcount(long long index)
 	{
 		refcount[index]++;
+		return refcount[index];
 	}
 
 

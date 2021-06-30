@@ -22,6 +22,9 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{E9C7FDCE-D52A-8D73-7EB0-C5296AF258F6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Assets">
+      <UniqueIdentifier>{ABEEB466-1750-9274-A0BD-D8260C1EC933}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Editor">
       <UniqueIdentifier>{FFE4F46E-6B46-D27C-F4B3-182F6014093C}</UniqueIdentifier>
     </Filter>
@@ -46,6 +49,9 @@
       <Filter>Header Files\Assets</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Assets\AssetManager.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Assets\ShaderManager.h">
       <Filter>Header Files\Assets</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Behaviour.h">
@@ -135,14 +141,23 @@
     <ClInclude Include="Header Files\XMLReaderTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\engine_constants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source Files\Assets\Asset.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Assets\AssetArray.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Assets\AssetManager.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Assets\ShaderManager.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\Behaviour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -150,6 +165,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\DisplacementMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Editor\EditorUI.cpp">
@@ -221,8 +239,5 @@
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Assets\Asset.cpp" />
-    <ClCompile Include="Source Files\Assets\AssetArray.cpp" />
-    <ClCompile Include="Source Files\Assets\AssetManager.cpp" />
   </ItemGroup>
 </Project>

@@ -58,48 +58,34 @@ int main()
 	rbdy2.setRigidBodyType(physics::STATIC, planeShape);
 
 
-
+	const int num = 1000;
+	const int rt = sqrt(num);
+	for (int i = 0; i < num; i++)
+	{
+		EntityID box = scene.CreateEntity();
+		scene.AddComponent<Mesh>(box, Mesh());
+		scene.GetComponent<Mesh>(box).CreateMesh(generateCubeVertices());
+		scene.AddComponent<Transform>(box, Transform(2*(i/rt),0, (2)*(i%rt)));
+		scene.AddComponent<Material>(box, boxMat);
+		scene.GetComponent<Transform>(box).rotation.setEulerAngle(0, 0, 0);
+	}
 	
-	float acc = 0;
 	scene.OnStart();
-	unsigned int count = 0;
+
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.3f;
 	while (!window.closeWindow())
 	{
-		if (acc > step)
-		{
-			int r = rand() % 2;
-			count++;
-			acc -= step;
-			EntityID box = scene.CreateEntity();
-			scene.AddComponent<Mesh>(box, Mesh());
-			if(r)
-			scene.GetComponent<Mesh>(box).CreateMesh(generateSphereVertices(32,16,1));
-			else
-			scene.GetComponent<Mesh>(box).CreateMesh(generateCubeVertices());
-			scene.AddComponent<Transform>(box, Transform(0, 3, 0));
-			scene.AddComponent<Material>(box, boxMat);
-			scene.GetComponent<Transform>(box).rotation.setEulerAngle(0, 0, 0);
-			scene.AddComponent<physics::RigidBody3D>(box, physics::RigidBody3D());
-			physics::RigidBody3D& rbdy = scene.GetComponent<physics::RigidBody3D>(box);
-			
-			if(r)
-			rbdy.setRigidBodyType(physics::DYNAMIC, physics::SPHERE);
-			else
-			rbdy.setRigidBodyType(physics::DYNAMIC, physics::BOX);
-		}
-		acc +=scene.getDeltaTime();
+		
 
 
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
-		scene.Render();
 
+		scene.Render();
 
 	}
 
-	std::cout <<"\ncount:"<<count<<"\n";
 
 	return 0;
 }

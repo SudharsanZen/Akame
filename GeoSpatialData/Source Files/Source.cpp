@@ -1,4 +1,4 @@
-#define ASSETS_ROOT_DIR "../../../Assets/"
+
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -23,7 +23,8 @@ void  func()
 
 int main()
 {
-	std::string rootDir(ASSETS_ROOT_DIR);
+	AssetManager::setAssetRoot("../../../Assets/");
+	std::string rootDir(AssetManager::getAssetRoot());
 	Window window(800, 800, "GeoSpatial Data");
 
 	if (!window.initialize())

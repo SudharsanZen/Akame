@@ -1,4 +1,4 @@
-#define ASSETS_ROOT_DIR "../../../Assets/"
+
 #include"Engine.h"
 #include"Editor/Scene.h"
 
@@ -88,7 +88,9 @@ public:
 
 int main()
 {
-	std::string rootDir(ASSETS_ROOT_DIR);
+	AssetManager::setAssetRoot("../../../Assets/");
+	std::string rootDir(AssetManager::getAssetRoot());
+	std::cout << AssetManager::getAssetRoot();
 	Window window(800,800,"planets");
 	
 	if (!window.initialize())
@@ -103,17 +105,17 @@ int main()
 
 
 	Material moonMaterial;
-	moonMaterial.setDiffuseMap(rootDir + "Media/Demo/Planets/Moon/diffuse.jpg");
-	moonMaterial.setSpecularMap(rootDir + "Media/Demo/Planets/Moon/Specular.jpg");
+	moonMaterial.setTexture2D("material.diffuse", rootDir + "Media/Demo/Planets/Moon/diffuse.jpg");
+	moonMaterial.setTexture2D("material.specular", rootDir + "Media/Demo/Planets/Moon/Specular.jpg");
 
 	
 	Material earthMaterial;
-	earthMaterial.setDiffuseMap(rootDir + "Media/Demo/Planets/Earth/Earth map.jpg");
-	earthMaterial.setSpecularMap(rootDir + "Media/Demo/Planets/Earth/Specular map.jpg");
+	earthMaterial.setTexture2D("material.diffuse",rootDir + "Media/Demo/Planets/Earth/Earth map.jpg");
+	earthMaterial.setTexture2D("material.specular", rootDir + "Media/Demo/Planets/Earth/Specular map.jpg");
 
 	Material sunMaterial;
-	sunMaterial.setDiffuseMap(rootDir + "Media/Demo/Planets/Sun/diffuse.jpg");
-	sunMaterial.setSpecularMap(rootDir + "Media/Demo/Planets/Sun/Specular.jpg");
+	sunMaterial.setTexture2D("material.diffuse", rootDir + "Media/Demo/Planets/Sun/diffuse.jpg");
+	sunMaterial.setTexture2D("material.specular", rootDir + "Media/Demo/Planets/Sun/Specular.jpg");
 	sunMaterial.isEmissive(true);
 	EntityID sun = scene.CreateEntity();
 

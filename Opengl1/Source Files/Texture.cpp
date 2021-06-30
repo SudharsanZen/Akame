@@ -2,6 +2,7 @@
 #include"stb_image.h"
 #include"glad/glad.h"
 #include"GLFW/glfw3.h"
+#include"Log/Log.h"
 #include<iostream>
 Texture::Texture(std::string dir)
 {
@@ -20,7 +21,7 @@ void Texture::reset()
 	{
 
 		glDeleteTextures(1, &textureID);
-	
+		ENGINE_CORE_INFO("Destroying Texture"+imageDir);
 		
 	}
 	textureID = -1;

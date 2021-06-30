@@ -1,5 +1,4 @@
 #pragma once
-#include"engine_constants.h"
 #include<functional>
 #include<string>
 
@@ -20,7 +19,7 @@ private:
 	void freeCodePointer(char**,unsigned int);
 	void deleteProgram();
 public:
-	Shader():Shader(ASSETS_ROOT_DIR+std::string("Shaders/default.vert"), ASSETS_ROOT_DIR+std::string("Shaders/default.frag")){}
+	Shader();
 	Shader(std::string vertexShaderDir,std::string fragmentShaderDir);
 	
 	void setShaderFileLocation(std::string vert, std::string frag) { vertDir = vert; fragDir = frag; };

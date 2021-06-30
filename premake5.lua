@@ -78,6 +78,7 @@ group "Samples"
     include "premakeConf/Planets.lua"
     include "premakeConf/GeoSpatialData.lua"
     include "premakeConf/Test.lua"
+    include "premakeConf/RenderStressTest.lua"
 group ""
 
 

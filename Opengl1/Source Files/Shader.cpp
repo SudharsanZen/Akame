@@ -3,7 +3,8 @@
 #include<fstream>
 #include<math.h>
 #include<glad/glad.h>
-
+#include"Log/Log.h"
+#include"Assets/AssetManager.h"
 Shader::Shader(std::string vertexShaderDir, std::string fragmentShaderDir)
 {
     //contructor
@@ -15,6 +16,14 @@ Shader::Shader(std::string vertexShaderDir, std::string fragmentShaderDir)
     compileShader();
 }
 
+Shader::Shader()
+{
+    vertDir = AssetManager::getAssetRoot() + std::string("Shaders/default.vert");
+    fragDir = AssetManager::getAssetRoot() + std::string("Shaders/default.frag");
+    programID = 0;
+    uboMatricesIndex = -1;
+    compileShader();
+}
 //functions for setting uniform variables
 
 unsigned int Shader::getUniformLocation(std::string varName) { return glGetUniformLocation(programID, varName.c_str()); }
@@ -80,7 +89,7 @@ char** Shader::readShaderFile(std::string fileName,unsigned int &len)
     }
     else
     {
-        std::cout << "ERROR::SHADER_CLASS::can't open File: " << fileName << "\"";
+        ENGINE_CORE_ERROR("SHADER_CLASS::can't open File: "+ fileName);
     }
     size_t contentLength = content.length();
     unsigned int numOfChunks = ceil((float)contentLength / (float)(CODE_BLOCK_SIZE - 1));
@@ -144,7 +153,7 @@ bool Shader::compileShader()
     {
         GLchar log[1024];
         glGetProgramInfoLog(programID, 1024, NULL, log);
-        std::cout << "\nERROR::LINKING_PROGRAM: " << log;
+       ENGINE_CORE_ERROR("ERROR::LINKING_PROGRAM: "+std::string(log));
         return false;
     }
 
@@ -176,9 +185,9 @@ void Shader::addShader(char** code,GLuint shaderID,GLuint codeCount,GLenum shade
     {
         GLint errorCodeLen;
         char log[1024];
-        std::cout << "ERROR::SHADER_TYPE("<<shaderType<<")::FAILED_TO_COMPILE:" << std::endl;
+        ENGINE_CORE_ERROR("SHADER_TYPE({0:d};)::FAILED_TO_COMPILE:",shaderType);
         glGetShaderInfoLog(shaderID, 1024, &errorCodeLen, log);
-        std::cout << log;
+        ENGINE_CORE_INFO(log);
     }
 }
 

@@ -1,16 +1,17 @@
 #include "Assets/AssetManager.h"
-#include"engine_constants.h"
+
 #include"Texture.h"
 #include"Shader.h"
 #include"Log/Log.h"
 #include<string>
 #include<filesystem>
-
 using namespace std::filesystem;
 
 AssetArray<Texture> AssetManager::_tex;
 std::map<std::string, long long> AssetManager::texLocIndexList;
-
+bool AssetManager::initialized = false;
+std::string AssetManager::assetRootPath = "../../Assets/";
+ShaderManager AssetManager::shaderManager;
 //convert string to lowercase
 std::string to_lower(std::string str)
 {
@@ -34,23 +35,24 @@ bool fileExists(std::string location)
 	return is_regular_file(loc);
 }
 
-//check if the texture is already loaded
-bool AssetManager::textureAlreadyExists(std::string location)
-{
-	return false;
-}
-
 AssetManager::AssetManager()
 {
 	
+}
+
+void AssetManager::init()
+{
+	shaderManager.loadAllShaders();
+	initialized = true;
 }
 
 long long AssetManager::createTexture(std::string location)
 {
 	if (!fileExists(location))
 	{
-		ENGINE_CORE_ERROR("CAN'T FIND TEXTURE");
-		location =std::string(ASSETS_ROOT_DIR)+"EngineAssets/errorTex.png";
+		location = AssetManager::getAssetRoot() + "EngineAssets/errorTex.png";
+		ENGINE_CORE_ERROR("CAN'T FIND TEXTURE:"+location);
+		
 	}
 	std::string mapStr = mapString(location);
 	auto itr = texLocIndexList.find(mapStr);
@@ -65,6 +67,7 @@ long long AssetManager::createTexture(std::string location)
 	{
 		
 		return itr->second;
+		_tex.incrementRefcount(itr->second);
 	}
 
 	
@@ -92,3 +95,9 @@ void AssetManager::notUsingTex(std::string location)
 		}
 	}
 }
+
+std::shared_ptr<Shader> AssetManager::getShader(std::string shaderName)
+{
+	return shaderManager.GetShader(shaderName);
+}
+

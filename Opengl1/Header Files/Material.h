@@ -2,63 +2,95 @@
 #include"GlmMath.h"
 #include"Texture.h"
 #include"Shader.h"
+#include"Assets/AssetManager.h"
+#include<unordered_map>
 class Material
 {
 private:
-	glm::vec3 diffColor;
-	std::shared_ptr<Texture> diffuse;
+	AssetManager a;
+	unsigned int nextTexUnit = 0;
+	std::string SHADER_NAME;
+	struct texDetails
+	{
+		std::string location="";
+		long long assetIndex=0;
+		unsigned int texUnit=0;
+	};
+	std::shared_ptr<int>refCount;
+	//stores all the Tetxure uniforms and corresponding values to be set
+	std::shared_ptr<std::unordered_map<std::string, texDetails>> uniformToTexDetails;
 
+
+	glm::vec3 diffColor;
 	bool emissive=false;
 	glm::vec3 specularColor;
-	std::shared_ptr<Texture> roughness;
-
-	bool normalMapOn;
-	std::shared_ptr<Texture> normalMap;
 
 	float ambientIntensity;
 
-	std::shared_ptr<Shader> shader;
+	friend class RenderingSystem;
 public:
-	
-	
-	void isEmissive(bool em)
+	Material(std::string shaderName="DEFAULT")
 	{
-		emissive = em;
-	}
-	Material()
-	{
+		SHADER_NAME = shaderName;
+		refCount = std::make_shared<int>();
+		*refCount = 1;
+		uniformToTexDetails = std::make_shared<std::unordered_map<std::string, texDetails>>();
 		emissive = false;
 		diffColor = glm::vec3(1, 1, 1);
 		specularColor = glm::vec3(1, 1, 1);
 		ambientIntensity = 0.2f;
-		normalMapOn = false;
-		shader = std::make_shared<Shader>();
-		shader->compileShader();
 	}
+	//set the texture uniform and it's value
+	void setTexture2D(std::string uniformName,std::string location)
+	{
+		auto itr = uniformToTexDetails->find(uniformName);
+		
+		texDetails td;
+		td.location = location;
+		long long index = a.createTexture(location);
+		td.assetIndex = index;
+		td.texUnit = nextTexUnit++;
+
+		if (itr == uniformToTexDetails->end())
+		{
+			(*uniformToTexDetails)[uniformName] = td;
+		}
+		else
+		{
+			//reduce reference count since the existing texture is replace by a new texture location
+			a.notUsingTex(itr->second.location);
+			itr->second =td;
+		}
+
+	}
+	void isEmissive(bool em)
+	{
+		emissive = em;
+	}
+	
 	Material(const Material& mat)
 	{
+		*mat.refCount += 1;
+		this->refCount = mat.refCount;
 		this->emissive = mat.emissive;
 		this->diffColor = mat.diffColor;
-		this->diffuse = mat.diffuse;
-		this->roughness = mat.roughness;
-		this->normalMap = mat.normalMap;
-		this->shader = mat.shader;
-		ambientIntensity = mat.ambientIntensity;
+		this->uniformToTexDetails = mat.uniformToTexDetails;
+		this->ambientIntensity = mat.ambientIntensity;
+		this->SHADER_NAME = mat.SHADER_NAME;
 	}
-	void setUniforms(glm::vec3& lightPose, glm::vec3& viewPose)
+	void setUniforms(std::shared_ptr<Shader> shader,glm::vec3& lightPose, glm::vec3& viewPose)
 	{
-		shader->useShaderProgram();
 
-		diffuse->use(0);
-
-		roughness->use(1);
+		for (auto& t : *uniformToTexDetails)
+		{
+			a.GetTexture(t.second.assetIndex)->use(t.second.texUnit);
+			shader->setUniformInteger(t.first,t.second.texUnit);
+		}
 
 
 		shader->setUniformVec3("lightPos", lightPose);
 		shader->setUniformVec3("viewPos", viewPose);
-		shader->setUniformInteger("material.diffuseMap", 0);
-		shader->setUniformInteger("material.specularMap", 1);
-		shader->setUniformInteger("material.normalMap", 2);
+
 
 
 
@@ -66,24 +98,34 @@ public:
 		shader->setUniformVec3("lightColor", glm::vec3(1, 1, 1));
 		shader->setUniformVec3("objectColor", glm::vec3(1, 1, 1));
 	}
-	void use(Transform &t,glm::vec3 &lightPose,glm::vec3 &viewPose)
+	void use(Transform &t,glm::vec3 &lightPose,glm::vec3 &viewPose,std::shared_ptr<Shader> shader)
 	{
-		setUniforms(lightPose,viewPose);
+		
+		setUniforms(shader,lightPose,viewPose);
 		glm::mat4 trans =t.transformMatrix();
 		shader->setUniformVec3("viewPos", viewPose);
 		shader->setUniformMat4fv("transform", 1, glm::value_ptr(trans));
 	}
 	
-	void setDiffuseMap(std::string fileLocation)		{		diffuse		= std::make_shared<Texture>(fileLocation);		}
+	
 
+	void reset() 
+	{
+		
+		for (auto& t : *uniformToTexDetails)
+		{
+			a.notUsingTex(t.second.location);
+		}
 
-	void setSpecularMap(std::string fileLocation)	{		roughness	= std::make_shared<Texture>(fileLocation);		}
+	}
 
-
-	void setNormalMap(std::string fileLocation)		{		normalMap	= std::make_shared<Texture>(fileLocation);	    }
-
-	void reset() {}
-
-
+	~Material()
+	{
+		*refCount -= 1;
+		if (*refCount < 1)
+		{
+			reset();
+		}
+	}
 };
 

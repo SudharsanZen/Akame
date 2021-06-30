@@ -18,3 +18,4 @@
 #include"ComponentArray.h"
 #include"Physics/RigidBody3D.h"
 #include"System.h"
+#include"Assets/AssetManager.h"
