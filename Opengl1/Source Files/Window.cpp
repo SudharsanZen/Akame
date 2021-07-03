@@ -123,6 +123,8 @@ bool Window::initialize()
 	};
 	glfwSetFramebufferSizeCallback(mainWindow.get(),frameBufferSizeCallBack);
 	glEnable(GL_MULTISAMPLE);
+	//glEnable(GL_CULL_FACE);
+
 	return true;
 }
 

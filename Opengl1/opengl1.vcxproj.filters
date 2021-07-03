@@ -144,6 +144,8 @@
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\FrameBuffer.h" />
+    <ClInclude Include="Header Files\DefferedRendererFragmentBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Assets\Asset.cpp">
@@ -239,5 +241,7 @@
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\FrameBuffer.cpp" />
+    <ClCompile Include="Source Files\DefferedRendererFragmentBuffer.cpp" />
   </ItemGroup>
 </Project>

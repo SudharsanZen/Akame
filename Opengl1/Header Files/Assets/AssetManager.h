@@ -29,5 +29,9 @@ public:
 	static void setAssetRoot(std::string root) { assetRootPath = root; }
 	static std::string getAssetRoot() { return assetRootPath; }
 	static void reloadAllShaders() { shaderManager.loadAllShaders(); }
+
+
+
+	
 };
 

@@ -11,7 +11,17 @@
 #include"Systems/RigidBodySystem.h"
 #include"ECS.h"
 #include"Log/Log.h"
+std::vector<std::shared_ptr<RenderingSystem>> listScene;
 
+
+void callBack(GLFWwindow* window,int w,int h)
+{
+	glViewport(0, 0, w, h);
+	for (auto &f : listScene)
+	{
+		f->updateFrameBufferSize(h,w);
+	}
+}
 //constructor initia
 Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 {
@@ -39,6 +49,9 @@ Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 		AssetManager::init();
 	}
 	glfwSwapInterval(0);
+	renderSys->updateFrameBufferSize(mainWindow.getBufferHeight(),mainWindow.getBufferWidth());
+	mainWindow.setBufferSizeCallBackFunction(callBack);
+	listScene.push_back(renderSys);
 }
 /*Call this to update the common global uniforms.
 * this updates the Projection matrix and ViewMatrix which is common to all shaders
@@ -53,6 +66,8 @@ void Scene::updateUniformBuffer(Camera& cam)
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 }
+
+
 
 
 
@@ -128,7 +143,7 @@ void Scene::Render()
 	glClearColor(color.x,color.y,color.z,color.w);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glEnable(GL_DEPTH_TEST);
+	
 
 	//renderStuff
 		updateUniformBuffer(cam);

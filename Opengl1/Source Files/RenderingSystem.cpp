@@ -1,9 +1,13 @@
+#include"glad/glad.h"
 #include"System.h"
 #include"Mesh.h"
 #include"Material.h"
 #include "ECS.h"
 #include "Systems/RenderingSystem.h"
+#include"GLFW/glfw3.h"
+
 #include"Camera.h"
+
 void RenderingSystem::GroupEntityWithCommonShader(std::shared_ptr<ECS> ecs)
 {
 	emptyDrawList();
@@ -21,6 +25,8 @@ void RenderingSystem::GroupEntityWithCommonShader(std::shared_ptr<ECS> ecs)
 void RenderingSystem::Run(std::shared_ptr<ECS> ecs, Camera& cam)
 {
 	GroupEntityWithCommonShader(ecs);
+	drfb.bindFrameBuffer();
+	glEnable(GL_DEPTH_TEST);
 
 	for (auto const& entList : drawList)
 	{
@@ -38,6 +44,14 @@ void RenderingSystem::Run(std::shared_ptr<ECS> ecs, Camera& cam)
 
 
 	}
+	
+	drfb.unBindFrameBuffer();
+
+	drfb.outPutToQaud(cam);
+
+
+
+
 }
 
 void RenderingSystem::emptyDrawList()
@@ -47,4 +61,10 @@ void RenderingSystem::emptyDrawList()
 	{
 		drawList[pair.first] = std::vector<Entity>();
 	}
+}
+
+void RenderingSystem::updateFrameBufferSize(int height, int width)
+{
+	fb.updateTextureSize(height,width);
+	drfb.updateBufferSize(height,width);
 }

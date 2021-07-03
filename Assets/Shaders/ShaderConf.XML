@@ -7,3 +7,15 @@
     <Vertex path="error.vert"/>
     <Fragment path="error.frag"/>
 </Shader>
+<Shader name="SCREENSHADER">
+    <Vertex path="SCREENSHADER.vert"/>
+    <Fragment path="SCREENSHADER.frag"/>
+</Shader>
+<Shader name="DEFERRED_OUT">
+    <Vertex path="deferred/finalOut.vert"/>
+    <Fragment path="deferred/finalOut.frag"/>
+</Shader>
+<Shader name="DEFERRED">
+    <Vertex path="deferred/frameBufferTargets.vert"/>
+    <Fragment path="deferred/frameBufferTargets.frag"/>
+</Shader>

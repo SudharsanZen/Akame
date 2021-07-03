@@ -2,6 +2,7 @@
 #include<memory>
 #include<vector>
 #include<cassert>
+#include<iostream>
 template<class T>
 class AssetArray
 {
@@ -54,8 +55,6 @@ public:
 		refcount[index]++;
 		return refcount[index];
 	}
-
-
 
 
 };

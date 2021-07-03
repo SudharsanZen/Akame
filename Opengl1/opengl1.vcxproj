@@ -94,6 +94,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Header Files\DefferedRendererFragmentBuffer.h" />
     <ClInclude Include="Header Files\Assets\Asset.h" />
     <ClInclude Include="Header Files\Assets\AssetArray.h" />
     <ClInclude Include="Header Files\Assets\AssetManager.h" />
@@ -107,6 +108,7 @@
     <ClInclude Include="Header Files\Engine.h" />
     <ClInclude Include="Header Files\EngineMath.h" />
     <ClInclude Include="Header Files\EngineMathConstants.h" />
+    <ClInclude Include="Header Files\FrameBuffer.h" />
     <ClInclude Include="Header Files\GlmMath.h" />
     <ClInclude Include="Header Files\Input.h" />
     <ClInclude Include="Header Files\Log\Log.h" />
@@ -137,10 +139,12 @@
     <ClCompile Include="Source Files\Behaviour.cpp" />
     <ClCompile Include="Source Files\BehaviourSystem.cpp" />
     <ClCompile Include="Source Files\Camera.cpp" />
+    <ClCompile Include="Source Files\DefferedRendererFragmentBuffer.cpp" />
     <ClCompile Include="Source Files\DisplacementMap.cpp" />
     <ClCompile Include="Source Files\Editor\EditorUI.cpp" />
     <ClCompile Include="Source Files\Editor\Scene.cpp" />
     <ClCompile Include="Source Files\EngineMathConstants.cpp" />
+    <ClCompile Include="Source Files\FrameBuffer.cpp" />
     <ClCompile Include="Source Files\Input.cpp" />
     <ClCompile Include="Source Files\Log\Log.cpp" />
     <ClCompile Include="Source Files\Material.cpp" />

@@ -10,5 +10,9 @@ public:
 	ShaderManager();
 	static void loadAllShaders();
 	static std::shared_ptr<Shader> GetShader(std::string shaderName);
+	static void releaseAllShaders() 
+	{
+		shaderList.clear();
+	}
 	//void loadShader(std::string shaderName);
 };

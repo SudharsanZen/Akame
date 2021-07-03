@@ -6,9 +6,11 @@
 #include<functional>
 #include"ECS.h"
 #include"BehaviourComponent.h"
+
 class Window;
 class RenderingSystem;
 class BehaviourSystem;
+
 namespace physics 
 {
 	class RigidBodySystem;
@@ -32,6 +34,8 @@ private:
 	
 	void updateUniformBuffer(Camera& cam);
 	friend class BehaviourSystem;
+
+	
 public:
 	//fn will be called when Scene::Render() is called. this method will be dprecated
 	std::function<void()> fn;

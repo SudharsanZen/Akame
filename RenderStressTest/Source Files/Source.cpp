@@ -10,10 +10,8 @@
 #include <crtdbg.h>
 #include"XMLReaderTest.h"
 
-
-int main()
+int app()
 {
-
 	std::string rootDir(AssetManager::getAssetRoot());
 	Window window(800, 800, "testWindow");
 
@@ -27,20 +25,20 @@ int main()
 
 
 	EntityID plane = scene.CreateEntity();
-	
 
 
-	Material boxMat;
+
+	Material boxMat("DEFERRED");
 	boxMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/box/diffuse.png");
 	boxMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/box/roughness.png");
 
 
 
-	Material planeMat;
-	planeMat.setTexture2D("material.diffuseMap", rootDir+"Media/pbr/rust/diffuse.png");
-	planeMat.setTexture2D("material.specularMap", rootDir+"Media/pbr/rust/roughness.png");
+	Material planeMat("DEFERRED");
+	planeMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/rust/diffuse.png");
+	planeMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/rust/roughness.png");
 
-	
+
 
 	Transform planeTransform;
 
@@ -58,34 +56,37 @@ int main()
 	rbdy2.setRigidBodyType(physics::STATIC, planeShape);
 
 
-	const int num = 1000;
+	const int num = 256;
 	const int rt = sqrt(num);
 	for (int i = 0; i < num; i++)
 	{
 		EntityID box = scene.CreateEntity();
 		scene.AddComponent<Mesh>(box, Mesh());
 		scene.GetComponent<Mesh>(box).CreateMesh(generateCubeVertices());
-		scene.AddComponent<Transform>(box, Transform(2*(i/rt),0, (2)*(i%rt)));
+		scene.AddComponent<Transform>(box, Transform(2 * (i / rt), 0, (2) * (i % rt)));
 		scene.AddComponent<Material>(box, boxMat);
 		scene.GetComponent<Transform>(box).rotation.setEulerAngle(0, 0, 0);
 	}
-	
+
 	scene.OnStart();
 
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.3f;
 	while (!window.closeWindow())
 	{
-		
-
 
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
-
 		scene.Render();
 
 	}
 
+	
+}
+int main()
+{
+
+	app();
 
 	return 0;
 }

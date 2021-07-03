@@ -219,12 +219,15 @@ std::vector<vert> generateCubeVertices(int heightSeg, int widthSeg)
 			vert v2 = { {x+(1 + j) * (w),y+(i+1) * h,z},{0,0,-1},{(1 + j) * (w),(i + 1) * h} };//(1,1)
 			vert v3 = { {x+(j) * (w),i* h+y,z},{0,0,-1},{(j) * (w),i * h} };//(0,0)
 			vert v4 = { {x+(j) * (w),(i+1) * h+y,z},{0,0,-1},{(j) * (w),(i + 1) * h} };//(0,1)
+			faceFront.push_back(v3);
+			faceFront.push_back(v2);
 			faceFront.push_back(v1);
-			faceFront.push_back(v2);
+			
+			
 			faceFront.push_back(v3);
-			faceFront.push_back(v2);
 			faceFront.push_back(v4);
-			faceFront.push_back(v3);
+			faceFront.push_back(v2);
+			
 		}
 	}
 	cube = faceFront;
@@ -286,12 +289,15 @@ std::vector<vert> generatePlaneVertices(int lengthSeg, int widthSeg)
 			vert v2 = { {x + (1 + j) * (w),y + (i + 1) * h,z},{0,0,-1},{(1 + j) * (w),(i + 1) * h} };//(1,1)
 			vert v3 = { {x + (j) * (w),i * h + y,z},{0,0,-1},{(j) * (w),i * h} };//(0,0)
 			vert v4 = { {x + (j) * (w),(i + 1) * h + y,z},{0,0,-1},{(j) * (w),(i + 1) * h} };//(0,1)
+			faceFront.push_back(v3);
+			faceFront.push_back(v2);
 			faceFront.push_back(v1);
-			faceFront.push_back(v2);
+			
+			
 			faceFront.push_back(v3);
-			faceFront.push_back(v2);
 			faceFront.push_back(v4);
-			faceFront.push_back(v3);
+			faceFront.push_back(v2);
+			
 		}
 	}
 
