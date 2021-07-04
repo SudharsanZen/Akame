@@ -25,18 +25,34 @@ int main()
 	Scene scene(window);
 
 
+	EntityID dir = scene.CreateEntity();
+	Lights d = Lights(LIGHT::DIRECTIONAL);
+	d.setColor(1, 1, 1);
+	d.setDirection(1, -1, 1);
+	d.setIntensity(0.3);
+	d.setPointLightConst(1, 2, 10);
+	scene.AddComponent<Lights>(dir, d);
+	scene.AddComponent<Transform>(dir, Transform(0, 2, 0));
+
+	EntityID ptl = scene.CreateEntity();
+	Lights p = Lights(LIGHT::POINT);
+	p.setColor(1, 1, 1);
+	p.setIntensity(5);
+	p.setPointLightConst(1, 1, 1);
+	scene.AddComponent<Lights>(ptl, p);
+	scene.AddComponent<Transform>(ptl, Transform(0,5,0));
 
 	EntityID plane = scene.CreateEntity();
 	
 
 
-	Material boxMat;
+	Material boxMat("DEFERRED");
 	boxMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/box/diffuse.png");
 	boxMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/box/roughness.png");
 
 
 
-	Material planeMat;
+	Material planeMat("DEFERRED");
 	planeMat.setTexture2D("material.diffuseMap", rootDir+"Media/pbr/rust/diffuse.png");
 	planeMat.setTexture2D("material.specularMap", rootDir+"Media/pbr/rust/roughness.png");
 

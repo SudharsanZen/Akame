@@ -26,7 +26,7 @@ namespace physics
 		void setPxToVisualTransform();
 		
 
-		void OnAddEntity() override;
+		void OnAddEntity(Entity entity) override;
 	
 
 	};

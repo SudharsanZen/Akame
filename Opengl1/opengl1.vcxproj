@@ -94,7 +94,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Header Files\DefferedRendererFragmentBuffer.h" />
+    <ClInclude Include="Header Files\DeferredRendererFragmentBuffer.h" />
     <ClInclude Include="Header Files\Assets\Asset.h" />
     <ClInclude Include="Header Files\Assets\AssetArray.h" />
     <ClInclude Include="Header Files\Assets\AssetManager.h" />
@@ -111,6 +111,7 @@
     <ClInclude Include="Header Files\FrameBuffer.h" />
     <ClInclude Include="Header Files\GlmMath.h" />
     <ClInclude Include="Header Files\Input.h" />
+    <ClInclude Include="Header Files\Lights.h" />
     <ClInclude Include="Header Files\Log\Log.h" />
     <ClInclude Include="Header Files\Material.h" />
     <ClInclude Include="Header Files\Mesh.h" />
@@ -130,22 +131,25 @@
     <ClInclude Include="Header Files\Window.h" />
     <ClInclude Include="Header Files\XMLReaderTest.h" />
     <ClInclude Include="Header Files\temp.h" />
+    <ClInclude Include="Header Files\Systems\LightSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source Files\Systems\LightSystem.cpp" />
     <ClCompile Include="Source Files\Assets\Asset.cpp" />
     <ClCompile Include="Source Files\Assets\AssetArray.cpp" />
     <ClCompile Include="Source Files\Assets\AssetManager.cpp" />
     <ClCompile Include="Source Files\Assets\ShaderManager.cpp" />
     <ClCompile Include="Source Files\Behaviour.cpp" />
-    <ClCompile Include="Source Files\BehaviourSystem.cpp" />
+    <ClCompile Include="Source Files\Systems\BehaviourSystem.cpp" />
     <ClCompile Include="Source Files\Camera.cpp" />
-    <ClCompile Include="Source Files\DefferedRendererFragmentBuffer.cpp" />
+    <ClCompile Include="Source Files\DeferedRendererFragmentBuffer.cpp" />
     <ClCompile Include="Source Files\DisplacementMap.cpp" />
     <ClCompile Include="Source Files\Editor\EditorUI.cpp" />
     <ClCompile Include="Source Files\Editor\Scene.cpp" />
     <ClCompile Include="Source Files\EngineMathConstants.cpp" />
     <ClCompile Include="Source Files\FrameBuffer.cpp" />
     <ClCompile Include="Source Files\Input.cpp" />
+    <ClCompile Include="Source Files\Lights.cpp" />
     <ClCompile Include="Source Files\Log\Log.cpp" />
     <ClCompile Include="Source Files\Material.cpp" />
     <ClCompile Include="Source Files\Math\Quaternion.cpp" />
@@ -155,8 +159,8 @@
     <ClCompile Include="Source Files\Model.cpp" />
     <ClCompile Include="Source Files\Physics\Physics.cpp" />
     <ClCompile Include="Source Files\Physics\RigidBody3D.cpp" />
-    <ClCompile Include="Source Files\RenderingSystem.cpp" />
-    <ClCompile Include="Source Files\RigidBodySystem.cpp" />
+    <ClCompile Include="Source Files\Systems\RenderingSystem.cpp" />
+    <ClCompile Include="Source Files\Systems\RigidBodySystem.cpp" />
     <ClCompile Include="Source Files\Shader.cpp" />
     <ClCompile Include="Source Files\Source.cpp" />
     <ClCompile Include="Source Files\Texture.cpp" />

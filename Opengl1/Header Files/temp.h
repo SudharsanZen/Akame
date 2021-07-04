@@ -6,7 +6,7 @@ class lines
 	unsigned int VBO, VAO;
 public:
 	glm::vec3 color;
-	Shader debugShader;
+	std::shared_ptr<Shader> debugShader;
 	struct line
 	{
 		glm::vec3 st;
@@ -20,6 +20,7 @@ public:
 	void clearMesh();
 
 };
+
 
 
 

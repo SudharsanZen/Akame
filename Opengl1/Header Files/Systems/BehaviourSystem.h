@@ -19,7 +19,7 @@ public:
 	void Update(float deltaTime);
 
 	//this is called everytime a BehviourComponent is added to an Entity.
-	void OnAddEntity() override;
+	void OnAddEntity(Entity entity) override;
 
 	
 };

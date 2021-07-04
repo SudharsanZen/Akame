@@ -56,7 +56,7 @@ void physics::RigidBodySystem::setPxToVisualTransform()
 }
 
 //set pointers for ecs,physics when an entity is added the rbodysystem
-void physics::RigidBodySystem::OnAddEntity()
+void physics::RigidBodySystem::OnAddEntity(Entity entity)
 {
 	std::shared_ptr<ECS> e = ecs.lock();
 	for (auto const& ent : entities)

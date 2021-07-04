@@ -2,7 +2,7 @@
 
 #include<math.h>
 #include"EngineMath.h"
-
+#include"Lights.h"
 #include"Shader.h"
 #include"Mesh.h"
 #include"MeshInstance.h"

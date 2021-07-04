@@ -1,8 +1,8 @@
-#include "DefferedRendererFragmentBuffer.h"
+#include "DeferredRendererFragmentBuffer.h"
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include"Log/Log.h"
-#include"Assets/ShaderManager.h"
+
 
 vert vtl = { glm::vec3(-1,1,0),glm::vec3(0,0,1),glm::vec2(0,1) };//top left vertex
 vert vtr = { glm::vec3(1,1,0),glm::vec3(0,0,1),glm::vec2(1,1) };//top right vertex
@@ -107,19 +107,44 @@ void DeferredRendererFragmentBuffer::useTextures()
 
 }
 
-void DeferredRendererFragmentBuffer::outPutToQaud(Camera &cam)
+void DeferredRendererFragmentBuffer::outPutToQaud(Camera &cam,std::shared_ptr<Shader> shader)
 {
 	
-	std::shared_ptr<Shader> shader=ShaderManager::GetShader("DEFERRED_OUT");
-	shader->useShaderProgram();
+	//deferred renderer final pass shader
 	useTextures();
 	shader->setUniformInteger("AlbedoSpec",0);
 	shader->setUniformInteger("Position",1);
 	shader->setUniformInteger("Normal",2);
-	shader->setUniformVec3("lightPos", glm::vec3(10, 4, 10));//temp
 	shader->setUniformVec3("viewPos",cam.transform.position);
-	shader->setUniformVec3("lightColor", glm::vec3(1, 1, 1));
-	shader->setUniformVec3("objectColor", glm::vec3(1, 1, 1));
+
+	quad.renderMesh();
+}
+
+void DeferredRendererFragmentBuffer::drawPositionBuffer()
+{
+	std::shared_ptr<Shader> shader = ShaderManager::GetShader("SCREENSHADER");
+	shader->useShaderProgram();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, Position);
+	quad.renderMesh();
+
+}
+
+void DeferredRendererFragmentBuffer::drawNormalBuffer()
+{
+	std::shared_ptr<Shader> shader = ShaderManager::GetShader("SCREENSHADER");
+	shader->useShaderProgram();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, Normal);
+	quad.renderMesh();
+}
+
+void DeferredRendererFragmentBuffer::drawAlbedoBuffer()
+{
+	std::shared_ptr<Shader> shader = ShaderManager::GetShader("SCREENSHADER");
+	shader->useShaderProgram();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, AlbedoSpec);
 	quad.renderMesh();
 }
 

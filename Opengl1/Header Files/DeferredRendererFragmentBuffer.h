@@ -1,6 +1,7 @@
 #pragma once
 #include"Mesh.h"
 #include"Camera.h"
+#include"Assets/ShaderManager.h"
 class DeferredRendererFragmentBuffer
 {
 	Mesh quad;
@@ -21,7 +22,11 @@ public:
 	void unBindFrameBuffer();
 	//tex unit 1: albedoSpec,unit 2:Normal,unit 3:position
 	void useTextures();
-	void outPutToQaud(Camera &cam);
+	void outPutToQaud(Camera& cam, std::shared_ptr<Shader> shader);
+
+	void drawPositionBuffer();
+	void drawNormalBuffer();
+	void drawAlbedoBuffer();
 	~DeferredRendererFragmentBuffer();
 };
 

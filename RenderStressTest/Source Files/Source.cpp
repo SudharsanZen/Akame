@@ -23,7 +23,6 @@ int app()
 	Scene scene(window);
 
 
-
 	EntityID plane = scene.CreateEntity();
 
 
@@ -48,7 +47,7 @@ int app()
 	scene.GetComponent<Mesh>(plane).CreateMesh(generatePlaneVertices());
 	scene.AddComponent<Transform>(plane, planeTransform);
 	scene.AddComponent<Material>(plane, planeMat);
-	//scene.GetComponent<Transform>(plane).rotation.setEulerAngle(0,0,45);
+
 	scene.AddComponent<physics::RigidBody3D>(plane, physics::RigidBody3D());
 	physics::RigidBody3D& rbdy2 = scene.GetComponent<physics::RigidBody3D>(plane);
 	physics::ColliderShape planeShape;
@@ -56,10 +55,32 @@ int app()
 	rbdy2.setRigidBodyType(physics::STATIC, planeShape);
 
 
-	const int num = 256;
+
+	EntityID dir = scene.CreateEntity();
+	Lights d = Lights(LIGHT::DIRECTIONAL);
+	d.setColor(1, 1, 1);
+	d.setDirection(1,-1,1);
+	d.setIntensity(1);
+	d.setPointLightConst(1,2,10);
+	scene.AddComponent<Lights>(dir, d);
+	scene.AddComponent<Transform>(dir, Transform(0,2,0));
+
+
+	const int num = 100;
 	const int rt = sqrt(num);
 	for (int i = 0; i < num; i++)
 	{
+
+		EntityID ptl = scene.CreateEntity();
+		Lights p = Lights(LIGHT::POINT);
+		p.setColor(1, 1, 1);
+		p.setIntensity(5);
+		p.setPointLightConst(1, 5,10);
+		scene.AddComponent<Lights>(ptl, p);
+		scene.AddComponent<Transform>(ptl, Transform(2 * (i / rt), 0.6, (2) * (i % rt)));
+		
+		
+
 		EntityID box = scene.CreateEntity();
 		scene.AddComponent<Mesh>(box, Mesh());
 		scene.GetComponent<Mesh>(box).CreateMesh(generateCubeVertices());

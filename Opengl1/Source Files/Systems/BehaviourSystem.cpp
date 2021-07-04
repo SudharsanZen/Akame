@@ -24,7 +24,7 @@ void BehaviourSystem::Update(float deltaTime)
 }
 
 //this is called everytime a BehviourComponent is added to an Entity.
-void BehaviourSystem::OnAddEntity()
+void BehaviourSystem::OnAddEntity(Entity entity)
 {
 
 }

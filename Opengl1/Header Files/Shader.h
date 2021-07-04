@@ -30,7 +30,7 @@ public:
 
 	void setUniformVec3(std::string varName, const glm::vec3& vec);
 	void setUniformMat4fv(std::string varName, unsigned int count, float* valuePtr);
-
+	void setUniformFloat(std::string varName, float value);
 	//call this to use this shader program
 	void useShaderProgram();
 

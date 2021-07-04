@@ -314,8 +314,10 @@ std::vector<vert> generatePlaneVertices(int lengthSeg, int widthSeg)
 	return faceFront;
 }
 
-inline lines::lines(glm::vec3 st, glm::vec3 end, glm::vec3 color) :debugShader("Shaders/DebugShader/default.vert", "Shaders/DebugShader/default.frag")
+lines::lines(glm::vec3 st, glm::vec3 end, glm::vec3 color) 
 {
+	std::string root = AssetManager::assetRootPath;
+	debugShader = std::make_shared<Shader>(root+"Shaders/DebugShader/default.vert",root+"Shaders/DebugShader/default.frag");
 	this->color = color;
 	//generate all buffers required for rendering and storing the mesh on the GPU
 	vData.st = st;
@@ -341,14 +343,14 @@ inline lines::lines(glm::vec3 st, glm::vec3 end, glm::vec3 color) :debugShader("
 
 }
 
-inline void lines::renderMesh()
+void lines::renderMesh()
 {
 	glad_glPointSize(2);
 	glad_glLineWidth(1);
 	//if all the buffers were successfully generated, then render the mesh
 
-	debugShader.useShaderProgram();
-	debugShader.setUniformVec3("color", color);
+	debugShader->useShaderProgram();
+	debugShader->setUniformVec3("color", color);
 	glBindVertexArray(VAO);
 
 	glDrawArrays(GL_LINES, 0, 2);
@@ -356,7 +358,7 @@ inline void lines::renderMesh()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-inline void lines::clearMesh()
+void lines::clearMesh()
 {
 	if (VBO)
 		glDeleteBuffers(1, &VBO);
@@ -364,3 +366,4 @@ inline void lines::clearMesh()
 		glDeleteVertexArrays(1, &VAO);
 
 }
+

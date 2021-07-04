@@ -34,6 +34,11 @@ void Shader::setUniformVec3(std::string varName, const glm::vec3& vec) { glUnifo
 
 void Shader::setUniformMat4fv(std::string varName, unsigned int count, float* valuePtr) { glUniformMatrix4fv(getUniformLocation(varName), count, GL_FALSE, valuePtr); }
 
+void Shader::setUniformFloat(std::string varName, float value)
+{
+    glUniform1f(getUniformLocation(varName),value);
+}
+
 Shader::~Shader()
 {
     deleteProgram();

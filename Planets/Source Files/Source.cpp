@@ -104,6 +104,7 @@ int main()
 
 
 
+
 	Material moonMaterial;
 	moonMaterial.setTexture2D("material.diffuse", rootDir + "Media/Demo/Planets/Moon/diffuse.jpg");
 	moonMaterial.setTexture2D("material.specular", rootDir + "Media/Demo/Planets/Moon/Specular.jpg");

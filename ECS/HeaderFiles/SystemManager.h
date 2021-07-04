@@ -48,12 +48,12 @@ public:
 			if ((sysSig & signature)==sysSig)
 			{
 				system->entities.insert(entity);
-				system->OnAddEntity();
+				system->OnAddEntity(entity);
 			}
 			else
 			{
 				system->entities.erase(entity);
-			
+				system->OnDestroyEntity(entity);
 			}
 		}
 	}
@@ -63,6 +63,7 @@ public:
 		for (auto const& pair : systems)
 		{
 			pair.second->entities.erase(entity);
+			
 		}
 	}
 

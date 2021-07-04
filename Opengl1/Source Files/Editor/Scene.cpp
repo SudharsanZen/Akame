@@ -11,6 +11,8 @@
 #include"Systems/RigidBodySystem.h"
 #include"ECS.h"
 #include"Log/Log.h"
+#include"Systems/LightSystem.h"
+#include"temp.h"
 std::vector<std::shared_ptr<RenderingSystem>> listScene;
 
 
@@ -92,6 +94,7 @@ void Scene::InitEcs()
 	ecs->RegisterComponent<Material>();
 	ecs->RegisterComponent<BehaviourComponent>();
 	ecs->RegisterComponent<physics::RigidBody3D>();
+	ecs->RegisterComponent<Lights>();
 
 
 	//create system signature
@@ -107,15 +110,24 @@ void Scene::InitEcs()
 	physicsSysSig.set(ecs->GetComponentBitPose<Transform>());
 	physicsSysSig.set(ecs->GetComponentBitPose<physics::RigidBody3D>());
 
+	Signature lightingSysSig;
+	lightingSysSig.set(ecs->GetComponentBitPose<Lights>());
+	lightingSysSig.set(ecs->GetComponentBitPose<Transform>());
+
 	//register system and it's signature
 	renderSys=ecs->RegisterSystem<RenderingSystem>();
 	behaviourSys=ecs->RegisterSystem<BehaviourSystem>();
 	physicsSys = ecs->RegisterSystem<physics::RigidBodySystem>();
+	lightSys = ecs->RegisterSystem<LightSystem>();
 	behaviourSys->ecs = ecs;
 	physicsSys->ecs=ecs;
+	renderSys->lightsystem = lightSys;
+	lightSys->ecs = ecs;
+
 	ecs->SetSystemSignature<RenderingSystem>(renderSysSig);
 	ecs->SetSystemSignature<BehaviourSystem>(behSysSig);
 	ecs->SetSystemSignature<physics::RigidBodySystem>(physicsSysSig);
+	ecs->SetSystemSignature<LightSystem>(lightingSysSig);
 
 
 }
@@ -136,6 +148,7 @@ void Scene::release()
 */
 void Scene::Render()
 {
+	
 	float currTime = glfwGetTime();
 
 	//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -152,6 +165,9 @@ void Scene::Render()
 		physicsSys->Run(deltaTime);
 		fn();
 
+		//lines(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0)).renderMesh();
+		//lines(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0)).renderMesh();
+		//lines(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1)).renderMesh();
 
 	window.processInput();
 	window.swapBuffers();

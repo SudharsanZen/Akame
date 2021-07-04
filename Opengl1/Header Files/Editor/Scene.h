@@ -10,7 +10,7 @@
 class Window;
 class RenderingSystem;
 class BehaviourSystem;
-
+class LightSystem;
 namespace physics 
 {
 	class RigidBodySystem;
@@ -23,6 +23,7 @@ private:
 
 	std::shared_ptr<RenderingSystem> renderSys;
 	std::shared_ptr<BehaviourSystem> behaviourSys;
+	std::shared_ptr<LightSystem> lightSys;
 	std::shared_ptr<physics::RigidBodySystem> physicsSys;
 	
 	glm::vec4 color;
