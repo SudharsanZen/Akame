@@ -94,6 +94,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DepthFrameBuffer.h" />
     <ClInclude Include="Header Files\DeferredRendererFragmentBuffer.h" />
     <ClInclude Include="Header Files\Assets\Asset.h" />
     <ClInclude Include="Header Files\Assets\AssetArray.h" />
@@ -134,6 +135,7 @@
     <ClInclude Include="Header Files\Systems\LightSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DepthFrameBuffer.cpp" />
     <ClCompile Include="Source Files\Systems\LightSystem.cpp" />
     <ClCompile Include="Source Files\Assets\Asset.cpp" />
     <ClCompile Include="Source Files\Assets\AssetArray.cpp" />

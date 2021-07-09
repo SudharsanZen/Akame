@@ -19,6 +19,7 @@ private:
 	std::shared_ptr<int>refCount;
 	//stores all the Tetxure uniforms and corresponding values to be set
 	std::shared_ptr<std::unordered_map<std::string, texDetails>> uniformToTexDetails;
+	std::shared_ptr<std::unordered_map<std::string, float>> uniformTofloat;
 
 
 	glm::vec3 diffColor;
@@ -35,10 +36,25 @@ public:
 		refCount = std::make_shared<int>();
 		*refCount = 1;
 		uniformToTexDetails = std::make_shared<std::unordered_map<std::string, texDetails>>();
+		uniformTofloat = std::make_shared<std::unordered_map<std::string, float>>();
 		emissive = false;
 		diffColor = glm::vec3(1, 1, 1);
 		specularColor = glm::vec3(1, 1, 1);
 		ambientIntensity = 0.2f;
+	}
+	//set float uniforms and it's values
+	void setValue(std::string varName,float value)
+	{
+		auto itr = uniformTofloat->find(varName);
+		if (itr == uniformTofloat->end())
+		{
+			(*uniformTofloat)[varName] = value;
+		}
+		else
+		{
+			//reduce reference count since the existing texture is replace by a new texture location
+			itr->second = value;
+		}
 	}
 	//set the texture uniform and it's value
 	void setTexture2D(std::string uniformName,std::string location)
@@ -75,6 +91,7 @@ public:
 		this->emissive = mat.emissive;
 		this->diffColor = mat.diffColor;
 		this->uniformToTexDetails = mat.uniformToTexDetails;
+		this->uniformTofloat = mat.uniformTofloat;
 		this->ambientIntensity = mat.ambientIntensity;
 		this->SHADER_NAME = mat.SHADER_NAME;
 	}
@@ -87,6 +104,10 @@ public:
 			shader->setUniformInteger(t.first,t.second.texUnit);
 		}
 
+		for (auto& t : *uniformTofloat)
+		{
+			shader->setUniformFloat(t.first,t.second);
+		}
 
 		shader->setUniformVec3("lightPos", lightPose);
 		shader->setUniformVec3("viewPos", viewPose);

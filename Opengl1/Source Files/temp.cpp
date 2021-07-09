@@ -1,8 +1,62 @@
 #include"temp.h"
 #include<glad/glad.h>
 
+void calTangentBiTangent(vert &v0,vert &v1,vert &v2)
+{
+	glm::vec3 t, b;
+	glm::vec3 e1 = v0.pos-v1.pos;
+	glm::vec3 e2 = v0.pos - v2.pos;
 
+	glm::vec2 delv1 = v0.uv-v1.uv;
+	glm::vec2 delv2 = v0.uv-v2.uv;
+	/*******
+	UV matrix 'U'
+		|delv1.x  delv1.y|
+		|delv2.x  delv2.y|
 
+		inv(U):
+		 1		
+		--- x	|delv2.y  -delv1.y|
+		|U|		|-delv2.x  delv1.x|
+	edge matrix 'E':
+		|e1.x e1.y e1.z|
+		|e2.x e2.y e2.z|
+	tangent and bitangent matrix  'T':
+		|t.x t.y t.z|
+		|b.x b.y b.z|
+
+		to calculate T
+			we know:  E=UxT
+			premultiply by inverse of U
+			we have:  inv(U)*E=T
+
+			t= (1/|U|) * (delv2.y * e1 - delv1.y*e2)
+
+	*******/
+
+	//determinant of U
+	float determU = (delv1.x * delv2.y - delv1.y * delv2.x);
+	float const constant = 1.0f/determU;
+
+	t = constant*(delv2.y * e1 - delv1.y * e2);
+	b = constant * (-delv2.x * e1+delv1.x*e2);
+
+	v0.tangent = t;
+	v0.biTangent = b;
+	v1.tangent = t;
+	v1.biTangent = b;
+	v2.tangent = t;
+	v2.biTangent = b;
+
+}
+
+void calTangentBiTangent(std::vector<vert>& v)
+{
+	for (long long i = 0; i < v.size(); i += 3)
+	{
+		calTangentBiTangent(v[i], v[i + 1], v[i+2]);
+	}
+}
 std::vector<vert> generateSphereVertices(int numSegLat, int numSegLong, float radius, std::vector<GLuint>& ind)
 {
 	std::vector<GLuint> index;
@@ -109,6 +163,7 @@ std::vector<vert> generateSphereVertices(int numSegLat, int numSegLong, float ra
 		}
 	}
 	ind = index;
+
 	return sphere;
 }
 vert vertFromIndex(int i,int j,float radius,int numSegLat,int numSegLong)
@@ -138,6 +193,7 @@ vert vertFromIndex(int i,int j,float radius,int numSegLat,int numSegLong)
 		v.uv.y = (i) * y;
 	}
 
+	
 	return v;
 
 }
@@ -156,9 +212,7 @@ std::vector<vert> generateSphereVertices(int numSegLat, int numSegLong, float ra
 				v=vertFromIndex(i,j,radius,numSegLat,numSegLong);
 				v1=vertFromIndex(i+1,j,radius,numSegLat,numSegLong);
 				v2=vertFromIndex(i+1,j+1,radius,numSegLat,numSegLong);
-				sphere.push_back(v);
-				sphere.push_back(v1);
-				sphere.push_back(v2);
+				
 			}
 			else if (i == numSegLat - 1)
 			{
@@ -195,6 +249,7 @@ std::vector<vert> generateSphereVertices(int numSegLat, int numSegLong, float ra
 
 		}
 	}
+	calTangentBiTangent(sphere);
 	return sphere;
 }
 
@@ -267,7 +322,7 @@ std::vector<vert> generateCubeVertices(int heightSeg, int widthSeg)
 			v.uv = faceFront[j].uv;
 			cube.push_back(v);
 		}
-	
+		calTangentBiTangent(cube);
 	return cube;
 }
 
@@ -311,6 +366,7 @@ std::vector<vert> generatePlaneVertices(int lengthSeg, int widthSeg)
 		v.uv = faceFront[j].uv;
 		faceFront[j] = v;
 	}
+	calTangentBiTangent(faceFront);
 	return faceFront;
 }
 

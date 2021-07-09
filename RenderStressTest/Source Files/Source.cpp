@@ -30,13 +30,17 @@ int app()
 	Material boxMat("DEFERRED");
 	boxMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/box/diffuse.png");
 	boxMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/box/roughness.png");
-
+	boxMat.setTexture2D("material.normalMap",rootDir+"Media/pbr/normal.jpg");
+	boxMat.setValue("specIntensity", 2);
+	boxMat.setValue("normalStrength",2);
 
 
 	Material planeMat("DEFERRED");
 	planeMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/rust/diffuse.png");
 	planeMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/rust/roughness.png");
-
+	planeMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/rust/normal.png");
+	planeMat.setValue("specIntensity",1);
+	planeMat.setValue("normalStrength", 0.1f);
 
 
 	Transform planeTransform;
@@ -65,26 +69,28 @@ int app()
 	scene.AddComponent<Lights>(dir, d);
 	scene.AddComponent<Transform>(dir, Transform(0,2,0));
 
-
+	
 	const int num = 100;
 	const int rt = sqrt(num);
 	for (int i = 0; i < num; i++)
 	{
-
-		EntityID ptl = scene.CreateEntity();
+		
+		EntityID point = scene.CreateEntity();
 		Lights p = Lights(LIGHT::POINT);
-		p.setColor(1, 1, 1);
-		p.setIntensity(5);
-		p.setPointLightConst(1, 5,10);
-		scene.AddComponent<Lights>(ptl, p);
-		scene.AddComponent<Transform>(ptl, Transform(2 * (i / rt), 0.6, (2) * (i % rt)));
-		
-		
+
+		p.setColor(1,0.5,0);
+		p.setIntensity(4);
+		p.setPointLightConst(1, 0.1, 5);
+		scene.AddComponent<Lights>(point, p);
+		scene.AddComponent<Transform>(point, Transform(2 * (i / rt), 1.1, (2) * (i % rt)));
 
 		EntityID box = scene.CreateEntity();
 		scene.AddComponent<Mesh>(box, Mesh());
+		//if ((i / rt) % 2 == 1)
 		scene.GetComponent<Mesh>(box).CreateMesh(generateCubeVertices());
-		scene.AddComponent<Transform>(box, Transform(2 * (i / rt), 0, (2) * (i % rt)));
+		//if((i/rt)%2==0)
+		//scene.GetComponent<Mesh>(box).CreateMesh(generateSphereVertices(10,10,0.5));
+		scene.AddComponent<Transform>(box, Transform(2 * (i / rt), 0.5, (2) * (i % rt)));
 		scene.AddComponent<Material>(box, boxMat);
 		scene.GetComponent<Transform>(box).rotation.setEulerAngle(0, 0, 0);
 	}

@@ -104,7 +104,7 @@ void RenderingSystem::Run(std::shared_ptr<ECS> ecs, Camera& cam)
 	shader->useShaderProgram();
 	setDeferredLightUniforms(ecs,shader,cam);
 	drfb.outPutToQaud(cam,shader);
-
+	//drfb.drawNormalBuffer();
 
 
 

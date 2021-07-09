@@ -83,7 +83,7 @@ vec3 calcPointLight(PointLight ptl,BufferPixelValues P)
 
     float spec=pow(max(dot(relectfLight,viewDir),0.0),128);
 
-    vec3 diffuse=diff*P.albedo;
+    vec3 diffuse=diff*(P.albedo*ptl.lightColor);
     vec3 ambient=ptl.ambient*P.albedo;
     vec3 specular= vec3(spec*P.specular);
     vec3 result=(attenuation)*((diffuse+specular)*ptl.intensity+ambient);

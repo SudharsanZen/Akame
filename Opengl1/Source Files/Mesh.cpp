@@ -105,6 +105,14 @@ void Mesh::setupMesh()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vert), (void*)(offsetof(struct vert,uv)));
 	glEnableVertexAttribArray(2);
 
+	//tangent vector 
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(vert), (void*)(offsetof(struct vert, tangent)));
+	glEnableVertexAttribArray(3);
+
+	//tangent vector 
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(vert), (void*)(offsetof(struct vert, biTangent)));
+	glEnableVertexAttribArray(4);
+
 	//unBinding all the buffers
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
