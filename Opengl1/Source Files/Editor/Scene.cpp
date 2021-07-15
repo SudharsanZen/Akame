@@ -45,7 +45,7 @@ Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 	{
 		AssetManager::init();
 	}
-	glfwSwapInterval(1);
+	glfwSwapInterval(0);
 	renderSys->updateFrameBufferSize(mainWindow.getBufferHeight(),mainWindow.getBufferWidth());
 	mainWindow.setBufferSizeCallBackFunction(callBack);
 	listScene.push_back(renderSys);

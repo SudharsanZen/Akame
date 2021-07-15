@@ -70,6 +70,7 @@ void TiledRenderer::outPutToQaud(Camera& cam, std::shared_ptr<LightSystem> lsys)
 
     glUniform1i(glGetUniformLocation(progID,"height"),height);
     glUniform1i(glGetUniformLocation(progID,"width"),width);
+    glUniform3fv(glGetUniformLocation(progID, "viewPos"),1,glm::value_ptr(cam.transform.position));
     glUniform1i(glGetUniformLocation(progID, "NUM_POINT_LIGHT"), int(lsys->ptVector.size()));
 
     glDispatchCompute(width/16,height/16,1);

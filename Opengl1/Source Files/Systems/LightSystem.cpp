@@ -86,7 +86,7 @@ LightSystem::LightSystem()
 {
 	glGenBuffers(1, &plUBO);
 	glBindBuffer(GL_UNIFORM_BUFFER, plUBO);
-	glBufferData(GL_UNIFORM_BUFFER,200*80,NULL,GL_DYNAMIC_DRAW);
+	glBufferData(GL_UNIFORM_BUFFER,800*80,NULL,GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER,0);
 	
 

@@ -2,11 +2,6 @@
 
 
 uniform int NUM_POINT_LIGHT;
-layout (binding = 0,rgba16f)  uniform readonly image2D albedoSpec;
-layout (binding = 1, rgba16f) uniform readonly image2D normal;
-layout (binding = 2, rgba16f) uniform readonly image2D position;
-layout (binding = 3) uniform sampler2D depthBuffer;
-layout (binding = 4, rgba16f) uniform writeonly image2D outTexture;
 struct PointLight
 {
     vec4 lightPose;  //16    0
@@ -16,9 +11,15 @@ struct PointLight
     float intensity; //4     64
 
 };
+layout (binding = 0,rgba16f)  uniform readonly image2D albedoSpec;
+layout (binding = 1, rgba16f) uniform readonly image2D normal;
+layout (binding = 2, rgba16f) uniform readonly image2D position;
+layout (binding = 3) uniform sampler2D depthBuffer;
+layout (binding = 4, rgba16f) uniform writeonly image2D outTexture;
+
 layout (std140,binding = 5) uniform ptLightBuffer
 {
-      PointLight ptLight[];
+      PointLight ptLight[800];
 };
 
 
@@ -64,12 +65,56 @@ bool checkAABBSphereIntersection(vec3 minim,vec3 maxim, vec3 c, float r)
 }
  shared uint maxDepth,minDepth;
 
+
+struct BufferPixelValues
+{
+    vec4 albedo;
+    float specular;
+    vec4 norm;
+    vec4 FragPos;
+};
+uniform sampler2D Position;
+uniform sampler2D Normal;
+uniform sampler2D AlbedoSpec;
+
+
+
+uniform vec3 viewPos; 
+uniform int emissive;
+
+
+vec3 calcPointLight(PointLight ptl,BufferPixelValues P)
+{
+    vec3 lightDir= ptl.lightPose.xyz-P.FragPos.xyz;
+    float lightDistance=length(lightDir);
+    lightDir=normalize(lightDir);
+    vec3 relectfLight=reflect(-lightDir,P.norm.xyz);
+    vec3 viewDir=-normalize(P.FragPos.xyz-viewPos);
+    float attenuation=1.0/( ptl.constants.x + ptl.constants.y*lightDistance + pow(lightDistance,2)*ptl.constants.z);
+
+    float diff=max(dot(P.norm.xyz,lightDir),0);
+
+    float spec=pow(max(dot(relectfLight,viewDir),0.0),128);
+
+    vec3 diffuse=diff*(P.albedo.xyz*ptl.lightColor.xyz);
+    vec3 ambient=ptl.ambient.xyz*P.albedo.xyz;
+    vec3 specular= vec3(spec*P.specular);
+    vec3 result=(attenuation)*((diffuse+specular)*ptl.intensity+ambient);
+    return result;
+
+}
+BufferPixelValues pV;
+
+
+
+
+
 void main()
 {
       ivec2 pixel = ivec2(gl_GlobalInvocationID.xy);
       uint loc=(gl_WorkGroupID.x+gl_WorkGroupID.y)%2;
       vec2 n=vec2(pixel)/vec2(width,height);
-      float depthValue= texture2D(depthBuffer,n).r;
+      float depthValue=texture2D(depthBuffer,n).r;
      
 
       uint depthInt=uint(depthValue*0xFFFFFFFF);
@@ -117,8 +162,21 @@ void main()
 
       );
       
+      pV.norm = vec4(normalize(imageLoad(normal,pixel).xyz),1);
+      pV.FragPos=imageLoad(position,pixel);
+      pV.specular = imageLoad(albedoSpec,pixel).a;  
+      pV.albedo=vec4(imageLoad(albedoSpec,pixel).xyz,1);
+    
+    vec3 result=vec3(0,0,0);
 
-      imageStore(outTexture, pixel,imageLoad(albedoSpec,pixel)+ptLight[2].lightPose);
+    for(int i=0;i<NUM_POINT_LIGHT;i++)
+    {
+        result+=calcPointLight(ptLight[i],pV);
+    }
+    
+  
+
+      imageStore(outTexture, pixel, vec4(result, 1.0));
       
       //imageStore(outTexture,pixel,vec4(vec3(depthValue),1));
 }

@@ -44,7 +44,7 @@ int app()
 
 	Transform planeTransform;
 
-	planeTransform.scale *= 20.0f;
+	planeTransform.scale *= 50;
 
 	scene.AddComponent<Mesh>(plane, Mesh());
 	scene.GetComponent<Mesh>(plane).CreateMesh(generatePlaneVertices());
@@ -54,7 +54,7 @@ int app()
 	scene.AddComponent<physics::RigidBody3D>(plane, physics::RigidBody3D());
 	physics::RigidBody3D& rbdy2 = scene.GetComponent<physics::RigidBody3D>(plane);
 	physics::ColliderShape planeShape;
-	planeShape.setColliderShape(physics::PLANE, 20, 20);
+	planeShape.setColliderShape(physics::PLANE, 30, 30);
 	rbdy2.setRigidBodyType(physics::STATIC, planeShape);
 
 
@@ -70,7 +70,7 @@ int app()
 	scene.AddComponent<Transform>(dir, Transform(0,2,0));
 	
 	
-	const int num = 9;
+	const int num =500;
 	const int rt = sqrt(num);
 	std::vector<EntityID> lightsVec;
 	for (int i = 0; i < num; i++)
@@ -79,10 +79,10 @@ int app()
 		EntityID point = scene.CreateEntity();
 		Lights p = Lights(LIGHT::POINT);
 	
-		p.setColor(1,1,1);
+		p.setColor(1,0.5,0.2);
 		p.setIntensity(4);
-		p.setPointLightConst(1, 0, 0);
-		p.ambientLigting(1, 1, 0);
+		p.setPointLightConst(1, 5, 5);
+		p.ambientLigting(0.1, 0, 0);
 		scene.AddComponent<Lights>(point, p);
 		scene.AddComponent<Transform>(point, Transform(2 * (i / rt)-1 -off, 0.5, (2) * (i % rt)-off));
 		
