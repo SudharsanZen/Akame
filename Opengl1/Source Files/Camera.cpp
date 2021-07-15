@@ -59,11 +59,10 @@ glm::mat4 Camera::lookAt(Transform& transform, glm::vec3& pos)
 	return Result;
 }
 
-void Camera::setCameraPosition(GLfloat x, GLfloat y, GLfloat z)
+
+void Camera::setCameraPosition(float x, float y, float z)
 {
-	transform.position.x = x;
-	transform.position.y = y;
-	transform.position.z = z;
+	transform.position = glm::vec3(x,y,z);
 }
 
 void Camera::setCameraPosition(glm::vec3 pos)

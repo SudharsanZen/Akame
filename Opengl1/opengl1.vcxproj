@@ -133,6 +133,7 @@
     <ClInclude Include="Header Files\XMLReaderTest.h" />
     <ClInclude Include="Header Files\temp.h" />
     <ClInclude Include="Header Files\Systems\LightSystem.h" />
+    <ClInclude Include="Header Files\Systems\RenderingSystem\TiledRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DepthFrameBuffer.cpp" />
@@ -171,6 +172,7 @@
     <ClCompile Include="Source Files\misc\StopWatch.cpp" />
     <ClCompile Include="Source Files\stb_image.cpp" />
     <ClCompile Include="Source Files\temp.cpp" />
+    <ClCompile Include="Source Files\Systems\RenderingSystem\TiledRenderer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

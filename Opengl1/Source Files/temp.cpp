@@ -212,6 +212,9 @@ std::vector<vert> generateSphereVertices(int numSegLat, int numSegLong, float ra
 				v=vertFromIndex(i,j,radius,numSegLat,numSegLong);
 				v1=vertFromIndex(i+1,j,radius,numSegLat,numSegLong);
 				v2=vertFromIndex(i+1,j+1,radius,numSegLat,numSegLong);
+				sphere.push_back(v2);
+				sphere.push_back(v1);
+				sphere.push_back(v);
 				
 			}
 			else if (i == numSegLat - 1)

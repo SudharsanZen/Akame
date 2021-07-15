@@ -46,6 +46,7 @@ Editor::Editor(Window &window):io(initGui())
 
 void Editor::DrawUI()
 {
+	
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	

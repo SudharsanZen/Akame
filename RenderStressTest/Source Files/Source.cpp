@@ -9,11 +9,11 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 #include"XMLReaderTest.h"
-
+#include"Editor/EditorUI.h"
 int app()
 {
 	std::string rootDir(AssetManager::getAssetRoot());
-	Window window(800, 800, "testWindow");
+	Window window(800, 600, "testWindow");
 
 	if (!window.initialize())
 	{
@@ -25,14 +25,13 @@ int app()
 
 	EntityID plane = scene.CreateEntity();
 
-
-
+	
 	Material boxMat("DEFERRED");
-	boxMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/box/diffuse.png");
-	boxMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/box/roughness.png");
-	boxMat.setTexture2D("material.normalMap",rootDir+"Media/pbr/normal.jpg");
-	boxMat.setValue("specIntensity", 2);
-	boxMat.setValue("normalStrength",2);
+	boxMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/crate/basecolor.jpg");
+	boxMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/crate/roughness.jpg");
+	boxMat.setTexture2D("material.normalMap",rootDir+"Media/pbr/crate/normal.jpg");
+	boxMat.setValue("specIntensity", 1);
+	boxMat.setValue("normalStrength",1);
 
 
 	Material planeMat("DEFERRED");
@@ -66,46 +65,57 @@ int app()
 	d.setDirection(1,-1,1);
 	d.setIntensity(1);
 	d.setPointLightConst(1,2,10);
+	d.ambientLigting(0,0,0);
 	scene.AddComponent<Lights>(dir, d);
 	scene.AddComponent<Transform>(dir, Transform(0,2,0));
-
 	
-	const int num = 100;
+	
+	const int num = 9;
 	const int rt = sqrt(num);
+	std::vector<EntityID> lightsVec;
 	for (int i = 0; i < num; i++)
 	{
-		
+		float off = rt-1;
 		EntityID point = scene.CreateEntity();
 		Lights p = Lights(LIGHT::POINT);
-
-		p.setColor(1,0.5,0);
+	
+		p.setColor(1,1,1);
 		p.setIntensity(4);
-		p.setPointLightConst(1, 0.1, 5);
+		p.setPointLightConst(1, 0, 0);
+		p.ambientLigting(1, 1, 0);
 		scene.AddComponent<Lights>(point, p);
-		scene.AddComponent<Transform>(point, Transform(2 * (i / rt), 1.1, (2) * (i % rt)));
-
+		scene.AddComponent<Transform>(point, Transform(2 * (i / rt)-1 -off, 0.5, (2) * (i % rt)-off));
+		
+		lightsVec.push_back(point);
 		EntityID box = scene.CreateEntity();
 		scene.AddComponent<Mesh>(box, Mesh());
-		//if ((i / rt) % 2 == 1)
+		if ((i / rt) % 2 == 1)
 		scene.GetComponent<Mesh>(box).CreateMesh(generateCubeVertices());
-		//if((i/rt)%2==0)
-		//scene.GetComponent<Mesh>(box).CreateMesh(generateSphereVertices(10,10,0.5));
-		scene.AddComponent<Transform>(box, Transform(2 * (i / rt), 0.5, (2) * (i % rt)));
+		if((i/rt)%2==0)
+		scene.GetComponent<Mesh>(box).CreateMesh(generateSphereVertices(16,32,0.5));
+		scene.AddComponent<Transform>(box, Transform(2 * (i / rt)-off, 0.5, (2) * (i % rt)-off));
 		scene.AddComponent<Material>(box, boxMat);
 		scene.GetComponent<Transform>(box).rotation.setEulerAngle(0, 0, 0);
 	}
-
+	
 	scene.OnStart();
 
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.3f;
+	float acc = 0;
 	while (!window.closeWindow())
 	{
-
+		acc += scene.getDeltaTime();
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
-		scene.Render();
 
+		scene.Render();
+		
+		
+		for (int i = 0; i < num; i++)
+		{
+			scene.GetComponent<Transform>(lightsVec[i]).position.y=1+sin(acc+i);
+		}
 	}
 
 	

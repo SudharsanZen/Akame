@@ -23,6 +23,8 @@ void callBack(GLFWwindow* window,int w,int h)
 	{
 		f->updateFrameBufferSize(h,w);
 	}
+
+	
 }
 //constructor initia
 Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
@@ -36,13 +38,6 @@ Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 
 	stbi_set_flip_vertically_on_load(true);
 
-	//intialize global uniform buffer for storing projection and view matrix
-	glGenBuffers(1, &uboMatrixBufferID);
-	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrixBufferID);
-	glBufferData(GL_UNIFORM_BUFFER, 2 * mat4Size, NULL, GL_STATIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrixBufferID, 0, 2 * mat4Size);
-
 	cam.setFieldOfView(60.0f);
 	cam.transform.position = glm::vec3(5, 5, 5);
 	InitEcs();
@@ -50,25 +45,11 @@ Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 	{
 		AssetManager::init();
 	}
-	glfwSwapInterval(0);
+	glfwSwapInterval(1);
 	renderSys->updateFrameBufferSize(mainWindow.getBufferHeight(),mainWindow.getBufferWidth());
 	mainWindow.setBufferSizeCallBackFunction(callBack);
 	listScene.push_back(renderSys);
 }
-/*Call this to update the common global uniforms.
-* this updates the Projection matrix and ViewMatrix which is common to all shaders
-*/
-void Scene::updateUniformBuffer(Camera& cam)
-{
-	glm::mat4 projMat = cam.getProjectionMatrix();
-	glm::mat4 viewMat = cam.getViewMatrix();
-	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrixBufferID);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, mat4Size, glm::value_ptr(projMat));
-	glBufferSubData(GL_UNIFORM_BUFFER, mat4Size, mat4Size, glm::value_ptr(viewMat));
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-}
-
 
 
 
@@ -159,12 +140,11 @@ void Scene::Render()
 	
 
 	//renderStuff
-		updateUniformBuffer(cam);
 		renderSys->Run(ecs,cam);
 		behaviourSys->Update(deltaTime);
 		physicsSys->Run(deltaTime);
 		fn();
-
+	
 		//lines(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0)).renderMesh();
 		//lines(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0)).renderMesh();
 		//lines(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1)).renderMesh();

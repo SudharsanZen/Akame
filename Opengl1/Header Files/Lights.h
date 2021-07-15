@@ -4,6 +4,7 @@
 
 enum class LIGHT {DIRECTIONAL,POINT,SPOT};
 class LightSystem;
+
 class Lights
 {
 private:

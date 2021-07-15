@@ -7,11 +7,13 @@ class DeferredRendererFragmentBuffer
 	Mesh quad;
 	unsigned int frameBuffer=0;
 	//texture render target that are going to be attached to the frameBuffer
-	unsigned int AlbedoSpec=0, Normal=0, Position=0;
+	unsigned int AlbedoSpec=0, Normal=0, Position=0,depthBuffer=0;
 
 	//render buffer for using as Depth/Stencil buffer
 	unsigned int rbo=0;
 	void GenerateFrameBuffer();
+
+	friend class TiledRenderer;
 public:
 
 	DeferredRendererFragmentBuffer();

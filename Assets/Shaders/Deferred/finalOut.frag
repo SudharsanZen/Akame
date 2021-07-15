@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 
 out vec4 FragColor;
   
@@ -45,7 +45,7 @@ uniform vec3 viewPos;
 uniform int emissive;
 
 uniform DirectionalLight DIR_L[4];
-uniform PointLight POINT_L[100];
+uniform PointLight POINT_L[150];
 
 vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P)
 {

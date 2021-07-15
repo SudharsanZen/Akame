@@ -1,0 +1,124 @@
+#version 430
+
+
+uniform int NUM_POINT_LIGHT;
+layout (binding = 0,rgba16f)  uniform readonly image2D albedoSpec;
+layout (binding = 1, rgba16f) uniform readonly image2D normal;
+layout (binding = 2, rgba16f) uniform readonly image2D position;
+layout (binding = 3) uniform sampler2D depthBuffer;
+layout (binding = 4, rgba16f) uniform writeonly image2D outTexture;
+struct PointLight
+{
+    vec4 lightPose;  //16    0
+    vec4 lightColor; //16    16
+    vec4 ambient;    //16    32
+    vec4 constants;  //16    48
+    float intensity; //4     64
+
+};
+layout (std140,binding = 5) uniform ptLightBuffer
+{
+      PointLight ptLight[];
+};
+
+
+layout (local_size_x = 32, local_size_y = 32) in;
+
+uniform int height;
+uniform int width;
+uniform mat4 projInv;
+
+vec4 unProject(vec4 point)
+{
+      return projInv*point;
+}
+
+
+//check if AABB and a given sphere are intersecting each other
+bool checkAABBSphereIntersection(vec3 minim,vec3 maxim, vec3 c, float r)
+{
+      if(
+            (c.x > minim.x && c.x <maxim.x) &&
+            (c.y > minim.y && c.y <maxim.y) &&
+            (c.z > minim.z && c.z <maxim.z)
+      )
+      return true;
+
+      //the nearest point
+      vec3 p;
+
+      //caculate the nearest point 'p' from the centre of the circle to the AABB
+      p.x=max(minim.x,min(maxim.x,c.x));
+      p.y=max(minim.y,min(maxim.y,c.y));
+      p.z=max(minim.z,min(maxim.z,c.z));
+
+
+      float dist = length((p-c));
+
+      
+      if(dist < r)
+            return true;
+
+      return false;
+
+}
+ shared uint maxDepth,minDepth;
+
+void main()
+{
+      ivec2 pixel = ivec2(gl_GlobalInvocationID.xy);
+      uint loc=(gl_WorkGroupID.x+gl_WorkGroupID.y)%2;
+      vec2 n=vec2(pixel)/vec2(width,height);
+      float depthValue= texture2D(depthBuffer,n).r;
+     
+
+      uint depthInt=uint(depthValue*0xFFFFFFFF);
+
+      //get the maximu and minum depth for the current tile
+      atomicMax(maxDepth,depthInt);
+      atomicMin(minDepth,depthInt);
+
+      barrier();
+
+      //the tile's screen coordinates for the current workGroup
+      uint minX=gl_WorkGroupID.x*32;
+      uint minY=gl_WorkGroupID.y*32;
+      uint maxX=(gl_WorkGroupID.x+1)*32;
+      uint maxY=(gl_WorkGroupID.y+1)*32;
+
+      //unprojecting the screen coordinates the viewSpace
+      vec4 tileCorners[4];
+
+      //constants for converting screenSpace points to NDC
+      float xC=2.0f/(float(width));
+      float yC=2.0f/(float(height));
+
+      //convert the tile corner points to NDC coordinate and then unProject it to get viewSpace coordinate
+      /*
+      tile Coordinate's Indices with an intutive picture ;)
+      y+
+         |   3*-----*2
+         |    *     *
+         |   0*-----*1
+         |______________x+
+      */
+      tileCorners[0]=unProject(vec4(float(minX)*xC-1.0f,float(minY)*yC-1.0f,1.0f,1.0f));
+      //tileCorners[1]=unProject(vec4(float(maxX)*xC-1.0f,float(minY)*yC-1.0f,1.0f,1.0f));
+      tileCorners[2]=unProject(vec4(float(maxX)*xC-1.0f,float(maxY)*yC-1.0f,1.0f,1.0f));
+      //tileCorners[3]=unProject(vec4(float(minX)*xC-1.0f,float(maxY)*yC-1.0f,1.0f,1.0f));
+      
+      vec3 minAABB=vec3( tileCorners[0].x
+                        ,tileCorners[0].y
+                        ,tileCorners[0].z
+      );
+      vec3 maxAABB=vec3( tileCorners[2].x,
+                         tileCorners[2].y,
+                         tileCorners[2].z+maxDepth
+
+      );
+      
+
+      imageStore(outTexture, pixel,imageLoad(albedoSpec,pixel)+ptLight[2].lightPose);
+      
+      //imageStore(outTexture,pixel,vec4(vec3(depthValue),1));
+}

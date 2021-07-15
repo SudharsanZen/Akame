@@ -28,12 +28,11 @@ private:
 	
 	glm::vec4 color;
 	Window &window;
-	unsigned int uboMatrixBufferID;
-	signed   long long int mat4Size = sizeof(glm::mat4);
+
 	float deltaTime;
 	float lastTime;
 	
-	void updateUniformBuffer(Camera& cam);
+
 	friend class BehaviourSystem;
 
 	

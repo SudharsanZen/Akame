@@ -24,65 +24,39 @@ void RenderingSystem::GroupEntityWithCommonShader(std::shared_ptr<ECS> ecs)
 			drawList[shdName].push_back(ent);
 	}
 }
-void RenderingSystem::setDeferredLightUniforms(std::shared_ptr<ECS> ecs,std::shared_ptr<Shader> shader,Camera &cam)
+
+
+/*Call this to update the common global uniforms.
+* this updates the Projection matrix and ViewMatrix which is common to all shaders
+*/
+
+void RenderingSystem::updateUniformBuffer(Camera& cam)
 {
-	std::shared_ptr<LightSystem> ltSys = lightsystem.lock();
-	
-	std::vector<Entity> &direc = ltSys->lightsList[LIGHT::DIRECTIONAL];
-	int NR_DIR_L =direc.size();
-	
-	std::vector<Entity> &point = ltSys->lightsList[LIGHT::POINT];
-	int NR_POINT_L = point.size();
-
-	//setting all the directional light variables
-	shader->setUniformInteger("NR_DIR_L",NR_DIR_L);
-	auto dirVarName = [](std::string structVar, int index)
-	{
-		std::stringstream str;
-		str << "DIR_L["<< index<< "]." + structVar;
-		return str.str();
-	};
-	for (int i = 0; i < NR_DIR_L; i++)
-	{
-		Lights& l = ecs->GetComponent<Lights>(direc[i]);
-		shader->setUniformVec3( dirVarName("lightDir",i) ,l.lightDirection);
-		shader->setUniformVec3( dirVarName("lightColor",i) ,l.lightColor);
-		shader->setUniformVec3( dirVarName("ambient",i) ,l.ambient);
-		shader->setUniformFloat( dirVarName("intensity",i) ,l.intensity);
-		shader->setUniformVec3( dirVarName("viewDir",i) ,cam.transform.forward());
-
-	}
-	
-	shader->setUniformInteger("NR_POINT_L", NR_POINT_L);
-	//setting all the Point light variables
-	auto pointVarName = [](std::string structVar, int index)
-	{
-		std::stringstream str;
-		str << "POINT_L[" << index << "]." + structVar;
-		return str.str();
-	};
-
-
-	
-
-	for (int i = 0; i < NR_POINT_L; i++)
-	{
-		Lights& l = ecs->GetComponent<Lights>(point[i]);
-		Transform& t = ecs->GetComponent<Transform>(point[i]);
-		shader->setUniformVec3(pointVarName("lightPose", i), t.position);
-		shader->setUniformVec3(pointVarName("lightColor", i), l.lightColor);
-		shader->setUniformVec3(pointVarName("ambient", i), l.ambient);
-		shader->setUniformVec3(pointVarName("constants", i), l.pointLightConstants);
-		shader->setUniformFloat(pointVarName("intensity", i), l.intensity);
-
-	}
-
-
-	
+	glm::mat4 projMat = cam.getProjectionMatrix();
+	glm::mat4 viewMat = cam.getViewMatrix();
+	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrixBufferID);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, mat4Size, glm::value_ptr(projMat));
+	glBufferSubData(GL_UNIFORM_BUFFER, mat4Size, mat4Size, glm::value_ptr(viewMat));
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 }
+
+RenderingSystem::RenderingSystem()
+{
+	lightPose = glm::vec3(10, 4, 10);
+	emptyDrawList();
+	//intialize global uniform buffer for storing projection and view matrix
+	glGenBuffers(1, &uboMatrixBufferID);
+	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrixBufferID);
+	glBufferData(GL_UNIFORM_BUFFER, 2 * mat4Size, NULL, GL_STATIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrixBufferID, 0, 2 * mat4Size);
+
+}
+
 void RenderingSystem::Run(std::shared_ptr<ECS> ecs, Camera& cam)
 {
+	updateUniformBuffer(cam);
 	GroupEntityWithCommonShader(ecs);
 	
 	//deferred renderer
@@ -100,15 +74,14 @@ void RenderingSystem::Run(std::shared_ptr<ECS> ecs, Camera& cam)
 	}
 	drfb.unBindFrameBuffer();
 	glDisable(GL_DEPTH_TEST);
-	shader = ShaderManager::GetShader("DEFERRED_OUT");
-	shader->useShaderProgram();
-	setDeferredLightUniforms(ecs,shader,cam);
-	drfb.outPutToQaud(cam,shader);
+	drfb.outPutToQaud(cam,lightsystem.lock());
 	//drfb.drawNormalBuffer();
 
 
 
 	glEnable(GL_DEPTH_TEST);
+
+	updateUniformBuffer(cam);
 	for (auto const& entList : drawList)
 	{
 		//get the shader from the shadermanager with the shader name from the map entlist

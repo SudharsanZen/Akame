@@ -10,12 +10,12 @@
 #include <crtdbg.h>
 #include"XMLReaderTest.h"
 
-
+#include"Editor/EditorUI.h"
 int main()
 {
 
 	std::string rootDir(AssetManager::getAssetRoot());
-	Window window(800, 800, "testWindow");
+	Window window(128, 128, "testWindow");
 
 	if (!window.initialize())
 	{
@@ -29,7 +29,7 @@ int main()
 	Lights d = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
 	d.setDirection(1, -1, 1);
-	d.setIntensity(0.3);
+	d.setIntensity(1);
 	d.setPointLightConst(1, 2, 10);
 	scene.AddComponent<Lights>(dir, d);
 	scene.AddComponent<Transform>(dir, Transform(0, 2, 0));
@@ -41,22 +41,32 @@ int main()
 	p.setPointLightConst(1, 1, 1);
 	scene.AddComponent<Lights>(ptl, p);
 	scene.AddComponent<Transform>(ptl, Transform(0,5,0));
-
+	
 	EntityID plane = scene.CreateEntity();
 	
+	Material spMat("DEFERRED");
+	spMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/bark/basecolor.jpg");
+	spMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/bark/roughness.jpg");
+	spMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/bark/normal.jpg");
+	spMat.setValue("normalStrength", 1);
+	spMat.setValue("specIntensity", 1);
 
+	
 
 	Material boxMat("DEFERRED");
 	boxMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/box/diffuse.png");
 	boxMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/box/roughness.png");
-
+	boxMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/normal.jpg");
+	boxMat.setValue("normalStrength",0);
+	boxMat.setValue("specIntensity", 1);
 
 
 	Material planeMat("DEFERRED");
 	planeMat.setTexture2D("material.diffuseMap", rootDir+"Media/pbr/rust/diffuse.png");
 	planeMat.setTexture2D("material.specularMap", rootDir+"Media/pbr/rust/roughness.png");
-
-	
+	planeMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/rust/normal.png");
+	planeMat.setValue("normalStrength", 0.2f);
+	planeMat.setValue("specIntensity", 1);
 
 	Transform planeTransform;
 
@@ -90,12 +100,18 @@ int main()
 			acc -= step;
 			EntityID box = scene.CreateEntity();
 			scene.AddComponent<Mesh>(box, Mesh());
-			if(r)
-			scene.GetComponent<Mesh>(box).CreateMesh(generateSphereVertices(32,16,1));
+			if (r)
+			{
+				scene.AddComponent<Material>(box, spMat);
+				scene.GetComponent<Mesh>(box).CreateMesh(generateSphereVertices(32, 16, 1));
+			}
 			else
-			scene.GetComponent<Mesh>(box).CreateMesh(generateCubeVertices());
+			{
+				scene.AddComponent<Material>(box, boxMat);
+				scene.GetComponent<Mesh>(box).CreateMesh(generateCubeVertices());
+			}
 			scene.AddComponent<Transform>(box, Transform(0, 3, 0));
-			scene.AddComponent<Material>(box, boxMat);
+			
 			scene.GetComponent<Transform>(box).rotation.setEulerAngle(0, 0, 0);
 			scene.AddComponent<physics::RigidBody3D>(box, physics::RigidBody3D());
 			physics::RigidBody3D& rbdy = scene.GetComponent<physics::RigidBody3D>(box);

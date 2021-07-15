@@ -82,7 +82,7 @@ bool Window::initialize()
 		return false;
 	}
 	glfwWindowHint(GLFW_SAMPLES, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
 	
@@ -123,8 +123,10 @@ bool Window::initialize()
 	};
 	glfwSetFramebufferSizeCallback(mainWindow.get(),frameBufferSizeCallBack);
 	glEnable(GL_MULTISAMPLE);
-	//glEnable(GL_CULL_FACE);
-
+	glEnable(GL_CULL_FACE);
+	int a;
+	glGetIntegerv(GL_MAX_VERTEX_UNIFORM_BLOCKS,&a);
+	ENGINE_CORE_CRITICAL("MAX UNIFORM BLOCK SIZE:{0:d}",a);
 	return true;
 }
 

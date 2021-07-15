@@ -12,7 +12,6 @@ Shader::Shader(std::string vertexShaderDir, std::string fragmentShaderDir)
     vertDir = vertexShaderDir;
     fragDir = fragmentShaderDir;
     programID = 0;
-    uboMatricesIndex = -1;
     compileShader();
 }
 
@@ -21,7 +20,6 @@ Shader::Shader()
     vertDir = AssetManager::getAssetRoot() + std::string("Shaders/default.vert");
     fragDir = AssetManager::getAssetRoot() + std::string("Shaders/default.frag");
     programID = 0;
-    uboMatricesIndex = -1;
     compileShader();
 }
 //functions for setting uniform variables
@@ -58,11 +56,8 @@ void Shader::useShaderProgram()
     //use created program
     if (programID)
     {
-        if (uboMatricesIndex == -1)
-        {
-            uboMatricesIndex = glGetUniformBlockIndex(programID, "Matrices");
-        }
-        glUniformBlockBinding(programID, uboMatricesIndex, 0);
+        
+       
         glUseProgram(programID);
         //callAfterUseProgram(programID);
     }

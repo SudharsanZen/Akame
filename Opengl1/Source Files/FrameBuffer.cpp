@@ -84,7 +84,7 @@ void FrameBuffer::RenderToQuad()
 
 	
 	quadMesh.renderMesh();
-	glActiveTexture(0);
+
 }
 
 FrameBuffer::~FrameBuffer()

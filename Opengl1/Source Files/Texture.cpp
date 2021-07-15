@@ -98,7 +98,7 @@ void Texture::use(unsigned int unit)
 		}
 		glActiveTexture(GL_TEXTURE0 + unit);
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		glActiveTexture(0);
+
 	}
 	else
 		std::cout << "can't use texture. textureID not initialized!"<<std::endl;

@@ -149,6 +149,7 @@
     <ClInclude Include="Header Files\Lights.h" />
     <ClInclude Include="Header Files\Systems\LightSystem.h" />
     <ClInclude Include="DepthFrameBuffer.h" />
+    <ClInclude Include="Header Files\Systems\RenderingSystem\TiledRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Assets\Asset.cpp">
@@ -249,5 +250,6 @@
     <ClCompile Include="Source Files\Lights.cpp" />
     <ClCompile Include="Source Files\Systems\LightSystem.cpp" />
     <ClCompile Include="DepthFrameBuffer.cpp" />
+    <ClCompile Include="Source Files\Systems\RenderingSystem\TiledRenderer.cpp" />
   </ItemGroup>
 </Project>
