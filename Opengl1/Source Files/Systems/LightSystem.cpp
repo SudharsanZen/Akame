@@ -12,10 +12,10 @@ void LightSystem::updatePointLightBuffer()
 		Lights& l = e->GetComponent<Lights>(ent);
 		pl.lightPose = glm::vec4(e->GetComponent<Transform>(ent).position,1);
 		pl.ambient = glm::vec4(l.ambient,1);
-		pl.constants = glm::vec4(l.pointLightConstants, 1);
+		pl.constants = glm::vec4(l.pointLightConstants, l.getPointLightRadius());
 		pl.lightColor = glm::vec4(l.lightColor, 1);
 		pl.intensity = l.intensity;
-	
+		
 		ptVector.push_back(pl);
 	}
 	
@@ -35,10 +35,21 @@ void LightSystem::updatePointLightBuffer()
 		offs += 16;
 		glBufferSubData(GL_UNIFORM_BUFFER, offs, 1 * sizeof(float), &ptVector[i].intensity);
 		offs += 16;
-
+	
 	}
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	drVector.clear();
 
+	for (auto& ent : lightsList[LIGHT::DIRECTIONAL])
+	{
+		Lights& l = ecs.lock()->GetComponent<Lights>(ent);
+		directionalLight drl;
+		drl.lightDir = l.lightDirection;
+		drl.lightColor = l.lightColor;
+		drl.ambient = l.ambient;
+		drl.intensity = l.intensity;
+		drVector.push_back(drl);
+	}
 }
 void LightSystem::updatePointLightContents()
 {
@@ -50,10 +61,10 @@ void LightSystem::updatePointLightContents()
 		Lights& l = e->GetComponent<Lights>(lightsList[LIGHT::POINT][i]);
 		pl.lightPose = glm::vec4(e->GetComponent<Transform>(lightsList[LIGHT::POINT][i]).position,1);
 		pl.ambient = glm::vec4(l.ambient, 1);
-		pl.constants = glm::vec4(l.pointLightConstants, 1);
+		pl.constants = glm::vec4(l.pointLightConstants, l.getPointLightRadius());
 		pl.lightColor = glm::vec4(l.lightColor, 1);
 		pl.intensity = l.intensity;
-
+	
 		ptVector[i]=pl;
 	}
 
@@ -75,6 +86,18 @@ void LightSystem::updatePointLightContents()
 
 	}
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+
+	for (int i=0;i<drVector.size();i++)
+	{
+		Lights& l = e->GetComponent<Lights>(lightsList[LIGHT::DIRECTIONAL][i]);
+		directionalLight &drl=drVector[i];
+		drl.lightDir = l.lightDirection;
+		drl.lightColor = l.lightColor;
+		drl.ambient = l.ambient;
+		drl.intensity = l.intensity;
+	
+	}
 
 }
 void LightSystem::bindPointLightBuffer(int layoutIndex)

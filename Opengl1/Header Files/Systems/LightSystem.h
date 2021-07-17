@@ -14,9 +14,19 @@ private:
 		glm::vec4 ambient; 
 		glm::vec4 constants;
 		float intensity;
+		float radius;
+	};
+
+	struct directionalLight
+	{
+		glm::vec3 lightDir;
+		glm::vec3 lightColor;
+		glm::vec3 ambient;
+		float intensity;
 	};
 	//point light vector for storing in point light uniform buffer
 	std::vector<pointLight> ptVector;
+	std::vector<directionalLight> drVector;
 
 	//pointLight uniform buffer
 	unsigned int plUBO;
@@ -50,6 +60,8 @@ public:
 		
 		updateLightList();
 		updatePointLightBuffer();
+
+		
 
 	}
 

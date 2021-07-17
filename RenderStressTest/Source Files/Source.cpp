@@ -13,7 +13,7 @@
 int app()
 {
 	std::string rootDir(AssetManager::getAssetRoot());
-	Window window(800, 600, "testWindow");
+	Window window(800, 800, "testWindow");
 
 	if (!window.initialize())
 	{
@@ -63,30 +63,33 @@ int app()
 	Lights d = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
 	d.setDirection(1,-1,1);
-	d.setIntensity(1);
+	d.setIntensity(0.2);
 	d.setPointLightConst(1,2,10);
 	d.ambientLigting(0,0,0);
 	scene.AddComponent<Lights>(dir, d);
 	scene.AddComponent<Transform>(dir, Transform(0,2,0));
 	
 	
-	const int num =500;
+	const int num =800;
 	const int rt = sqrt(num);
 	std::vector<EntityID> lightsVec;
 	for (int i = 0; i < num; i++)
 	{
 		float off = rt-1;
+	
+
 		EntityID point = scene.CreateEntity();
 		Lights p = Lights(LIGHT::POINT);
 	
 		p.setColor(1,0.5,0.2);
 		p.setIntensity(4);
-		p.setPointLightConst(1, 5, 5);
-		p.ambientLigting(0.1, 0, 0);
+		p.setPointLightConst(1, 2, 10);
+		p.ambientLigting(0, 0, 0);
 		scene.AddComponent<Lights>(point, p);
 		scene.AddComponent<Transform>(point, Transform(2 * (i / rt)-1 -off, 0.5, (2) * (i % rt)-off));
 		
 		lightsVec.push_back(point);
+		
 		EntityID box = scene.CreateEntity();
 		scene.AddComponent<Mesh>(box, Mesh());
 		if ((i / rt) % 2 == 1)

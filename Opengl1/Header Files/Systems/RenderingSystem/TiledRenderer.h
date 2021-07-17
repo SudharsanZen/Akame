@@ -1,6 +1,7 @@
 #pragma once
 #include"Systems/LightSystem.h"
 #include"DeferredRendererFragmentBuffer.h"
+#include"Assets/AssetManager.h"
 class TiledRenderer
 {
 	unsigned int progID;
@@ -15,7 +16,7 @@ class TiledRenderer
 
 public:
 
-	TiledRenderer(std::string shaderLocation="E:/Project/CustomGameEngine/Assets/Shaders/Deferred/Compute/defCal.comp");
+	TiledRenderer(std::string shaderLocation=AssetManager::assetRootPath+"Shaders/Deferred/Compute/defCal.comp");
 
 	void updateBufferSize(int height, int width);
 	void bindFrameBuffer();

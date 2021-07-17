@@ -87,6 +87,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>Opengl1.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\Opengl1\bin\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@ int main()
 {
 
 	std::string rootDir(AssetManager::getAssetRoot());
-	Window window(128, 128, "testWindow");
+	Window window(800, 800, "testWindow");
 
 	if (!window.initialize())
 	{
@@ -29,7 +29,7 @@ int main()
 	Lights d = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
 	d.setDirection(1, -1, 1);
-	d.setIntensity(1);
+	d.setIntensity(0.3);
 	d.setPointLightConst(1, 2, 10);
 	scene.AddComponent<Lights>(dir, d);
 	scene.AddComponent<Transform>(dir, Transform(0, 2, 0));
