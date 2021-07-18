@@ -63,9 +63,9 @@ int app()
 	Lights d = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
 	d.setDirection(1,-1,1);
-	d.setIntensity(0.2);
+	d.setIntensity(0.6);
 	d.setPointLightConst(1,2,10);
-	d.ambientLigting(0,0,0);
+	d.ambientLigting(0.1,0,0);
 	scene.AddComponent<Lights>(dir, d);
 	scene.AddComponent<Transform>(dir, Transform(0,2,0));
 	
@@ -81,7 +81,7 @@ int app()
 		EntityID point = scene.CreateEntity();
 		Lights p = Lights(LIGHT::POINT);
 	
-		p.setColor(1,0.5,0.2);
+		p.setColor(1,1,1);
 		p.setIntensity(4);
 		p.setPointLightConst(1, 2, 10);
 		p.ambientLigting(0, 0, 0);
