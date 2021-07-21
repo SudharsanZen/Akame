@@ -1,6 +1,6 @@
 #pragma once
 #include"ECS.h"
-#include"Lights.h"
+#include"Lighting/Lights.h"
 #include"Log/Log.h"
 class LightSystem:public System
 {

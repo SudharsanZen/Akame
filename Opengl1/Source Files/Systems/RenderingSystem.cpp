@@ -3,8 +3,8 @@
 #include"Mesh.h"
 #include"Material.h"
 #include "ECS.h"
-#include"Systems/LightSystem.h"
-#include "Systems/RenderingSystem.h"
+#include"Systems/RenderingSystem/LightSystem.h"
+#include "Systems/RenderingSystem/RenderingSystem.h"
 #include"GLFW/glfw3.h"
 #include<sstream>
 #include"Camera.h"

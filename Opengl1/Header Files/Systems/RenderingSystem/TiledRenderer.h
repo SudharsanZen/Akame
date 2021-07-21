@@ -1,5 +1,5 @@
 #pragma once
-#include"Systems/LightSystem.h"
+#include"Systems/RenderingSystem/LightSystem.h"
 #include"DeferredRendererFragmentBuffer.h"
 #include"Assets/AssetManager.h"
 class TiledRenderer
@@ -27,6 +27,7 @@ public:
 	void drawPositionBuffer();
 	void drawNormalBuffer();
 	void drawAlbedoBuffer();
+	~TiledRenderer();
 
 
 

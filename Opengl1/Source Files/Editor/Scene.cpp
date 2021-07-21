@@ -6,12 +6,12 @@
 #include"Material.h"
 #include"Physics/RigidBody3D.h"
 #include"Window.h"
-#include"Systems/RenderingSystem.h"
+#include"Systems/RenderingSystem/RenderingSystem.h"
 #include"Systems/BehaviourSystem.h"
 #include"Systems/RigidBodySystem.h"
 #include"ECS.h"
 #include"Log/Log.h"
-#include"Systems/LightSystem.h"
+#include"Systems/RenderingSystem/LightSystem.h"
 #include"temp.h"
 std::vector<std::shared_ptr<RenderingSystem>> listScene;
 

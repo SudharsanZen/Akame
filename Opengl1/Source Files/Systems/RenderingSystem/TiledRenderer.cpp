@@ -125,6 +125,21 @@ void TiledRenderer::drawAlbedoBuffer()
 	drfb.drawAlbedoBuffer();
 }
 
+TiledRenderer::~TiledRenderer()
+{
+    if (outTex)
+    {
+        glDeleteTextures(1,&outTex);
+        outTex = 0;
+
+    }
+    if (progID)
+    {
+        glDeleteProgram(progID);
+        progID = 0;
+    }
+}
+
 char** TiledRenderer::readShaderFile(std::string fileName, int& len)
 {
     /*read shader file content from the given location

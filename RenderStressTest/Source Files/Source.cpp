@@ -81,7 +81,7 @@ int app()
 		EntityID point = scene.CreateEntity();
 		Lights p = Lights(LIGHT::POINT);
 	
-		p.setColor(1,1,1);
+		p.setColor(1,0.5,0);
 		p.setIntensity(4);
 		p.setPointLightConst(1, 2, 10);
 		p.ambientLigting(0, 0, 0);

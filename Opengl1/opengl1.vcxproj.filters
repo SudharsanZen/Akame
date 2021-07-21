@@ -123,7 +123,7 @@
     <ClInclude Include="Header Files\Systems\BehaviourSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Systems\RenderingSystem.h">
+    <ClInclude Include="Header Files\Systems\RenderingSystem\RenderingSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Systems\RigidBodySystem.h">
@@ -146,10 +146,11 @@
     </ClInclude>
     <ClInclude Include="Header Files\FrameBuffer.h" />
     <ClInclude Include="Header Files\DeferredRendererFragmentBuffer.h" />
-    <ClInclude Include="Header Files\Lights.h" />
-    <ClInclude Include="Header Files\Systems\LightSystem.h" />
+    <ClInclude Include="Header Files\Lighting\Lights.h" />
+    <ClInclude Include="Header Files\Systems\RenderingSystem\LightSystem.h" />
     <ClInclude Include="DepthFrameBuffer.h" />
     <ClInclude Include="Header Files\Systems\RenderingSystem\TiledRenderer.h" />
+    <ClInclude Include="Header Files\Systems\RenderingSystem\ShadowFBO.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Assets\Asset.cpp">
@@ -251,5 +252,6 @@
     <ClCompile Include="Source Files\Systems\LightSystem.cpp" />
     <ClCompile Include="DepthFrameBuffer.cpp" />
     <ClCompile Include="Source Files\Systems\RenderingSystem\TiledRenderer.cpp" />
+    <ClCompile Include="Source Files\Systems\RenderingSystem\ShadowFBO.cpp" />
   </ItemGroup>
 </Project>

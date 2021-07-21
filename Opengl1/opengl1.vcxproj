@@ -112,7 +112,7 @@
     <ClInclude Include="Header Files\FrameBuffer.h" />
     <ClInclude Include="Header Files\GlmMath.h" />
     <ClInclude Include="Header Files\Input.h" />
-    <ClInclude Include="Header Files\Lights.h" />
+    <ClInclude Include="Header Files\Lighting\Lights.h" />
     <ClInclude Include="Header Files\Log\Log.h" />
     <ClInclude Include="Header Files\Material.h" />
     <ClInclude Include="Header Files\Mesh.h" />
@@ -125,14 +125,15 @@
     <ClInclude Include="Header Files\Shader.h" />
     <ClInclude Include="Header Files\StopWatch.h" />
     <ClInclude Include="Header Files\Systems\BehaviourSystem.h" />
-    <ClInclude Include="Header Files\Systems\RenderingSystem.h" />
+    <ClInclude Include="Header Files\Systems\RenderingSystem\RenderingSystem.h" />
+    <ClInclude Include="Header Files\Systems\RenderingSystem\ShadowFBO.h" />
     <ClInclude Include="Header Files\Systems\RigidBodySystem.h" />
     <ClInclude Include="Header Files\Texture.h" />
     <ClInclude Include="Header Files\Transform.h" />
     <ClInclude Include="Header Files\Window.h" />
     <ClInclude Include="Header Files\XMLReaderTest.h" />
     <ClInclude Include="Header Files\temp.h" />
-    <ClInclude Include="Header Files\Systems\LightSystem.h" />
+    <ClInclude Include="Header Files\Systems\RenderingSystem\LightSystem.h" />
     <ClInclude Include="Header Files\Systems\RenderingSystem\TiledRenderer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +164,7 @@
     <ClCompile Include="Source Files\Physics\Physics.cpp" />
     <ClCompile Include="Source Files\Physics\RigidBody3D.cpp" />
     <ClCompile Include="Source Files\Systems\RenderingSystem.cpp" />
+    <ClCompile Include="Source Files\Systems\RenderingSystem\ShadowFBO.cpp" />
     <ClCompile Include="Source Files\Systems\RigidBodySystem.cpp" />
     <ClCompile Include="Source Files\Shader.cpp" />
     <ClCompile Include="Source Files\Source.cpp" />

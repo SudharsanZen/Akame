@@ -1,5 +1,5 @@
-#include"Systems/LightSystem.h"
-#include "Lights.h"
+#include"Systems/RenderingSystem/LightSystem.h"
+#include "Lighting/Lights.h"
 #include"EngineMathConstants.h"
 
 Lights::Lights():Lights(LIGHT::POINT)
