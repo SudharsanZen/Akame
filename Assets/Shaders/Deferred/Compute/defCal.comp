@@ -31,11 +31,11 @@ layout (binding = 1, rgba16f) uniform readonly image2D normal;
 layout (binding = 2, rgba16f) uniform readonly image2D position;
 layout (binding = 3) uniform sampler2D depBuffer;
 layout (binding = 4, rgba16f) uniform writeonly image2D outTexture;
-
 layout (std140,binding = 5) uniform ptLightBuffer
 {
       PointLight ptLight[MAX_NUM_LIGHTS];
 };
+layout (binding = 6) uniform sampler2D dir_sMap;
 
 uniform DirectionalLight DIR_L[4];
 layout (local_size_x = TILE_DIM_X, local_size_y = TILE_DIM_Y) in;
@@ -44,6 +44,7 @@ uniform int height;
 uniform int width;
 uniform mat4 projInv;
 uniform mat4 viewMat;
+uniform mat4 lightSpaceMat;
 
 vec4 unProject(vec4 point)
 {
@@ -100,6 +101,28 @@ uniform sampler2D AlbedoSpec;
 uniform vec3 viewPos; 
 uniform int emissive;
 
+float shadowCalculation(vec4 fragPose,mat4 lightSpaceMatrix)
+{
+      fragPose=lightSpaceMatrix*fragPose;
+      vec3 projCoord=fragPose.xyz/fragPose.w;
+      projCoord=projCoord*0.5+0.5;
+
+     
+
+      float shadow = 0.0;
+      vec2 texelSize = 1.0 / textureSize(dir_sMap, 0);
+      for(int x = -1; x <= 1; ++x)
+      {
+      for(int y = -1; y <= 1; ++y)
+      {
+            float pcfDepth = texture(dir_sMap, projCoord.xy + vec2(x, y) * texelSize).r; 
+            shadow += projCoord.z  > pcfDepth ? 1.0 : 0.0;        
+      }    
+      }
+      shadow /= 9.0;
+
+      return shadow;
+}
 
 vec3 calcPointLight(PointLight ptl,BufferPixelValues P)
 {
@@ -124,7 +147,7 @@ vec3 calcPointLight(PointLight ptl,BufferPixelValues P)
 }
 BufferPixelValues pV;
 
-vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P)
+vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P,float shadow)
 {
     //flip light and make it's direction from fragment pose to lightSource
     vec3 lightDir=normalize(-l.lightDir);
@@ -142,7 +165,7 @@ vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P)
     
     
     //add all the resultant values
-    vec3 result=(((diffuse+specular)*l.intensity)+ambient);
+    vec3 result=(((diffuse+specular)*l.intensity*(1.0f-shadow))+ambient);
     
     return result;
 }
@@ -277,7 +300,8 @@ void main()
 
       for(uint i=0;i<NUM_DIR_LIGHT;i++)
       {
-            result+=calcDirecLight(DIR_L[i],pV);
+            float s=shadowCalculation(pV.FragPos,lightSpaceMat);
+            result+=calcDirecLight(DIR_L[i],pV,s);
 
       }
     //without light culling
@@ -290,5 +314,5 @@ void main()
       //float lightConcentration=(float(lightIndex)/float(NUM_POINT_LIGHT));
       //imageStore(outTexture, pixel, vec4(result, 1.0)+vec4(mix(vec3(0,0,0.1),vec3(1,0,0),lightConcentration),0));
       imageStore(outTexture, pixel, vec4(result, 1.0));
-      //imageStore(outTexture,pixel,vec4(vec3(depthValue),1));
+      //imageStore(outTexture,pixel,vec4(vec3(texture2D(dir_sMap,n).r),1));
 }

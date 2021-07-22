@@ -16,6 +16,7 @@ public:
 		outDepth = 0;
 		this->height = height;
 		this->width=width;
+		initFBO(height,width);
 	}
 
 	void initFBO(int height, int width);

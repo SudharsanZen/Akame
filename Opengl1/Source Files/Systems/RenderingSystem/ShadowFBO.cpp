@@ -2,6 +2,7 @@
 #include"GLFW/glfw3.h"
 #include"Systems/RenderingSystem/ShadowFBO.h"
 #include"Log/Log.h"
+#include<iostream>
 void ShadowFBO::initFBO(int height, int width)
 {
 
@@ -12,8 +13,12 @@ void ShadowFBO::initFBO(int height, int width)
 	glGenTextures(1, &outDepth);
 	glBindTexture(GL_TEXTURE_2D, outDepth);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,width,height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 	
@@ -26,12 +31,14 @@ void ShadowFBO::initFBO(int height, int width)
 
 void ShadowFBO::bindShadowBuffer()
 {
-	glBindBuffer(GL_FRAMEBUFFER,outDepth);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	glClearColor(1,1,1, 1);
+	glClear(GL_DEPTH_BUFFER_BIT);
 }
 
 void ShadowFBO::unBindShadowBuffer()
 {
-	glBindBuffer(GL_FRAMEBUFFER,0);
+	glBindFramebuffer(GL_FRAMEBUFFER,0);
 }
 
 void ShadowFBO::useDepthTexture(unsigned int textureUnit)

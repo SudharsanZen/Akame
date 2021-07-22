@@ -21,7 +21,10 @@ void callBack(GLFWwindow* window,int w,int h)
 	glViewport(0, 0, w, h);
 	for (auto &f : listScene)
 	{
+		f->height = h;
+		f->width = w;
 		f->updateFrameBufferSize(h,w);
+		
 	}
 
 	
@@ -49,6 +52,8 @@ Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 	renderSys->updateFrameBufferSize(mainWindow.getBufferHeight(),mainWindow.getBufferWidth());
 	mainWindow.setBufferSizeCallBackFunction(callBack);
 	listScene.push_back(renderSys);
+	renderSys->height = window.getBufferHeight();
+	renderSys->width = window.getBufferWidth();
 }
 
 

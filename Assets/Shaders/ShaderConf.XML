@@ -19,3 +19,7 @@
     <Vertex path="deferred/frameBufferTargets.vert"/>
     <Fragment path="deferred/frameBufferTargets.frag"/>
 </Shader>
+<Shader name="SHADOW_DIRECTIONAL">
+    <Vertex path="LightingAndShadows/dir_shadowMap.vert"/>
+    <Fragment path="LightingAndShadows/dir_shadowMap.frag"/>
+</Shader>

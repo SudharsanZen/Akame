@@ -2,6 +2,12 @@
 #include"Mesh.h"
 #include"Camera.h"
 #include"Assets/ShaderManager.h"
+namespace BasicShapes
+{
+	extern std::vector<vert> quadVert;
+	extern std::vector<unsigned int> quadIndices;
+}
+
 class DeferredRendererFragmentBuffer
 {
 	Mesh quad;

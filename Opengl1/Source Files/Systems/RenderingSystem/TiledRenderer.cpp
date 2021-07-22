@@ -23,6 +23,11 @@ TiledRenderer::TiledRenderer(std::string shaderLocation)
 
 }
 
+void TiledRenderer::set4x4Matrixfv(std::string name, glm::mat4 value)
+{
+    glUniformMatrix4fv(glGetUniformLocation(progID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
+}
+
 void TiledRenderer::updateBufferSize(int height, int width)
 {
     this->height = height;
@@ -56,11 +61,10 @@ void TiledRenderer::bindTextures()
 }
 
 
-void TiledRenderer::outPutToQaud(Camera& cam, std::shared_ptr<LightSystem> lsys)
+void TiledRenderer::setUpShader(Camera& cam, std::shared_ptr<LightSystem> lsys)
 {
-   
     glUseProgram(progID);
- 
+
     //bind the G-Buffers
     bindTextures();
 
@@ -68,13 +72,13 @@ void TiledRenderer::outPutToQaud(Camera& cam, std::shared_ptr<LightSystem> lsys)
     lsys->updatePointLightContents();
     lsys->bindPointLightBuffer(5);
 
-    glUniform1i(glGetUniformLocation(progID,"height"),height);
-    glUniform1i(glGetUniformLocation(progID,"width"),width);
-    glUniform3fv(glGetUniformLocation(progID, "viewPos"),1,glm::value_ptr(cam.transform.position));
+    glUniform1i(glGetUniformLocation(progID, "height"), height);
+    glUniform1i(glGetUniformLocation(progID, "width"), width);
+    glUniform3fv(glGetUniformLocation(progID, "viewPos"), 1, glm::value_ptr(cam.transform.position));
     glUniform1i(glGetUniformLocation(progID, "NUM_POINT_LIGHT"), int(lsys->ptVector.size()));
-    glUniformMatrix4fv(glGetUniformLocation(progID,"projInv"), 1, GL_FALSE, glm::value_ptr(glm::inverse(cam.getProjectionMatrix())));
+    glUniformMatrix4fv(glGetUniformLocation(progID, "projInv"), 1, GL_FALSE, glm::value_ptr(glm::inverse(cam.getProjectionMatrix())));
     glUniformMatrix4fv(glGetUniformLocation(progID, "viewMat"), 1, GL_FALSE, glm::value_ptr(cam.getViewMatrix()));
-    glDispatchCompute(width/32,(height/32+1),1);
+
     glUniform1i(glGetUniformLocation(progID, "NUM_DIR_LIGHT"), int(lsys->drVector.size()));
     auto dirVarName = [](std::string structVar, int index)
     {
@@ -82,22 +86,28 @@ void TiledRenderer::outPutToQaud(Camera& cam, std::shared_ptr<LightSystem> lsys)
         str << "DIR_L[" << index << "]." + structVar;
         return str.str();
     };
-    int ith_dirLight=0;
+    int ith_dirLight = 0;
     for (auto& l : lsys->drVector)
     {
-       
-        std::string var=dirVarName("lightDir", ith_dirLight);
-        glUniform3fv(glGetUniformLocation(progID,var.c_str()), 1, glm::value_ptr(l.lightDir));
+
+        std::string var = dirVarName("lightDir", ith_dirLight);
+        glUniform3fv(glGetUniformLocation(progID, var.c_str()), 1, glm::value_ptr(l.lightDir));
         var = dirVarName("lightColor", ith_dirLight);
         glUniform3fv(glGetUniformLocation(progID, var.c_str()), 1, glm::value_ptr(l.lightColor));
         var = dirVarName("ambient", ith_dirLight);
         glUniform3fv(glGetUniformLocation(progID, var.c_str()), 1, glm::value_ptr(l.ambient));
         var = dirVarName("intensity", ith_dirLight);
-        glUniform1f(glGetUniformLocation(progID, var.c_str()),l.intensity);
+        glUniform1f(glGetUniformLocation(progID, var.c_str()), l.intensity);
         ith_dirLight++;
     }
-    
 
+}
+
+void TiledRenderer::outPutToQaud()
+{
+   
+   
+    glDispatchCompute(width / 32, (height / 32 + 1), 1);
     glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 

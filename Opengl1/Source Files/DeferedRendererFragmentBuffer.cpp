@@ -9,11 +9,12 @@ vert vtr = { glm::vec3(1,1,0),glm::vec3(0,0,1),glm::vec2(1,1) };//top right vert
 vert vbl = { glm::vec3(-1,-1,0),glm::vec3(0,0,1),glm::vec2(0,0) };//bottom left
 vert vbr = { glm::vec3(1,-1,0),glm::vec3(0,0,1),glm::vec2(1,0) };//bottom right
 
-std::vector<vert> quadVert = { vtl,vtr,vbl,vbr };
-std::vector<unsigned int> indices = { 2,1,0,2,3,1 };
+	std::vector<vert> BasicShapes::quadVert = { vtl,vtr,vbl,vbr };
+	std::vector<unsigned int> BasicShapes::quadIndices = { 2,1,0,2,3,1 };
+
 DeferredRendererFragmentBuffer::DeferredRendererFragmentBuffer()
 {
-	quad.CreateMesh(quadVert,indices);
+	quad.CreateMesh(BasicShapes::quadVert,BasicShapes::quadIndices);
 	GenerateFrameBuffer();
 }
 

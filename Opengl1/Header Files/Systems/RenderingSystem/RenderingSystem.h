@@ -5,15 +5,20 @@
 #include<set>
 #include"ECS.h"
 #include"FrameBuffer.h"
+#include"Systems/RenderingSystem/ShadowFBO.h"
 #include"Systems/RenderingSystem/TiledRenderer.h"
 class Camera;
 class LightSystem;
 class RenderingSystem:public System
 {
 private:
+	Mesh quad;
 
 	FrameBuffer fb;
 	TiledRenderer drfb;
+	ShadowFBO dir_sMap;
+	
+	
 	glm::vec3 lightPose;
 	std::unordered_map<std::string, std::vector<Entity>> drawList;
 	void GroupEntityWithCommonShader(std::shared_ptr<ECS> ecs);
@@ -28,7 +33,7 @@ private:
 
 
 public:
-
+	int height, width;
 	RenderingSystem();
 	void Run(std::shared_ptr<ECS> ecs, Camera& cam);
 	void emptyDrawList();
