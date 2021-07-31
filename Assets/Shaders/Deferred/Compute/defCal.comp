@@ -304,13 +304,7 @@ void main()
             result+=calcDirecLight(DIR_L[i],pV,s);
 
       }
-    //without light culling
-      /*for(uint i=0;i<NUM_POINT_LIGHT;i++)
-    {
-        result+=calcPointLight(ptLight[i],pV);
-    }*/
-    
-  
+ 
       //float lightConcentration=(float(lightIndex)/float(NUM_POINT_LIGHT));
       //imageStore(outTexture, pixel, vec4(result, 1.0)+vec4(mix(vec3(0,0,0.1),vec3(1,0,0),lightConcentration),0));
       imageStore(outTexture, pixel, vec4(result, 1.0));

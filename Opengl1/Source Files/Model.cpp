@@ -5,6 +5,7 @@
 #include<assimp/Importer.hpp>
 #include<assimp/scene.h>
 #include<assimp/postprocess.h>
+#include"temp.h"
 void Model::Draw()
 {
 	for (GLuint i = 0; i < meshes.size(); i++)
@@ -15,8 +16,13 @@ void Model::Draw()
 
 void Model::loadModel(std::string path)
 {
+	unsigned int importOptions = aiProcess_Triangulate           
+    | aiProcess_JoinIdenticalVertices       
+    | aiProcess_Triangulate                         
+    | aiProcess_FlipUVs;
+
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path,aiProcess_Triangulate|aiProcess_FlipUVs);
+	const aiScene* scene = importer.ReadFile(path,importOptions);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -74,9 +80,24 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
 		{
 			indices.push_back(face.mIndices[j]);
+			
+			
 		}
 	}
+	std::vector<vert> finalVert;
+	for (long long int i = 0; i < indices.size(); i+=3)
+	{
+		vert v1, v2, v3;
+		v1 = vertices[indices[i]];
+		v2 = vertices[indices[i+1]];
+		v3 = vertices[indices[i + 2]];
+	
+		calTangentBiTangent(v1, v2, v3);
+		finalVert.push_back(v1);
+		finalVert.push_back(v2);
+		finalVert.push_back(v3);
+	}
 	Mesh m;
-	m.CreateMesh(vertices,indices);
+	m.CreateMesh(finalVert);
 	return m;
 }

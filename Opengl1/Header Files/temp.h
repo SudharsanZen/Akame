@@ -23,8 +23,8 @@ public:
 
 
 
-
-
+void calTangentBiTangent(vert& v0, vert& v1, vert& v2);
+void calTangentBiTangent(std::vector<vert>& v);
 std::vector<vert> generateSphereVertices(int numSegLat, int numSegLong, float radius, std::vector<unsigned int>& ind);
 std::vector<vert> generateSphereVertices(int numSegLat, int numSegLong, float radius);
 std::vector<vert> generateCubeVertices(int heightSeg=1, int widthSeg=1);

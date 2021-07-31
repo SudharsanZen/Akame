@@ -43,4 +43,9 @@ public:
 	{
 		ecs.lock()->AddComponent<T>(eid,comp);
 	}
+
+	EntityID CreateEntity()
+	{
+		return ecs.lock()->CreateEntity();
+	}
 };

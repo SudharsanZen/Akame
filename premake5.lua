@@ -79,6 +79,8 @@ group "Samples"
     include "premakeConf/GeoSpatialData.lua"
     include "premakeConf/Test.lua"
     include "premakeConf/RenderStressTest.lua"
+    include "premakeConf/Model.lua"
+    include "premakeConf/snakeGame.lua"
 group ""
 
 

@@ -13,6 +13,7 @@ bool Input::getKeyDown(int key)
 	if(ptr)
 	{
 		return (glfwGetKey(ptr, key) == GLFW_PRESS);
+		
 	}
 	else
 	{

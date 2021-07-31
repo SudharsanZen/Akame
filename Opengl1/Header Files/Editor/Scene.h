@@ -18,7 +18,7 @@ namespace physics
 class Scene
 {
 private:
-
+	
 	std::shared_ptr<ECS> ecs;
 
 	std::shared_ptr<RenderingSystem> renderSys;
@@ -37,6 +37,7 @@ private:
 
 	
 public:
+	void vsyncOn(bool status);
 	//fn will be called when Scene::Render() is called. this method will be dprecated
 	std::function<void()> fn;
 	//main camera

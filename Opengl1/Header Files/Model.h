@@ -14,8 +14,9 @@ public:
 	}
 
 	void Draw();
-private:
 	std::vector<Mesh> meshes;
+private:
+	
 	std::string directory;
 
 	void loadModel(std::string path);

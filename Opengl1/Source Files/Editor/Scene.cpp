@@ -1,3 +1,4 @@
+#include"Editor/EditorUI.h"
 #include "Editor/Scene.h"
 #include"stb_image.h"
 #include<glad/glad.h>
@@ -29,6 +30,17 @@ void callBack(GLFWwindow* window,int w,int h)
 
 	
 }
+void Scene::vsyncOn(bool status)
+{
+	if (status)
+	{
+		glfwSwapInterval(1);
+	}
+	else
+	{
+		glfwSwapInterval(0);
+	}
+}
 //constructor initia
 Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 {
@@ -43,6 +55,8 @@ Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 
 	cam.setFieldOfView(60.0f);
 	cam.transform.position = glm::vec3(5, 5, 5);
+	cam.transform.rotation = Quaternion::rotationAroundAxisVector(-135, worldUp);
+	cam.transform.rotation = Quaternion::rotationAroundAxisVector(-45, cam.transform.right()) * cam.transform.rotation.quaternion;
 	InitEcs();
 	if (!AssetManager::isInitialized())
 	{
@@ -145,6 +159,7 @@ void Scene::Render()
 	
 
 	//renderStuff
+		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		renderSys->Run(ecs,cam);
 		behaviourSys->Update(deltaTime);
 		physicsSys->Run(deltaTime);

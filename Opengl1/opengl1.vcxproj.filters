@@ -10,6 +10,9 @@
     <Filter Include="Header Files\Editor">
       <UniqueIdentifier>{373999AD-A39A-76BB-2C08-BD6D9868AD7A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Lighting">
+      <UniqueIdentifier>{C693FB69-3200-B764-FBF3-4EC2671FD9CC}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Log">
       <UniqueIdentifier>{72AB6E6F-5EA4-8DC1-87D6-7246732E6DCD}</UniqueIdentifier>
     </Filter>
@@ -18,6 +21,9 @@
     </Filter>
     <Filter Include="Header Files\Systems">
       <UniqueIdentifier>{28D220C8-1461-AA91-BD7F-BE8CA9EDBA37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Systems\RenderingSystem">
+      <UniqueIdentifier>{DABC2553-C6A3-E74A-6FF4-4D685BBA60B1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{E9C7FDCE-D52A-8D73-7EB0-C5296AF258F6}</UniqueIdentifier>
@@ -36,6 +42,12 @@
     </Filter>
     <Filter Include="Source Files\Physics">
       <UniqueIdentifier>{5BA4C7A6-4733-5170-F051-656BDCBF6116}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems">
+      <UniqueIdentifier>{F0F6F1B4-DC85-7B7E-85A4-8F7971128C24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems\RenderingSystem">
+      <UniqueIdentifier>{A271F71F-8E58-B917-37A9-1F35236F327E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\misc">
       <UniqueIdentifier>{6434C40A-D04A-C2A0-19C2-4DC285179328}</UniqueIdentifier>
@@ -63,6 +75,9 @@
     <ClInclude Include="Header Files\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\DeferredRendererFragmentBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\DisplacementMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -81,11 +96,17 @@
     <ClInclude Include="Header Files\EngineMathConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\FrameBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\GlmMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Input.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Lighting\Lights.h">
+      <Filter>Header Files\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Log\Log.h">
       <Filter>Header Files\Log</Filter>
@@ -123,8 +144,17 @@
     <ClInclude Include="Header Files\Systems\BehaviourSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Systems\RenderingSystem\LightSystem.h">
+      <Filter>Header Files\Systems\RenderingSystem</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Systems\RenderingSystem\RenderingSystem.h">
-      <Filter>Header Files\Systems</Filter>
+      <Filter>Header Files\Systems\RenderingSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Systems\RenderingSystem\ShadowFBO.h">
+      <Filter>Header Files\Systems\RenderingSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Systems\RenderingSystem\TiledRenderer.h">
+      <Filter>Header Files\Systems\RenderingSystem</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Systems\RigidBodySystem.h">
       <Filter>Header Files\Systems</Filter>
@@ -144,13 +174,6 @@
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\FrameBuffer.h" />
-    <ClInclude Include="Header Files\DeferredRendererFragmentBuffer.h" />
-    <ClInclude Include="Header Files\Lighting\Lights.h" />
-    <ClInclude Include="Header Files\Systems\RenderingSystem\LightSystem.h" />
-    <ClInclude Include="DepthFrameBuffer.h" />
-    <ClInclude Include="Header Files\Systems\RenderingSystem\TiledRenderer.h" />
-    <ClInclude Include="Header Files\Systems\RenderingSystem\ShadowFBO.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Assets\Asset.cpp">
@@ -168,10 +191,10 @@
     <ClCompile Include="Source Files\Behaviour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Systems\BehaviourSystem.cpp">
+    <ClCompile Include="Source Files\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Camera.cpp">
+    <ClCompile Include="Source Files\DeferedRendererFragmentBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\DisplacementMap.cpp">
@@ -186,7 +209,13 @@
     <ClCompile Include="Source Files\EngineMathConstants.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\FrameBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Lights.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Log\Log.cpp">
@@ -216,17 +245,29 @@
     <ClCompile Include="Source Files\Physics\RigidBody3D.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Systems\RenderingSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source Files\Systems\RigidBodySystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source Files\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Source.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Systems\BehaviourSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Systems\LightSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Systems\RenderingSystem.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Systems\RenderingSystem\ShadowFBO.cpp">
+      <Filter>Source Files\Systems\RenderingSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Systems\RenderingSystem\TiledRenderer.cpp">
+      <Filter>Source Files\Systems\RenderingSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Systems\RigidBodySystem.cpp">
+      <Filter>Source Files\Systems</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Texture.cpp">
       <Filter>Source Files</Filter>
@@ -246,12 +287,5 @@
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\FrameBuffer.cpp" />
-    <ClCompile Include="Source Files\DeferedRendererFragmentBuffer.cpp" />
-    <ClCompile Include="Source Files\Lights.cpp" />
-    <ClCompile Include="Source Files\Systems\LightSystem.cpp" />
-    <ClCompile Include="DepthFrameBuffer.cpp" />
-    <ClCompile Include="Source Files\Systems\RenderingSystem\TiledRenderer.cpp" />
-    <ClCompile Include="Source Files\Systems\RenderingSystem\ShadowFBO.cpp" />
   </ItemGroup>
 </Project>

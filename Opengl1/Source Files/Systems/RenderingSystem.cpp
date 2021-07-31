@@ -9,7 +9,7 @@
 #include<sstream>
 #include"Camera.h"
 
-#define DIR_MAP_SIZE 8192
+#define DIR_MAP_SIZE 8129
 //returns the point where the ray intersects the plane
 glm::vec3 rayPlaneIntersectionPoint(glm::vec3 rayOrigin,glm::vec3 rayDir,glm::vec3 planeNormal,glm::vec3 planePoint)
 {
@@ -69,9 +69,13 @@ void RenderingSystem::Run(std::shared_ptr<ECS> ecs, Camera& cam)
 	std::shared_ptr<LightSystem> lsys=lightsystem.lock();
 	updateUniformBuffer(cam);
 	GroupEntityWithCommonShader(ecs);
+
+	//directional shadowMap cal
 	std::shared_ptr<Shader> shader;
+	if (drawList["DEFERRED"].size() > 0)
+	{
 	glm::mat4 dirLightSpace=glm::mat4(0);
-	//get the shader from the shadermanager with the shader name from the map entlist
+	
 	if (lsys->drVector.size())
 	{
 		glCullFace(GL_FRONT);
@@ -122,29 +126,31 @@ void RenderingSystem::Run(std::shared_ptr<ECS> ecs, Camera& cam)
 
 	glViewport(0,0,width,height);
 	//deferred renderer-----------------------------------------------------------------------
-		shader=ShaderManager::GetShader("DEFERRED");
+	
+		shader = ShaderManager::GetShader("DEFERRED");
 		shader->useShaderProgram();
-			glEnable(GL_DEPTH_TEST);
-			glDisable(GL_MULTISAMPLE);
-				
-				drfb.bindFrameBuffer();
+		glEnable(GL_DEPTH_TEST);
+		glDisable(GL_MULTISAMPLE);
 
-					for (auto const& ent : drawList["DEFERRED"])
-					{
-						Transform& t = ecs->GetComponent<Transform>(ent);
-						Mesh& mesh = ecs->GetComponent<Mesh>(ent);
-						ecs->GetComponent<Material>(ent).use(t, lightPose, cam.transform.position, shader);
-						mesh.renderMesh();
-					}
-				
-				drfb.unBindFrameBuffer();
-			
-			//render final to quad
-			glDisable(GL_DEPTH_TEST);//disable depth to remove quad from depth calulations
-			drfb.setUpShader(cam, lightsystem.lock());
-			dir_sMap.useDepthTexture(6);
-			drfb.set4x4Matrixfv("lightSpaceMat",dirLightSpace);
-			drfb.outPutToQaud();
+		drfb.bindFrameBuffer();
+
+		for (auto const& ent : drawList["DEFERRED"])
+		{
+			Transform& t = ecs->GetComponent<Transform>(ent);
+			Mesh& mesh = ecs->GetComponent<Mesh>(ent);
+			ecs->GetComponent<Material>(ent).use(t, lightPose, cam.transform.position, shader);
+			mesh.renderMesh();
+		}
+
+		drfb.unBindFrameBuffer();
+
+		//render final to quad
+		glDisable(GL_DEPTH_TEST);//disable depth to remove quad from depth calulations
+		drfb.setUpShader(cam, lightsystem.lock());
+		dir_sMap.useDepthTexture(6);
+		drfb.set4x4Matrixfv("lightSpaceMat", dirLightSpace);
+		drfb.outPutToQaud();
+	}
 	//deferred renderer end-------------------------------------------------------------------
 
 

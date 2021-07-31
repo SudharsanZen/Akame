@@ -14,6 +14,7 @@ void Editor::initImGui()
 	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 	//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
+
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
 
@@ -25,7 +26,7 @@ void Editor::initImGui()
 		style.WindowRounding = 0.0f;
 		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 	}
-
+	
 	// Setup Platform/Renderer bindings
 	ImGui_ImplGlfw_InitForOpenGL(context.lock().get(), true);
 	ImGui_ImplOpenGL3_Init("#version 150");
