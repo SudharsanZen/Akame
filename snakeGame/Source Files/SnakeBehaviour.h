@@ -6,7 +6,7 @@
 class Snake :public Behaviour
 {
 	int bX,bY;
-
+	bool gameWon=false;
 	bool started=false;
 	int score = 0;
 	glm::vec3 moveDir;
@@ -20,7 +20,7 @@ class Snake :public Behaviour
 	EntityID head;
 	EntityID apple;
 	float snakeSize = 1;
-	std::vector < std::pair<int, int >> freeIndices;
+	std::vector < std::pair<float, float>> freeIndices;
 	std::vector<EntityID> tailList;
 	Mesh ap;
 	std::shared_ptr<Model> appleModel;
@@ -40,7 +40,7 @@ class Snake :public Behaviour
 	
 public:
 
-	Snake(Camera &cam,float snakeSize=1,int x=10,int y=10) :headMat("DEFERRED"),tailMat("DEFERRED"),appleMat("DEFERRED"), mainCam(cam)
+	Snake(Camera &cam,float snakeSize=1,int x=2,int y=2) :headMat("DEFERRED"),tailMat("DEFERRED"),appleMat("DEFERRED"), mainCam(cam)
 	{
 		bX = x;
 		bY = y;
@@ -80,10 +80,10 @@ public:
 
 		
 		apple = CreateEntity();
-		Transform cT(0.5, 0, 3.5);
-		cT.scale *= 0.01;
+		Transform aT(1.5, 0, -1.5);
+		aT.scale *= 0.01;
 		
-		AddComponent<Transform>(apple, cT);
+		AddComponent<Transform>(apple, aT);
 		AddComponent<Mesh>(apple, appleModel->meshes[0]);
 		AddComponent<Material>(apple, appleMat);
 		Lights point(LIGHT::POINT);
@@ -129,6 +129,9 @@ public:
 			return;
 		if (prevDir==-moveDir || moveDir==-currMoveDir)
 			moveDir = prevDir;
+
+		if (gameWon && hitBoundaries())
+			return;
 		if(!gameOver)
 		gameOver = hitBoundaries();
 		if (gameOver)
@@ -163,10 +166,11 @@ public:
 			currMoveDir = moveDir;
 		}
 		
-
+		
 		
 
 		Transform &applePose=GetComponent<Transform>(apple);
+		
 		if (glm::length(applePose.position - headPose.position) <= 0.2f)
 		{
 			formFreeList();
@@ -174,11 +178,17 @@ public:
 			float randX = freeIndices[randFreeListIndex].first;
 			float randZ = freeIndices[randFreeListIndex].second;
 
-			
+			if (score>=bX*bY*4)
+			{
+				applePose.position = glm::vec3(0, -2, 0);
+				gameWon = true;
+				return;
+			}
 			
 			score += 1;
-			applePose.position.x=randX+0.5;
-			applePose.position.z=randZ+0.5;
+			
+			applePose.position.x=randX;
+			applePose.position.z=randZ;
 			applePose.scale = glm::vec3(0.0f);
 			tailList.push_back(createCube(tailMat,GetComponent<Transform>(tailList.back()).position));
 		}
@@ -190,22 +200,31 @@ public:
 	void formFreeList()
 	{
 		//create a free list which contains locations which can be used to spawn food
-		for (int i = 1; i <= bX * bY*2*2; i++)
+		freeIndices.clear();
+		for (int i = 0; i < bX*2; i++)
 		{
-			freeIndices.empty();
-			freeIndices.push_back(std::make_pair<int, int>((i % (bY))-(bY), (i / (bX*2))-(bX)));
-		}
-		for (int i = 0; i < freeIndices.size(); i++)
-		{
-			for (int j = 0; j < tailList.size(); j++)
+			for (int j = 0; j < bY * 2; j++)
 			{
-				glm::vec3 pose = GetComponent<Transform>(tailList[j]).position;
-				if ((int)pose.x == freeIndices[i].first && (int)pose.x == freeIndices[i].second)
+				freeIndices.push_back(std::make_pair<float, float>(((float)i) - bX+0.5f, ((float)j)-bY+0.5f));
+			}
+		}
+
+		for (int j = 0; j < tailList.size(); j++)
+		{
+			glm::vec3 pose = GetComponent<Transform>(tailList[j]).position;
+
+			for (int i = 0; i < freeIndices.size(); i++)
+			{
+				if (pose.x == freeIndices[i].first && pose.z == freeIndices[i].second)
 				{
 					freeIndices.erase(freeIndices.begin()+i);
+					break;
 				}
 			}
 		}
+		
+			
+		
 	}
 
 

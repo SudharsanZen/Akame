@@ -8,7 +8,8 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 #include"snakeBehaviour.h"
-
+#define sizeX 10.0f
+#define sizeY 10.0f
 
 int main()
 {
@@ -37,6 +38,7 @@ int main()
 	d.setColor(1, 1, 0.9);
 	d.setDirection(-1, -1, -1);
 	d.setIntensity(1);
+
 	scene.AddComponent<Lights>(dir, d);
 	scene.AddComponent<Transform>(dir, Transform(0, 2, 0));
 
@@ -44,18 +46,18 @@ int main()
 	
 	EntityID snake = scene.CreateEntity();
 	scene.AddComponent<BehaviourComponent>(snake,BehaviourComponent());
-	scene.GetComponent<BehaviourComponent>(snake).setBehaviour<Snake>(scene.cam);
+	scene.GetComponent<BehaviourComponent>(snake).setBehaviour<Snake>(scene.cam,1,sizeX,sizeY);
 
 
 	EntityID floor = scene.CreateEntity();
-	Transform T(0, -10.5, 0);
-	T.scale *= 20.01;
+	Transform T(0, -(sizeY+0.5f), 0);
+	T.scale *= sizeY*2+0.01f;
 	scene.AddComponent<Transform>(floor,T);
 	Mesh fMesh;
 	fMesh.CreateMesh(generateCubeVertices());
 	scene.AddComponent<Mesh>(floor, fMesh);
 	scene.AddComponent<Material>(floor,floorMat);
-	scene.vsyncOn(false);
+	scene.vsyncOn(true);
 	
 	scene.OnStart();
 	while (!window.closeWindow())
