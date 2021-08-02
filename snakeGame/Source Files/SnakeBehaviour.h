@@ -51,13 +51,13 @@ public:
 		headMat.setTexture2D("material.diffuseMap", rootDir + "Media/snakeHead.png");
 		headMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/crate/roughness.jpg");
 		headMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/crate/normal.jpg");
-		headMat.setValue("normalStrength", 0.1);
+		headMat.setValue("normalStrength", 0.1f);
 		headMat.setValue("specIntensity", 1);
 
 		tailMat.setTexture2D("material.diffuseMap", rootDir + "Media/snakeBody.png");
 		tailMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/crate/roughness.jpg");
 		tailMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/crate/normal.jpg");
-		tailMat.setValue("normalStrength", 0.1);
+		tailMat.setValue("normalStrength", 0.1f);
 		tailMat.setValue("specIntensity", 1);
 		appleMat.setTexture2D("material.diffuseMap", rootDir + "Media/Apple/Apple_BaseColor.png");
 		appleMat.setTexture2D("material.specularMap", rootDir + "Media/Apple/Apple_Roughtness.png");
@@ -76,7 +76,7 @@ public:
 		head = createCube(headMat);
 
 		for(int i=1;i<3;i++)
-			tailList.push_back(createCube(tailMat,glm::vec3(0.5,0,(0.5f-1.0f)*(float)i)));
+			tailList.push_back(createCube(tailMat,glm::vec3(0.5f,0,(0.5f-1.0f)*(float)i)));
 
 		
 		apple = CreateEntity();

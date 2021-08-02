@@ -85,7 +85,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		}
 	}
 	std::vector<vert> finalVert;
-	for (long long int i = 0; i < indices.size(); i+=3)
+	for (size_t i = 0; i < indices.size(); i+=3)
 	{
 		vert v1, v2, v3;
 		v1 = vertices[indices[i]];

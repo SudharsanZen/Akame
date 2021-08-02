@@ -23,7 +23,7 @@ void LightSystem::updatePointLightBuffer()
 	
 	int offs = 0;
 	glBindBuffer(GL_UNIFORM_BUFFER, plUBO);
-	for (long long int i = 0; i < ptVector.size(); i++)
+	for (size_t i = 0; i < ptVector.size(); i++)
 	{
 		glBufferSubData(GL_UNIFORM_BUFFER, offs, 4 * sizeof(float), &ptVector[i].lightPose);
 		offs += 16;
@@ -71,7 +71,7 @@ void LightSystem::updatePointLightContents()
 	
 	int offs = 0;
 	glBindBuffer(GL_UNIFORM_BUFFER, plUBO);
-	for (long long int i = 0; i < ptVector.size(); i++)
+	for (size_t i = 0; i < ptVector.size(); i++)
 	{
 		glBufferSubData(GL_UNIFORM_BUFFER, offs, 4 * sizeof(float), &ptVector[i].lightPose);
 		offs += 16;

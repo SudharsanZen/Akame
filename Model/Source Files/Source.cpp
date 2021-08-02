@@ -56,7 +56,7 @@ int main()
 	spMat.setTexture2D("material.diffuseMap", rootDir + "Media/backpack/diffuse.jpg");
 	spMat.setTexture2D("material.specularMap", rootDir + "Media/backpack/roughness.jpg");
 	spMat.setTexture2D("material.normalMap", rootDir + "Media/backpack/normal.png");
-	spMat.setValue("normalStrength", 0.1);
+	spMat.setValue("normalStrength", 0.1f);
 	spMat.setValue("specIntensity", 1);
 	
 

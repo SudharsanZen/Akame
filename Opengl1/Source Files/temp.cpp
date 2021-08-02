@@ -52,7 +52,7 @@ void calTangentBiTangent(vert &v0,vert &v1,vert &v2)
 
 void calTangentBiTangent(std::vector<vert>& v)
 {
-	for (long long i = 0; i < v.size(); i += 3)
+	for (size_t i = 0; i < v.size(); i += 3)
 	{
 		calTangentBiTangent(v[i], v[i + 1], v[i+2]);
 	}
@@ -292,7 +292,7 @@ std::vector<vert> generateCubeVertices(int heightSeg, int widthSeg)
 	
 	for (int i = 1; i <4; i++)
 	{
-		Quaternion rotate = Quaternion::rotationAroundAxisVector(i * 90, worldUp);
+		Quaternion rotate = Quaternion::rotationAroundAxisVector(i * 90.0f, worldUp);
 
 		for (int j = 0; j < faceFront.size(); j++)
 		{

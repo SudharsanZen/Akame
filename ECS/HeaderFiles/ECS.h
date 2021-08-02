@@ -24,7 +24,7 @@ public:
 		versionOfEntity.resize(maxEntities,0);
 		signature.resize(maxEntities,Signature(0));
 		
-		for (int i = 0; i < MAXENTITIES; i++)
+		for (uint32_t i = 0; i < MAXENTITIES; i++)
 			availableEntity.push_back(i);
 		
 	}

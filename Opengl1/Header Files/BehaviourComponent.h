@@ -16,6 +16,7 @@ public:
 	template<typename T,typename ...Args>
 	void setBehaviour(Args&&... args)
 	{
+		
 		behaviour = std::make_shared<T>(std::forward<Args>(args)...); 
 		behaviour->entityID = eid;
 	}

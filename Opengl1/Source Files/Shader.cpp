@@ -92,7 +92,7 @@ char** Shader::readShaderFile(std::string fileName,unsigned int &len)
         ENGINE_CORE_ERROR("SHADER_CLASS::can't open File: "+ fileName);
     }
     size_t contentLength = content.length();
-    unsigned int numOfChunks = ceil((float)contentLength / (float)(CODE_BLOCK_SIZE - 1));
+    unsigned int numOfChunks =(unsigned int) ceil((float)contentLength / (float)(CODE_BLOCK_SIZE - 1));
 
     char** code = new char* [numOfChunks];
     size_t pos = 0, i = 0;
@@ -197,7 +197,7 @@ void Shader::freeCodePointer(char** code,unsigned int len)
     * freeing the memoryused by the code pointer.
     * call this after compiling the code for shaders.
     */
-    for (int i = 0; i < len; i++)
+    for (unsigned int  i = 0; i < len; i++)
         free(code[i]);
 
     free(code);

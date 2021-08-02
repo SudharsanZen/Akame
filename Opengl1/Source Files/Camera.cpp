@@ -11,6 +11,7 @@ Camera::Camera(float fovy, float aspectRatio, float nearz, float farz, GLboolean
 {
 	
 	//cameraTarget = transform.position+glm::vec3(0, 0, -3);
+	
 	this->fovy = fovy;
 	this->aspectRatio = aspectRatio;
 	this->nearz = nearz;
@@ -82,7 +83,7 @@ void flyCam(Camera& cam,float deltaTime)
 {
 
 	static bool init = false;
-	static double xPrev = 0, yPrev = 0;
+	static float xPrev = 0, yPrev = 0;
 	double x = 0, y = 0;
 	static float X = -45, Y = -135;
 	float speed = 10;
@@ -116,8 +117,8 @@ void flyCam(Camera& cam,float deltaTime)
 	if (Input::getMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS || !init)
 	{
 		init = true;
-		X += -(y - yPrev) * 0.5;
-		Y += -(x - xPrev) * 0.5;
+		X += -(y - yPrev) * 0.5f;
+		Y += -(x - xPrev) * 0.5f;
 		//if (abs(Y) >= 360.0f)
 			//Y =Y+((Y>0)?-1:1)*360.0f;
 		Y = abs(Y) >= 360.0f ? 0 : Y;

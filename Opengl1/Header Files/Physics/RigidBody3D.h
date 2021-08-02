@@ -5,7 +5,7 @@
 #include<vector>
 #include<cassert>
 class ECS;
-typedef std::uint32_t Entity;
+typedef std::size_t Entity;
 namespace physx
 {
 	class PxRigidActor;
@@ -14,7 +14,7 @@ namespace physics
 {
 	class Physics;
 
-	enum RigidBodyType
+	enum class RigidBodyType
 	{
 		STATIC,DYNAMIC
 	};
@@ -38,6 +38,8 @@ namespace physics
 	public:
 		RigidBody3D()
 		{
+			eid = -1;
+			rBodyType = RigidBodyType::STATIC;
 			rigidbody = NULL;
 		}
 

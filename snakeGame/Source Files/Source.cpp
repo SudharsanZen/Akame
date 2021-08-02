@@ -29,13 +29,13 @@ int main()
 	floorMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/crate/basecolor.jpg");
 	floorMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/crate/roughness.jpg");
 	floorMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/crate/normal.jpg");
-	floorMat.setValue("normalStrength", 0.1);
+	floorMat.setValue("normalStrength", 0.1f);
 	floorMat.setValue("specIntensity", 1);
 
 	EntityID dir = scene.CreateEntity();
 
 	Lights d = Lights(LIGHT::DIRECTIONAL);
-	d.setColor(1, 1, 0.9);
+	d.setColor(1, 1, 0.9f);
 	d.setDirection(-1, -1, -1);
 	d.setIntensity(1);
 

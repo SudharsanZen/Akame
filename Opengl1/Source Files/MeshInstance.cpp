@@ -40,7 +40,7 @@ void MeshInstance::renderMesh()
 	{
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-		glDrawElementsInstanced(GL_TRIANGLES, numOfIndices, GL_UNSIGNED_INT,nullptr, transformList.size());
+		glDrawElementsInstanced(GL_TRIANGLES, numOfIndices, GL_UNSIGNED_INT,nullptr,transformList.size());
 	}
 	else
 	{
@@ -135,14 +135,14 @@ void MeshInstance::createMesh(const std::vector<vert>& vertices, const std::vect
 
 
 	//setting attribite pointer for each row of matrices with 4 component in each row
-	int vecSize = sizeof(glm::vec4);
-	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (void*)(0));
+	long long  vecSize = sizeof(glm::vec4);
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (const void*)(0));
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (void*)(1 * vecSize));
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (const void*)(1 * vecSize));
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (void*)(2 * vecSize));
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (const void*)(2 * vecSize));
 	glEnableVertexAttribArray(5);
-	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (void*)(3 * vecSize));
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (const void*)(3 * vecSize));
 	glEnableVertexAttribArray(6);
 
 	glVertexAttribDivisor(3, 1);

@@ -29,7 +29,7 @@ int main()
 	Lights d = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
 	d.setDirection(1, -1, 1);
-	d.setIntensity(0.3);
+	d.setIntensity(0.3f);
 	d.setPointLightConst(1, 2, 10);
 	scene.AddComponent<Lights>(dir, d);
 	scene.AddComponent<Transform>(dir, Transform(0, 2, 0));
@@ -80,8 +80,8 @@ int main()
 	scene.AddComponent<physics::RigidBody3D>(plane, physics::RigidBody3D());
 	physics::RigidBody3D& rbdy2 = scene.GetComponent<physics::RigidBody3D>(plane);
 	physics::ColliderShape planeShape;
-	planeShape.setColliderShape(physics::PLANE, 20, 20);
-	rbdy2.setRigidBodyType(physics::STATIC, planeShape);
+	planeShape.setColliderShape(physics::Shapes::PLANE, 20, 20);
+	rbdy2.setRigidBodyType(physics::RigidBodyType::STATIC, planeShape);
 
 
 
@@ -117,9 +117,9 @@ int main()
 			physics::RigidBody3D& rbdy = scene.GetComponent<physics::RigidBody3D>(box);
 			
 			if(r)
-			rbdy.setRigidBodyType(physics::DYNAMIC, physics::SPHERE);
+			rbdy.setRigidBodyType(physics::RigidBodyType::DYNAMIC, physics::Shapes::SPHERE);
 			else
-			rbdy.setRigidBodyType(physics::DYNAMIC, physics::BOX);
+			rbdy.setRigidBodyType(physics::RigidBodyType::DYNAMIC, physics::Shapes::BOX);
 		}
 		acc +=scene.getDeltaTime();
 

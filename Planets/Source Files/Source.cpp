@@ -151,7 +151,7 @@ int main()
 	scene.GetComponent<BehaviourComponent>(moon).setBehaviour<MoonBehv>(earth);
 
 
-	scene.backGroundColor(0.2, 0.4, 0.2, 1);
+	scene.backGroundColor(0.2f, 0.4f, 0.2f, 1.0f);
 	//scene.backGroundColor(0, 0, 0, 1);
 
 	scene.OnStart();

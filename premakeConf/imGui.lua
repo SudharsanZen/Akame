@@ -26,13 +26,12 @@ project "imGui"
 
     libdirs
     {
-        "%{LibraryDir.GLFW}"        
+              
     }
 
     links
     {
-        "glfw3.lib",
-        "opengl32.lib"
+        
     }
     filter "configurations:Debug"
         defines {"DEBUG"}

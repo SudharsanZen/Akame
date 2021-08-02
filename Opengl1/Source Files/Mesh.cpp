@@ -49,7 +49,7 @@ void Mesh::CreateMesh(std::vector<vert> vertices, std::vector<GLuint> indices)
 {
 	this->vertices = vertices;
 	this->indices = indices;
-
+	
 	numOfIndices = indices.size();
 	numOfVertices = vertices.size();
 	setupMesh();

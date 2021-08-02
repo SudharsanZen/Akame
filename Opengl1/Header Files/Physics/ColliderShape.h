@@ -3,7 +3,7 @@
 
 namespace physics
 {
-	enum Shapes
+	enum class Shapes
 	{
 		BOX, PLANE, SPHERE
 	};
@@ -15,7 +15,7 @@ namespace physics
 
 	public:
 		
-		ColliderShape(Shapes sp=SPHERE,float d1=1,float d2=1,float d3=1)
+		ColliderShape(Shapes sp=Shapes::SPHERE, float d1 = 1, float d2 = 1, float d3 = 1)
 		{
 			setColliderShape(sp,d1,d2,d3);
 		}

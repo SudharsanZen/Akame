@@ -10,7 +10,7 @@ private:
 	//Buffer object and Atrribute object iDs
 	unsigned int VAO, VBO, IBO,VBOinstance;
 	//number of IBO indices
-	unsigned int numOfIndices, numOfVertices;
+	size_t numOfIndices, numOfVertices;
 	std::vector<Transform>& transformList;
 	std::vector<glm::mat4> modelMatList;
 	void clearMesh();

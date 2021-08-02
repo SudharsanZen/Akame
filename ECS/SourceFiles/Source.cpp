@@ -6,7 +6,7 @@ ECS ecs;
 class position
 {
 public:
-	int x, y, z;
+	float x, y, z;
 
 	void reset()
 	{

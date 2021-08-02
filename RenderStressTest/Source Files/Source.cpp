@@ -10,7 +10,7 @@
 #include <crtdbg.h>
 #include"XMLReaderTest.h"
 #include"Editor/EditorUI.h"
-int app()
+void app()
 {
 	std::string rootDir(AssetManager::getAssetRoot());
 	Window window(800, 800, "testWindow");
@@ -18,7 +18,7 @@ int app()
 	if (!window.initialize())
 	{
 		std::cout << "Can't init WINDOW";
-		return -1;
+
 	}
 	Scene scene(window);
 
@@ -54,8 +54,8 @@ int app()
 	scene.AddComponent<physics::RigidBody3D>(plane, physics::RigidBody3D());
 	physics::RigidBody3D& rbdy2 = scene.GetComponent<physics::RigidBody3D>(plane);
 	physics::ColliderShape planeShape;
-	planeShape.setColliderShape(physics::PLANE, 30, 30);
-	rbdy2.setRigidBodyType(physics::STATIC, planeShape);
+	planeShape.setColliderShape(physics::Shapes::PLANE, 30, 30);
+	rbdy2.setRigidBodyType(physics::RigidBodyType::STATIC, planeShape);
 
 
 
@@ -63,19 +63,19 @@ int app()
 	Lights d = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
 	d.setDirection(1,-0.5,1);
-	d.setIntensity(0.6);
+	d.setIntensity(0.6f);
 	d.setPointLightConst(1,2,10);
-	d.ambientLigting(0.1,0,0);
+	d.ambientLigting(0.1f,0,0);
 	scene.AddComponent<Lights>(dir, d);
 	scene.AddComponent<Transform>(dir, Transform(0,2,0));
 	
 	
 	const int num =800;
-	const int rt = sqrt(num);
+	const int rt = (int)sqrt(num);
 	std::vector<EntityID> lightsVec;
 	for (int i = 0; i < num; i++)
 	{
-		float off = rt-1;
+		float off = (float)(rt-1);
 	
 
 		EntityID point = scene.CreateEntity();
@@ -96,7 +96,7 @@ int app()
 		scene.GetComponent<Mesh>(box).CreateMesh(generateCubeVertices());
 		if((i/rt)%2==0)
 		scene.GetComponent<Mesh>(box).CreateMesh(generateSphereVertices(16,32,0.5));
-		scene.AddComponent<Transform>(box, Transform(2 * (i / rt)-off, 0.6, (2) * (i % rt)-off));
+		scene.AddComponent<Transform>(box, Transform(2.0f * (i / rt)-off, 0.6f, (2.0f) * (i % rt)-off));
 		scene.AddComponent<Material>(box, boxMat);
 		scene.GetComponent<Transform>(box).rotation.setEulerAngle(0, 0, 0);
 	}

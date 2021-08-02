@@ -31,14 +31,14 @@ public:
 		return assetList.size() - 1;
 	}
 	
-	std::shared_ptr<T> GetAsset(long long index)
+	std::shared_ptr<T> GetAsset(unsigned long long index)
 	{
 		assert(assetList.size() > index && "Trying to access non existing element from the array!");
 		assert(refcount[index] > 0 && "Asset was destroyed dude to zero refCount!");
 		return assetList[index];
 	}
 
-	int decrementRefcount(long long index)
+	int decrementRefcount(unsigned long long index)
 	{
 		refcount[index]--;
 		if (refcount[index] <= 0)

@@ -17,7 +17,7 @@ private:
 	//Buffer object and Atrribute object iDs
 	unsigned int VAO, VBO, IBO;
 	//number of IBO indices
-	unsigned int numOfIndices,numOfVertices;
+	size_t numOfIndices,numOfVertices;
 	void setupMesh();
 	
 public:

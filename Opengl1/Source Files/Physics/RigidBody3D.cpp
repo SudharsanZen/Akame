@@ -27,18 +27,18 @@ void physics::RigidBody3D::setColliderShape(ColliderShape shape)
 {
 	colliderShape = shape;
 	ASSERT_RB();
-	physx::PxShape* colShape;
+	physx::PxShape* colShape=nullptr;
 	detachAllAttachedShapes();
 	std::shared_ptr<Physics> ptr = physicsPtr.lock();
 	switch (shape.getShapeType())
 	{
-	case BOX:
+	case Shapes::BOX:
 		colShape = ptr->mPhysics->createShape(physx::PxBoxGeometry(shape.dim.x / 2, shape.dim.y / 2, shape.dim.z / 2), *(ptr->mMaterial));
 		break;
-	case PLANE:
-		colShape = ptr->mPhysics->createShape(physx::PxBoxGeometry(shape.dim.x / 2, 0.01, shape.dim.y / 2), *(ptr->mMaterial));
+	case Shapes::PLANE:
+		colShape = ptr->mPhysics->createShape(physx::PxBoxGeometry(shape.dim.x / 2, 0.01f, shape.dim.y / 2), *(ptr->mMaterial));
 		break;
-	case SPHERE:
+	case Shapes::SPHERE:
 		colShape = ptr->mPhysics->createShape(physx::PxSphereGeometry(shape.dim.x), *(ptr->mMaterial));
 		break;
 	default:
@@ -58,14 +58,14 @@ void physics::RigidBody3D::setRigidBodyType(RigidBodyType rbType, ColliderShape 
 	rBodyType = rbType;
 	ReleaseRbody();
 
-	if (rbType == DYNAMIC)
+	if (rbType == RigidBodyType::DYNAMIC)
 	{
 		physx::PxTransform entityTransform = _ToPxTrans(ecs.lock()->GetComponent<Transform>(eid));
 		rigidbody = (static_cast<physx::PxRigidActor*>(physicsPtr.lock()->mPhysics->createRigidDynamic(entityTransform)));
 
 		setColliderShape(shape);
 	}
-	else if (rbType == STATIC)
+	else if (rbType == RigidBodyType::STATIC)
 	{
 		physx::PxTransform entityTransform = _ToPxTrans(ecs.lock()->GetComponent<Transform>(eid));
 		physx::PxRigidStatic* act = (physicsPtr.lock()->mPhysics->createRigidStatic(entityTransform));
