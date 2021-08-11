@@ -81,6 +81,7 @@ group "Samples"
     include "premakeConf/RenderStressTest.lua"
     include "premakeConf/Model.lua"
     include "premakeConf/snakeGame.lua"
+    include "premakeConf/RandomStuffTest.lua"
 group ""
 
 

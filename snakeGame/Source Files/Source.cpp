@@ -30,17 +30,17 @@ int main()
 	floorMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/crate/roughness.jpg");
 	floorMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/crate/normal.jpg");
 	floorMat.setValue("normalStrength", 0.1f);
-	floorMat.setValue("specIntensity", 1);
+	floorMat.setValue("specIntensity", 1.0f);
 
 	EntityID dir = scene.CreateEntity();
 
 	Lights d = Lights(LIGHT::DIRECTIONAL);
-	d.setColor(1, 1, 0.9f);
+	d.setColor(1, 1, 0.9);
 	d.setDirection(-1, -1, -1);
 	d.setIntensity(1);
 
 	scene.AddComponent<Lights>(dir, d);
-	scene.AddComponent<Transform>(dir, Transform(0, 2, 0));
+	scene.AddComponent<Transform>(dir, Transform(0, 2.0f, 0));
 
 
 	
@@ -57,8 +57,8 @@ int main()
 	fMesh.CreateMesh(generateCubeVertices());
 	scene.AddComponent<Mesh>(floor, fMesh);
 	scene.AddComponent<Material>(floor,floorMat);
-	scene.vsyncOn(true);
-	
+	//scene.vsyncOn(true);
+
 	scene.OnStart();
 	while (!window.closeWindow())
 	{

@@ -23,3 +23,7 @@
     <Vertex path="LightingAndShadows/dir_shadowMap.vert"/>
     <Fragment path="LightingAndShadows/dir_shadowMap.frag"/>
 </Shader>
+<Shader name="GRIDS">
+    <Vertex path="Misc/grids.vert"/>
+    <Fragment path="Misc/grids.frag"/>
+</Shader>

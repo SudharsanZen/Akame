@@ -124,6 +124,8 @@ bool Window::initialize()
 	glfwSetFramebufferSizeCallback(mainWindow.get(),frameBufferSizeCallBack);
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_CULL_FACE);
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	int a;
 	glGetIntegerv(GL_MAX_VERTEX_UNIFORM_BLOCKS,&a);
 	ENGINE_CORE_CRITICAL("MAX UNIFORM BLOCK SIZE:{0:d}",a);

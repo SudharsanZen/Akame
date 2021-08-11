@@ -88,8 +88,6 @@ public:
 	~Scene()
 	{
 		release();
-
-		_CrtDumpMemoryLeaks();
 	
 	}
 	void release();

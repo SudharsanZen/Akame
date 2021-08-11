@@ -45,7 +45,7 @@ void RenderingSystem::updateUniformBuffer(Camera& cam)
 	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrixBufferID);
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, mat4Size, glm::value_ptr(projMat));
 	glBufferSubData(GL_UNIFORM_BUFFER, mat4Size, mat4Size, glm::value_ptr(viewMat));
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 
 }
 
@@ -59,17 +59,16 @@ RenderingSystem::RenderingSystem():dir_sMap(DIR_MAP_SIZE,DIR_MAP_SIZE)
 	glGenBuffers(1, &uboMatrixBufferID);
 	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrixBufferID);
 	glBufferData(GL_UNIFORM_BUFFER, 2 * mat4Size, NULL, GL_STATIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrixBufferID, 0, 2 * mat4Size);
 
 }
 
-void RenderingSystem::Run(std::shared_ptr<ECS> ecs, Camera& cam)
+void RenderingSystem::Run(Camera& cam)
 {
 	std::shared_ptr<LightSystem> lsys=lightsystem.lock();
 	updateUniformBuffer(cam);
-	GroupEntityWithCommonShader(ecs);
 
+	std::shared_ptr<ECS> E = ecs.lock();
 	//directional shadowMap cal
 	std::shared_ptr<Shader> shader;
 	if (drawList["DEFERRED"].size() > 0)
@@ -103,8 +102,8 @@ void RenderingSystem::Run(std::shared_ptr<ECS> ecs, Camera& cam)
 			//exclude DEFERRED material from being rendered here
 			for (auto const& ent : entList.second)
 			{
-				Transform& t = ecs->GetComponent<Transform>(ent);
-				Mesh& mesh = ecs->GetComponent<Mesh>(ent);
+				Transform& t = E->GetComponent<Transform>(ent);
+				Mesh& mesh = E->GetComponent<Mesh>(ent);
 				glm::mat4 tmat = t.transformMatrix();
 				shader->setUniformMat4fv("transform", 1, glm::value_ptr(tmat));
 				mesh.renderMesh();
@@ -136,9 +135,9 @@ void RenderingSystem::Run(std::shared_ptr<ECS> ecs, Camera& cam)
 
 		for (auto const& ent : drawList["DEFERRED"])
 		{
-			Transform& t = ecs->GetComponent<Transform>(ent);
-			Mesh& mesh = ecs->GetComponent<Mesh>(ent);
-			ecs->GetComponent<Material>(ent).use(t, lightPose, cam.transform.position, shader);
+			Transform& t = E->GetComponent<Transform>(ent);
+			Mesh& mesh = E->GetComponent<Mesh>(ent);
+			E->GetComponent<Material>(ent).use(t, lightPose, cam.transform.position, shader);
 			mesh.renderMesh();
 		}
 
@@ -156,6 +155,7 @@ void RenderingSystem::Run(std::shared_ptr<ECS> ecs, Camera& cam)
 
 	//forward renderer start------------------------------------------------------------------
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
 	for (auto const& entList : drawList)
 	{
 		//get the shader from the shadermanager with the shader name from the map entlist
@@ -163,18 +163,19 @@ void RenderingSystem::Run(std::shared_ptr<ECS> ecs, Camera& cam)
 		//exclude DEFERRED material from being rendered here
 		if (entList.first == "DEFERRED")
 			continue;
+		
 		shader->useShaderProgram();
 			for (auto const& ent : entList.second)
 			{
-				Transform& t = ecs->GetComponent<Transform>(ent);
-				Mesh& mesh = ecs->GetComponent<Mesh>(ent);
-				ecs->GetComponent<Material>(ent).use(t,lightPose,cam.transform.position,shader);
+				Transform& t = E->GetComponent<Transform>(ent);
+				Mesh& mesh = E->GetComponent<Mesh>(ent);
+				E->GetComponent<Material>(ent).use(t,lightPose,cam.transform.position,shader);
 				mesh.renderMesh();
 			}
 		
 
 	}
-
+	glDisable(GL_BLEND);
 	//forward renderer end--------------------------------------------------------------------
 	
 	//render directional shadows--------------------------------------------------------------

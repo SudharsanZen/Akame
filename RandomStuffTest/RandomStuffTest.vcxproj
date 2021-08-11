@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{110C02F6-7D76-B66C-C6B4-6712325E94C1}</ProjectGuid>
+    <ProjectGuid>{8EBFD314-FA4A-41D9-035C-C4CD6F669DD9}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>snakeGame</RootNamespace>
+    <RootNamespace>RandomStuffTest</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -42,15 +42,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>bin\Debug\</OutDir>
-    <IntDir>..\bin\Intermediate\Debug\snakeGame\</IntDir>
-    <TargetName>snakeGame</TargetName>
+    <IntDir>..\bin\Intermediate\Debug\RandomStuffTest\</IntDir>
+    <TargetName>RandomStuffTest</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>bin\Release\</OutDir>
-    <IntDir>..\bin\Intermediate\Release\snakeGame\</IntDir>
-    <TargetName>snakeGame</TargetName>
+    <IntDir>..\bin\Intermediate\Release\RandomStuffTest\</IntDir>
+    <TargetName>RandomStuffTest</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -58,7 +58,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>E:\Project\CustomGameEngine\snakeGame\Header Files;..\Opengl1\Header Files;..\ECS\HeaderFiles;..\Opengl1\vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Opengl1\Header Files;..\ECS\HeaderFiles;..\Opengl1\vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ClCompile>
@@ -74,7 +74,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>E:\Project\CustomGameEngine\snakeGame\Header Files;..\Opengl1\Header Files;..\ECS\HeaderFiles;..\Opengl1\vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Opengl1\Header Files;..\ECS\HeaderFiles;..\Opengl1\vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -91,9 +91,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Source.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Header Files\SnakeBehaviour.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

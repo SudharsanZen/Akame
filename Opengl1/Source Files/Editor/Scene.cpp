@@ -52,7 +52,7 @@ Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 	lastTime = 0;
 
 	stbi_set_flip_vertically_on_load(true);
-
+	color = glm::vec4(0,0,0,1);
 	cam.setFieldOfView(60.0f);
 	cam.transform.position = glm::vec3(5, 5, 5);
 	cam.transform.rotation = Quaternion::rotationAroundAxisVector(-135, worldUp);
@@ -123,6 +123,7 @@ void Scene::InitEcs()
 	physicsSys->ecs=ecs;
 	renderSys->lightsystem = lightSys;
 	lightSys->ecs = ecs;
+	renderSys-> ecs = ecs;
 
 	ecs->SetSystemSignature<RenderingSystem>(renderSysSig);
 	ecs->SetSystemSignature<BehaviourSystem>(behSysSig);
@@ -160,7 +161,7 @@ void Scene::Render()
 
 	//renderStuff
 		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
-		renderSys->Run(ecs,cam);
+		renderSys->Run(cam);
 		behaviourSys->Update(deltaTime);
 		physicsSys->Run(deltaTime);
 		fn();

@@ -29,6 +29,7 @@ class Snake :public Behaviour
 	{
 		EntityID body = CreateEntity();
 		Transform cT(pose);
+		
 		Mesh cub;
 		cT.scale *= snakeSize;
 		cub.CreateMesh(generateCubeVertices());
@@ -173,6 +174,9 @@ public:
 		
 		if (glm::length(applePose.position - headPose.position) <= 0.2f)
 		{
+
+
+			
 			formFreeList();
 			int randFreeListIndex = rand()%freeIndices.size();
 			float randX = freeIndices[randFreeListIndex].first;
@@ -252,7 +256,7 @@ public:
 		glm::vec3 targetScale = glm::vec3(0.01f);
 		Transform &appleT=GetComponent<Transform>(apple);
 		appleT.scale += (targetScale - appleT.scale) * deltaTime*10.0f;
-		appleRot += deltaTime*100;
+		appleRot += 100* deltaTime;
 		if(appleRot>360)
 		appleRot = 0;
 		appleT.rotation.setEulerAngle(0,appleRot,0);

@@ -42,7 +42,7 @@ int main()
 	m->setSpecularMap(rootDir + "Media/disp.jpg");
 
 
-	mesh->CreateMesh(generatePlaneVertices(200, 200));
+	mesh->CreateMesh(generatePlaneVertices(500, 500));
 
 	scene->backGroundColor(0, 0, 0, 1);
 	scene->fn = func;

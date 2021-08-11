@@ -24,7 +24,7 @@ void app()
 
 
 	EntityID plane = scene.CreateEntity();
-
+	EntityID plane2 = scene.CreateEntity();
 	
 	Material boxMat("DEFERRED");
 	boxMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/crate/basecolor.jpg");
@@ -57,12 +57,19 @@ void app()
 	planeShape.setColliderShape(physics::Shapes::PLANE, 30, 30);
 	rbdy2.setRigidBodyType(physics::RigidBodyType::STATIC, planeShape);
 
+	Transform p2(0,5,0);
+	p2.rotation.setEulerAngle(90,0,0);
+	p2.scale *= 5;
 
+	scene.AddComponent<Mesh>(plane2, Mesh());
+	scene.GetComponent<Mesh>(plane2).CreateMesh(generatePlaneVertices());
+	scene.AddComponent<Transform>(plane2, p2);
+	scene.AddComponent<Material>(plane2, planeMat);
 
 	EntityID dir = scene.CreateEntity();
 	Lights d = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
-	d.setDirection(1,-0.5,1);
+	d.setDirection(0,-1,0);
 	d.setIntensity(0.6f);
 	d.setPointLightConst(1,2,10);
 	d.ambientLigting(0.1f,0,0);
@@ -96,7 +103,7 @@ void app()
 		scene.GetComponent<Mesh>(box).CreateMesh(generateCubeVertices());
 		if((i/rt)%2==0)
 		scene.GetComponent<Mesh>(box).CreateMesh(generateSphereVertices(16,32,0.5));
-		scene.AddComponent<Transform>(box, Transform(2.0f * (i / rt)-off, 0.6f, (2.0f) * (i % rt)-off));
+		scene.AddComponent<Transform>(box, Transform(2.0f * (i / rt)-off, 0.5f, (2.0f) * (i % rt)-off));
 		scene.AddComponent<Material>(box, boxMat);
 		scene.GetComponent<Transform>(box).rotation.setEulerAngle(0, 0, 0);
 	}
@@ -115,12 +122,12 @@ void app()
 		scene.Render();
 		
 		
-		for (int i = 0; i < num; i++)
+		for (int i = 0; i < lightsVec.size(); i++)
 		{
 			scene.GetComponent<Transform>(lightsVec[i]).position.y=1+sin(acc+i);
 		}
-		Lights &t=scene.GetComponent<Lights>(dir);
-		t.setDirection(Quaternion(0,acc*10,0)* glm::vec3(1, -1, 1));
+		//Lights &t=scene.GetComponent<Lights>(dir);
+		//t.setDirection(Quaternion(0,acc*10,0)* glm::vec3(1, -1, 1));
 		
 	}
 

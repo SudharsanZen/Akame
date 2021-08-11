@@ -17,7 +17,7 @@ private:
 
 	
 public:
-	ECS(Entity maxEntities=5000)
+	ECS(Entity maxEntities=20000)
 	{
 		MAXENTITIES = maxEntities;
 		

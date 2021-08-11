@@ -83,8 +83,8 @@ float Lights::calPointLightRadius(glm::vec3 C,float Intensity)
 	r2 = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 
 	if (r1 >= 0)
-		return r1+2;
+		return r1*2;
 	else
-		return r2+2;
+		return r2*2;
 
 }

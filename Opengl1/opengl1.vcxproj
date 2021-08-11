@@ -89,7 +89,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;imGui.lib;PhysX_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;PhysXPvdSDK_static_64.lib;PhysXFoundation_64.lib;pugixml.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;imGui.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXCooking_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXExtensions_static_64.lib;pugixml.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\glfw\src\Release;vendor\PhysX\physx\bin\win.x86_64.vc142.md\Release;vendor\imGui\windows\Release;vendor\assimp\lib\Release;vendor\pugixml\src\bin\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
