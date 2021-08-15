@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 #include"snakeBehaviour.h"
+
 #define sizeX 10.0f
 #define sizeY 10.0f
 
@@ -63,6 +64,7 @@ int main()
 	while (!window.closeWindow())
 	{
 		scene.Render();
+		
 	}
 
 

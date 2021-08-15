@@ -20,6 +20,7 @@ class DeferredRendererFragmentBuffer
 	void GenerateFrameBuffer();
 
 	friend class TiledRenderer;
+	friend class RenderingSystem;
 public:
 
 	DeferredRendererFragmentBuffer();

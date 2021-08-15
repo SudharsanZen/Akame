@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 #include"XMLReaderTest.h"
+#include"DeferredRendererFragmentBuffer.h"
 #include"Editor/EditorUI.h"
 void app()
 {
@@ -33,7 +34,7 @@ void app()
 	boxMat.setValue("specIntensity", 1);
 	boxMat.setValue("normalStrength",1);
 
-
+	scene.vsyncOn(true);
 	Material planeMat("DEFERRED");
 	planeMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/rust/diffuse.png");
 	planeMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/rust/roughness.png");
@@ -72,10 +73,27 @@ void app()
 	d.setDirection(0,-1,0);
 	d.setIntensity(0.6f);
 	d.setPointLightConst(1,2,10);
-	d.ambientLigting(0.1f,0,0);
+	d.ambientLigting(0.1f,0.1f,0.1f);
 	scene.AddComponent<Lights>(dir, d);
 	scene.AddComponent<Transform>(dir, Transform(0,2,0));
+
+	Material mat("GRIDS");
+	EntityID pl = scene.CreateEntity();
+	Transform planeInf;
+	planeInf.scale *= 1;
+	scene.AddComponent<Transform>(pl, planeInf);
+	scene.AddComponent<Mesh>(pl, Mesh());
+	scene.AddComponent<Material>(pl, mat);
+	scene.GetComponent<Mesh>(pl).CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
+	Material matS("SPHERE");
+	EntityID sky = scene.CreateEntity();
+	Transform skyInf;
 	
+
+	scene.AddComponent<Transform>(sky, skyInf);
+	scene.AddComponent<Mesh>(sky, Mesh());
+	scene.AddComponent<Material>(sky, matS);
+	scene.GetComponent<Mesh>(sky).CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
 	const int num =800;
 	const int rt = (int)sqrt(num);
@@ -126,8 +144,8 @@ void app()
 		{
 			scene.GetComponent<Transform>(lightsVec[i]).position.y=1+sin(acc+i);
 		}
-		//Lights &t=scene.GetComponent<Lights>(dir);
-		//t.setDirection(Quaternion(0,acc*10,0)* glm::vec3(1, -1, 1));
+		Lights &t=scene.GetComponent<Lights>(dir);
+		t.setDirection(Quaternion(acc*10,0,0)* glm::vec3(0, -1, 0));
 		
 	}
 

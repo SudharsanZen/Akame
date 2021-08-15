@@ -66,12 +66,12 @@ void main()
  
     vec3 worldPose=nearPoint*t/(farPoint-nearPoint);
     vec3 planePoint = nearPoint + t * (farPoint - nearPoint);
-    gl_FragDepth=getDepth(planePoint);
+    
     
     FragColor = grid(planePoint, 100) * float(t > 0);
-
-
  
+
+    gl_FragDepth=getDepth(planePoint);
 
 } 
 

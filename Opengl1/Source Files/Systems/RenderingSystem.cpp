@@ -149,19 +149,39 @@ void RenderingSystem::Run(Camera& cam)
 		dir_sMap.useDepthTexture(6);
 		drfb.set4x4Matrixfv("lightSpaceMat", dirLightSpace);
 		drfb.outPutToQaud();
+	
 	}
-	//deferred renderer end-------------------------------------------------------------------
-
-
-	//forward renderer start------------------------------------------------------------------
 	glEnable(GL_DEPTH_TEST);
+	//deferred renderer end-------------------------------------------------------------------
+	shader = ShaderManager::GetShader("SPHERE");
+	shader->useShaderProgram();
+	shader->setUniformVec3("sunPose", -lsys->drVector[0].lightDir);
+	//copy deferred rendering depth buffer to forward
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, drfb.drfb.frameBuffer);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // write to default framebuffer
+	glBlitFramebuffer(
+		0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST
+	);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	for (auto const& ent : drawList["SPHERE"])
+	{
+		Transform& t = E->GetComponent<Transform>(ent);
+		Mesh& mesh = E->GetComponent<Mesh>(ent);
+		E->GetComponent<Material>(ent).use(t, lightPose, cam.transform.position, shader);
+		mesh.renderMesh();
+	}
+	
+	//forward renderer start------------------------------------------------------------------
+
 	glEnable(GL_BLEND);
+	
+	
 	for (auto const& entList : drawList)
 	{
 		//get the shader from the shadermanager with the shader name from the map entlist
 		shader=ShaderManager::GetShader(entList.first);
 		//exclude DEFERRED material from being rendered here
-		if (entList.first == "DEFERRED")
+		if (entList.first == "DEFERRED" || entList.first =="SPHERE")
 			continue;
 		
 		shader->useShaderProgram();

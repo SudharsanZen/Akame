@@ -20,7 +20,7 @@ class Scene
 private:
 	
 	std::shared_ptr<ECS> ecs;
-
+	
 	std::shared_ptr<RenderingSystem> renderSys;
 	std::shared_ptr<BehaviourSystem> behaviourSys;
 	std::shared_ptr<LightSystem> lightSys;

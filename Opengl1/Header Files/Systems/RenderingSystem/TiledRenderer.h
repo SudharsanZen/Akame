@@ -13,7 +13,7 @@ class TiledRenderer
 	void compileComputeShader(std::string fileName);
 	void freeCodePointer(char** code, int len);
 	void bindTextures();
-
+	friend class RenderingSystem;
 public:
 
 	TiledRenderer(std::string shaderLocation=AssetManager::assetRootPath+"Shaders/Deferred/Compute/defCal.comp");

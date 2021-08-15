@@ -25,7 +25,7 @@ int main()
 	
 	Scene scene(window);
 	EntityID cube = scene.CreateEntity();
-	Material cmat;
+	Material cmat("DEFERRED");
 	cmat.setTexture2D("material.diffuseMap",AssetManager::assetRootPath+"Media/pbr/basecolor.jpg");
 	cmat.setTexture2D("material.normalMap",AssetManager::assetRootPath+"Media/pbr/normal.jpg");
 	cmat.setTexture2D("material.specularMap",AssetManager::assetRootPath+"Media/pbr/roughness.jpg");
@@ -37,18 +37,27 @@ int main()
 	scene.GetComponent<Mesh>(cube).CreateMesh(generateCubeVertices());
 
 	Material mat("GRIDS");
-	EntityID plane;
+	EntityID plane= scene.CreateEntity();
 	Transform planeInf;
 	planeInf.scale *= 1;
 	scene.AddComponent<Transform>(plane,planeInf);
 	scene.AddComponent<Mesh>(plane,Mesh());
 	scene.AddComponent<Material>(plane,mat);
 	scene.GetComponent<Mesh>(plane).CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
-	glm::vec3 point(0, 0, 100);
-	point = scene.cam.getProjectionMatrix() * glm::vec4(point, 1);
-	std::cout << "zpoint after trasnform:" << point.z << "\n\n\n";
+
+
+	/*Material matS("SPHERE");
+	EntityID sky= scene.CreateEntity();
+	Transform skyInf;
+
+	scene.AddComponent<Transform>(sky, skyInf);
+	scene.AddComponent<Mesh>(sky, Mesh());
+	scene.AddComponent<Material>(sky, matS);
+	scene.GetComponent<Mesh>(sky).CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
+
+	*/
 	scene.OnStart();
-	scene.vsyncOn(true);
+	scene.vsyncOn(false);
 	while (!window.closeWindow())
 	{
 		flyCam(scene.cam,scene.getDeltaTime());

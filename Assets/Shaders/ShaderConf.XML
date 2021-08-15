@@ -27,3 +27,7 @@
     <Vertex path="Misc/grids.vert"/>
     <Fragment path="Misc/grids.frag"/>
 </Shader>
+<Shader name="SPHERE">
+    <Vertex path="Misc/grids.vert"/>
+    <Fragment path="Misc/sphere.frag"/>
+</Shader>

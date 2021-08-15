@@ -27,6 +27,7 @@ private:
 	unsigned int uboMatrixBufferID;
 	signed   long long int mat4Size = sizeof(glm::mat4);
 	friend class Scene;
+
 	/*Call this to update the common global uniforms.
 	* this updates the Projection matrix and ViewMatrix which is common to all shaders
 	*/
