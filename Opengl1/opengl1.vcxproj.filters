@@ -52,6 +52,9 @@
     <Filter Include="Source Files\misc">
       <UniqueIdentifier>{6434C40A-D04A-C2A0-19C2-4DC285179328}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Systems\RenderingSystem\BuiltInShaderPipelines">
+      <UniqueIdentifier>{b53bc24b-d6f4-4be5-a252-f5b57442795e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header Files\Assets\Asset.h">
@@ -174,6 +177,8 @@
     <ClInclude Include="Header Files\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Systems\RenderingSystem\ShaderRenderPipeline.h" />
+    <ClInclude Include="Header Files\Systems\RenderingSystem\DeferredPipeline.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Assets\Asset.cpp">
@@ -287,5 +292,7 @@
     <ClCompile Include="Source Files\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Systems\RenderingSystem\ShaderRenderPipeline.cpp" />
+    <ClCompile Include="Source Files\Systems\RenderingSystem\BuiltInShaderPipelines\DeferredPipeline.cpp" />
   </ItemGroup>
 </Project>

@@ -105,7 +105,7 @@ void LightSystem::bindPointLightBuffer(int layoutIndex)
 	glBindBufferBase(GL_UNIFORM_BUFFER,layoutIndex,plUBO);
 	
 }
-LightSystem::LightSystem()
+LightSystem::LightSystem() :dir_sMap(DIR_MAP_SIZE, DIR_MAP_SIZE)
 {
 	glGenBuffers(1, &plUBO);
 	glBindBuffer(GL_UNIFORM_BUFFER, plUBO);
@@ -113,4 +113,43 @@ LightSystem::LightSystem()
 	glBindBuffer(GL_UNIFORM_BUFFER,0);
 	
 
+}
+
+void LightSystem::BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader)
+{
+
+	//currently only rendering one shadow map
+	if (drVector.size() > 0)
+	{
+		glCullFace(GL_FRONT);
+		glViewport(0, 0, DIR_MAP_SIZE, DIR_MAP_SIZE);
+		auto const& drLight = drVector[0];
+
+		glm::vec3 forward = glm::normalize(drLight.lightDir);
+		glm::vec3 pose = -forward * 36.0f;
+		glm::vec3 up = normalize(glm::cross(forward, -worldRight));
+
+		
+		dir_sMap.bindShadowBuffer();
+		shader->useShaderProgram();
+		glm::mat4 viewMat = glm::lookAt(pose, pose + (forward * 10.0f), up);
+
+		float boxSize = 50;
+
+		glm::mat4 projOrtho = glm::ortho(-boxSize, boxSize, -boxSize, boxSize, 0.1f, 100.0f);
+		shader->setUniformMat4fv("projMat", 1, glm::value_ptr(projOrtho));
+		shader->setUniformMat4fv("view", 1, glm::value_ptr(viewMat));
+		dirLightSpace = projOrtho * viewMat;
+
+
+
+
+
+	}
+}
+void LightSystem::unBindDirectionalShadowMap()
+{
+
+	dir_sMap.unBindShadowBuffer();
+	glCullFace(GL_BACK);
 }

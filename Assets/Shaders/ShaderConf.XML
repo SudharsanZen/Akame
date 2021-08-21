@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<Shader name="DEFAULT">
+<Shader name="DEFAULT" queue="GEOMETRY+1">
     <Vertex path="default.vert"/>
     <Fragment path="default.frag"/>
 </Shader>
-<Shader name="ERROR">
+<Shader name="ERROR" queue="GEOMETRY+2">
     <Vertex path="error.vert"/>
     <Fragment path="error.frag"/>
 </Shader>
-<Shader name="SCREENSHADER">
+<Shader name="SCREENSHADER" queue="NULL">
     <Vertex path="SCREENSHADER.vert"/>
     <Fragment path="SCREENSHADER.frag"/>
 </Shader>
-<Shader name="DEFERRED_OUT">
+<Shader name="DEFERRED_OUT" queue="NULL">
     <Vertex path="deferred/finalOut.vert"/>
     <Fragment path="deferred/finalOut.frag"/>
 </Shader>
-<Shader name="DEFERRED">
+<Shader name="DEFERRED" queue="GEOMETRY+0">
     <Vertex path="deferred/frameBufferTargets.vert"/>
     <Fragment path="deferred/frameBufferTargets.frag"/>
 </Shader>
-<Shader name="SHADOW_DIRECTIONAL">
+<Shader name="SHADOW_DIRECTIONAL" queue="NULL">
     <Vertex path="LightingAndShadows/dir_shadowMap.vert"/>
     <Fragment path="LightingAndShadows/dir_shadowMap.frag"/>
 </Shader>
-<Shader name="GRIDS">
+<Shader name="GRIDS" queue="OVERLAY+1">
     <Vertex path="Misc/grids.vert"/>
     <Fragment path="Misc/grids.frag"/>
 </Shader>
-<Shader name="SPHERE">
+<Shader name="SPHERE" queue="OVERLAY+0">
     <Vertex path="Misc/grids.vert"/>
     <Fragment path="Misc/sphere.frag"/>
 </Shader>

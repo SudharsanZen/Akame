@@ -11,7 +11,7 @@ namespace BasicShapes
 class DeferredRendererFragmentBuffer
 {
 	Mesh quad;
-	unsigned int frameBuffer=0;
+
 	//texture render target that are going to be attached to the frameBuffer
 	unsigned int AlbedoSpec=0, Normal=0, Position=0,depthBuffer=0;
 
@@ -24,7 +24,7 @@ class DeferredRendererFragmentBuffer
 public:
 
 	DeferredRendererFragmentBuffer();
-
+	unsigned int frameBuffer = 0;
 	
 	void updateBufferSize(int height,int width);
 	void bindFrameBuffer();

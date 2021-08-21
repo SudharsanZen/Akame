@@ -2,6 +2,8 @@
 #include"ECS.h"
 #include"Lighting/Lights.h"
 #include"Log/Log.h"
+#include"Systems/RenderingSystem/ShadowFBO.h"
+#define DIR_MAP_SIZE 8129
 class LightSystem:public System
 {
 private:
@@ -24,9 +26,7 @@ private:
 		glm::vec3 ambient;
 		float intensity;
 	};
-	//point light vector for storing in point light uniform buffer
-	std::vector<pointLight> ptVector;
-	std::vector<directionalLight> drVector;
+	
 
 	//pointLight uniform buffer
 	unsigned int plUBO;
@@ -41,20 +41,35 @@ private:
 			lightsList[l.getType()].push_back(ent);
 		}
 	}
-
+	glm::mat4 dirLightSpace = glm::mat4(0);
+	
 	friend class Scene;
 	friend class Lights;
 	friend class RenderingSystem;
 	friend class TiledRenderer;
 public:
+	//point light vector for storing in point light uniform buffer
+	std::vector<pointLight> ptVector;
+	std::vector<directionalLight> drVector;
+
+	ShadowFBO dir_sMap;
 	//empty point light list completely and create a new one, call when entity is added or removed
 	void updatePointLightBuffer();
+	//calculates and sets the necesary variables for shadow map calculations
+	void BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader);
+	
+	//get the directional light's view projection matrix
+	glm::mat4 GetDirectionalLightSpaceMat()
+	{
+		return dirLightSpace;
+	}
+	void unBindDirectionalShadowMap();
 
 	//just update the information for existing lights, call for dynamic point lights
 	void updatePointLightContents();
 	void bindPointLightBuffer(int layoutIndex);
 	LightSystem();
-
+	
 	void OnAddEntity(Entity entity) override
 	{
 		

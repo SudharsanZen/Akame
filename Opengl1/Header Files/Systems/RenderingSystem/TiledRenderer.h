@@ -8,14 +8,15 @@ class TiledRenderer
 	
 	unsigned int outTex;
 	int height, width;
-	DeferredRendererFragmentBuffer drfb;
+	
 	char** readShaderFile(std::string fileName, int& len);
 	void compileComputeShader(std::string fileName);
 	void freeCodePointer(char** code, int len);
 	void bindTextures();
 	friend class RenderingSystem;
+	
 public:
-
+	DeferredRendererFragmentBuffer drfb;
 	TiledRenderer(std::string shaderLocation=AssetManager::assetRootPath+"Shaders/Deferred/Compute/defCal.comp");
 	void set4x4Matrixfv(std::string, glm::mat4);
 	void updateBufferSize(int height, int width);

@@ -124,8 +124,10 @@
     <ClInclude Include="Header Files\Shader.h" />
     <ClInclude Include="Header Files\StopWatch.h" />
     <ClInclude Include="Header Files\Systems\BehaviourSystem.h" />
+    <ClInclude Include="Header Files\Systems\RenderingSystem\DeferredPipeline.h" />
     <ClInclude Include="Header Files\Systems\RenderingSystem\LightSystem.h" />
     <ClInclude Include="Header Files\Systems\RenderingSystem\RenderingSystem.h" />
+    <ClInclude Include="Header Files\Systems\RenderingSystem\ShaderRenderPipeline.h" />
     <ClInclude Include="Header Files\Systems\RenderingSystem\ShadowFBO.h" />
     <ClInclude Include="Header Files\Systems\RenderingSystem\TiledRenderer.h" />
     <ClInclude Include="Header Files\Systems\RigidBodySystem.h" />
@@ -164,6 +166,8 @@
     <ClCompile Include="Source Files\Systems\BehaviourSystem.cpp" />
     <ClCompile Include="Source Files\Systems\LightSystem.cpp" />
     <ClCompile Include="Source Files\Systems\RenderingSystem.cpp" />
+    <ClCompile Include="Source Files\Systems\RenderingSystem\BuiltInShaderPipelines\DeferredPipeline.cpp" />
+    <ClCompile Include="Source Files\Systems\RenderingSystem\ShaderRenderPipeline.cpp" />
     <ClCompile Include="Source Files\Systems\RenderingSystem\ShadowFBO.cpp" />
     <ClCompile Include="Source Files\Systems\RenderingSystem\TiledRenderer.cpp" />
     <ClCompile Include="Source Files\Systems\RigidBodySystem.cpp" />

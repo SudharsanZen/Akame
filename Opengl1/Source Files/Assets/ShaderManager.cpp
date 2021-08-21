@@ -3,7 +3,22 @@
 #include"Log/Log.h"
 #include"Assets/AssetManager.h"
 #include<iostream>
+#include<sstream>
+#include"Systems\RenderingSystem\ShaderRenderPipeline.h"
 std::unordered_map<std::string, std::shared_ptr<Shader>> ShaderManager::shaderList;
+std::map<std::string, std::vector<std::pair<int, std::string>>> ShaderManager::shaderQueues;
+std::map<std::string, std::shared_ptr<ShaderRenderPipeline>> ShaderManager::shaderRenderPipeline;
+
+bool queuePairCompare(std::pair<int,std::string> a,std::pair<int,std::string> b)
+{
+	return a.first < b.first;
+}
+bool ShaderManager::checkForPipeline(std::string shaderName)
+{
+	if (shaderRenderPipeline.find(shaderName) != shaderRenderPipeline.end())
+		return true;
+	return false;
+}
 ShaderManager::ShaderManager()
 {
 	
@@ -25,6 +40,19 @@ void ShaderManager::loadAllShaders()
 	for (pugi::xml_node ShaderNode : doc.children("Shader"))
 	{
 		std::string shaderName=ShaderNode.attribute("name").value();
+		std::string queue=ShaderNode.attribute("queue").value();
+
+
+		std::string queueName=queue;
+		int queueNumber = -1;
+		//extract the queue details
+		std::size_t i_plus = queue.find("+");
+		if (i_plus != std::string::npos)
+		{
+			queueName = queue.substr(0, i_plus);
+			std::stringstream str(queue.substr(i_plus, queue.length()));
+			str >> queueNumber;
+		}
 		std::string vertPath =shaderRoot+ShaderNode.child("Vertex").attribute("path").value();
 		std::string fragPath = shaderRoot+ShaderNode.child("Fragment").attribute("path").value();
 
@@ -35,6 +63,17 @@ void ShaderManager::loadAllShaders()
 			ENGINE_CORE_INFO("vert:path="+vertPath);
 			ENGINE_CORE_INFO("frag:path="+fragPath);
 			shaderList[shaderName] = std::make_shared<Shader>(vertPath,fragPath);
+			if (queueName != "NULL")
+			{
+				auto fitr = shaderQueues.find(queueName);
+				if (fitr == shaderQueues.end())
+				{
+					std::vector<std::pair<int, std::string>> shaderNameList;
+					
+					shaderQueues[queueName] = shaderNameList;
+				}
+				shaderQueues[queueName].push_back({ queueNumber,shaderName });
+			}
 		}
 		else
 		{
@@ -42,6 +81,21 @@ void ShaderManager::loadAllShaders()
 			itr->second = std::make_shared<Shader>(vertPath,fragPath);
 		}
 	}
+
+	ENGINE_CORE_INFO("ShaderQueue");
+	for (auto& q : shaderQueues)
+	{
+		auto& v = q.second;
+		sort(v.begin(),v.end(),queuePairCompare);
+		std::cout << q.first;
+		ENGINE_CORE_INFO("Queue"+q.first);
+		for (auto& p : v)
+		{
+			ENGINE_CORE_INFO("{0:d} : "+p.second,p.first);
+		}
+	}
+
+
 
 }
 

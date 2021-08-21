@@ -8,8 +8,8 @@
 #include"GLFW/glfw3.h"
 #include<sstream>
 #include"Camera.h"
+#include"Systems/RenderingSystem/DeferredPipeline.h"
 
-#define DIR_MAP_SIZE 8129
 //returns the point where the ray intersects the plane
 glm::vec3 rayPlaneIntersectionPoint(glm::vec3 rayOrigin,glm::vec3 rayDir,glm::vec3 planeNormal,glm::vec3 planePoint)
 {
@@ -49,7 +49,13 @@ void RenderingSystem::updateUniformBuffer(Camera& cam)
 
 }
 
-RenderingSystem::RenderingSystem():dir_sMap(DIR_MAP_SIZE,DIR_MAP_SIZE)
+void RenderingSystem::attachAllBuiltInSRP()
+{
+	ShaderManager::AttachShaderPipeline<DeferredPipeline>("DEFERRED");
+	ShaderManager::AttachShaderPipeline<RM_SKY_BOXPipeline>("SPHERE");
+}
+
+RenderingSystem::RenderingSystem()
 {
 	lightPose = glm::vec3(10, 4, 10);
 	
@@ -60,7 +66,7 @@ RenderingSystem::RenderingSystem():dir_sMap(DIR_MAP_SIZE,DIR_MAP_SIZE)
 	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrixBufferID);
 	glBufferData(GL_UNIFORM_BUFFER, 2 * mat4Size, NULL, GL_STATIC_DRAW);
 	glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrixBufferID, 0, 2 * mat4Size);
-
+	attachAllBuiltInSRP();
 }
 
 void RenderingSystem::Run(Camera& cam)
@@ -69,138 +75,21 @@ void RenderingSystem::Run(Camera& cam)
 	updateUniformBuffer(cam);
 
 	std::shared_ptr<ECS> E = ecs.lock();
-	//directional shadowMap cal
 	std::shared_ptr<Shader> shader;
-	if (drawList["DEFERRED"].size() > 0)
-	{
-	glm::mat4 dirLightSpace=glm::mat4(0);
-	
-	if (lsys->drVector.size())
-	{
-		glCullFace(GL_FRONT);
-		glViewport(0, 0, DIR_MAP_SIZE, DIR_MAP_SIZE);
-		auto const& drLight = lsys->drVector[0];
 
-		glm::vec3 forward = glm::normalize(drLight.lightDir);
-		glm::vec3 pose = -forward * 36.0f;
-		glm::vec3 up = normalize(glm::cross(forward, -worldRight));
-
-		shader = ShaderManager::GetShader("SHADOW_DIRECTIONAL");
-		dir_sMap.bindShadowBuffer();
-		shader->useShaderProgram();
-		glm::mat4 viewMat = glm::lookAt(pose, pose + (forward * 10.0f), up);
-		
-		float boxSize = 50;
-
-		glm::mat4 projOrtho = glm::ortho(-boxSize, boxSize, -boxSize, boxSize, 0.1f, 100.0f);
-		shader->setUniformMat4fv("projMat", 1, glm::value_ptr(projOrtho));
-		shader->setUniformMat4fv("view", 1, glm::value_ptr(viewMat));
-		dirLightSpace = projOrtho*viewMat;
-		for (auto const& entList : drawList)
-		{
-
-			//exclude DEFERRED material from being rendered here
-			for (auto const& ent : entList.second)
-			{
-				Transform& t = E->GetComponent<Transform>(ent);
-				Mesh& mesh = E->GetComponent<Mesh>(ent);
-				glm::mat4 tmat = t.transformMatrix();
-				shader->setUniformMat4fv("transform", 1, glm::value_ptr(tmat));
-				mesh.renderMesh();
-			}
-
-
-		}
-		dir_sMap.unBindShadowBuffer();
-		glDisable(GL_DEPTH_TEST);
-		glViewport(0, 0, width, height);
-
-		glCullFace(GL_BACK);
-	}
-	//directional shadow maps done-------------------------------------------------------------
-
-
-
-
-
-	glViewport(0,0,width,height);
-	//deferred renderer-----------------------------------------------------------------------
-	
-		shader = ShaderManager::GetShader("DEFERRED");
-		shader->useShaderProgram();
-		glEnable(GL_DEPTH_TEST);
-		glDisable(GL_MULTISAMPLE);
-
-		drfb.bindFrameBuffer();
-
-		for (auto const& ent : drawList["DEFERRED"])
-		{
-			Transform& t = E->GetComponent<Transform>(ent);
-			Mesh& mesh = E->GetComponent<Mesh>(ent);
-			E->GetComponent<Material>(ent).use(t, lightPose, cam.transform.position, shader);
-			mesh.renderMesh();
-		}
-
-		drfb.unBindFrameBuffer();
-
-		//render final to quad
-		glDisable(GL_DEPTH_TEST);//disable depth to remove quad from depth calulations
-		drfb.setUpShader(cam, lightsystem.lock());
-		dir_sMap.useDepthTexture(6);
-		drfb.set4x4Matrixfv("lightSpaceMat", dirLightSpace);
-		drfb.outPutToQaud();
-	
-	}
-	glEnable(GL_DEPTH_TEST);
-	//deferred renderer end-------------------------------------------------------------------
-	shader = ShaderManager::GetShader("SPHERE");
+	//directional shadow maps 
+	shader=ShaderManager::GetShader("SHADOW_DIRECTIONAL");
 	shader->useShaderProgram();
-	shader->setUniformVec3("sunPose", -lsys->drVector[0].lightDir);
-	//copy deferred rendering depth buffer to forward
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, drfb.drfb.frameBuffer);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // write to default framebuffer
-	glBlitFramebuffer(
-		0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST
-	);
+	lsys->BindDirectionalLightShadowMap(shader);
+		RenderAllMesh(shader,cam);
+	lsys->unBindDirectionalShadowMap();
+	//directional shadow maps done-------------------------------------------------------------
+	
+	glViewport(0,0,width,height);
+	RenderQueue("GEOMETRY",cam);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	for (auto const& ent : drawList["SPHERE"])
-	{
-		Transform& t = E->GetComponent<Transform>(ent);
-		Mesh& mesh = E->GetComponent<Mesh>(ent);
-		E->GetComponent<Material>(ent).use(t, lightPose, cam.transform.position, shader);
-		mesh.renderMesh();
-	}
+	RenderQueue("OVERLAY",cam);
 	
-	//forward renderer start------------------------------------------------------------------
-
-	glEnable(GL_BLEND);
-	
-	
-	for (auto const& entList : drawList)
-	{
-		//get the shader from the shadermanager with the shader name from the map entlist
-		shader=ShaderManager::GetShader(entList.first);
-		//exclude DEFERRED material from being rendered here
-		if (entList.first == "DEFERRED" || entList.first =="SPHERE")
-			continue;
-		
-		shader->useShaderProgram();
-			for (auto const& ent : entList.second)
-			{
-				Transform& t = E->GetComponent<Transform>(ent);
-				Mesh& mesh = E->GetComponent<Mesh>(ent);
-				E->GetComponent<Material>(ent).use(t,lightPose,cam.transform.position,shader);
-				mesh.renderMesh();
-			}
-		
-
-	}
-	glDisable(GL_BLEND);
-	//forward renderer end--------------------------------------------------------------------
-	
-	//render directional shadows--------------------------------------------------------------
-	
-
 
 
 
@@ -217,6 +106,93 @@ void RenderingSystem::emptyDrawList()
 
 void RenderingSystem::updateFrameBufferSize(int height, int width)
 {
-	fb.updateTextureSize(height,width);
-	drfb.updateBufferSize(height,width);
+	//call all the call back function of all the registered ShaderRenderPipline classes for each shader
+	for (auto& SRP : ShaderManager::shaderRenderPipeline)
+	{
+		SRP.second->WindowsResizeCallBacks(height,width);
+	}
 }
+
+void RenderingSystem::viewPortSize(int x, int y, int height, int width)
+{
+	glViewport(0, 0, width, height);
+}
+
+void RenderingSystem::depthTestOn(bool state)
+{
+	if (state)
+		glEnable(GL_DEPTH_TEST);
+	else
+		glDisable(GL_DEPTH_TEST);
+}
+
+void RenderingSystem::ClearBuffer()
+{
+}
+
+void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera cam)
+{
+	std::shared_ptr<ECS> E = ecs.lock();
+	std::shared_ptr<Shader> shader = ShaderManager::GetShader(SHADERNAME);
+	shader->useShaderProgram();
+	auto itr = drawList.find(SHADERNAME);
+	if (itr != drawList.end())
+	{
+		//check if a pipeline is registered in the name of the shader or not 
+		bool pipeReg = ShaderManager::checkForPipeline(SHADERNAME);
+		std::shared_ptr<ShaderRenderPipeline> shdPipe;
+		if (pipeReg)
+		{
+			//if registered then call the pre render call back function
+			shdPipe = ShaderManager::shaderRenderPipeline[SHADERNAME];
+			shdPipe->OnPreRender(shader, this, cam);
+		}
+
+		//loop through all entities under the shader name and render it
+		for (auto const& ent : drawList[SHADERNAME])
+		{
+			Transform& t = E->GetComponent<Transform>(ent);
+			Mesh& mesh = E->GetComponent<Mesh>(ent);
+			E->GetComponent<Material>(ent).use(t, glm::vec3(0), cam.transform.position, shader);
+			mesh.renderMesh();
+		}
+
+		if (pipeReg)
+		{
+			//call the post render call back function registered under this shader
+			shdPipe->OnPostRender(shader,this,cam);
+		}
+	}
+	
+}
+//render all object under the given shader
+void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
+{
+	std::shared_ptr<ECS> E = ecs.lock();
+
+	for (auto const& entList : drawList)
+	{
+
+		//exclude DEFERRED material from being rendered here
+		for (auto const& ent : entList.second)
+		{
+			Transform& t = E->GetComponent<Transform>(ent);
+			Mesh& mesh = E->GetComponent<Mesh>(ent);
+			glm::mat4 tmat = t.transformMatrix();
+			shader->setUniformMat4fv("transform", 1, glm::value_ptr(tmat));
+			mesh.renderMesh();
+		}
+
+
+	}
+}
+//renders all entities with all shaders registered under this queue type
+void RenderingSystem::RenderQueue(std::string QUEUENAME,Camera cam)
+{
+	auto const& sQ = ShaderManager::shaderQueues[QUEUENAME];
+	for (int i = 0; i < sQ.size(); i++)
+	{
+		RenderAllEntitiesWithShader(sQ[i].second, cam);
+	}
+}
+

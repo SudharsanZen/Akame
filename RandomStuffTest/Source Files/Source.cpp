@@ -24,6 +24,16 @@ int main()
 
 	
 	Scene scene(window);
+	EntityID dir = scene.CreateEntity();
+	Lights d = Lights(LIGHT::DIRECTIONAL);
+	d.setColor(1, 1, 1);
+	d.setDirection(0,-1,0);
+	d.setIntensity(0.6f);
+	d.setPointLightConst(1,2,10);
+	d.ambientLigting(0.1f,0.1f,0.1f);
+	scene.AddComponent<Lights>(dir, d);
+	scene.AddComponent<Transform>(dir, Transform(0,2,0));
+	
 	EntityID cube = scene.CreateEntity();
 	Material cmat("DEFERRED");
 	cmat.setTexture2D("material.diffuseMap",AssetManager::assetRootPath+"Media/pbr/basecolor.jpg");
@@ -45,8 +55,8 @@ int main()
 	scene.AddComponent<Material>(plane,mat);
 	scene.GetComponent<Mesh>(plane).CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 
-
-	/*Material matS("SPHERE");
+	/*
+	Material matS("SPHERE");
 	EntityID sky= scene.CreateEntity();
 	Transform skyInf;
 
@@ -54,8 +64,8 @@ int main()
 	scene.AddComponent<Mesh>(sky, Mesh());
 	scene.AddComponent<Material>(sky, matS);
 	scene.GetComponent<Mesh>(sky).CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
-
 	*/
+	
 	scene.OnStart();
 	scene.vsyncOn(false);
 	while (!window.closeWindow())

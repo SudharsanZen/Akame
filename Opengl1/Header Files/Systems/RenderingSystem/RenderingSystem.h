@@ -7,6 +7,7 @@
 #include"FrameBuffer.h"
 #include"Systems/RenderingSystem/ShadowFBO.h"
 #include"Systems/RenderingSystem/TiledRenderer.h"
+
 class Camera;
 class LightSystem;
 class RenderingSystem :public System
@@ -14,15 +15,10 @@ class RenderingSystem :public System
 private:
 	Mesh quad;
 
-	FrameBuffer fb;
-	TiledRenderer drfb;
-	ShadowFBO dir_sMap;
-
-
 	glm::vec3 lightPose;
 	std::unordered_map<std::string, std::vector<Entity>> drawList;
 	void GroupEntityWithCommonShader(std::shared_ptr<ECS> ecs);
-	std::weak_ptr<LightSystem> lightsystem;
+	
 	std::weak_ptr<ECS> ecs;
 	unsigned int uboMatrixBufferID;
 	signed   long long int mat4Size = sizeof(glm::mat4);
@@ -33,8 +29,9 @@ private:
 	*/
 	void updateUniformBuffer(Camera& cam);
 
-
+	void attachAllBuiltInSRP();
 public:
+	std::weak_ptr<LightSystem> lightsystem;
 	int height, width;
 	RenderingSystem();
 	void Run(Camera& cam);
@@ -42,6 +39,11 @@ public:
 	void OnAddEntity(Entity entity) override {GroupEntityWithCommonShader(ecs.lock());}
 	void OnDestroyEntity(Entity entity) override{ GroupEntityWithCommonShader(ecs.lock()); };
 	void updateFrameBufferSize(int height,int width);
-
+	void viewPortSize(int x,int y,int height,int width);
+	void depthTestOn(bool state);
+	void ClearBuffer();
+	void RenderAllEntitiesWithShader(std::string SHADERNAME,Camera cam);
+	void RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam);
+	void RenderQueue(std::string QUEUENAME,Camera cam);
 };
 

@@ -127,7 +127,7 @@ void app()
 	}
 	
 	scene.OnStart();
-
+	scene.vsyncOn(false);
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.3f;
 	float acc = 0;
@@ -145,7 +145,7 @@ void app()
 			scene.GetComponent<Transform>(lightsVec[i]).position.y=1+sin(acc+i);
 		}
 		Lights &t=scene.GetComponent<Lights>(dir);
-		t.setDirection(Quaternion(acc*10,0,0)* glm::vec3(0, -1, 0));
+		t.setDirection(glm::vec3(0, -1, 0));
 		
 	}
 

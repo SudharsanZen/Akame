@@ -7,9 +7,9 @@ out vec4 FragColor;
 
 in vec3 nearPoint;
 in vec3 farPoint;
-uniform sampler2D texture1;
+
 uniform vec3 viewPose;
-uniform sampler2D texture2;
+
 layout (std140) uniform Matrices
 {
     mat4 proj;
