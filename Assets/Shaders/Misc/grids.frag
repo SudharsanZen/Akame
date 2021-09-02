@@ -22,16 +22,16 @@ float getParamT(float nearP,float farP)
 
 
 
-#define axisLength 0.01
+#define axisLength 0.1
 vec4 grid(vec3 fragPose, float scale) {
   
     vec4 color=vec4(0);
-    vec2 coord=fragPose.xz/3;
+    vec2 coord=fragPose.xz;
     
     //xy grids
-    vec2 grid=abs(fract(coord-0.5)-0.5)/fwidth(coord*2);
+    vec2 grid=abs(fract(coord-0.5)-0.5)/fwidth(coord*3);
     float line = min(grid.x, grid.y);
-    vec4 gridCOl = vec4((1.0 - min(line, 1.0))*0.8f);
+    vec4 gridCOl = vec4((1.0 - min(line, 1.0)));
     
     
     vec2 gridAx=fwidth(coord);
@@ -53,7 +53,15 @@ float getDepth(vec3 pos) {
     return (NDC.z / NDC.w)*0.5f+0.5f;
 }
 
+#define near 0.1f
+#define far 250.0f
 
+
+float LinearizeDepth(float depth) 
+{
+    float z = depth * 2.0 - 1.0; // back to NDC 
+    return (2.0 * near * far) / (far + near - z * (far - near))/far;	
+}
 void main()
 {
     
@@ -69,9 +77,10 @@ void main()
     
     
     FragColor = grid(planePoint, 100) * float(t > 0);
- 
-
+    
+   
     gl_FragDepth=getDepth(planePoint);
+    FragColor.a*= max(0, (0.5 - LinearizeDepth(gl_FragDepth)));
 
 } 
 

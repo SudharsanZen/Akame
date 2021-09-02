@@ -19,6 +19,21 @@ public:
 		version = 0;
 		index = 0;
 	}
+	EntityID(Entity index,Entity version=0)
+	{
+		this->index = index;
+		this->version = version;
+	}
+
+	bool operator == (EntityID e)
+	{
+		return (version == e.version && index == e.index);
+	}
+
+	bool operator != (EntityID e)
+	{
+		return !(version == e.version && index == e.index);
+	}
 	friend std::ostream& operator <<(std::ostream& os, const EntityID& ID);
 };
 

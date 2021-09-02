@@ -138,6 +138,7 @@
     <ClInclude Include="Header Files\temp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Header Files\Systems\RenderingSystem\SceneTransformManager.h" />
     <ClCompile Include="Source Files\Assets\Asset.cpp" />
     <ClCompile Include="Source Files\Assets\AssetArray.cpp" />
     <ClCompile Include="Source Files\Assets\AssetManager.cpp" />

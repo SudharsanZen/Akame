@@ -145,7 +145,7 @@ public:
 	{
 		Transform& headPose = GetComponent<Transform>(head);
 		currTime += deltaTime;
-		if (currTime > 0.1)
+		if (currTime > 0.6)
 		{
 			currTime = 0;
 			//update tail pose

@@ -6,7 +6,7 @@
 #include<functional>
 #include"ECS.h"
 #include"BehaviourComponent.h"
-
+#include"Systems/RenderingSystem/SceneTransformManager.h"
 class Window;
 class RenderingSystem;
 class BehaviourSystem;
@@ -25,6 +25,7 @@ private:
 	std::shared_ptr<BehaviourSystem> behaviourSys;
 	std::shared_ptr<LightSystem> lightSys;
 	std::shared_ptr<physics::RigidBodySystem> physicsSys;
+	std::shared_ptr<SceneTransformManager> transformManager;
 	
 	glm::vec4 color;
 	Window &window;

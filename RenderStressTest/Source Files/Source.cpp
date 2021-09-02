@@ -145,7 +145,8 @@ void app()
 			scene.GetComponent<Transform>(lightsVec[i]).position.y=1+sin(acc+i);
 		}
 		Lights &t=scene.GetComponent<Lights>(dir);
-		t.setDirection(glm::vec3(0, -1, 0));
+		Quaternion rot(acc*10.0f,0,0);
+		t.setDirection(rot*glm::vec3(0, -1, 0));
 		
 	}
 

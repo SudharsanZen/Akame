@@ -114,21 +114,26 @@ void Scene::InitEcs()
 	lightingSysSig.set(ecs->GetComponentBitPose<Lights>());
 	lightingSysSig.set(ecs->GetComponentBitPose<Transform>());
 
+	Signature transformSig;
+	transformSig.set(ecs->GetComponentBitPose<Transform>());
+
 	//register system and it's signature
 	renderSys=ecs->RegisterSystem<RenderingSystem>();
 	behaviourSys=ecs->RegisterSystem<BehaviourSystem>();
 	physicsSys = ecs->RegisterSystem<physics::RigidBodySystem>();
 	lightSys = ecs->RegisterSystem<LightSystem>();
+	transformManager = ecs->RegisterSystem<SceneTransformManager>();
 	behaviourSys->ecs = ecs;
 	physicsSys->ecs=ecs;
 	renderSys->lightsystem = lightSys;
 	lightSys->ecs = ecs;
 	renderSys-> ecs = ecs;
-
+	transformManager->ecs = ecs;
 	ecs->SetSystemSignature<RenderingSystem>(renderSysSig);
 	ecs->SetSystemSignature<BehaviourSystem>(behSysSig);
 	ecs->SetSystemSignature<physics::RigidBodySystem>(physicsSysSig);
 	ecs->SetSystemSignature<LightSystem>(lightingSysSig);
+	ecs->SetSystemSignature<SceneTransformManager>(transformSig);
 
 
 }
@@ -161,6 +166,7 @@ void Scene::Render()
 
 	//renderStuff
 		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
+		transformManager->UpdateTransforms();
 		renderSys->Run(cam);
 		behaviourSys->Update(deltaTime);
 		physicsSys->Run(deltaTime);

@@ -294,5 +294,8 @@
     </ClCompile>
     <ClCompile Include="Source Files\Systems\RenderingSystem\ShaderRenderPipeline.cpp" />
     <ClCompile Include="Source Files\Systems\RenderingSystem\BuiltInShaderPipelines\DeferredPipeline.cpp" />
+    <ClCompile Include="Header Files\Systems\RenderingSystem\SceneTransformManager.h">
+      <Filter>Header Files\Systems\RenderingSystem</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -121,6 +121,7 @@ void LightSystem::BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader)
 	//currently only rendering one shadow map
 	if (drVector.size() > 0)
 	{
+		
 		glCullFace(GL_FRONT);
 		glViewport(0, 0, DIR_MAP_SIZE, DIR_MAP_SIZE);
 		auto const& drLight = drVector[0];
@@ -152,4 +153,5 @@ void LightSystem::unBindDirectionalShadowMap()
 
 	dir_sMap.unBindShadowBuffer();
 	glCullFace(GL_BACK);
+	
 }

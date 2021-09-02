@@ -57,10 +57,10 @@ void RenderingSystem::attachAllBuiltInSRP()
 
 RenderingSystem::RenderingSystem()
 {
-	lightPose = glm::vec3(10, 4, 10);
+	
 	
 	emptyDrawList();
-	quad.CreateMesh(BasicShapes::quadVert,BasicShapes::quadIndices);
+	
 	//intialize global uniform buffer for storing projection and view matrix
 	glGenBuffers(1, &uboMatrixBufferID);
 	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrixBufferID);
@@ -85,9 +85,8 @@ void RenderingSystem::Run(Camera& cam)
 	lsys->unBindDirectionalShadowMap();
 	//directional shadow maps done-------------------------------------------------------------
 	
-	glViewport(0,0,width,height);
+	glViewport(0, 0, width, height);
 	RenderQueue("GEOMETRY",cam);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	RenderQueue("OVERLAY",cam);
 	
 
@@ -126,18 +125,23 @@ void RenderingSystem::depthTestOn(bool state)
 		glDisable(GL_DEPTH_TEST);
 }
 
-void RenderingSystem::ClearBuffer()
-{
-}
 
+
+//render all entities under the given shader
 void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera cam)
 {
+	
 	std::shared_ptr<ECS> E = ecs.lock();
 	std::shared_ptr<Shader> shader = ShaderManager::GetShader(SHADERNAME);
 	shader->useShaderProgram();
 	auto itr = drawList.find(SHADERNAME);
 	if (itr != drawList.end())
 	{
+		if (drawList[SHADERNAME].size() == 0)
+			return;
+		glEnable(GL_BLEND);
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_DEPTH_TEST);
 		//check if a pipeline is registered in the name of the shader or not 
 		bool pipeReg = ShaderManager::checkForPipeline(SHADERNAME);
 		std::shared_ptr<ShaderRenderPipeline> shdPipe;

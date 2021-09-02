@@ -9,8 +9,8 @@
 #include <crtdbg.h>
 #include"snakeBehaviour.h"
 
-#define sizeX 10.0f
-#define sizeY 10.0f
+#define sizeX 2.0f
+#define sizeY 2.0f
 
 int main()
 {
