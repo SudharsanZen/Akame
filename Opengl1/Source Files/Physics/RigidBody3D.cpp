@@ -1,4 +1,4 @@
-#include "Physics\RigidBody3D.h"
+#include "Components\Physics\RigidBody3D.h"
 #include<PxPhysicsAPI.h>
 #include"Physics/Physics.h"
 #include"ECS.h"
@@ -55,6 +55,12 @@ void physics::RigidBody3D::setColliderShape(ColliderShape shape)
 
 void physics::RigidBody3D::setRigidBodyType(RigidBodyType rbType, ColliderShape shape)
 {
+	if (rigidbody)
+	{
+		rigidbody->release();
+		rigidbody = NULL;
+	}
+
 	rBodyType = rbType;
 	ReleaseRbody();
 

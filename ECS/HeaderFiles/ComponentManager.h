@@ -57,9 +57,9 @@ public:
 	}
 
 	template<typename T>
-	void AddComponent(Entity entity,T component)
+	T& AddComponent(Entity entity)
 	{
-		GetComponentArray<T>()->InsertData(entity,component);
+		return GetComponentArray<T>()->InsertData(entity);
 	}
 
 	template<typename T>

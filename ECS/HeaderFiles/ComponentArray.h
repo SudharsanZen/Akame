@@ -23,14 +23,14 @@ private:
 	std::unordered_map<Entity, Entity> entityToIndex;
 
 public:
-	void InsertData(Entity entity, T data);
+	T& InsertData(Entity entity);
 	void RemoveData(Entity entity);
 	T& GetData(Entity entity);
 	void EntityDestroyed(Entity entity) override;
 };
 
 template<typename T>
-inline void ComponentArray<T>::InsertData(Entity entity, T data)
+inline T& ComponentArray<T>::InsertData(Entity entity)
 {
 	
 	assert(entityToIndex.find(entity)==entityToIndex.end()	&&	"Component Already Attached to this entity!" );
@@ -50,7 +50,10 @@ inline void ComponentArray<T>::InsertData(Entity entity, T data)
 	Entity freeIndex = freeList.back();
 	freeList.pop_back();
 	entityToIndex[entity] = freeIndex;
-	dataList[freeIndex / MAXELEMENT][freeIndex % MAXELEMENT] = data;
+	
+	return (dataList[freeIndex / MAXELEMENT][freeIndex % MAXELEMENT] = T());
+
+	
 }
 
 template<typename T>

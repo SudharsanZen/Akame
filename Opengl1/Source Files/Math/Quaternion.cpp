@@ -1,4 +1,4 @@
-#include "Quaternion.h"
+#include "Math\Quaternion.h"
 #include<glm\glm\mat3x3.hpp>
 #include<glm\glm\glm.hpp>
 #include<glad\glad.h>

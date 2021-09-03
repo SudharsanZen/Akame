@@ -68,8 +68,8 @@ int main()
 	{
 		entity.push_back(ecs.CreateEntity());
 
-		ecs.AddComponent(entity[i], position());
-		ecs.AddComponent(entity[i], gravity(rand()%8));
+		ecs.AddComponent<position>(entity[i]);
+		ecs.AddComponent<gravity>(entity[i])= gravity(rand()%8);
 	}
 
 	physics->Update();

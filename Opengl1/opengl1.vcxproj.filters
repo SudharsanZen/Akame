@@ -69,61 +69,61 @@
     <ClInclude Include="Header Files\Assets\ShaderManager.h">
       <Filter>Header Files\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Behaviour.h">
+    <ClInclude Include="Header Files\Components\Behaviour\Behaviour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\BehaviourComponent.h">
+    <ClInclude Include="Header Files\Components\Behaviour\BehaviourComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Camera.h">
+    <ClInclude Include="Header Files\Rendering\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\DeferredRendererFragmentBuffer.h">
+    <ClInclude Include="Header Files\Rendering\DeferredRendererFragmentBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\DisplacementMap.h">
+    <ClInclude Include="Header Files\Rendering\DisplacementMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Editor\EditorUI.h">
+    <ClInclude Include="Header Files\Core\Editor\EditorUI.h">
       <Filter>Header Files\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Editor\Scene.h">
+    <ClInclude Include="Header Files\Core\Scene.h">
       <Filter>Header Files\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Engine.h">
+    <ClInclude Include="Header Files\Core\Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\EngineMath.h">
+    <ClInclude Include="Header Files\Math\EngineMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\EngineMathConstants.h">
+    <ClInclude Include="Header Files\Math\EngineMathConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\FrameBuffer.h">
+    <ClInclude Include="Header Files\Rendering\FrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\GlmMath.h">
+    <ClInclude Include="Header Files\Math\GlmMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Input.h">
+    <ClInclude Include="Header Files\Core\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Lighting\Lights.h">
+    <ClInclude Include="Header Files\Components\Lighting\Lights.h">
       <Filter>Header Files\Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Log\Log.h">
+    <ClInclude Include="Header Files\Core\Log\Log.h">
       <Filter>Header Files\Log</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Material.h">
+    <ClInclude Include="Header Files\Components\Rendering\Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Mesh.h">
+    <ClInclude Include="Header Files\Components\Rendering\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\MeshInstance.h">
+    <ClInclude Include="Header Files\Rendering\MeshInstance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Model.h">
+    <ClInclude Include="Header Files\Rendering\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Physics\ColliderShape.h">
@@ -132,53 +132,51 @@
     <ClInclude Include="Header Files\Physics\Physics.h">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Physics\RigidBody3D.h">
+    <ClInclude Include="Header Files\Components\Physics\RigidBody3D.h">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Quaternion.h">
+    <ClInclude Include="Header Files\Math\Quaternion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Shader.h">
+    <ClInclude Include="Header Files\Rendering\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\StopWatch.h">
+    <ClInclude Include="Header Files\Misc\StopWatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Systems\BehaviourSystem.h">
+    <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Systems\RenderingSystem\LightSystem.h">
+    <ClInclude Include="Header Files\Rendering\System\LightSystem.h">
       <Filter>Header Files\Systems\RenderingSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Systems\RenderingSystem\RenderingSystem.h">
+    <ClInclude Include="Header Files\Rendering\System\RenderingSystem.h">
       <Filter>Header Files\Systems\RenderingSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Systems\RenderingSystem\ShadowFBO.h">
+    <ClInclude Include="Header Files\Rendering\System\ShadowFBO.h">
       <Filter>Header Files\Systems\RenderingSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Systems\RenderingSystem\TiledRenderer.h">
+    <ClInclude Include="Header Files\Rendering\System\TiledRenderer.h">
       <Filter>Header Files\Systems\RenderingSystem</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Systems\RigidBodySystem.h">
+    <ClInclude Include="Header Files\Physics\System\RigidBodySystem.h">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Texture.h">
+    <ClInclude Include="Header Files\Rendering\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Transform.h">
+    <ClInclude Include="Header Files\Components\Rendering\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Window.h">
+    <ClInclude Include="Header Files\Core\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\XMLReaderTest.h">
+    <ClInclude Include="Header Files\Misc\temp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\temp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Header Files\Systems\RenderingSystem\ShaderRenderPipeline.h" />
-    <ClInclude Include="Header Files\Systems\RenderingSystem\DeferredPipeline.h" />
+    <ClInclude Include="Header Files\Rendering\System\ShaderRenderPipeline.h" />
+    <ClInclude Include="Header Files\Rendering\System\DeferredPipeline.h" />
+    <ClInclude Include="Header Files\Rendering\DepthFrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Assets\Asset.cpp">
@@ -193,40 +191,40 @@
     <ClCompile Include="Source Files\Assets\ShaderManager.cpp">
       <Filter>Source Files\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Behaviour.cpp">
+    <ClCompile Include="Source Files\Components\Behaviour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Camera.cpp">
+    <ClCompile Include="Source Files\Rendering\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\DeferedRendererFragmentBuffer.cpp">
+    <ClCompile Include="Source Files\Rendering\DeferedRendererFragmentBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\DisplacementMap.cpp">
+    <ClCompile Include="Source Files\Rendering\DisplacementMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Editor\EditorUI.cpp">
       <Filter>Source Files\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Editor\Scene.cpp">
+    <ClCompile Include="Source Files\Core\Scene.cpp">
       <Filter>Source Files\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\EngineMathConstants.cpp">
+    <ClCompile Include="Source Files\Math\EngineMathConstants.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\FrameBuffer.cpp">
+    <ClCompile Include="Source Files\Rendering\FrameBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Input.cpp">
+    <ClCompile Include="Source Files\Core\Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Lights.cpp">
+    <ClCompile Include="Source Files\Components\Lights.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Log\Log.cpp">
       <Filter>Source Files\Log</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Material.cpp">
+    <ClCompile Include="Source Files\Components\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Math\Quaternion.cpp">
@@ -235,13 +233,13 @@
     <ClCompile Include="Source Files\Math\Transform.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Mesh.cpp">
+    <ClCompile Include="Source Files\Components\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\MeshInstance.cpp">
+    <ClCompile Include="Source Files\Rendering\MeshInstance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Model.cpp">
+    <ClCompile Include="Source Files\Rendering\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Physics\Physics.cpp">
@@ -250,37 +248,31 @@
     <ClCompile Include="Source Files\Physics\RigidBody3D.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Shader.cpp">
+    <ClCompile Include="Source Files\Rendering\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source Files\Systems\BehaviourSystem.cpp">
+    <ClCompile Include="Source Files\Scripting\BehaviourSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Systems\LightSystem.cpp">
+    <ClCompile Include="Source Files\Rendering\System\LightSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Systems\RenderingSystem.cpp">
+    <ClCompile Include="Source Files\Rendering\System\RenderingSystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Systems\RenderingSystem\ShadowFBO.cpp">
+    <ClCompile Include="Source Files\Rendering\System\ShadowFBO.cpp">
       <Filter>Source Files\Systems\RenderingSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Systems\RenderingSystem\TiledRenderer.cpp">
+    <ClCompile Include="Source Files\Rendering\System\TiledRenderer.cpp">
       <Filter>Source Files\Systems\RenderingSystem</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Systems\RigidBodySystem.cpp">
+    <ClCompile Include="Source Files\Physics\System\RigidBodySystem.cpp">
       <Filter>Source Files\Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Texture.cpp">
+    <ClCompile Include="Source Files\Rendering\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source Files\XMLReader.cpp">
+    <ClCompile Include="Source Files\Core\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\misc\StopWatch.cpp">
@@ -289,13 +281,14 @@
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\temp.cpp">
+    <ClCompile Include="Source Files\misc\temp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Systems\RenderingSystem\ShaderRenderPipeline.cpp" />
-    <ClCompile Include="Source Files\Systems\RenderingSystem\BuiltInShaderPipelines\DeferredPipeline.cpp" />
-    <ClCompile Include="Header Files\Systems\RenderingSystem\SceneTransformManager.h">
+    <ClCompile Include="Source Files\Rendering\System\ShaderRenderPipeline.cpp" />
+    <ClCompile Include="Source Files\Rendering\System\BuiltInShaderPipelines\DeferredPipeline.cpp" />
+    <ClCompile Include="Header Files\Rendering\System\SceneTransformManager.h">
       <Filter>Header Files\Systems\RenderingSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Rendering\DepthFrameBuffer.cpp" />
   </ItemGroup>
 </Project>

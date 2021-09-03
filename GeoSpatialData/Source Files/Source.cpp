@@ -3,9 +3,9 @@
 #include<fstream>
 #include<string>
 #include<algorithm>
-#include"Engine.h"
-#include"DisplacementMap.h"
-#include"Editor/Scene.h"
+#include"Core/Engine.h"
+#include"Rendering/DisplacementMap.h"
+#include"Core/Scene.h"
 #include<vector>
 
 

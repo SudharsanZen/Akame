@@ -1,10 +1,10 @@
 #include"Assets/ShaderManager.h"
 #include<pugixml.hpp>
-#include"Log/Log.h"
+#include"Core/Log/Log.h"
 #include"Assets/AssetManager.h"
 #include<iostream>
 #include<sstream>
-#include"Systems\RenderingSystem\ShaderRenderPipeline.h"
+#include"Rendering\System\ShaderRenderPipeline.h"
 std::unordered_map<std::string, std::shared_ptr<Shader>> ShaderManager::shaderList;
 std::map<std::string, std::vector<std::pair<int, std::string>>> ShaderManager::shaderQueues;
 std::map<std::string, std::shared_ptr<ShaderRenderPipeline>> ShaderManager::shaderRenderPipeline;

@@ -4,9 +4,9 @@
 #include<algorithm>
 #include<vector>
 #include<stdlib.h>
-#include<Engine.h>
-#include<DeferredRendererFragmentBuffer.h>
-#include<Editor\Scene.h>
+#include<Core/Engine.h>
+#include<Rendering/DeferredRendererFragmentBuffer.h>
+#include<Core/Scene.h>
 #define sizeX 10.0f
 #define sizeY 10.0f
 
@@ -29,14 +29,15 @@ int main()
 
 	Scene scene(window);
 	EntityID dir = scene.CreateEntity();
-	Lights d = Lights(LIGHT::DIRECTIONAL);
+	Lights &d = scene.AddComponent<Lights>(dir);
+	d.setType(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
 	d.setDirection(1,-1,0);
 	d.setIntensity(0.6f);
 	d.setPointLightConst(1,2,10);
 	d.ambientLigting(0.1f,0.1f,0.1f);
-	scene.AddComponent<Lights>(dir, d);
-	scene.AddComponent<Transform>(dir, Transform(0,2,0));
+	
+	scene.AddComponent<Transform>(dir).position=glm::vec3(0,2,0);
 	std::vector<EntityID> cubeList;
 	float m = 100;
 	for (int i = 0; i < m; i++)
@@ -45,12 +46,10 @@ int main()
 
 		EntityID cube = scene.CreateEntity();
 		cubeList.push_back(cube);
-		
-		Transform cT(float(i)*0.9f, 0, 0);
-		scene.AddComponent<Transform>(cube, cT);
-		scene.AddComponent<Mesh>(cube, Mesh());
-		scene.AddComponent<Material>(cube, cmat);
-		scene.GetComponent<Mesh>(cube).CreateMesh(generateSphereVertices(32,16,1));
+		scene.AddComponent<Transform>(cube).position=glm::vec3(float(i) * 0.9f, 0, 0);
+		Mesh &cM=scene.AddComponent<Mesh>(cube);
+		scene.AddComponent<Material>(cube)=cmat;
+		cM.CreateMesh(generateSphereVertices(32,16,1));
 	}
 	
 
@@ -60,20 +59,20 @@ int main()
 	EntityID plane= scene.CreateEntity();
 	Transform planeInf;
 	planeInf.scale *= 1;
-	scene.AddComponent<Transform>(plane,planeInf);
-	scene.AddComponent<Mesh>(plane,Mesh());
-	scene.AddComponent<Material>(plane,mat);
-	scene.GetComponent<Mesh>(plane).CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
+	scene.AddComponent<Transform>(plane)=planeInf;
+	Mesh &pm=scene.AddComponent<Mesh>(plane);
+	scene.AddComponent<Material>(plane)=mat;
+	pm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
 	
 	Material matS("SPHERE");
 	EntityID sky= scene.CreateEntity();
-	Transform skyInf;
+	scene.AddComponent<Material>(sky) = matS;
+	scene.AddComponent<Transform>(sky);
+	Mesh& skMesh = scene.AddComponent<Mesh>(sky);
+	skMesh.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
+	
 
-	scene.AddComponent<Transform>(sky, skyInf);
-	scene.AddComponent<Mesh>(sky, Mesh());
-	scene.AddComponent<Material>(sky, matS);
-	scene.GetComponent<Mesh>(sky).CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
 	
 	scene.OnStart();

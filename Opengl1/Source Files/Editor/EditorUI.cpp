@@ -1,4 +1,4 @@
-#include "Editor\EditorUI.h"
+#include "Core\Editor\EditorUI.h"
 #include<imGui\backends\imgui_impl_glfw.h>
 #include<imGui\backends\imgui_impl_opengl3.h>
 #include<glad\glad.h>

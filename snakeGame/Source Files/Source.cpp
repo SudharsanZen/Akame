@@ -35,29 +35,27 @@ int main()
 
 	EntityID dir = scene.CreateEntity();
 
-	Lights d = Lights(LIGHT::DIRECTIONAL);
+	Lights &d = scene.AddComponent<Lights>(dir)=Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 0.9);
 	d.setDirection(-1, -1, -1);
 	d.setIntensity(1);
 
-	scene.AddComponent<Lights>(dir, d);
-	scene.AddComponent<Transform>(dir, Transform(0, 2.0f, 0));
+	scene.AddComponent<Transform>(dir)= Transform(0, 2.0f, 0);
 
 
 	
 	EntityID snake = scene.CreateEntity();
-	scene.AddComponent<BehaviourComponent>(snake,BehaviourComponent());
+	scene.AddComponent<BehaviourComponent>(snake);
 	scene.GetComponent<BehaviourComponent>(snake).setBehaviour<Snake>(scene.cam,1,sizeX,sizeY);
 
 
 	EntityID floor = scene.CreateEntity();
 	Transform T(0, -(sizeY+0.5f), 0);
 	T.scale *= sizeY*2+0.01f;
-	scene.AddComponent<Transform>(floor,T);
-	Mesh fMesh;
+	scene.AddComponent<Transform>(floor)=T;
+	Mesh &fMesh= scene.AddComponent<Mesh>(floor);
 	fMesh.CreateMesh(generateCubeVertices());
-	scene.AddComponent<Mesh>(floor, fMesh);
-	scene.AddComponent<Material>(floor,floorMat);
+	scene.AddComponent<Material>(floor)=(floorMat);
 	//scene.vsyncOn(true);
 
 	scene.OnStart();

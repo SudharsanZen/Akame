@@ -2,15 +2,15 @@
 #include<fstream>
 #include<string>
 #include<algorithm>
-#include"Engine.h"
-#include"Editor/Scene.h"
+#include"Core/Engine.h"
+#include"Core/Scene.h"
 #include<vector>
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-#include"XMLReaderTest.h"
-#include"DeferredRendererFragmentBuffer.h"
-#include"Editor/EditorUI.h"
+
+#include"Rendering/DeferredRendererFragmentBuffer.h"
+#include"Core/Editor/EditorUI.h"
 void app()
 {
 	std::string rootDir(AssetManager::getAssetRoot());
@@ -47,13 +47,12 @@ void app()
 
 	planeTransform.scale *= 50;
 
-	scene.AddComponent<Mesh>(plane, Mesh());
-	scene.GetComponent<Mesh>(plane).CreateMesh(generatePlaneVertices());
-	scene.AddComponent<Transform>(plane, planeTransform);
-	scene.AddComponent<Material>(plane, planeMat);
+	Mesh &mP=scene.AddComponent<Mesh>(plane);
+	mP.CreateMesh(generatePlaneVertices());
+	scene.AddComponent<Transform>(plane)=planeTransform;
+	scene.AddComponent<Material>(plane)=planeMat;
 
-	scene.AddComponent<physics::RigidBody3D>(plane, physics::RigidBody3D());
-	physics::RigidBody3D& rbdy2 = scene.GetComponent<physics::RigidBody3D>(plane);
+	physics::RigidBody3D& rbdy2=scene.AddComponent<physics::RigidBody3D>(plane);
 	physics::ColliderShape planeShape;
 	planeShape.setColliderShape(physics::Shapes::PLANE, 30, 30);
 	rbdy2.setRigidBodyType(physics::RigidBodyType::STATIC, planeShape);
@@ -62,38 +61,39 @@ void app()
 	p2.rotation.setEulerAngle(90,0,0);
 	p2.scale *= 5;
 
-	scene.AddComponent<Mesh>(plane2, Mesh());
-	scene.GetComponent<Mesh>(plane2).CreateMesh(generatePlaneVertices());
-	scene.AddComponent<Transform>(plane2, p2);
-	scene.AddComponent<Material>(plane2, planeMat);
+	Mesh &plane2M=scene.AddComponent<Mesh>(plane2);
+	plane2M.CreateMesh(generatePlaneVertices());
+	scene.AddComponent<Transform>(plane2)=p2;
+	scene.AddComponent<Material>(plane2)=planeMat;
 
 	EntityID dir = scene.CreateEntity();
-	Lights d = Lights(LIGHT::DIRECTIONAL);
+	Lights &d = scene.AddComponent<Lights>(dir);
+	d.setType(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
 	d.setDirection(0,-1,0);
 	d.setIntensity(0.6f);
 	d.setPointLightConst(1,2,10);
 	d.ambientLigting(0.1f,0.1f,0.1f);
-	scene.AddComponent<Lights>(dir, d);
-	scene.AddComponent<Transform>(dir, Transform(0,2,0));
+	
+	scene.AddComponent<Transform>(dir)= Transform(0,2,0);
 
 	Material mat("GRIDS");
 	EntityID pl = scene.CreateEntity();
 	Transform planeInf;
 	planeInf.scale *= 1;
-	scene.AddComponent<Transform>(pl, planeInf);
-	scene.AddComponent<Mesh>(pl, Mesh());
-	scene.AddComponent<Material>(pl, mat);
-	scene.GetComponent<Mesh>(pl).CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
+	scene.AddComponent<Transform>(pl)= planeInf;
+	Mesh &plm=scene.AddComponent<Mesh>(pl);
+	scene.AddComponent<Material>(pl)= mat;
+	plm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	Material matS("SPHERE");
 	EntityID sky = scene.CreateEntity();
 	Transform skyInf;
 	
 
-	scene.AddComponent<Transform>(sky, skyInf);
-	scene.AddComponent<Mesh>(sky, Mesh());
-	scene.AddComponent<Material>(sky, matS);
-	scene.GetComponent<Mesh>(sky).CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
+	scene.AddComponent<Transform>(sky) =skyInf;
+	Mesh &skym=scene.AddComponent<Mesh>(sky);
+	scene.AddComponent<Material>(sky)=matS;
+	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
 	const int num =800;
 	const int rt = (int)sqrt(num);
@@ -104,25 +104,25 @@ void app()
 	
 
 		EntityID point = scene.CreateEntity();
-		Lights p = Lights(LIGHT::POINT);
+		Lights &p = scene.AddComponent<Lights>(point);
 	
 		p.setColor(1,0.5,0);
 		p.setIntensity(4);
 		p.setPointLightConst(1, 2, 10);
 		p.ambientLigting(0, 0, 0);
-		scene.AddComponent<Lights>(point, p);
-		scene.AddComponent<Transform>(point, Transform(2 * (i / rt)-1 -off, 0.5, (2) * (i % rt)-off));
+		
+		scene.AddComponent<Transform>(point)= Transform(2 * (i / rt)-1 -off, 0.5, (2) * (i % rt)-off);
 		
 		lightsVec.push_back(point);
 		
 		EntityID box = scene.CreateEntity();
-		scene.AddComponent<Mesh>(box, Mesh());
+		Mesh& bm=scene.AddComponent<Mesh>(box);
 		if ((i / rt) % 2 == 1)
-		scene.GetComponent<Mesh>(box).CreateMesh(generateCubeVertices());
+		bm.CreateMesh(generateCubeVertices());
 		if((i/rt)%2==0)
-		scene.GetComponent<Mesh>(box).CreateMesh(generateSphereVertices(16,32,0.5));
-		scene.AddComponent<Transform>(box, Transform(2.0f * (i / rt)-off, 0.5f, (2.0f) * (i % rt)-off));
-		scene.AddComponent<Material>(box, boxMat);
+		bm.CreateMesh(generateSphereVertices(16,32,0.5));
+		scene.AddComponent<Transform>(box)= Transform(2.0f * (i / rt)-off, 0.5f, (2.0f) * (i % rt)-off);
+		scene.AddComponent<Material>(box)=boxMat;
 		scene.GetComponent<Transform>(box).rotation.setEulerAngle(0, 0, 0);
 	}
 	

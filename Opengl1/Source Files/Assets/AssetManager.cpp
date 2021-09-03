@@ -1,8 +1,8 @@
 #include "Assets/AssetManager.h"
 
-#include"Texture.h"
-#include"Shader.h"
-#include"Log/Log.h"
+#include"Rendering/Texture.h"
+#include"Rendering/Shader.h"
+#include"Core/Log/Log.h"
 #include<string>
 #include<filesystem>
 using namespace std::filesystem;

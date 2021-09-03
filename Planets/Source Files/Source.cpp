@@ -1,6 +1,6 @@
 
-#include"Engine.h"
-#include"Editor/Scene.h"
+#include"Core/Engine.h"
+#include"Core/Scene.h"
 
 
 
@@ -121,38 +121,32 @@ int main()
 	EntityID sun = scene.CreateEntity();
 
 	//component that describes the shape
-	scene.AddComponent<Mesh>(sun, Mesh());
+	Mesh &sunM=scene.AddComponent<Mesh>(sun);
 	//component that describes the material
-	scene.AddComponent<Material>(sun, sunMaterial);
+	scene.AddComponent<Material>(sun)=sunMaterial;
 	//component that describes the location ,size and rotation
-	scene.AddComponent<Transform>(sun, Transform(0, 0, 0)); 
+	scene.AddComponent<Transform>(sun)= Transform(0, 0, 0); 
 	//get the Mesh component and define it's shape, in this case a sphere
-	scene.GetComponent<Mesh>(sun).CreateMesh(generateSphereVertices(30, 30, 30));
+	sunM.CreateMesh(generateSphereVertices(30, 30, 30));
 
 	EntityID earth=scene.CreateEntity();
 
-	scene.AddComponent<Mesh>(earth,Mesh());
-	scene.AddComponent<Material>(earth,earthMaterial);
-	scene.AddComponent<Transform>(earth,Transform(0,0,0));
-	scene.AddComponent<BehaviourComponent>(earth,BehaviourComponent());
-
-	scene.GetComponent<Mesh>(earth).CreateMesh(generateSphereVertices(30,30,10));
-	scene.GetComponent<BehaviourComponent>(earth).setBehaviour<EarthBehv>(sun);
-
+	Mesh &earthM=scene.AddComponent<Mesh>(earth);
+	scene.AddComponent<Material>(earth)=earthMaterial;
+	scene.AddComponent<Transform>(earth)=Transform(0,0,0);
+	scene.AddComponent<BehaviourComponent>(earth).setBehaviour<EarthBehv>(sun);
+	earthM.CreateMesh(generateSphereVertices(30,30,10));
+	
 	EntityID moon = scene.CreateEntity();
 
-	scene.AddComponent<Mesh>(moon, Mesh());
-	scene.AddComponent<Material>(moon, moonMaterial);
-	scene.AddComponent<Transform>(moon, Transform(0, 0, 0));
-	scene.AddComponent<BehaviourComponent>(moon, BehaviourComponent());
+	scene.AddComponent<Mesh>(moon).CreateMesh(generateSphereVertices(30, 30, 3));
+	scene.AddComponent<Material>(moon)= moonMaterial;
+	scene.AddComponent<Transform>(moon)= Transform(0, 0, 0);
+	scene.AddComponent<BehaviourComponent>(moon).setBehaviour<MoonBehv>(earth);
 
-
-	scene.GetComponent<Mesh>(moon).CreateMesh(generateSphereVertices(30, 30, 3));
-	scene.GetComponent<BehaviourComponent>(moon).setBehaviour<MoonBehv>(earth);
 
 
 	scene.backGroundColor(0.2f, 0.4f, 0.2f, 1.0f);
-	//scene.backGroundColor(0, 0, 0, 1);
 
 	scene.OnStart();
 	while (!window.closeWindow())

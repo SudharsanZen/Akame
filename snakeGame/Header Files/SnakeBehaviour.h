@@ -1,6 +1,6 @@
 
-#include"Engine.h"
-#include"Editor/Scene.h"
+#include"Core/Engine.h"
+#include"Core/Scene.h"
 #include<glm/glm/gtx/vector_angle.hpp>
 
 class Snake :public Behaviour
@@ -29,13 +29,13 @@ class Snake :public Behaviour
 	{
 		EntityID body = CreateEntity();
 		Transform cT(pose);
-		
+		AddComponent<Material>(body) = (mat);
 		Mesh cub;
 		cT.scale *= snakeSize;
 		cub.CreateMesh(generateCubeVertices());
-		AddComponent<Transform>(body, cT);
-		AddComponent<Mesh>(body, cub);
-		AddComponent<Material>(body, mat);
+		AddComponent<Transform>(body)=cT;
+		AddComponent<Mesh>(body)=cub;
+		
 		return body;
 	}
 	
@@ -84,14 +84,14 @@ public:
 		Transform aT(1.5, 0, -1.5);
 		aT.scale *= 0.01;
 		
-		AddComponent<Transform>(apple, aT);
-		AddComponent<Mesh>(apple, appleModel->meshes[0]);
-		AddComponent<Material>(apple, appleMat);
+		AddComponent<Transform>(apple)=( aT);
+		AddComponent<Mesh>(apple)= appleModel->meshes[0];
+		AddComponent<Material>(apple)=( appleMat);
 		Lights point(LIGHT::POINT);
 		point.setColor(1,0.5,0);
 		point.setPointLightConst(1,5,7);
 		point.setIntensity(6);
-		AddComponent<Lights>(apple,point);
+		AddComponent<Lights>(apple)=point;
 		
 		
 	}

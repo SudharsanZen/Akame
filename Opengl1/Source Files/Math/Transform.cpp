@@ -1,4 +1,4 @@
-#include "Transform.h"
+#include "Components\Rendering\Transform.h"
 
 //graphics framework uses left handsided 3d-coordinate system
 

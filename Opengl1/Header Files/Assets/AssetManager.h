@@ -1,8 +1,8 @@
 #pragma once
 #include"Assets/AssetArray.h"
 #include<map>
-#include"Texture.h"
-#include"Shader.h"
+#include"Rendering/Texture.h"
+#include"Rendering/Shader.h"
 #include"Assets/ShaderManager.h"
 
 class AssetManager

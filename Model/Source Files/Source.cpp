@@ -2,15 +2,13 @@
 #include<fstream>
 #include<string>
 #include<algorithm>
-#include"Engine.h"
-#include"Editor/Scene.h"
+#include"Core/Engine.h"
+#include"Core/Scene.h"
 #include<vector>
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-#include"XMLReaderTest.h"
 
-#include"Editor/EditorUI.h"
 
 class rotateBehv :public Behaviour
 {
@@ -49,8 +47,8 @@ int main()
 	d.setDirection(1, -1, 1);
 	d.setIntensity(1);
 	d.setPointLightConst(1, 2, 10);
-	scene.AddComponent<Lights>(dir, d);
-	scene.AddComponent<Transform>(dir, Transform(0, 2, 0));
+	scene.AddComponent<Lights>(dir)=d;
+	scene.AddComponent<Transform>(dir);
 
 	Material spMat("DEFERRED");
 	spMat.setTexture2D("material.diffuseMap", rootDir + "Media/backpack/diffuse.jpg");
@@ -73,11 +71,10 @@ int main()
 		t.scale *= 7;
 		
 		EntityID bag = scene.CreateEntity();
-		scene.AddComponent<Mesh>(bag, testModel.meshes[i]);
-		scene.AddComponent<Transform>(bag, t);
-		scene.AddComponent<Material>(bag, spMat);
-		scene.AddComponent<BehaviourComponent>(bag,BehaviourComponent());
-		scene.GetComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
+		scene.AddComponent<Mesh>(bag)= testModel.meshes[i];
+		scene.AddComponent<Transform>(bag)=t;
+		scene.AddComponent<Material>(bag)= spMat;
+		scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
 	}
 
 

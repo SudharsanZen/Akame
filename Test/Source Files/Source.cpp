@@ -2,15 +2,13 @@
 #include<fstream>
 #include<string>
 #include<algorithm>
-#include"Engine.h"
-#include"Editor/Scene.h"
+#include"Core/Engine.h"
+#include"Core/Scene.h"
 #include<vector>
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-#include"XMLReaderTest.h"
 
-#include"Editor/EditorUI.h"
 int main()
 {
 
@@ -26,21 +24,21 @@ int main()
 
 
 	EntityID dir = scene.CreateEntity();
-	Lights d = Lights(LIGHT::DIRECTIONAL);
+	Lights &d = scene.AddComponent<Lights>(dir) = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
 	d.setDirection(1, -1, 1);
 	d.setIntensity(0.3f);
 	d.setPointLightConst(1, 2, 10);
-	scene.AddComponent<Lights>(dir, d);
-	scene.AddComponent<Transform>(dir, Transform(0, 2, 0));
+	
+	scene.AddComponent<Transform>(dir)= Transform(0, 2, 0);
 
 	EntityID ptl = scene.CreateEntity();
-	Lights p = Lights(LIGHT::POINT);
+	Lights &p = scene.AddComponent<Lights>(ptl)= Lights(LIGHT::POINT);
 	p.setColor(1, 1, 1);
 	p.setIntensity(5);
 	p.setPointLightConst(1, 1, 1);
-	scene.AddComponent<Lights>(ptl, p);
-	scene.AddComponent<Transform>(ptl, Transform(0,5,0));
+	
+	scene.AddComponent<Transform>(ptl)= Transform(0,5,0);
 	
 	EntityID plane = scene.CreateEntity();
 	
@@ -72,13 +70,11 @@ int main()
 
 	planeTransform.scale *= 20.0f;
 
-	scene.AddComponent<Mesh>(plane, Mesh());
-	scene.GetComponent<Mesh>(plane).CreateMesh(generatePlaneVertices());
-	scene.AddComponent<Transform>(plane, planeTransform);
-	scene.AddComponent<Material>(plane, planeMat);
-	//scene.GetComponent<Transform>(plane).rotation.setEulerAngle(0,0,45);
-	scene.AddComponent<physics::RigidBody3D>(plane, physics::RigidBody3D());
-	physics::RigidBody3D& rbdy2 = scene.GetComponent<physics::RigidBody3D>(plane);
+	scene.AddComponent<Mesh>(plane).CreateMesh(generatePlaneVertices());
+	scene.AddComponent<Transform>(plane)=planeTransform;
+	scene.AddComponent<Material>(plane)=planeMat;
+
+	physics::RigidBody3D& rbdy2 = scene.AddComponent<physics::RigidBody3D>(plane);
 	physics::ColliderShape planeShape;
 	planeShape.setColliderShape(physics::Shapes::PLANE, 20, 20);
 	rbdy2.setRigidBodyType(physics::RigidBodyType::STATIC, planeShape);
@@ -99,21 +95,21 @@ int main()
 			count++;
 			acc -= step;
 			EntityID box = scene.CreateEntity();
-			scene.AddComponent<Mesh>(box, Mesh());
+			
 			if (r)
 			{
-				scene.AddComponent<Material>(box, spMat);
-				scene.GetComponent<Mesh>(box).CreateMesh(generateSphereVertices(32, 16, 1));
+				scene.AddComponent<Material>(box)= spMat;
+				scene.AddComponent<Mesh>(box).CreateMesh(generateSphereVertices(32, 16, 1));
 			}
 			else
 			{
-				scene.AddComponent<Material>(box, boxMat);
-				scene.GetComponent<Mesh>(box).CreateMesh(generateCubeVertices());
+				scene.AddComponent<Material>(box)=boxMat;
+				scene.AddComponent<Mesh>(box).CreateMesh(generateCubeVertices());
 			}
-			scene.AddComponent<Transform>(box, Transform(0, 3, 0));
+			scene.AddComponent<Transform>(box) =Transform(0, 3, 0);
 			
 			scene.GetComponent<Transform>(box).rotation.setEulerAngle(0, 0, 0);
-			scene.AddComponent<physics::RigidBody3D>(box, physics::RigidBody3D());
+			scene.AddComponent<physics::RigidBody3D>(box);
 			physics::RigidBody3D& rbdy = scene.GetComponent<physics::RigidBody3D>(box);
 			
 			if(r)

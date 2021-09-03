@@ -65,14 +65,16 @@ public:
 	}
 
 	template<typename T>
-	void AddComponent(EntityID entityID, T comp)
+	T& AddComponent(EntityID entityID)
 	{
 		assert(versionOfEntity[entityID.index] == entityID.version && "trying to add component to a non existing entity!");
-		componentManager.AddComponent(entityID.index,comp);
+		T& compRef=componentManager.AddComponent<T>(entityID.index);
 		Signature &sigComp = signature[entityID.index];
 
 		sigComp.set(componentManager.GetComponentBitPose<T>(),true);
 		systemManager.EntitySignatureChanged(entityID.index,signature[entityID.index]);
+
+		return compRef;
 	}
 
 	template<typename T>

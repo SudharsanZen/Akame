@@ -5,7 +5,7 @@ in vec3 Normal;
 in vec3 FragPos;  
 in vec2 uvCoord;
 
-uniform vec3 lightPos; 
+vec3 lightPos=vec3(0,1,0); 
 uniform vec3 viewPos; 
 uniform vec3 lightColor;
 uniform vec3 objectColor;
@@ -34,6 +34,7 @@ uniform Material material;
 
 void main()
 {
+
     // ambient
     if(emissive>0)
     {
