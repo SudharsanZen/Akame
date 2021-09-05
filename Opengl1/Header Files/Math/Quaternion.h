@@ -2,6 +2,10 @@
 #include"Math/EngineMathConstants.h"
 #include<string>
 #include<memory>
+class Quaternion;
+glm::vec3 operator * (glm::vec3 const& vec3, Quaternion& q);
+glm::vec3 operator * ( Quaternion& q, glm::vec3 const& vec3);
+Quaternion operator *(const Quaternion& rhs, const Quaternion& lhs);
 class Quaternion
 {
 private:
@@ -9,11 +13,11 @@ private:
 	
 public:
 	glm::quat quaternion;
-	
+	Quaternion() :Quaternion(glm::quat(1,0,0,0)) {};
 	Quaternion(glm::quat quat);
 	Quaternion(float w, float x, float y, float z);
 	Quaternion(float EulerAngleX, float EulerAngleY, float EulerAngleZ);
-	static glm::quat rotationAroundAxisVector(float angleInDegrees, glm::vec3 AxisVector);
+	static Quaternion rotationAroundAxisVector(float angleInDegrees, glm::vec3 AxisVector);
 	void setEulerAngle(float, float, float);
 	Quaternion conjugate() { return glm::conjugate(quaternion); }
 	glm::vec3 getEulerAngle() { return glm::degrees(glm::eulerAngles(quaternion)); }
@@ -40,17 +44,16 @@ public:
 		return *this;
 	}
 
-	Quaternion operator *(const Quaternion& rhs)
-	{
-		return Quaternion(quaternion * rhs.quaternion);
-	}
+	friend Quaternion operator *(const Quaternion& rhs, const Quaternion& lhs);
+	
 
-	glm::vec3 operator * (glm::vec3 const& vec3)
+	friend glm::vec3 operator * ( glm::vec3 const& vec3, Quaternion& q);
+	friend glm::vec3 operator * (Quaternion& q, glm::vec3 const& vec3);
+
+	Quaternion& operator = (Quaternion const& quat)
 	{
-		/*glm::quat newVec = quaternion * vec3 * glm::conjugate(quaternion);
-		return glm::vec3(newVec.x, newVec.y, newVec.z);*/
-		glm::vec4 pos = getMatrix() * glm::vec4(vec3, 1);
-		return glm::vec3(pos.x, pos.y, pos.z);
+		quaternion = quat.quaternion;
+		return *this;
 	}
 
 

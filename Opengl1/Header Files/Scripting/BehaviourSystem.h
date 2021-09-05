@@ -1,6 +1,6 @@
 #pragma once
 
-#include"Components/Behaviour/BehaviourComponent.h"
+#include"ECS.h"
 
 class ECS;
 /*

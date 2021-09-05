@@ -1,5 +1,7 @@
 #include"scripting/BehaviourSystem.h"
+#include"Components/Behaviour/BehaviourComponent.h"
 #include"ECS.h"
+
 
 void BehaviourSystem::OnStart()
 {

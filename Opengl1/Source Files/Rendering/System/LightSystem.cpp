@@ -10,7 +10,7 @@ void LightSystem::updatePointLightBuffer()
 	{
 		
 		Lights& l = e->GetComponent<Lights>(ent);
-		pl.lightPose = glm::vec4(e->GetComponent<Transform>(ent).position,1);
+		pl.lightPose = glm::vec4(e->GetComponent<Transform>(ent).GetGlobalPosition(),1);
 		pl.ambient = glm::vec4(l.ambient,1);
 		pl.constants = glm::vec4(l.pointLightConstants, l.getPointLightRadius());
 		pl.lightColor = glm::vec4(l.lightColor, 1);
@@ -59,7 +59,7 @@ void LightSystem::updatePointLightContents()
 	{
 		
 		Lights& l = e->GetComponent<Lights>(lightsList[LIGHT::POINT][i]);
-		pl.lightPose = glm::vec4(e->GetComponent<Transform>(lightsList[LIGHT::POINT][i]).position,1);
+		pl.lightPose = glm::vec4(e->GetComponent<Transform>(lightsList[LIGHT::POINT][i]).GetGlobalPosition(),1);
 		pl.ambient = glm::vec4(l.ambient, 1);
 		pl.constants = glm::vec4(l.pointLightConstants, l.getPointLightRadius());
 		pl.lightColor = glm::vec4(l.lightColor, 1);

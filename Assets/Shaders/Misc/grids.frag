@@ -37,10 +37,10 @@ vec4 grid(vec3 fragPose, float scale) {
     vec2 gridAx=fwidth(coord);
     //x axis
     float linex=smoothstep(axisLength-gridAx.x,axisLength+gridAx.x,abs(coord.x));
-    vec4 colx = vec4(1.0 - min(linex, 1.0),0,0,1);
+    vec4 colx = vec4(0,0,1.0 - min(linex, 1.0),1);
     //z axis
     float linez=smoothstep(axisLength-gridAx.y,axisLength+gridAx.y,abs(coord.y));
-    vec4 colz = vec4(0,0,1.0 - min(linez, 1.0),1);
+    vec4 colz = vec4(1.0 - min(linez, 1.0),0,0,1);
 
 
     color=mix(gridCOl,colx,1-linex);
@@ -54,7 +54,7 @@ float getDepth(vec3 pos) {
 }
 
 #define near 0.1f
-#define far 250.0f
+#define far 150.0f
 
 
 float LinearizeDepth(float depth) 

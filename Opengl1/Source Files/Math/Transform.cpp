@@ -2,14 +2,24 @@
 
 //graphics framework uses left handsided 3d-coordinate system
 
-Transform::Transform():rotation(0,0,0)
+Transform::Transform()
 {
-	scale = glm::vec3(1,1,1);
-	position = glm::vec3(0,0,0);
+	baseScale = glm::vec3(1,1,1);
+	basePosition = glm::vec3(0,0,0);
+	localPosition = basePosition;
+	localScale = baseScale;
+
+	localToWorld =glm::mat4(1.0f);
+	worldToLocal =glm::mat4(1.0f);
 }
 
-Transform::Transform(float posX, float posY, float posZ):rotation(0,0,0)
+Transform::Transform(float posX, float posY, float posZ)
 {
-	scale = glm::vec3(1,1,1);
-	position = glm::vec3(posX,posY,posZ);
+	baseScale = glm::vec3(1, 1, 1);
+	basePosition = glm::vec3(0, 0, 0);
+	localPosition = glm::vec3(posX,posY,posZ);
+	localScale = baseScale;
+
+	localToWorld = glm::mat4(1.0f);
+	worldToLocal = glm::mat4(1.0f);
 }

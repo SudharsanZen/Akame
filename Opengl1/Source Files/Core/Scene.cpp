@@ -54,9 +54,9 @@ Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 	stbi_set_flip_vertically_on_load(true);
 	color = glm::vec4(0,0,0,1);
 	cam.setFieldOfView(60.0f);
-	cam.transform.position = glm::vec3(5, 5, 5);
-	cam.transform.rotation = Quaternion::rotationAroundAxisVector(-135, worldUp);
-	cam.transform.rotation = Quaternion::rotationAroundAxisVector(-45, cam.transform.right()) * cam.transform.rotation.quaternion;
+	cam.transform.SetGlobalPosition(glm::vec3(5, 5, 5));
+	cam.transform.SetLocalRotation(Quaternion::rotationAroundAxisVector(-135, worldUp));
+	cam.transform.SetLocalRotation(Quaternion::rotationAroundAxisVector(-45, cam.transform.right()) * cam.transform.GetGlobalRotation());
 	InitEcs();
 	if (!AssetManager::isInitialized())
 	{
@@ -172,9 +172,9 @@ void Scene::Render()
 		physicsSys->Run(deltaTime);
 		fn();
 	
-		//lines(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0)).renderMesh();
-		//lines(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0)).renderMesh();
-		//lines(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1)).renderMesh();
+		lines(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0)).renderMesh();
+		lines(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0)).renderMesh();
+		lines(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1)).renderMesh();
 
 	window.processInput();
 	window.swapBuffers();

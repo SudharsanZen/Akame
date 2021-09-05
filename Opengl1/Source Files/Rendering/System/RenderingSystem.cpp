@@ -160,7 +160,7 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 		{
 			Transform& t = E->GetComponent<Transform>(ent);
 			Mesh& mesh = E->GetComponent<Mesh>(ent);
-			E->GetComponent<Material>(ent).use(t, glm::vec3(0), cam.transform.position, shader);
+			E->GetComponent<Material>(ent).use(t, glm::vec3(0), cam.transform.GetGlobalPosition(), shader);
 			mesh.renderMesh();
 		}
 

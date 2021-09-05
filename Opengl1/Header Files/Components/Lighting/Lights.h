@@ -1,11 +1,11 @@
 #pragma once
 #include"glm/glm/glm.hpp"
 #include"Rendering/Shader.h"
-
+#include"Components/Components.h"
 enum class LIGHT {DIRECTIONAL,POINT,SPOT};
 class LightSystem;
 
-class Lights
+class Lights:public Components
 {
 private:
 	LIGHT type;

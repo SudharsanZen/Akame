@@ -2,6 +2,7 @@
 
 #include<vector>
 #include"Math/GlmMath.h"
+#include"Components/Components.h"
 struct vert
 {
 	glm::vec3 pos;
@@ -11,7 +12,7 @@ struct vert
 	glm::vec3 biTangent;
 };
 
-class Mesh
+class Mesh:public Components
 {
 private:
 	//Buffer object and Atrribute object iDs

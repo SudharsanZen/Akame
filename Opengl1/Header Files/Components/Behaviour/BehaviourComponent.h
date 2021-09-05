@@ -1,11 +1,12 @@
 #pragma once
 #include"Components/Behaviour/Behaviour.h"
+#include"Components/Components.h"
+#include"Scripting/BehaviourSystem.h"
 static float behvCount=0;
-class BehaviourComponent
+class BehaviourComponent:public Components
 {
 private:
 	//Id of the entity to which this component belongs to
-	EntityID eid;
 	std::shared_ptr<Behaviour> behaviour;
 	friend class BehaviourSystem;
 	friend class Scene;

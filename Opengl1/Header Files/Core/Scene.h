@@ -68,9 +68,7 @@ public:
 	template<typename T>
 	T& AddComponent(EntityID entityID);
 
-	//specialization of AddComponent for BehaviourComponent for storing entityID along with the component
-	template<>
-	BehaviourComponent& AddComponent<BehaviourComponent>(EntityID entityID);
+
 
 	//Remove added component
 	template<typename T>
@@ -102,18 +100,15 @@ template<typename T>
 inline T& Scene::AddComponent(EntityID entityID)
 {
 
-	return ecs->AddComponent<T>(entityID);
+	T& comp=ecs->AddComponent<T>(entityID);
+	comp.eid = entityID ;
+	comp.ecs = ecs;
+	return comp;
 }
 
 //specialization of AddComponent for BehaviourComponent for storing entityID along with the component
 
-template<>
-inline BehaviourComponent& Scene::AddComponent(EntityID entityID)
-{
-	BehaviourComponent &bh= ecs->AddComponent<BehaviourComponent>(entityID);
-	bh.eid = entityID;
-	return bh;
-}
+
 
 //Remove added component
 

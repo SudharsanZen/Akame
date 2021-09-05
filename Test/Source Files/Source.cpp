@@ -68,7 +68,7 @@ int main()
 
 	Transform planeTransform;
 
-	planeTransform.scale *= 20.0f;
+	planeTransform.SetGlobalScale(glm::vec3( 20.0f));
 
 	scene.AddComponent<Mesh>(plane).CreateMesh(generatePlaneVertices());
 	scene.AddComponent<Transform>(plane)=planeTransform;
@@ -108,7 +108,7 @@ int main()
 			}
 			scene.AddComponent<Transform>(box) =Transform(0, 3, 0);
 			
-			scene.GetComponent<Transform>(box).rotation.setEulerAngle(0, 0, 0);
+		
 			scene.AddComponent<physics::RigidBody3D>(box);
 			physics::RigidBody3D& rbdy = scene.GetComponent<physics::RigidBody3D>(box);
 			

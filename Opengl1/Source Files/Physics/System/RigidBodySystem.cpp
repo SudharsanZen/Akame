@@ -46,10 +46,10 @@ void physics::RigidBodySystem::setPxToVisualTransform()
 	{
 		RigidBody3D& rb3d = e->GetComponent<RigidBody3D>(ent);
 		Transform& transform = e->GetComponent<Transform>(ent);
-		scale = transform.scale;
+		scale = transform.GetLocalScale();
 		transform = _PxToTrans(rb3d.rigidbody->getGlobalPose());
 
-		transform.scale = scale;
+		transform.SetLocalScale(scale);
 
 	}
 

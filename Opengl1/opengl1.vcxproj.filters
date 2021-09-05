@@ -177,6 +177,7 @@
     <ClInclude Include="Header Files\Rendering\System\ShaderRenderPipeline.h" />
     <ClInclude Include="Header Files\Rendering\System\DeferredPipeline.h" />
     <ClInclude Include="Header Files\Rendering\DepthFrameBuffer.h" />
+    <ClInclude Include="Header Files\Components\Components.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Assets\Asset.cpp">
@@ -290,5 +291,6 @@
       <Filter>Header Files\Systems\RenderingSystem</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Rendering\DepthFrameBuffer.cpp" />
+    <ClCompile Include="Source Files\Components\Components.cpp" />
   </ItemGroup>
 </Project>

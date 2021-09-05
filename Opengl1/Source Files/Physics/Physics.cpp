@@ -21,7 +21,7 @@ namespace physics
 	}
 	physx::PxTransform _ToPxTrans(Transform t)
 	{
-		return physx::PxTransform(_ToPxVec3(t.position), _ToPxQuat(t.rotation.quaternion));
+		return physx::PxTransform(_ToPxVec3(t.GetGlobalPosition()), _ToPxQuat(t.GetGlobalRotation().quaternion));
 	}
 
 	glm::vec3 _PxToVec3(physx::PxVec3 v)
@@ -35,7 +35,7 @@ namespace physics
 	Transform _PxToTrans(physx::PxTransform pxt)
 	{
 		Transform t(_PxToVec3(pxt.p));
-		t.rotation.quaternion = _PxToQuat(pxt.q);
+		t.SetGlobalRotation(_PxToQuat(pxt.q));
 		return t;
 	}
 

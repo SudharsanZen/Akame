@@ -122,7 +122,7 @@ void DeferredRendererFragmentBuffer::outPutToQaud(Camera &cam,std::shared_ptr<Sh
 	shader->setUniformInteger("AlbedoSpec",0);
 	shader->setUniformInteger("Position",1);
 	shader->setUniformInteger("Normal",2);
-	shader->setUniformVec3("viewPos",cam.transform.position);
+	shader->setUniformVec3("viewPos",cam.transform.GetGlobalPosition());
 
 	quad.renderMesh();
 }

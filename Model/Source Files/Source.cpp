@@ -22,7 +22,7 @@ public:
 		angle += deltaTime * 5;
 		angle = angle - floor(angle / 360) * 360;
 		Transform& t = GetComponent<Transform>();
-		t.rotation = Quaternion::rotationAroundAxisVector(angle,glm::vec3(0,1,0));
+		t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(angle,glm::vec3(0,1,0)));
 	}
 };
 
@@ -68,7 +68,7 @@ int main()
 	for (int i = 0; i < testModel.meshes.size(); i++)
 	{
 		Transform t(0, 12, 0);
-		t.scale *= 7;
+		t.SetGlobalScale(t.GetGlobalScale()*7.0f);
 		
 		EntityID bag = scene.CreateEntity();
 		scene.AddComponent<Mesh>(bag)= testModel.meshes[i];

@@ -37,19 +37,31 @@ int main()
 	d.setPointLightConst(1,2,10);
 	d.ambientLigting(0.1f,0.1f,0.1f);
 	
-	scene.AddComponent<Transform>(dir).position=glm::vec3(0,2,0);
+	scene.AddComponent<Transform>(dir).SetGlobalPosition(glm::vec3(0,2,0));
 	std::vector<EntityID> cubeList;
-	float m = 100;
+	float m = 10;
 	for (int i = 0; i < m; i++)
 	{
 		
-
+		
 		EntityID cube = scene.CreateEntity();
 		cubeList.push_back(cube);
-		scene.AddComponent<Transform>(cube).position=glm::vec3(float(i) * 0.9f, 0, 0);
+		Transform& t = scene.AddComponent<Transform>(cube);
+		t.SetGlobalRotation(Quaternion(0,0,0));
+		t.SetGlobalPosition(glm::vec3(float(i), 0, 0));
 		Mesh &cM=scene.AddComponent<Mesh>(cube);
 		scene.AddComponent<Material>(cube)=cmat;
-		cM.CreateMesh(generateSphereVertices(32,16,1));
+		cM.CreateMesh(generateSphereVertices(32,16,0.5));
+
+		if (i > 0)
+		{
+			t.setParent(cubeList[i - 1]);
+		}
+		else
+		{
+
+			//t.SetLocalScale(glm::vec3(3));
+		}
 	}
 	
 
@@ -58,7 +70,7 @@ int main()
 	Material mat("GRIDS");
 	EntityID plane= scene.CreateEntity();
 	Transform planeInf;
-	planeInf.scale *= 1;
+
 	scene.AddComponent<Transform>(plane)=planeInf;
 	Mesh &pm=scene.AddComponent<Mesh>(plane);
 	scene.AddComponent<Material>(plane)=mat;
@@ -72,34 +84,27 @@ int main()
 	Mesh& skMesh = scene.AddComponent<Mesh>(sky);
 	skMesh.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
+	
+	Transform& t = scene.GetComponent<Transform>(cubeList[0]);
+	Transform& t1 = scene.GetComponent<Transform>(cubeList[4]);
+	
+	t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30, glm::vec3(0, 0, 1)));
 
-	
-	
 	scene.OnStart();
 	scene.vsyncOn(false);
 	float time = 0;
 	while (!window.closeWindow())
 	{
-		time += scene.getDeltaTime();
+		time += scene.getDeltaTime()*10;
 		flyCam(scene.cam,scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.Render();
-
-		for (int i = 0; i < m; i++)
-		{
-			float fixSt = (1 - ((m - i) / m)) * (20.0f / (i + 1));
-			float fixEnd = ((m+5.0f - i) / m);
-			Transform& t = scene.GetComponent<Transform>(cubeList[i]);
-			float val = (sin((i+time*2.0f)))*5;
-		
-			t.position.y = (val*fixEnd+sin(i/10.0f+time*2)*5)*fixSt;
-
-			t.scale = glm::vec3(1, 1, 1) *(fixEnd);
-			
-			
-			t.position.z = sin((0.5+i)/2+time*2.0f)*fixSt*10 ;
-			
-		}
+		glm::vec3 pose = t.GetLocalPosition();
+		t.SetLocalScale((sin(time/15) * glm::vec3(1)));
+		//t1.SetGlobalScale(sin(time)*glm::vec3(1));
+		//t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(time,glm::vec3(0,0,1)));
+		t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(time,glm::vec3(0,1,0)));
+		t1.SetGlobalRotation(Quaternion::rotationAroundAxisVector(time, glm::vec3(0, 1, 0)));
 	}
 
 

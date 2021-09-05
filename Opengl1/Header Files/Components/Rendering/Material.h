@@ -3,8 +3,9 @@
 #include"Rendering/Texture.h"
 #include"Rendering/Shader.h"
 #include"Assets/AssetManager.h"
+#include"Components/Components.h"
 #include<unordered_map>
-class Material
+class Material:public Components
 {
 private:
 	AssetManager a;

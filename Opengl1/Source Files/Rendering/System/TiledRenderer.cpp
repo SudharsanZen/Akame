@@ -74,7 +74,7 @@ void TiledRenderer::setUpShader(Camera& cam, std::shared_ptr<LightSystem> lsys)
 
     glUniform1i(glGetUniformLocation(progID, "height"), height);
     glUniform1i(glGetUniformLocation(progID, "width"), width);
-    glUniform3fv(glGetUniformLocation(progID, "viewPos"), 1, glm::value_ptr(cam.transform.position));
+    glUniform3fv(glGetUniformLocation(progID, "viewPos"), 1, glm::value_ptr(cam.transform.GetGlobalPosition()));
     glUniform1i(glGetUniformLocation(progID, "NUM_POINT_LIGHT"), int(lsys->ptVector.size()));
     glUniformMatrix4fv(glGetUniformLocation(progID, "projInv"), 1, GL_FALSE, glm::value_ptr(glm::inverse(cam.getProjectionMatrix())));
     glUniformMatrix4fv(glGetUniformLocation(progID, "viewMat"), 1, GL_FALSE, glm::value_ptr(cam.getViewMatrix()));

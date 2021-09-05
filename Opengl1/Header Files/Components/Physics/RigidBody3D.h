@@ -4,6 +4,7 @@
 #include<memory>
 #include<vector>
 #include<cassert>
+#include"Components\Components.h"
 class ECS;
 typedef std::size_t Entity;
 namespace physx
@@ -19,13 +20,13 @@ namespace physics
 		STATIC,DYNAMIC
 	};
 
-	class RigidBody3D
+	class RigidBody3D:public Components
 	{
-		Entity eid;
+
 		RigidBodyType rBodyType;
 		ColliderShape colliderShape;
 		std::weak_ptr<Physics> physicsPtr;
-		std::weak_ptr<ECS> ecs;
+
 		physx::PxRigidActor* rigidbody;
 
 		void ASSERT_RB() { assert(rigidbody && "rigidbody is not initialized, trying to access nullptr!"); }

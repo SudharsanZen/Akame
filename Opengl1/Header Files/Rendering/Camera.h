@@ -24,8 +24,8 @@ public:
 	void setCameraPosition(float x,float y,float z);
 	void setCameraPosition(glm::vec3 pos);
 	void setCameraRotation(glm::vec3 rot);
-	void setCameraRotation(glm::quat rot) { transform.rotation.quaternion =rot; }
-	glm::vec3 getCameraPosition() { return transform.position; };
+	void setCameraRotation(glm::quat rot) { transform.SetGlobalRotation(rot); }
+	glm::vec3 getCameraPosition() { return transform.GetGlobalPosition(); };
 
 	//sets Field of View for the camera. takes input in degrees.
 	inline void setFieldOfView(float degrees) { this->fovy = glm::radians(degrees); };

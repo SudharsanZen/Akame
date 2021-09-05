@@ -94,6 +94,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Header Files\Components\Components.h" />
     <ClInclude Include="Header Files\Rendering\DepthFrameBuffer.h" />
     <ClInclude Include="Header Files\Assets\Asset.h" />
     <ClInclude Include="Header Files\Assets\AssetArray.h" />
@@ -138,6 +139,7 @@
     <ClInclude Include="Header Files\Misc\temp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source Files\Components\Components.cpp" />
     <ClCompile Include="Source Files\Rendering\DepthFrameBuffer.cpp" />
     <ClCompile Include="Header Files\Rendering\System\SceneTransformManager.h" />
     <ClCompile Include="Source Files\Assets\Asset.cpp" />

@@ -11,7 +11,15 @@ public:
 	
 	void UpdateTransforms()
 	{
-
+		std::shared_ptr<ECS> e = ecs.lock();
+		for (auto ent : entities)
+		{
+			Transform& t = e->GetComponent<Transform>(ent);
+			if (t.parent == -1)
+			{
+				t.updateChildBaseTransformDetails();
+			}
+		}
 	}
 
 	//this is called everytime a BehviourComponent is added to an Entity.

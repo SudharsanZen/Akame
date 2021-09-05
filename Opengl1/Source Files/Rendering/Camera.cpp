@@ -28,7 +28,7 @@ glm::mat4 Camera::getViewMatrix()
 	static glm::vec3 up,right;
 	right = glm::normalize(glm::cross(camDir,glm::vec3(0,1,0)));
 	up = glm::normalize(glm::cross(right,camDir));*/
-	return glm::lookAt(transform.position,transform.position+(transform.forward()*10.0f),transform.up());
+	return glm::lookAt(transform.GetGlobalPosition(),transform.GetGlobalPosition()+(transform.forward()*10.0f),transform.up());
 	//return lookAt(transform,transform.position);
 
 }
@@ -63,17 +63,17 @@ glm::mat4 Camera::lookAt(Transform& transform, glm::vec3& pos)
 
 void Camera::setCameraPosition(float x, float y, float z)
 {
-	transform.position = glm::vec3(x,y,z);
+	transform.SetGlobalPosition(glm::vec3(x,y,z));
 }
 
 void Camera::setCameraPosition(glm::vec3 pos)
 {
-	transform.position = pos;
+	transform.SetGlobalPosition(pos);
 }
 
 void Camera::setCameraRotation(glm::vec3 rot)
 {
-	transform.rotation.setEulerAngle(rot.x,rot.y,rot.z);
+	transform.SetGlobalRotation(Quaternion(rot.x,rot.y,rot.z));
 }
 
 
@@ -123,8 +123,8 @@ void flyCam(Camera& cam,float deltaTime)
 			//Y =Y+((Y>0)?-1:1)*360.0f;
 		Y = abs(Y) >= 360.0f ? 0 : Y;
 		X = abs(X) >= 360.0f ? 0 : X;
-		cam.transform.rotation = Quaternion::rotationAroundAxisVector(Y, worldUp);
-		cam.transform.rotation = Quaternion::rotationAroundAxisVector(X, cam.transform.right()) * cam.transform.rotation.quaternion;
+		cam.transform.SetGlobalRotation(Quaternion::rotationAroundAxisVector(Y, worldUp));
+		cam.transform.SetGlobalRotation(Quaternion::rotationAroundAxisVector(X, cam.transform.right()) * cam.transform.GetGlobalRotation());
 	}
 
 	
