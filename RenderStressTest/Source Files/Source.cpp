@@ -45,8 +45,8 @@ void app()
 
 	Transform planeTransform;
 
-	planeTransform.scale *= 50;
-
+	planeTransform.SetGlobalScale(glm::vec3(1) *= 50);
+	planeTransform.SetGlobalPosition(glm::vec3(0.0f,0.1f,0.0f));
 	Mesh &mP=scene.AddComponent<Mesh>(plane);
 	mP.CreateMesh(generatePlaneVertices());
 	scene.AddComponent<Transform>(plane)=planeTransform;
@@ -58,8 +58,8 @@ void app()
 	rbdy2.setRigidBodyType(physics::RigidBodyType::STATIC, planeShape);
 
 	Transform p2(0,5,0);
-	p2.rotation.setEulerAngle(90,0,0);
-	p2.scale *= 5;
+	p2.SetGlobalRotation(Quaternion(90,0,0));
+	p2.SetGlobalScale(glm::vec3( 5));
 
 	Mesh &plane2M=scene.AddComponent<Mesh>(plane2);
 	plane2M.CreateMesh(generatePlaneVertices());
@@ -80,7 +80,7 @@ void app()
 	Material mat("GRIDS");
 	EntityID pl = scene.CreateEntity();
 	Transform planeInf;
-	planeInf.scale *= 1;
+
 	scene.AddComponent<Transform>(pl)= planeInf;
 	Mesh &plm=scene.AddComponent<Mesh>(pl);
 	scene.AddComponent<Material>(pl)= mat;
@@ -123,11 +123,11 @@ void app()
 		bm.CreateMesh(generateSphereVertices(16,32,0.5));
 		scene.AddComponent<Transform>(box)= Transform(2.0f * (i / rt)-off, 0.5f, (2.0f) * (i % rt)-off);
 		scene.AddComponent<Material>(box)=boxMat;
-		scene.GetComponent<Transform>(box).rotation.setEulerAngle(0, 0, 0);
+		scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 	}
 	
 	scene.OnStart();
-	scene.vsyncOn(false);
+	scene.vsyncOn(true);
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.3f;
 	float acc = 0;
@@ -142,11 +142,14 @@ void app()
 		
 		for (int i = 0; i < lightsVec.size(); i++)
 		{
-			scene.GetComponent<Transform>(lightsVec[i]).position.y=1+sin(acc+i);
+		
+			Transform& T = scene.GetComponent<Transform>(lightsVec[i]);
+			glm::vec3 pose = T.GetGlobalPosition();
+			T.SetGlobalPosition(glm::vec3(pose.x, 1 + sin(acc + i),pose.z));
 		}
 		Lights &t=scene.GetComponent<Lights>(dir);
-		Quaternion rot(acc*10.0f,0,0);
-		t.setDirection(rot*glm::vec3(0, -1, 0));
+		Quaternion rot(0,0, fmod(acc * 10.0f, 180));
+		t.setDirection(rot*glm::vec3(-1,0, 0));
 		
 	}
 

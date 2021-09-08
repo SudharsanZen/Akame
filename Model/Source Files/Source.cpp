@@ -91,8 +91,10 @@ int main()
 
 
 		flyCam(scene.cam, scene.getDeltaTime());
+		scene.clearBuffer();
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.Render();
+		scene.swapBuffers();
 
 
 	}

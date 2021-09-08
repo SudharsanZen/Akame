@@ -39,7 +39,7 @@ namespace physics
 	public:
 		RigidBody3D()
 		{
-			eid = -1;
+			eid = EntityID(-1,-1);
 			rBodyType = RigidBodyType::STATIC;
 			rigidbody = NULL;
 		}

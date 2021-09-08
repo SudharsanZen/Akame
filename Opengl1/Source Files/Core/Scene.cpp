@@ -95,6 +95,7 @@ void Scene::InitEcs()
 	ecs->RegisterComponent<BehaviourComponent>();
 	ecs->RegisterComponent<physics::RigidBody3D>();
 	ecs->RegisterComponent<Lights>();
+	ecs->RegisterComponent<EntityDescriptor>();
 
 
 	//create system signature
@@ -117,18 +118,25 @@ void Scene::InitEcs()
 	Signature transformSig;
 	transformSig.set(ecs->GetComponentBitPose<Transform>());
 
+	Signature entityDescriptor;
+	entityDescriptor.set(ecs->GetComponentBitPose<EntityDescriptor>());
+
 	//register system and it's signature
 	renderSys=ecs->RegisterSystem<RenderingSystem>();
 	behaviourSys=ecs->RegisterSystem<BehaviourSystem>();
 	physicsSys = ecs->RegisterSystem<physics::RigidBodySystem>();
 	lightSys = ecs->RegisterSystem<LightSystem>();
 	transformManager = ecs->RegisterSystem<SceneTransformManager>();
+	EDS = ecs->RegisterSystem<EntityDescriptionSystem>();
+
 	behaviourSys->ecs = ecs;
 	physicsSys->ecs=ecs;
 	renderSys->lightsystem = lightSys;
 	lightSys->ecs = ecs;
 	renderSys-> ecs = ecs;
 	transformManager->ecs = ecs;
+	EDS->ecs = ecs;
+	ecs->SetSystemSignature<EntityDescriptionSystem>(entityDescriptor);
 	ecs->SetSystemSignature<RenderingSystem>(renderSysSig);
 	ecs->SetSystemSignature<BehaviourSystem>(behSysSig);
 	ecs->SetSystemSignature<physics::RigidBodySystem>(physicsSysSig);
@@ -149,21 +157,22 @@ void Scene::release()
 	renderSys.reset();
 }
 
+void Scene::clearBuffer()
+{
+	//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+	//glClearColor(1,1,1,1.0f);
+	glClearColor(color.x, color.y, color.z, color.w);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 /*Render a Frame of the Scene.
 * call this inside the main window loop. 
 */
 void Scene::Render()
 {
-	
+	window.processInput();
+	glfwPollEvents();
 	float currTime = glfwGetTime();
-
-	//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	//glClearColor(1,1,1,1.0f);
-	glClearColor(color.x,color.y,color.z,color.w);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	
-
 	//renderStuff
 		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		transformManager->UpdateTransforms();
@@ -175,10 +184,16 @@ void Scene::Render()
 		lines(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0)).renderMesh();
 		lines(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0)).renderMesh();
 		lines(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1)).renderMesh();
-
-	window.processInput();
-	window.swapBuffers();
-	glfwPollEvents();
 	deltaTime = currTime - lastTime;
 	lastTime = currTime;
+	
+	
+	
+}
+
+void Scene::swapBuffers()
+{
+	
+	window.swapBuffers();
+	
 }

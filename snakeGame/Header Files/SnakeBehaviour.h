@@ -31,7 +31,7 @@ class Snake :public Behaviour
 		Transform cT(pose);
 		AddComponent<Material>(body) = (mat);
 		Mesh cub;
-		cT.scale *= snakeSize;
+		cT.SetGlobalScale(glm::vec3(snakeSize));
 		cub.CreateMesh(generateCubeVertices());
 		AddComponent<Transform>(body)=cT;
 		AddComponent<Mesh>(body)=cub;
@@ -82,7 +82,7 @@ public:
 		
 		apple = CreateEntity();
 		Transform aT(1.5, 0, -1.5);
-		aT.scale *= 0.01;
+		aT.SetGlobalScale(glm::vec3(0.01));
 		
 		AddComponent<Transform>(apple)=( aT);
 		AddComponent<Mesh>(apple)= appleModel->meshes[0];
@@ -121,11 +121,11 @@ public:
 			started = true;
 			moveDir = glm::vec3(snakeSize, 0, 0);
 		}
-		glm::vec3 newPose = ((glm::normalize(glm::vec3(0, 1, -1)) * 10.0f + headPose.position));
+		glm::vec3 newPose = ((glm::normalize(glm::vec3(0, 1, -1)) * 10.0f + headPose.GetGlobalPosition()));
 		if (gameOver)
-			newPose.y = mainCam.transform.position.y;
-		mainCam.transform.position += (-mainCam.transform.position + newPose) * deltaTime * 2.0f;
-		mainCam.transform.rotation.setEulerAngle(-45, 0, 0);
+			newPose.y = mainCam.transform.GetGlobalPosition().y;
+		mainCam.transform.SetGlobalPosition(mainCam.transform.GetGlobalPosition()+(-mainCam.transform.GetGlobalPosition() + newPose) * deltaTime * 2.0f);
+		mainCam.transform.SetGlobalRotation(Quaternion(-45, 0, 0));
 		if (!started)
 			return;
 		if (prevDir==-moveDir || moveDir==-currMoveDir)
@@ -162,8 +162,8 @@ public:
 			}
 
 			
-			headPose.position += moveDir;
-			headPose.rotation = Quaternion::rotationAroundAxisVector(glm::orientedAngle(glm::vec3(0,0,1),moveDir,glm::vec3(0,1,0))*(180.0f/glm::pi<float>()),glm::vec3(0,1,0));
+			headPose.SetGlobalPosition(headPose.GetGlobalPosition()+moveDir);
+			headPose.SetGlobalRotation(Quaternion::rotationAroundAxisVector(glm::orientedAngle(glm::vec3(0,0,1),moveDir,glm::vec3(0,1,0))*(180.0f/glm::pi<float>()),glm::vec3(0,1,0)));
 			currMoveDir = moveDir;
 		}
 		
@@ -172,7 +172,7 @@ public:
 
 		Transform &applePose=GetComponent<Transform>(apple);
 		
-		if (glm::length(applePose.position - headPose.position) <= 0.2f)
+		if (glm::length(applePose.GetGlobalPosition() - headPose.GetGlobalPosition()) <= 0.2f)
 		{
 
 
@@ -184,17 +184,16 @@ public:
 
 			if (score>=bX*bY*4)
 			{
-				applePose.position = glm::vec3(0, -2, 0);
+				applePose.SetGlobalPosition(glm::vec3(0, -2, 0));
 				gameWon = true;
 				return;
 			}
 			
 			score += 1;
 			
-			applePose.position.x=randX;
-			applePose.position.z=randZ;
-			applePose.scale = glm::vec3(0.0f);
-			tailList.push_back(createCube(tailMat,GetComponent<Transform>(tailList.back()).position));
+			applePose.SetGlobalPosition(glm::vec3(randX,applePose.GetGlobalPosition().y,randZ));
+			applePose.SetGlobalScale(glm::vec3(0.0f));
+			tailList.push_back(createCube(tailMat,GetComponent<Transform>(tailList.back()).GetGlobalPosition()));
 		}
 
 
@@ -215,7 +214,7 @@ public:
 
 		for (int j = 0; j < tailList.size(); j++)
 		{
-			glm::vec3 pose = GetComponent<Transform>(tailList[j]).position;
+			glm::vec3 pose = GetComponent<Transform>(tailList[j]).GetGlobalPosition();
 
 			for (int i = 0; i < freeIndices.size(); i++)
 			{
@@ -236,11 +235,11 @@ public:
 	{
 		
 		Transform &headPose = GetComponent<Transform>(head);
-		glm::vec3 pose = headPose.position;
+		glm::vec3 pose = headPose.GetGlobalPosition();
 		for (int i = 0; i < tailList.size(); i++)
 		{
-			glm::vec3 currtailPose = GetComponent<Transform>(tailList[i]).position;
-			if (length(headPose.position - currtailPose) <= 0.2f)
+			glm::vec3 currtailPose = GetComponent<Transform>(tailList[i]).GetGlobalPosition();
+			if (length(headPose.GetGlobalPosition() - currtailPose) <= 0.2f)
 				return true;
 		}
 		if (pose.z < (float)bY && pose.z > -(float)bY && pose.x < (float)bX && pose.x > -(float)bX)
@@ -255,10 +254,10 @@ public:
 	{
 		glm::vec3 targetScale = glm::vec3(0.01f);
 		Transform &appleT=GetComponent<Transform>(apple);
-		appleT.scale += (targetScale - appleT.scale) * deltaTime*10.0f;
+		appleT.SetGlobalScale(appleT.GetGlobalScale()+(targetScale - appleT.GetGlobalScale()) * deltaTime*10.0f);
 		appleRot += 100* deltaTime;
 		if(appleRot>360)
 		appleRot = 0;
-		appleT.rotation.setEulerAngle(0,appleRot,0);
+		appleT.SetGlobalRotation(Quaternion(0,appleRot,0));
 	}
 };

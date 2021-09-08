@@ -7,6 +7,8 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include"Core/Log/Log.h"
+#include"Core/Input.h"
+
 Window::Window(int width,int height,std::string winName,Window *shareWindow)
 {
 	Log::Init();
@@ -18,7 +20,7 @@ Window::Window(int width,int height,std::string winName,Window *shareWindow)
 	Width = width;
 	windowName = winName;
 	share = shareWindow;
-	
+	Input::flush();
 }
 
 Window::~Window()
@@ -48,6 +50,7 @@ int Window::getBufferWidth()
 
 bool Window::closeWindow()
 {
+	Input::flush();
 	//returns true if windows close event has occured
 	if (mainWindow)
 		return glfwWindowShouldClose(mainWindow.get());
@@ -56,6 +59,7 @@ bool Window::closeWindow()
 		ENGINE_CORE_ERROR("initialize window first!");
 		return true;
 	}
+	
 }
 
 void Window::swapBuffers()
@@ -129,6 +133,8 @@ bool Window::initialize()
 	int a;
 	glGetIntegerv(GL_MAX_VERTEX_UNIFORM_BLOCKS,&a);
 	ENGINE_CORE_CRITICAL("MAX UNIFORM BLOCK SIZE:{0:d}",a);
+	glfwSetKeyCallback(mainWindow.get(), Input::handleKeys);
+	
 	return true;
 }
 

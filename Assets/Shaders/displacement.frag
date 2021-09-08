@@ -5,7 +5,7 @@ in vec3 Normal;
 in vec3 FragPos;  
 in vec2 uvCoord;
 
-uniform vec3 lightPos; 
+
 uniform vec3 viewPos; 
 uniform vec3 lightColor;
 uniform vec3 objectColor;
@@ -22,18 +22,14 @@ struct Material
     float shininess;
 
 };
-float near = 0.01; 
-float far  = 10.0;
-float LinearizeDepth(float depth) 
-{
-    float z = depth * 2.0 - 1.0; // back to NDC 
-    return (2.0 * near * far) / (far + near - z * (far - near));	
-}
+
+
 uniform Material material;
 
 
 void main()
 {
+    vec3 lightPos=vec3(10,10,0); 
     // ambient
     if(emissive>0)
     {
@@ -43,8 +39,11 @@ void main()
     float ambientStrength = 0.1;
     vec3 ambient = ambientStrength * lightColor;
   	
+    vec3 r=dFdx(FragPos);
+    vec3 l=dFdy(FragPos);
+
     // diffuse 
-    vec3 norm = normalize(Normal);
+    vec3 norm = normalize(cross(r,l));
     //norm = normalize(texture(material.normalMap,uvCoord).xyz);
     vec3 lightDir = normalize(lightPos - FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
@@ -54,7 +53,7 @@ void main()
     vec3 specularStrength = texture(material.specularMap,uvCoord).xyz;
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);  
-    float spec = 1*pow(max(dot(viewDir, reflectDir), 0.0), 16);
+    float spec = 1*pow(max(dot(viewDir, reflectDir), 0.0), 128);
     vec3 specular = specularStrength.x * spec * lightColor;  
         
     vec3 result = (ambient + diffuse + specular) * texture(material.diffuseMap,uvCoord).xyz;

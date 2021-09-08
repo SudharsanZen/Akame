@@ -8,7 +8,7 @@
 
 class Transform:public Components
 {
-	EntityID parent=-1;
+	EntityID parent=EntityID(-1,-1);
 
 	std::list<EntityID> child;
 	//global parent transform
@@ -49,6 +49,7 @@ class Transform:public Components
 		}
 	}
 	friend class SceneTransformManager;
+	friend class Editor;
 	
 public:
 	
@@ -98,7 +99,7 @@ public:
 	}
 	void SetGlobalRotation(Quaternion rotation)
 	{
-		if (parent == -1)
+		if (parent == EntityID(-1,-1))
 			localRotation = rotation.quaternion;
 		else
 		localRotation= glm::inverse(baseRotation.quaternion)* rotation.quaternion;
@@ -116,7 +117,7 @@ public:
 
 	Transform& getParentTransform()
 	{
-		assert(parent != -1 && "trying to access non existing parent transform, this transform doesn't have any parent");
+		assert(parent != EntityID(-1,-1) && "trying to access non existing parent transform, this transform doesn't have any parent");
 		return ecs.lock()->GetComponent<Transform>(parent);
 	}
 
@@ -140,7 +141,7 @@ public:
 		baseScale = p.GetGlobalScale();
 		
 		//get conversion matrices 
-		localToWorld = formTransformMatrix(basePosition,baseRotation,baseScale);
+		localToWorld = p.transformMatrix();
 		worldToLocal = glm::inverse(localToWorld);
 
 		//convert previously calculated world transform details to the current parent's local space
@@ -161,7 +162,7 @@ public:
 		localScale = GetGlobalScale();
 		localRotation = GetGlobalRotation();
 
-		if (parent != -1)
+		if (parent != EntityID(-1,-1))
 		{
 			Transform& prevP = ecs.lock()->GetComponent<Transform>(parent);
 			auto itr = std::find(prevP.child.begin(), prevP.child.end(), eid);
@@ -172,7 +173,7 @@ public:
 			}
 			
 		}
-		
+		parent = EntityID(-1,-1);
 		basePosition = glm::vec3(0);
 		baseScale = glm::vec3(1);
 		baseRotation = Quaternion(1, 0, 0, 0);

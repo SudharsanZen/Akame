@@ -239,10 +239,30 @@
 #define MOUSE_BUTTON_RIGHT     MOUSE_BUTTON_2
 #define MOUSE_BUTTON_MIDDLE    MOUSE_BUTTON_3
 		/*! @} */
+
+
+
+class GLFWwindow;
 class Input
 {
 private:
+	class keyState
+	{
+	public:
+		int currentState=0;
+		int oldState=0;
 
+		bool up;
+		bool down;
+
+	};
+	static keyState keyPressed[1024];
+	
+	static void handleKeys(GLFWwindow* window, int key, int code, int action, int mode);
+	friend class Window;
+	friend class Scene;
+
+	static void flush();
 public:
 	
 	

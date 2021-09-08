@@ -5,6 +5,7 @@
 class SceneTransformManager :public System
 {
 	std::weak_ptr<ECS> ecs;
+	friend class Editor;
 	friend class Scene;
 public:
 
@@ -15,7 +16,7 @@ public:
 		for (auto ent : entities)
 		{
 			Transform& t = e->GetComponent<Transform>(ent);
-			if (t.parent == -1)
+			if (t.parent == EntityID(-1,-1))
 			{
 				t.updateChildBaseTransformDetails();
 			}

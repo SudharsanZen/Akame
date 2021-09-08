@@ -7,6 +7,8 @@
 #include"ECS.h"
 #include"Components/Behaviour/BehaviourComponent.h"
 #include"Rendering/System/SceneTransformManager.h"
+#include"Components/EntityDescriptor.h"
+#include "Core/Editor/EntityDescriptionSystem.h"
 class Window;
 class RenderingSystem;
 class BehaviourSystem;
@@ -26,6 +28,7 @@ private:
 	std::shared_ptr<LightSystem> lightSys;
 	std::shared_ptr<physics::RigidBodySystem> physicsSys;
 	std::shared_ptr<SceneTransformManager> transformManager;
+	std::shared_ptr<EntityDescriptionSystem> EDS;
 	
 	glm::vec4 color;
 	Window &window;
@@ -35,7 +38,7 @@ private:
 	
 
 	friend class BehaviourSystem;
-
+	friend class Editor;
 	
 public:
 	void vsyncOn(bool status);
@@ -46,8 +49,9 @@ public:
 	Scene(Window& mainWindow);
 	
 	//call this to render a frame
+	void clearBuffer();
 	void Render();
-
+	void swapBuffers();
 	//call this before Scene::Render() in the main window loop 
 	void OnStart();
 	void InitEcs();
@@ -55,9 +59,18 @@ public:
 	//Creates an entity in the Scene
 	EntityID CreateEntity()
 	{
-		return ecs->CreateEntity();
+		EntityID eid=ecs->CreateEntity();
+		AddComponent<EntityDescriptor>(eid);
+		return eid;
 	}
-
+	void SetEntityTag(EntityID eid,std::string tag)
+	{
+		EDS->SetEntityTag(eid,tag);
+	}
+	void SetEntityName(EntityID eid,std::string name)
+	{
+		GetComponent<EntityDescriptor>(eid).SetName(name);
+	}
 	//Destroys an entity in the Scene
 	void DestroyeEntity(EntityID entityID)
 	{

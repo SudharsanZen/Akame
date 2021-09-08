@@ -8,9 +8,10 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 #include"snakeBehaviour.h"
-
+#include"Core/Editor/EditorUI.h"
 #define sizeX 2.0f
 #define sizeY 2.0f
+
 
 int main()
 {
@@ -25,7 +26,7 @@ int main()
 	}
 
 	Scene scene(window);
-
+	
 	Material floorMat("DEFERRED");
 	floorMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/crate/basecolor.jpg");
 	floorMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/crate/roughness.jpg");
@@ -51,17 +52,22 @@ int main()
 
 	EntityID floor = scene.CreateEntity();
 	Transform T(0, -(sizeY+0.5f), 0);
-	T.scale *= sizeY*2+0.01f;
+	T.SetGlobalScale(glm::vec3(sizeY*2+0.01f));
 	scene.AddComponent<Transform>(floor)=T;
 	Mesh &fMesh= scene.AddComponent<Mesh>(floor);
 	fMesh.CreateMesh(generateCubeVertices());
 	scene.AddComponent<Material>(floor)=(floorMat);
 	//scene.vsyncOn(true);
-
+	Editor editor(window);
+	
 	scene.OnStart();
 	while (!window.closeWindow())
 	{
+		scene.clearBuffer();
+	
 		scene.Render();
+		editor.DrawUI();
+		scene.swapBuffers();
 		
 	}
 

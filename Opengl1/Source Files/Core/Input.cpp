@@ -1,49 +1,66 @@
-#include "Core/Input.h"
+
 #include"Core/Window.h"
 #include<GLFW/glfw3.h>
 #include<memory>
 #include<iostream>
+#include "Core/Input.h"
 
 
+Input::keyState Input::keyPressed[1024];
 
-bool Input::getKeyDown(int key)
+
+void Input::flush()
 {
-	static GLFWwindow* ptr = glfwGetCurrentContext();
-
-	if(ptr)
+	for (int i = 0; i < 1024; i++)
 	{
-		return (glfwGetKey(ptr, key) == GLFW_PRESS);
+		keyPressed[i].up = false;
+		keyPressed[i].down = false;
 		
 	}
-	else
-	{
-		std::cout << "INPUT::Can't get glfw context!\n";
-	}
-	return false;
+	
+}
+bool Input::getKeyDown(int key)
+{
+	return (keyPressed[key].down);
 }
 
 bool Input::getKeyUp(int key)
 {
-	static GLFWwindow* ptr = glfwGetCurrentContext();
+	return (keyPressed[key].up);
 
-	if (ptr)
-	{
-		return ((ptr, key) == GLFW_RELEASE);
-	}
-	else
-	{
-		std::cout << "INPUT::Can't get glfw context!\n";
-	}
-	return false;
 }
+void Input::handleKeys(GLFWwindow* window, int key, int code, int action, int mode)
+{
 
+	if (key >= 0 && key < 1024)
+	{
+		float currKeyState = Input::keyPressed[key].currentState;
+		if (action == GLFW_PRESS || action == GLFW_RELEASE)
+		{
+			Input::keyPressed[key].oldState = currKeyState;
+			Input::keyPressed[key].currentState = action;
+			if (currKeyState == GLFW_PRESS && action == GLFW_RELEASE)
+			{
+				//std::cout << "Up";
+				Input::keyPressed[key].up = true;
+			}
+			else if (currKeyState == GLFW_RELEASE && action == GLFW_PRESS)
+			{
+				//std::cout << "Down";
+				Input::keyPressed[key].down = true;
+			}
+
+		}
+
+	}
+}
 bool Input::getKey(int key)
 {
-	static GLFWwindow* ptr = glfwGetCurrentContext();
+	/**/static GLFWwindow* ptr = glfwGetCurrentContext();
 
 	if (ptr)
 	{
-		return (glfwGetKey(ptr, key) == GLFW_REPEAT);
+		return (glfwGetKey(ptr, key) == GLFW_PRESS);
 	}
 	else
 	{

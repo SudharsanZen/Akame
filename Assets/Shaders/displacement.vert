@@ -31,7 +31,7 @@ out vec2 uvCoord;
 void main()
 {
     vec3 disp=normal;
-    gl_Position =proj*view*transform*vec4(aPos+vec3(0,texture2D(material.dispMap,texCoord).y*0.5,0), 1.0);
+    gl_Position =proj*view*transform*vec4(aPos+vec3(0,texture2D(material.dispMap,texCoord).x,0), 1.0);
     FragPos = vec3(transform * vec4(aPos, 1.0));
 
     Normal=mat3(transpose(inverse(transform))) * normal;

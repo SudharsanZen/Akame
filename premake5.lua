@@ -68,6 +68,7 @@ startproject "Test"
 
 include "premakeConf/Opengl1.lua"
 include "premakeConf/ECS.lua"
+include "premakeConf/AkameEngine.lua"
 
 group "Dependencies"
     include "premakeConf/imGui.lua"

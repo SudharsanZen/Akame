@@ -87,26 +87,26 @@ void flyCam(Camera& cam,float deltaTime)
 	double x = 0, y = 0;
 	static float X = -45, Y = -135;
 	float speed = 10;
-	if (Input::getKeyDown(GLFW_KEY_LEFT_SHIFT))
+	if (Input::getKey(GLFW_KEY_LEFT_SHIFT))
 	{
 		speed *= 5;
 	}
-	if (Input::getKeyDown(GLFW_KEY_W))
+	if (Input::getKey(GLFW_KEY_W))
 	{
 		cam.setCameraPosition(cam.getCameraPosition() + cam.transform.forward() * speed * deltaTime);
 
 	}
-	if (Input::getKeyDown(GLFW_KEY_S))
+	if (Input::getKey(GLFW_KEY_S))
 	{
 		cam.setCameraPosition(cam.getCameraPosition() - cam.transform.forward() * speed * deltaTime);
 
 	}
-	if (Input::getKeyDown(GLFW_KEY_A))
+	if (Input::getKey(GLFW_KEY_A))
 	{
 		cam.setCameraPosition(cam.getCameraPosition() - cam.transform.right() * speed * deltaTime);
 
 	}
-	if (Input::getKeyDown(GLFW_KEY_D))
+	if (Input::getKey(GLFW_KEY_D))
 	{
 		cam.setCameraPosition(cam.getCameraPosition() + cam.transform.right() * speed * deltaTime);
 

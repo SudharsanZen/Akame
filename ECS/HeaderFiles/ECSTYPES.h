@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 #include<bitset>
+#include<tuple>
 using Entity = std::size_t;
 using ComponentBitPosition = std::uint8_t;
 using ComponentID = const char*;
@@ -13,27 +14,41 @@ private:
 	Entity index;
 
 	friend class ECS;
+	friend class Editor;
 public:
-	EntityID()
+
+
+	EntityID():EntityID(0,0)
 	{
-		version = 0;
-		index = 0;
 	}
-	EntityID(Entity index,Entity version=0)
+	EntityID(Entity index,Entity version)
 	{
 		this->index = index;
 		this->version = version;
+		
 	}
 
-	bool operator == (EntityID e)
+	bool operator == (EntityID const &e)const 
 	{
-		return (version == e.version && index == e.index);
+		return std::tie(index, version) == std::tie(e.index, e.version);
 	}
 
-	bool operator != (EntityID e)
+	bool operator != (EntityID const& e)const
 	{
-		return !(version == e.version && index == e.index);
+		return std::tie(index, version) != std::tie(e.index, e.version);
 	}
+
+	bool operator < (EntityID const& e)const
+	{
+		return std::tie(index,version)<std::tie(e.index,e.version);
+	}
+
+
+	bool operator > (EntityID const &e)const 
+	{
+		return std::tie(index, version) > std::tie(e.index, e.version);
+	}
+
 	friend std::ostream& operator <<(std::ostream& os, const EntityID& ID);
 };
 

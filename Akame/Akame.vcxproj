@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{110C02F6-7D76-B66C-C6B4-6712325E94C1}</ProjectGuid>
+    <ProjectGuid>{8490D30C-F0A4-FBBD-B926-9F1D25FAF7EE}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>snakeGame</RootNamespace>
+    <RootNamespace>Akame</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -42,15 +42,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>bin\Debug\</OutDir>
-    <IntDir>..\bin\Intermediate\Debug\snakeGame\</IntDir>
-    <TargetName>snakeGame</TargetName>
+    <IntDir>..\bin\Intermediate\Debug\Akame\</IntDir>
+    <TargetName>Akame</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>bin\Release\</OutDir>
-    <IntDir>..\bin\Intermediate\Release\snakeGame\</IntDir>
-    <TargetName>snakeGame</TargetName>
+    <IntDir>..\bin\Intermediate\Release\Akame\</IntDir>
+    <TargetName>Akame</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -89,9 +89,6 @@
       <AdditionalLibraryDirectories>..\Opengl1\bin\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="Header Files\SnakeBehaviour.h" />
-  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Source.cpp" />
   </ItemGroup>

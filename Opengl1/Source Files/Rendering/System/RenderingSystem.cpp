@@ -73,7 +73,7 @@ void RenderingSystem::Run(Camera& cam)
 {
 	std::shared_ptr<LightSystem> lsys=lightsystem.lock();
 
-
+	
 	
 	updateUniformBuffer(cam);
 	

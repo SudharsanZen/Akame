@@ -63,7 +63,6 @@ void physics::RigidBodySystem::OnAddEntity(Entity entity)
 	{
 
 		RigidBody3D& rb3d = e->GetComponent<RigidBody3D>(ent);
-		rb3d.eid = ent;
 		rb3d.physicsPtr = mPhysics;
 		rb3d.ecs = ecs;
 	}
