@@ -1,0 +1,21 @@
+#pragma once
+
+#include<math.h>
+#include"Math/EngineMath.h"
+#include"Components/Lighting/Lights.h"
+#include"Rendering/Shader.h"
+#include"Components/Rendering/Mesh.h"
+#include"Rendering/MeshInstance.h"
+#include"Rendering/Texture.h"
+#include"Components/Rendering/Material.h"
+#include"Editor/EditorUI.h"
+#include"Rendering/Camera.h"
+#include"Core/Input.h"
+#include"misc/temp.h"
+#include"time.h"
+#include"misc/stopwatch.h"
+#include"Rendering/Model.h"
+#include"ComponentArray.h"
+#include"Components/Physics/RigidBody3D.h"
+#include"System.h"
+#include"Assets/AssetManager.h"
