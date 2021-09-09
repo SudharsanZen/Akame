@@ -49,6 +49,12 @@ public:
 	{
 		assert(versionOfEntity[entityID.index] == entityID.version && "trying to destroy a non existing entity!");
 
+		for (auto pair : systemManager.systems)
+		{
+			auto& system = pair.second;
+			if (system->entities.find(entityID.index) != system->entities.end())
+				system->OnDestroyEntity(entityID.index);
+		}
 		componentManager.EntityDestroyed(entityID.index);
 		systemManager.EntityDestroyed(entityID.index);
 		

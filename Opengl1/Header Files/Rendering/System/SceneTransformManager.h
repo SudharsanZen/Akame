@@ -23,11 +23,17 @@ public:
 		}
 	}
 
-	//this is called everytime a BehviourComponent is added to an Entity.
+
 	void OnAddEntity(Entity entity) override
 	{
 
 	}
 
+	void OnDestroyEntity(Entity entity)override
+	{
+		Transform& t = ecs.lock()->GetComponent<Transform>(entity);
+		t.removeParent();
+		t.destroyChildren();
+	}
 
 };

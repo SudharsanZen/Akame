@@ -4,6 +4,8 @@
 #include<glad\glad.h>
 #include<GLFW\glfw3.h>
 #include<iostream>
+#include"Core/Input.h"
+#include<sstream>
 #include"Components/EntityDescriptor.h"
 void Editor::initImGui()
 {
@@ -47,18 +49,21 @@ Editor::Editor(Window &window,Scene &scene):io(initGui()),scene(scene)
 }
 void Editor::DrawNode(Transform const& t, EntityDescriptor &edt, ImGuiTreeNodeFlags const& base_flags)
 {
+	
 	EntityID selectedEntity(-1, -1);
     int numOfChild = t.child.size();
     static int selection_mask = (1 << 2);
     int node_clicked = -1;
     ImGuiTreeNodeFlags node_flags = base_flags;
-    const bool is_selected = (selected.find(edt.eid)!=selected.end());
+	std::stringstream str;
+	str << " id: "<<edt.eid.index<<"-"<<edt.eid.version;
+	const bool is_selected = (selected.find(edt.eid)!=selected.end());
     if (is_selected)
         node_flags |= ImGuiTreeNodeFlags_Selected;
     if (numOfChild>0)
     {
         //tree nodes
-        bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)edt.eid.index, node_flags, edt.name.c_str(), edt.eid.index);
+        bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)edt.eid.index, node_flags, (edt.name+str.str()).c_str(), edt.eid.index);
 		if (ImGui::IsItemClicked())
 		{
 			selectedEntity = edt.eid;
@@ -81,7 +86,7 @@ void Editor::DrawNode(Transform const& t, EntityDescriptor &edt, ImGuiTreeNodeFl
     {
       //leaves
         node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen; // ImGuiTreeNodeFlags_Bullet
-        ImGui::TreeNodeEx((void*)(intptr_t)edt.eid.index, node_flags, edt.name.c_str(), edt.eid.index);
+        ImGui::TreeNodeEx((void*)(intptr_t)edt.eid.index, node_flags, (edt.name + str.str()).c_str(), edt.eid.index);
 		if (ImGui::IsItemClicked())
 			selectedEntity = edt.eid;
 
@@ -109,7 +114,16 @@ void Editor::DrawNode(Transform const& t, EntityDescriptor &edt, ImGuiTreeNodeFl
 
 void Editor::DrawUI()
 {
-	std::set<Entity> entities = scene.transformManager->entities;
+	if (Input::getKeyDown(KEY_DELETE))
+	{
+
+		for (auto ent : selected)
+		{
+			scene.ecs->DestroyEntity(ent);
+
+		}
+		selected.clear();
+	}
 	std::shared_ptr<ECS> e = scene.ecs;
 	
 	ImGui_ImplOpenGL3_NewFrame();
@@ -131,7 +145,7 @@ void Editor::DrawUI()
             ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
 
 
-        for (auto ent : entities)
+        for (auto ent : scene.transformManager->entities)
         {
             Transform& t = e->GetComponent<Transform>(ent);
             EntityDescriptor& edt = e->GetComponent<EntityDescriptor>(ent);

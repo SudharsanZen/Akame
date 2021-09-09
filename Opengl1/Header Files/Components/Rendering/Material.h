@@ -136,7 +136,7 @@ public:
 		
 		for (auto& t : *uniformToTexDetails)
 		{
-			a.notUsingTex(t.second.location);
+			//a.notUsingTex(t.second.location);
 		}
 
 	}

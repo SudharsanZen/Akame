@@ -53,7 +53,10 @@ public:
 	//this is a call back function which is called evertime a new entity is registered under rendering system
 	void OnAddEntity(Entity entity) override {GroupEntityWithCommonShader(ecs.lock());}
 	//this is a call back function which is called when an entity is destroyed 
-	void OnDestroyEntity(Entity entity) override{ GroupEntityWithCommonShader(ecs.lock()); };
+	void AfterDestroyEntity() override
+	{ 
+		GroupEntityWithCommonShader(ecs.lock()); 
+	}
 	//call this update the frame buffer's size to which stuff are drawn too
 	void updateFrameBufferSize(int height,int width);
 	//change the viewPort's buffer size

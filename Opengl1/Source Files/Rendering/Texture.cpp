@@ -21,7 +21,7 @@ void Texture::reset()
 	{
 
 		glDeleteTextures(1, &textureID);
-		ENGINE_CORE_INFO("Destroying Texture"+imageDir);
+		
 		
 	}
 	textureID = -1;

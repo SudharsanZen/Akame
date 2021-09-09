@@ -53,8 +53,9 @@ int main()
 		Transform& t = scene.AddComponent<Transform>(cube);
 		t.SetGlobalRotation(Quaternion(0,0,0));
 		t.SetGlobalPosition(glm::vec3(float(i), 0, 0));
+		scene.AddComponent<Material>(cube) = cmat;
 		Mesh &cM=scene.AddComponent<Mesh>(cube);
-		scene.AddComponent<Material>(cube)=cmat;
+		
 		cM.CreateMesh(generateSphereVertices(32,16,0.5));
 
 		if (i > 0)
@@ -98,10 +99,12 @@ int main()
 	Transform& t1 = scene.GetComponent<Transform>(cubeList[4]);
 	
 	//t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30, glm::vec3(0, 0, 1)));
+
 	Editor editor(window,scene);
 	scene.OnStart();
 	scene.vsyncOn(false);
 	float deltaTime = 0;
+	i=3;
 	while (!window.closeWindow())
 	{
 		
@@ -109,24 +112,9 @@ int main()
 		flyCam(scene.cam,scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.clearBuffer();
-		scene.Render();
-		if (Input::getKeyDown(KEY_F))
-		{
 
-			EntityID cube = scene.CreateEntity();
-			std::stringstream str;
-			str << "Entity: " << i;
-			scene.AddComponent<Material>(cube) = cmat;
-			scene.SetEntityName(cube, str.str());
-			Transform& t = scene.AddComponent<Transform>(cube);
-			t.setParent(cubeList[0]);
-			t.SetGlobalRotation(Quaternion(0, 0, 0));
-			t.SetGlobalPosition(glm::vec3(float(i++), 0, 0));
-			Mesh& cM = scene.AddComponent<Mesh>(cube);
-			
-			cM.CreateMesh(generateSphereVertices(32, 16, 0.5));
-			cubeList.push_back(cube);
-		}
+		scene.Render();
+		
 		editor.DrawUI();
 		glm::vec3 pose = t.GetLocalPosition();
 

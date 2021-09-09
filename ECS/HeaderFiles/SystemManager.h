@@ -9,7 +9,7 @@ private:
 
 	std::unordered_map<ComponentID, Signature> systemSignature;	
 	std::unordered_map<ComponentID, std::shared_ptr<System>> systems;
-
+	friend class ECS;
 public:
 	template<typename T>
 	std::shared_ptr<T>	RegisterSystem()
@@ -52,8 +52,10 @@ public:
 			}
 			else
 			{
+				
+
 				system->entities.erase(entity);
-				system->OnDestroyEntity(entity);
+				system->AfterDestroyEntity();
 			}
 		}
 	}
@@ -62,8 +64,9 @@ public:
 	{
 		for (auto const& pair : systems)
 		{
+		
 			pair.second->entities.erase(entity);
-			
+			pair.second->AfterDestroyEntity();
 		}
 	}
 

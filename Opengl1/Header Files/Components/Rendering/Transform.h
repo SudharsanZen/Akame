@@ -50,6 +50,21 @@ class Transform:public Components
 	}
 	friend class SceneTransformManager;
 	friend class Editor;
+
+	void destroyChildren()
+	{
+		/*since removeParent (called on destroy of entities with transform components) changes the original child list, to avoid access violation error
+		  we are using a copy of the initial child list before destroy	and then doing the loop
+		*/
+		auto eCopy = child;
+		for (auto e : eCopy)
+		{
+			Transform& t = ecs.lock()->GetComponent<Transform>(e);
+			t.destroyChildren();
+			ecs.lock()->DestroyEntity(e);
+		
+		}
+	}
 	
 public:
 	

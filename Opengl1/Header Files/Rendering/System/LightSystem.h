@@ -80,7 +80,7 @@ public:
 
 	}
 
-	void OnDestroyEntity(Entity entity) override
+	void AfterDestroyEntity() override
 	{
 		updateLightList();
 		updatePointLightBuffer();
