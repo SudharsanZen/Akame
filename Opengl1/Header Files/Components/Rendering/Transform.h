@@ -199,6 +199,14 @@ public:
 	}
 	void reset()
 	{
+		auto cChild = child;
+		for (auto ch : cChild)
+		{
+			Transform &t=ecs.lock()->GetComponent<Transform>(ch);
+			t.setParent(parent);
+		}
+		removeParent();
+		
 		basePosition = glm::vec3(0);
 		baseScale = glm::vec3(1);
 		baseRotation.setEulerAngle(0,0,0);
