@@ -11,7 +11,7 @@
 [submodule "AkameCore/vendor/assimp"]
 	path = AkameCore/vendor/assimp
 	url = https://github.com/assimp/assimp.git
-[submodule "Opengl1/vendor/PhysX"]
+[submodule "AkameCore/vendor/PhysX"]
 	path = AkameCore/vendor/PhysX
 	url = https://github.com/SudharsanZen/PhysX.git
 [submodule "AkameCore/vendor/pugixml"]
