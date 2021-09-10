@@ -1,22 +1,22 @@
 [submodule "glfw"]
-	path = glfw
+	path = AkameCore/vendor/glfw
 	url = https://github.com/glfw/glfw.git
 [submodule "Opengl1/vendor/glm"]
-	path = Opengl1/vendor/glm
+	path = AkameCore/vendor/glm
 	url = https://github.com/g-truc/glm.git
 [submodule "Opengl1/vendor/imgui"]
-	path = Opengl1/vendor/imgui
+	path = AkameCore/vendor/imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = docking
 [submodule "Opengl1/vendor/assimp"]
-	path = Opengl1/vendor/assimp
+	path = AkameCore/vendor/assimp
 	url = https://github.com/assimp/assimp.git
 [submodule "Opengl1/vendor/PhysX"]
-	path = Opengl1/vendor/PhysX
+	path = AkameCore/vendor/PhysX
 	url = https://github.com/SudharsanZen/PhysX.git
 [submodule "Opengl1/vendor/pugixml"]
-	path = Opengl1/vendor/pugixml
+	path = AkameCore/vendor/pugixml
 	url = https://github.com/zeux/pugixml.git
 [submodule "Opengl1/vendor/spdlog"]
-	path = Opengl1/vendor/spdlog
+	path = AkameCore/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git

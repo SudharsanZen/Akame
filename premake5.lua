@@ -6,37 +6,40 @@ workspace "GameEngine"
         "Debug",
         "Release"
     }
+ComDir={}
+ComDir["AkameCore"]="%{wks.location}/AkameCore/"
 
 IncludeDir={}
-IncludeDir["GLFW"]="%{wks.location}/glfw/include"
-IncludeDir["vendor"]="%{wks.location}/Opengl1/vendor"
-IncludeDir["imGui"]="%{wks.location}/Opengl1/vendor/imGui"
-IncludeDir["assimp"]="%{wks.location}/Opengl1/vendor/assimp/include"
-IncludeDir["Engine"]="%{wks.location}/Opengl1/Header Files"
+
+IncludeDir["vendor"]="%{wks.location}/AkameCore/vendor"
+IncludeDir["GLFW"]="%{IncludeDir.vendor}/glfw/include"
+IncludeDir["imGui"]="%{IncludeDir.vendor}/imGui"
+IncludeDir["assimp"]="%{IncludeDir.vendor}/assimp/include"
+IncludeDir["AkameCore"]="%{wks.location}/AkameCore/Header Files"
 IncludeDir["ECS"]="%{wks.location}/ECS/HeaderFiles"
-IncludeDir["pugixml"]="%{wks.location}/Opengl1/vendor/pugixml/src"
-IncludeDir["spdlog"]="%{wks.location}/Opengl1/vendor/spdlog/include"
-IncludeDir["Physx"]=[[%{wks.location}/Opengl1/vendor/PhysX/physx/include;
-%{wks.location}/Opengl1/vendor/PhysX/physx/source/physxextensions/src;
-%{wks.location}/Opengl1/vendor/PhysX/pxshared/include;
-%{wks.location}/Opengl1/vendor/PhysX/physx/source/foundation/include;
-%{wks.location}/Opengl1/vendor/PhysX/physx/snippets]]
+IncludeDir["pugixml"]="%{IncludeDir.vendor}/pugixml/src"
+IncludeDir["spdlog"]="%{IncludeDir.vendor}/spdlog/include"
+IncludeDir["Physx"]=[[%{IncludeDir.vendor}/PhysX/physx/include;
+%{IncludeDir.vendor}/PhysX/physx/source/physxextensions/src;
+%{IncludeDir.vendor}/PhysX/pxshared/include;
+%{IncludeDir.vendor}/PhysX/physx/source/foundation/include;
+%{IncludeDir.vendor}/PhysX/physx/snippets]]
 
 
 LibraryDir={}
-LibraryDir["GLFW"]="%{wks.location}/glfw/src/%{cfg.buildcfg}"
-LibraryDir["assimp"]="%{wks.location}/Opengl1/vendor/assimp/lib/%{cfg.buildcfg}"
-LibraryDir["Engine"]="%{wks.location}/Opengl1/bin/%{cfg.buildcfg}"
-LibraryDir["Physx"]="%{wks.location}/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}"
-LibraryDir["imGui"]="%{wks.location}/Opengl1/vendor/imGui/%{cfg.system}/%{cfg.buildcfg}"
-LibraryDir["pugixml"]="%{wks.location}/Opengl1/vendor/pugixml/src/bin/%{cfg.buildcfg}"
+LibraryDir["GLFW"]="%{IncludeDir.vendor}/glfw/src/%{cfg.buildcfg}"
+LibraryDir["assimp"]="%{IncludeDir.vendor}/assimp/lib/%{cfg.buildcfg}"
+LibraryDir["AkameCore"]="%{wks.location}/AkameCore/bin/%{cfg.buildcfg}"
+LibraryDir["Physx"]="%{IncludeDir.vendor}/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}"
+LibraryDir["imGui"]="%{IncludeDir.vendor}/imGui/%{cfg.system}/%{cfg.buildcfg}"
+LibraryDir["pugixml"]="%{IncludeDir.vendor}/pugixml/src/bin/%{cfg.buildcfg}"
 
 LiblinksRelease={
     "glfw3.lib",
     "opengl32.lib",
     "imGui.lib",
     "assimp-vc142-mt.lib",
-    "Opengl1.lib",
+    "AkameCore.lib",
 
     "PhysX_64.lib",
     "PhysXCommon_64.lib",
@@ -51,7 +54,7 @@ LiblinksDebug={
     "opengl32.lib",
     "imGui.lib",
     "assimp-vc142-mtd.lib",
-    "Opengl1.lib",
+    "AkameCore.lib",
 
     "PhysX_64.lib",
     "PhysXCommon_64.lib",
@@ -60,29 +63,29 @@ LiblinksDebug={
     "PhysXPvdSDK_static_64.lib",
     "PhysXExtensions_static_64.lib"
     }
-AllIncludeDir="%{IncludeDir.GLFW};%{IncludeDir.vendor};%{IncludeDir.imGui};%{IncludeDir.assimp};%{IncludeDir.ECS};%{IncludeDir.Engine};%{IncludeDir.pugixml};%{IncludeDir.spdlog};"..IncludeDir["Physx"]
+AllIncludeDir="%{IncludeDir.GLFW};%{IncludeDir.vendor};%{IncludeDir.imGui};%{IncludeDir.assimp};%{IncludeDir.ECS};%{IncludeDir.AkameCore};%{IncludeDir.pugixml};%{IncludeDir.spdlog};"..IncludeDir["Physx"]
 
-AllDebugEnvPaths="PATH=$(SolutionDir)/Opengl1/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};$(SolutionDir)/Opengl1/vendor/assimp/bin/%{cfg.buildcfg}"
+AllDebugEnvPaths="PATH=$(SolutionDir)/AkameCore/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};$(SolutionDir)/AkameCore/vendor/assimp/bin/%{cfg.buildcfg}"
 
 startproject "Test"
 
-include "premakeConf/Opengl1.lua"
-include "premakeConf/ECS.lua"
-include "premakeConf/AkameEngine.lua"
+include "premakeconfig/AkameCore.lua"
+include "premakeconfig/ECS.lua"
+include "premakeconfig/AkameEngine.lua"
 
 group "Dependencies"
-    include "premakeConf/imGui.lua"
-    include "premakeConf/Dependencies.lua"
+    include "premakeconfig/imGui.lua"
+    include "premakeconfig/Dependencies.lua"
 group ""
 
 group "Samples"
-    include "premakeConf/Planets.lua"
-    include "premakeConf/GeoSpatialData.lua"
-    include "premakeConf/Test.lua"
-    include "premakeConf/RenderStressTest.lua"
-    include "premakeConf/Model.lua"
-    include "premakeConf/snakeGame.lua"
-    include "premakeConf/RandomStuffTest.lua"
+    include "premakeconfig/Planets.lua"
+    include "premakeconfig/GeoSpatialData.lua"
+    include "premakeconfig/Test.lua"
+    include "premakeconfig/RenderStressTest.lua"
+    include "premakeconfig/Model.lua"
+    include "premakeconfig/snakeGame.lua"
+    include "premakeconfig/RandomStuffTest.lua"
 group ""
 
 
