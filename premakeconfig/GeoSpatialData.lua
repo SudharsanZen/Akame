@@ -3,7 +3,7 @@ project "GeoSpatialData"
     location"%{wks.location}/Samples/GeoSpatialData/"
     kind "ConsoleApp"
     language "C++"
-    targetdir "%{wks.location}/Samples/GeoSpatialData/bin/%{cfg.buildcfg}"
+    targetdir "%{wks.location}/bin/%{cfg.buildcfg}/%{cfg.architecture}/Samples/"
     objdir "%{wks.location}/bin/Intermediate/%{cfg.buildcfg}/%{prj.name}"
     debugdir "%{cfg.targetdir}"
     dependson{"imGui","glfw","AkameCore"}

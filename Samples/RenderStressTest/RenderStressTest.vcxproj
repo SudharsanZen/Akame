@@ -41,14 +41,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>bin\Debug\</OutDir>
+    <OutDir>..\..\bin\Debug\x86_64\Samples\</OutDir>
     <IntDir>..\..\bin\Intermediate\Debug\RenderStressTest\</IntDir>
     <TargetName>RenderStressTest</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>bin\Release\</OutDir>
+    <OutDir>..\..\bin\Release\x86_64\Samples\</OutDir>
     <IntDir>..\..\bin\Intermediate\Release\RenderStressTest\</IntDir>
     <TargetName>RenderStressTest</TargetName>
     <TargetExt>.exe</TargetExt>

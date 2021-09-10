@@ -73,7 +73,7 @@ public:
 
 	void OnStart()override
 	{
-		appleModel = std::make_shared<Model>(rootDir + "Media/Apple/apple.obj");
+		appleModel = std::make_shared<Model>(rootDir + "Media/Apple/apple.fbx");
 		head = createCube(headMat);
 
 		for(int i=1;i<3;i++)
@@ -82,7 +82,7 @@ public:
 		
 		apple = CreateEntity();
 		Transform aT(1.5, 0, -1.5);
-		aT.SetGlobalScale(glm::vec3(0.01));
+		aT.SetGlobalScale(glm::vec3(0.02f));
 		
 		AddComponent<Transform>(apple)=( aT);
 		AddComponent<Mesh>(apple)= appleModel->meshes[0];
@@ -252,7 +252,7 @@ public:
 	float appleRot=0;
 	void AppleBehv(float deltaTime)
 	{
-		glm::vec3 targetScale = glm::vec3(0.01f);
+		glm::vec3 targetScale = glm::vec3(0.02f);
 		Transform &appleT=GetComponent<Transform>(apple);
 		appleT.SetGlobalScale(appleT.GetGlobalScale()+(targetScale - appleT.GetGlobalScale()) * deltaTime*10.0f);
 		appleRot += 100* deltaTime;

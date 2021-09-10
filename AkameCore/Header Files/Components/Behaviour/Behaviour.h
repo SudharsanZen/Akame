@@ -1,7 +1,7 @@
 #pragma once
 #include"ECS.h"
 
-
+#include"Components/EntityDescriptor.h"
 class Behaviour
 {
 	std::weak_ptr<ECS> ecs;
@@ -29,7 +29,10 @@ public:
 	template<typename T>
 	T& AddComponent(T comp)
 	{
-		return ecs.lock()->AddComponent<T>(entityID);
+		T& comp = ecs.lock()->AddComponent<T>(entityID);
+		comp.eid = entityID;
+		comp.ecs = ecs;
+		return comp;
 	}
 
 	template<typename T>
@@ -41,11 +44,17 @@ public:
 	template<typename T>
 	T& AddComponent(EntityID& eid)
 	{
-		return ecs.lock()->AddComponent<T>(eid);
+		T& comp = ecs.lock()->AddComponent<T>(eid);
+		comp.eid = eid;
+		comp.ecs = ecs;
+		return comp;
 	}
 
 	EntityID CreateEntity()
 	{
-		return ecs.lock()->CreateEntity();
+		EntityID eid = ecs.lock()->CreateEntity();
+		AddComponent<EntityDescriptor>(eid);
+		return eid;
+
 	}
 };

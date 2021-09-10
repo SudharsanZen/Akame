@@ -114,7 +114,7 @@ void Editor::DrawNode(Transform const& t, EntityDescriptor &edt, ImGuiTreeNodeFl
 
 void Editor::DrawUI()
 {
-	if (Input::getKeyDown(KEY_DELETE))
+	if (ImGui::IsKeyDown(KEY_DELETE))
 	{
 
 		for (auto ent : selected)

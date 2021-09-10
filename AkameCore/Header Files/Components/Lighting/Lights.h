@@ -23,6 +23,7 @@ private:
 	float calPointLightRadius(glm::vec3 C, float intensity);
 	float pointLightRadius;
 	
+	
 public:
 	float getPointLightRadius() { return calPointLightRadius(pointLightConstants,intensity); }
 	Lights();

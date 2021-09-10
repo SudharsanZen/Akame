@@ -1,4 +1,4 @@
-workspace "GameEngine"
+workspace "Akame"
     architecture "x64"
     startproject "imGui"
     configurations

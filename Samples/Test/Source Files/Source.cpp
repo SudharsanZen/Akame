@@ -11,7 +11,7 @@
 
 int main()
 {
-	
+	AssetManager::setAssetRoot("../../../Assets/");
 	std::string rootDir(AssetManager::getAssetRoot());
 	Window window(800, 800, "testWindow");
 
@@ -87,6 +87,7 @@ int main()
 	unsigned int count = 0;
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.3f;
+	Editor editor(window,scene);
 	while (!window.closeWindow())
 	{
 		if (acc > step)
@@ -123,7 +124,8 @@ int main()
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.Render();
-
+		editor.DrawUI();
+		scene.swapBuffers();
 
 	}
 

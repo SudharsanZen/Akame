@@ -15,7 +15,7 @@
 
 int main()
 {
-	
+	AssetManager::setAssetRoot("../../../Assets/");
 	std::string rootDir(AssetManager::getAssetRoot());
 	Window window(800, 800, "SnakeGame");
 	
@@ -58,7 +58,7 @@ int main()
 	fMesh.CreateMesh(generateCubeVertices());
 	scene.AddComponent<Material>(floor)=(floorMat);
 	//scene.vsyncOn(true);
-
+	Editor editor(window,scene);
 	
 	scene.OnStart();
 	while (!window.closeWindow())
@@ -66,7 +66,7 @@ int main()
 		scene.clearBuffer();
 	
 		scene.Render();
-	
+		editor.DrawUI();
 		scene.swapBuffers();
 		
 	}

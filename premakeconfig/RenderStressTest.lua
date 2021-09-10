@@ -2,7 +2,7 @@ project "RenderStressTest"
         location"%{wks.location}/Samples/RenderStressTest"
         kind "ConsoleApp"
         language "C++"
-        targetdir "%{prj.location}/bin/%{cfg.buildcfg}"
+        targetdir "%{wks.location}/bin/%{cfg.buildcfg}/%{cfg.architecture}/Samples/"
         objdir "%{wks.location}/bin/Intermediate/%{cfg.buildcfg}/%{prj.name}"
         dependson{"imGui","glfw","AkameCore"}
         debugdir "%{prj.location}/bin"

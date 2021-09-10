@@ -14,7 +14,7 @@
 
 int main()
 {
-	AssetManager::setAssetRoot("../../../Assets/");
+	AssetManager::setAssetRoot("../../../../Assets/");
 	Window window(800, 800, "GeoSpatial Data");
 
 	if (!window.initialize())

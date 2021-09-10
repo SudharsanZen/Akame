@@ -4,8 +4,10 @@
 
 class Components
 {
-	friend class Scene;
+	
 protected:
+	friend class Scene;
+	friend class Behaviour;
 	std::weak_ptr<ECS> ecs;
 	EntityID eid;
 };

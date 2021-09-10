@@ -13,6 +13,7 @@
 #include"Core/Editor/EditorUI.h"
 void app()
 {
+	AssetManager::setAssetRoot("../../../Assets/");
 	std::string rootDir(AssetManager::getAssetRoot());
 	Window window(800, 800, "testWindow");
 	std::cout<<sizeof(glm::mat4);
@@ -150,7 +151,7 @@ void app()
 		Lights &t=scene.GetComponent<Lights>(dir);
 		Quaternion rot(0,0, fmod(acc * 10.0f, 180));
 		t.setDirection(rot*glm::vec3(-1,0, 0));
-		
+		scene.swapBuffers();
 	}
 
 	

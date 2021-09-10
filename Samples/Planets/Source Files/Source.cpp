@@ -35,14 +35,14 @@ public:
 		if (sunEarthAngle > 360)
 			sunEarthAngle = 0;
 
-		GetComponent<Transform>().rotation.setEulerAngle(0,y,0);
+		GetComponent<Transform>().SetGlobalRotation(Quaternion(0,y,0));
 
 		
 
 		Quaternion rot = Quaternion::rotationAroundAxisVector(sunEarthAngle, worldUp);
-		glm::vec3 sunPosition = GetComponent<Transform>(sun).position;
+		glm::vec3 sunPosition = GetComponent<Transform>(sun).GetGlobalPosition();
 
-		GetComponent<Transform>().position = sunPosition + rot * ((glm::vec3(0, 0, 1)*sunEarthDist));//38.4400
+		GetComponent<Transform>().SetGlobalPosition(sunPosition + rot * ((glm::vec3(0, 0, 1)*sunEarthDist)));//38.4400
 	}
 };
 class MoonBehv :public Behaviour
@@ -76,12 +76,12 @@ public:
 		if (eartMoonAng > 360)
 			eartMoonAng = 0;
 
-		transform.rotation.setEulerAngle(0, y, 0);
+		transform.SetGlobalRotation(Quaternion(0, y, 0));
 
 		Quaternion rot=Quaternion::rotationAroundAxisVector(eartMoonAng,worldUp);
-		glm::vec3 earthPosition=GetComponent<Transform>(earth).position;
+		glm::vec3 earthPosition=GetComponent<Transform>(earth).GetGlobalPosition();
 		
-		transform.position = earthPosition+rot*glm::vec3(0,0,1)*distanceFromEarth;
+		transform.SetGlobalPosition( earthPosition+rot*glm::vec3(0,0,1)*distanceFromEarth);
 		
 	}
 };
@@ -155,6 +155,7 @@ int main()
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.Render();
+		scene.swapBuffers();
 	}
 	
 	return 0;

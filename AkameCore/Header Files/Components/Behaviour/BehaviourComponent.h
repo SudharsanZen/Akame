@@ -10,6 +10,7 @@ private:
 	std::shared_ptr<Behaviour> behaviour;
 	friend class BehaviourSystem;
 	friend class Scene;
+	friend class Behaviour;
 	
 public:
 	

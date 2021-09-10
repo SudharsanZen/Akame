@@ -12,7 +12,7 @@
 
 int main()
 {
-	
+	AssetManager::setAssetRoot("../../../Assets/");
 	std::string rootDir(AssetManager::getAssetRoot());
 	Window window(800, 800, "DUMBSTUFF");
 	
