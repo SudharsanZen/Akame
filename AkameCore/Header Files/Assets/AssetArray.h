@@ -40,7 +40,7 @@ public:
 
 	int decrementRefcount(unsigned long long index)
 	{
-		refcount[index]--;
+		refcount[index]=refcount[index]-1;
 		if (refcount[index] <= 0)
 		{
 			refcount[index] = 0;
@@ -52,7 +52,7 @@ public:
 
 	int incrementRefcount(long long index)
 	{
-		refcount[index]++;
+		refcount[index]=refcount[index]+1;
 		return refcount[index];
 	}
 

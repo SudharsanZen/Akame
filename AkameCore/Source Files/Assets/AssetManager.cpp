@@ -65,9 +65,9 @@ long long AssetManager::createTexture(std::string location)
 	}
 	else
 	{
-		
-		return itr->second;
 		_tex.incrementRefcount(itr->second);
+		return itr->second;
+		
 	}
 
 	
@@ -91,6 +91,7 @@ void AssetManager::notUsingTex(std::string location)
 		if (ref <= 0)
 		{
 			texLocIndexList.erase(itr);
+			ENGINE_CORE_WARN("Textrue: "+location + " is destroyed since it's not referenced");
 			return;
 		}
 	}

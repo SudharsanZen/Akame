@@ -5,7 +5,7 @@ project "GeoSpatialData"
     language "C++"
     targetdir "%{wks.location}/bin/%{cfg.buildcfg}/%{cfg.architecture}/Samples/"
     objdir "%{wks.location}/bin/Intermediate/%{cfg.buildcfg}/%{prj.name}"
-    debugdir "%{cfg.targetdir}"
+    debugdir "%{wks.location}/bin/%{cfg.buildcfg}/%{cfg.architecture}/Samples/"
     dependson{"imGui","glfw","AkameCore"}
     files
     {

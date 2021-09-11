@@ -50,7 +50,7 @@ void Material::setTexture2D(std::string uniformName, std::string location)
 	else
 	{
 		//reduce reference count since the existing texture is replace by a new texture location
-		a.notUsingTex(itr->second.location);
+		AssetManager::notUsingTex(itr->second.location);
 		itr->second = td;
 	}
 
@@ -97,20 +97,24 @@ void Material::use(Transform& t, glm::vec3& lightPose, glm::vec3& viewPose, std:
 
 void Material::reset()
 {
+	*refCount -= 1;
+	//std::cout << "\n usecount:" << *refCount;
+	if (*refCount == 0)
+	{
 
-	refCount.reset();
-
+		if (uniformToTexDetails)
+		{
+			for (auto& t : *uniformToTexDetails)
+			{
+				AssetManager::notUsingTex(t.second.location);
+			}
+			uniformToTexDetails.reset();
+		}
+	}
 }
 
 Material::~Material()
 {
-	
-	if (refCount.use_count()<=1)
-	{
-		for (auto& t : *uniformToTexDetails)
-		{
-			a.notUsingTex(t.second.location);
-		}
-	}
+	reset();
 }
 

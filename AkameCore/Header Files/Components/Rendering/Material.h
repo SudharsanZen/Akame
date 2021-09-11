@@ -38,7 +38,31 @@ public:
 	void setTexture2D(std::string uniformName, std::string location);
 	void isEmissive(bool em);
 	
+	Material& operator =(const Material& mat)
+	{
+		*mat.refCount += 1;
+		this->refCount = mat.refCount;
+		this->emissive = mat.emissive;
+		this->diffColor = mat.diffColor;
+		this->uniformToTexDetails = mat.uniformToTexDetails;
+		this->uniformTofloat = mat.uniformTofloat;
+		this->ambientIntensity = mat.ambientIntensity;
+		this->SHADER_NAME = mat.SHADER_NAME;
+		
+		return *this;
+	}
 	
+	/*Material(const Material& mat)
+	{
+		*mat.refCount += 1;
+		this->refCount = mat.refCount;
+		this->emissive = mat.emissive;
+		this->diffColor = mat.diffColor;
+		this->uniformToTexDetails = mat.uniformToTexDetails;
+		this->uniformTofloat = mat.uniformTofloat;
+		this->ambientIntensity = mat.ambientIntensity;
+		this->SHADER_NAME = mat.SHADER_NAME;
+	}*/
 
 	void setUniforms(std::shared_ptr<Shader> shader, glm::vec3& lightPose, glm::vec3& viewPose);
 	void use(Transform& t, glm::vec3& lightPose, glm::vec3& viewPose, std::shared_ptr<Shader> shader);

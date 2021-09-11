@@ -5,7 +5,7 @@ project "AkameEngine"
         targetdir "%{wks.location}/bin/%{cfg.buildcfg}/%{cfg.architecture}"
         objdir "%{wks.location}/bin/Intermediate/%{cfg.buildcfg}/%{prj.name}"
         dependson{"imGui","glfw","AkameCore"}
-        debugdir "%{prj.location}/bin"
+        debugdir "%{wks.location}/bin/%{cfg.buildcfg}/%{cfg.architecture}"
         files
         {
             "%{prj.location}/Header Files/**.h",

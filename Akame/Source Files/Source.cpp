@@ -14,7 +14,7 @@
 
 int main()
 {
-	
+	AssetManager::setAssetRoot("../../../Assets/");
 	std::string rootDir(AssetManager::getAssetRoot());
 	Window window(800, 800, "DUMBSTUFF");
 	
@@ -24,10 +24,7 @@ int main()
 		return -1;
 	}
 
-	std::shared_ptr<Material> cmat=std::make_shared<Material>("DEFERRED");
-	cmat->setTexture2D("material.diffuseMap", AssetManager::assetRootPath + "Media/pbr/basecolor.jpg");
-	cmat->setTexture2D("material.normalMap", AssetManager::assetRootPath + "Media/pbr/normal.jpg");
-	cmat->setTexture2D("material.specularMap", AssetManager::assetRootPath + "Media/pbr/roughness.jpg");
+	
 
 	Scene scene(window);
 	EntityID dir = scene.CreateEntity();
@@ -44,37 +41,43 @@ int main()
 	std::vector<EntityID> cubeList;
 	float m = 5;
 	int i;
-	for (i = 0; i < m; i++)
 	{
-		
-		
-		EntityID cube = scene.CreateEntity();
-		cubeList.push_back(cube);
-		Transform& t = scene.AddComponent<Transform>(cube);
-		t.SetGlobalRotation(Quaternion(0,0,0));
-		t.SetGlobalPosition(glm::vec3(float(i), 0, 0));
-		scene.AddComponent<Material>(cube) =*cmat;
-		Mesh &cM=scene.AddComponent<Mesh>(cube);
-		
-		cM.CreateMesh(generateSphereVertices(32,16,0.5));
-
-		if (i > 0)
-		{
-			t.setParent(cubeList[i - 1]);
-		}
-		else
+		std::shared_ptr<Material> cmat = std::make_shared<Material>("DEFERRED");
+		cmat->setTexture2D("material.diffuseMap", AssetManager::assetRootPath + "Media/pbr/basecolor.jpg");
+		cmat->setTexture2D("material.normalMap", AssetManager::assetRootPath + "Media/pbr/normal.jpg");
+		cmat->setTexture2D("material.specularMap", AssetManager::assetRootPath + "Media/pbr/roughness.jpg");
+		for (i = 0; i < m; i++)
 		{
 
-			t.SetLocalScale(glm::vec3(3));
-			t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30,glm::vec3(0,0,1)));
+
+			EntityID cube = scene.CreateEntity();
+			cubeList.push_back(cube);
+			Transform& t = scene.AddComponent<Transform>(cube);
+			t.SetGlobalRotation(Quaternion(0, 0, 0));
+			t.SetGlobalPosition(glm::vec3(float(i), 0, 0));
+			scene.AddComponent<Material>(cube) = *cmat;
+			Mesh& cM = scene.AddComponent<Mesh>(cube);
+
+			cM.CreateMesh(generateSphereVertices(32, 16, 0.5));
+
+			if (i > 0)
+			{
+				t.setParent(cubeList[i - 1]);
+			}
+			else
+			{
+
+				t.SetLocalScale(glm::vec3(3));
+				t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30, glm::vec3(0, 0, 1)));
+			}
+			std::stringstream str;
+			str << "Entity: " << i;
+
+			scene.SetEntityName(cube, str.str());
 		}
-		std::stringstream str;
-		str <<"Entity: "<< i;
-		
-		scene.SetEntityName(cube,str.str());
+		cmat.reset();
 	}
 	
-	cmat.reset();
 	
 
 	Material mat("GRIDS");
