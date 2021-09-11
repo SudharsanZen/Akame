@@ -24,10 +24,10 @@ int main()
 		return -1;
 	}
 
-	Material cmat("DEFERRED");
-	cmat.setTexture2D("material.diffuseMap", AssetManager::assetRootPath + "Media/pbr/basecolor.jpg");
-	cmat.setTexture2D("material.normalMap", AssetManager::assetRootPath + "Media/pbr/normal.jpg");
-	cmat.setTexture2D("material.specularMap", AssetManager::assetRootPath + "Media/pbr/roughness.jpg");
+	std::shared_ptr<Material> cmat=std::make_shared<Material>("DEFERRED");
+	cmat->setTexture2D("material.diffuseMap", AssetManager::assetRootPath + "Media/pbr/basecolor.jpg");
+	cmat->setTexture2D("material.normalMap", AssetManager::assetRootPath + "Media/pbr/normal.jpg");
+	cmat->setTexture2D("material.specularMap", AssetManager::assetRootPath + "Media/pbr/roughness.jpg");
 
 	Scene scene(window);
 	EntityID dir = scene.CreateEntity();
@@ -53,7 +53,7 @@ int main()
 		Transform& t = scene.AddComponent<Transform>(cube);
 		t.SetGlobalRotation(Quaternion(0,0,0));
 		t.SetGlobalPosition(glm::vec3(float(i), 0, 0));
-		scene.AddComponent<Material>(cube) = cmat;
+		scene.AddComponent<Material>(cube) =*cmat;
 		Mesh &cM=scene.AddComponent<Mesh>(cube);
 		
 		cM.CreateMesh(generateSphereVertices(32,16,0.5));
@@ -74,7 +74,7 @@ int main()
 		scene.SetEntityName(cube,str.str());
 	}
 	
-
+	cmat.reset();
 	
 
 	Material mat("GRIDS");

@@ -14,7 +14,7 @@ private:
 	void initImGui();
 	//returns the &io value
 	ImGuiIO& initGui();
-
+	void DrawNode(Transform const& t, EntityDescriptor& edt, ImGuiTreeNodeFlags const& base_flags);
 public:
 	
 	Editor(Window &window,Scene& scene);
@@ -22,6 +22,6 @@ public:
 	void DrawUI();//call after redering scene objects else the UI will be put behind other renderings
 
 
-	void DrawNode(Transform const& t, EntityDescriptor  &edt, ImGuiTreeNodeFlags const& base_flags);
+	
 };
 
