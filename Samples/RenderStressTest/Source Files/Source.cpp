@@ -13,7 +13,7 @@
 #include"Core/Editor/EditorUI.h"
 void app()
 {
-	AssetManager::setAssetRoot("../../../Assets/");
+	AssetManager::setAssetRoot("../../../../Assets/");
 	std::string rootDir(AssetManager::getAssetRoot());
 	Window window(800, 800, "testWindow");
 	std::cout<<sizeof(glm::mat4);
@@ -71,7 +71,7 @@ void app()
 	Lights &d = scene.AddComponent<Lights>(dir);
 	d.setType(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
-	d.setDirection(0,-1,0);
+	d.setDirection(-1,-1,0);
 	d.setIntensity(0.6f);
 	d.setPointLightConst(1,2,10);
 	d.ambientLigting(0.1f,0.1f,0.1f);
@@ -96,7 +96,7 @@ void app()
 	scene.AddComponent<Material>(sky)=matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
-	const int num =800;
+	const int num =200;
 	const int rt = (int)sqrt(num);
 	std::vector<EntityID> lightsVec;
 	for (int i = 0; i < num; i++)
@@ -126,7 +126,7 @@ void app()
 		scene.AddComponent<Material>(box)=boxMat;
 		scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 	}
-	
+	Editor edt(window,scene);
 	scene.OnStart();
 	scene.vsyncOn(true);
 	scene.backGroundColor(0, 0, 0, 1);
@@ -135,11 +135,12 @@ void app()
 	while (!window.closeWindow())
 	{
 		acc += scene.getDeltaTime();
+		
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
-
+	
 		scene.Render();
-		
+		edt.DrawUI();
 		
 		for (int i = 0; i < lightsVec.size(); i++)
 		{
@@ -150,7 +151,7 @@ void app()
 		}
 		Lights &t=scene.GetComponent<Lights>(dir);
 		Quaternion rot(0,0, fmod(acc * 10.0f, 180));
-		t.setDirection(rot*glm::vec3(-1,0, 0));
+		//t.setDirection(rot*glm::vec3(-1,0, 0));
 		scene.swapBuffers();
 	}
 

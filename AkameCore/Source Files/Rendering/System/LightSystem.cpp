@@ -115,7 +115,7 @@ LightSystem::LightSystem() :dir_sMap(DIR_MAP_SIZE, DIR_MAP_SIZE)
 
 }
 
-void LightSystem::BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader)
+void LightSystem::BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader,Camera &cam)
 {
 
 	//currently only rendering one shadow map
@@ -126,21 +126,31 @@ void LightSystem::BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader)
 		glViewport(0, 0, DIR_MAP_SIZE, DIR_MAP_SIZE);
 		auto const& drLight = drVector[0];
 
+	
+
+		glm::mat4 cp = cam.getProjectionMatrix();
+		glm::mat4 cv = cam.getViewMatrix();
+		
+
 		glm::vec3 forward = glm::normalize(drLight.lightDir);
 		glm::vec3 pose = -forward * 36.0f;
 		glm::vec3 up = normalize(glm::cross(forward, -worldRight));
+		glm::vec3 center = glm::vec4(pose + (forward * 10.0f), 1);
 
-		
 		dir_sMap.bindShadowBuffer();
 		shader->useShaderProgram();
-		glm::mat4 viewMat = glm::lookAt(pose, pose + (forward * 10.0f), up);
+		
+		
 
+
+		glm::mat4 viewMat = glm::lookAt(pose, center, up);
 		float boxSize = 50;
 
 		glm::mat4 projOrtho = glm::ortho(-boxSize, boxSize, -boxSize, boxSize, 0.1f, 100.0f);
-		shader->setUniformMat4fv("projMat", 1, glm::value_ptr(projOrtho));
-		shader->setUniformMat4fv("view", 1, glm::value_ptr(viewMat));
+		
+		
 		dirLightSpace = projOrtho * viewMat;
+		shader->setUniformMat4fv("lightSpaceMat", 1, glm::value_ptr(dirLightSpace));
 
 
 

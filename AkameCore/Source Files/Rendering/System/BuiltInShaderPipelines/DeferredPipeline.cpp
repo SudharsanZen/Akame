@@ -30,6 +30,8 @@ void DeferredPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSyst
 	drfb.setUpShader(cam, lsys);
 	lsys->dir_sMap.useDepthTexture(6);
 	drfb.set4x4Matrixfv("lightSpaceMat", dirLightSpace);
+	drfb.set4x4Matrixfv("proj", cam.getProjectionMatrix());
+	drfb.set4x4Matrixfv("viewMat", cam.getViewMatrix());
 	drfb.outPutToQaud();
 
 

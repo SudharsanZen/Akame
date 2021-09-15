@@ -20,6 +20,7 @@ public:
 	static Quaternion rotationAroundAxisVector(float angleInDegrees, glm::vec3 AxisVector);
 	void setEulerAngle(float, float, float);
 	Quaternion conjugate() { return glm::conjugate(quaternion); }
+	Quaternion inverse() { return glm::inverse(quaternion); }
 	glm::vec3 getEulerAngle() { return glm::degrees(glm::eulerAngles(quaternion)); }
 
 

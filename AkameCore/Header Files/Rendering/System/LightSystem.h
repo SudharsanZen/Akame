@@ -3,7 +3,8 @@
 #include"Components/Lighting/Lights.h"
 #include"Core/Log/Log.h"
 #include"Rendering/System/ShadowFBO.h"
-#define DIR_MAP_SIZE 8129
+#include"Rendering/Camera.h"
+#define DIR_MAP_SIZE 2048
 class LightSystem:public System
 {
 private:
@@ -47,6 +48,7 @@ private:
 	friend class Lights;
 	friend class RenderingSystem;
 	friend class TiledRenderer;
+	friend class Editor;
 public:
 	//point light vector for storing in point light uniform buffer
 	std::vector<pointLight> ptVector;
@@ -56,7 +58,7 @@ public:
 	//empty point light list completely and create a new one, call when entity is added or removed
 	void updatePointLightBuffer();
 	//calculates and sets the necesary variables for shadow map calculations
-	void BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader);
+	void BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader,Camera &cam);
 	
 	//get the directional light's view projection matrix
 	glm::mat4 GetDirectionalLightSpaceMat()

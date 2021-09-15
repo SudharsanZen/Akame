@@ -43,6 +43,7 @@ layout (local_size_x = TILE_DIM_X, local_size_y = TILE_DIM_Y) in;
 uniform int height;
 uniform int width;
 uniform mat4 projInv;
+uniform mat4 proj;
 uniform mat4 viewMat;
 uniform mat4 lightSpaceMat;
 
@@ -103,7 +104,8 @@ uniform int emissive;
 
 float shadowCalculation(vec4 fragPose,mat4 lightSpaceMatrix)
 {
-      fragPose=lightSpaceMatrix*fragPose;
+      
+      fragPose=lightSpaceMat*fragPose;
       vec3 projCoord=fragPose.xyz/fragPose.w;
       projCoord=projCoord*0.5+0.5;
 

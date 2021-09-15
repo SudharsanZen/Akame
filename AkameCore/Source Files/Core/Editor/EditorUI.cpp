@@ -7,9 +7,10 @@
 #include"Core/Input.h"
 #include<sstream>
 #include"Components/EntityDescriptor.h"
+#include"Rendering/System/LightSystem.h"
 void Editor::initImGui()
 {
-	
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
@@ -161,9 +162,23 @@ void Editor::DrawUI()
 
 	ImGui::End();
 
-
+	ImGui::Begin("DirShadowMap");
+	//get the mouse position
+	ImVec2 pos = ImGui::GetCursorScreenPos();
+	
+	//pass the texture of the FBO
+	//window.getRenderTexture() is the texture of the FBO
+	//the next parameter is the upper left corner for the uvs to be applied at
+	//the third parameter is the lower right corner
+	//the last two parameters are the UVs
+	//they have to be flipped (normally they would be (0,0);(1,1) 
+	ImGui::GetWindowDrawList()->AddImage(
+		(void*) scene.lightSys->dir_sMap.getMapBuff(),
+		ImVec2(ImGui::GetCursorScreenPos()),
+		ImVec2(ImGui::GetCursorScreenPos().x + scene.lightSys->dir_sMap.getWidth() / 3,
+			ImGui::GetCursorScreenPos().y + scene.lightSys->dir_sMap.getHeight() / 3), ImVec2(0, 1), ImVec2(1, 0));
     
-
+	ImGui::End();
 
 	ImGui::Render();
 	int display_w=0, display_h=0;
@@ -192,6 +207,7 @@ void Editor::DrawUI()
 		ImGui::RenderPlatformWindowsDefault();
 		glfwMakeContextCurrent(backup_current_context);
 	}
+
 
 }
 

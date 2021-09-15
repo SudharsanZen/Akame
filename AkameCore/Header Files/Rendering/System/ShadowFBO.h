@@ -23,8 +23,9 @@ public:
 
 	void bindShadowBuffer();
 	void unBindShadowBuffer();
-
+	unsigned int getMapBuff() { return outDepth; }
 	void useDepthTexture(unsigned int textureUnit);
-
+	int getWidth() { return width; }
+	int getHeight() { return height; }
 	~ShadowFBO();
 };
