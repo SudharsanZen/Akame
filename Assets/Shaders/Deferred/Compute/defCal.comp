@@ -137,7 +137,7 @@ float shadowCalculation(vec4 fragPose)
       fragPose=lightSpaceMat[layer]*fragPose;
       projCoord=fragPose.xyz/fragPose.w;
       projCoord=projCoord*0.5+0.5;
-      depth=texture(dir_sMap, vec3(projCoord.xy,layer)).r; 
+      //depth=texture(dir_sMap, vec3(projCoord.xy,layer)).r; 
       float pcfDepth=0;
       float texel=1.0f/shadowRes;
       for(int i=-con;i<=con;++i)

@@ -96,7 +96,7 @@ void app()
 	scene.AddComponent<Material>(sky)=matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
-	const int num =500;
+	const int num =200;
 	const int rt = (int)sqrt(num);
 	std::vector<EntityID> lightsVec;
 	for (int i = 0; i < num; i++)
