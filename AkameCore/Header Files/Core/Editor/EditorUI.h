@@ -1,17 +1,22 @@
 #pragma once
 #include"Core/Window.h"
 #include"Core/Scene.h"
+#include"Rendering/Texture.h"
+#include"Rendering/FrameBuffer.h"
+#include"Assets/ShaderManager.h"
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
 class Editor
 {
 private:
+	float lambda=0.07f;
 	std::set<EntityID> selected;
 	ImGuiIO& io;
 	std::weak_ptr<GLFWwindow> context;
 	Scene &scene;
 	//initializes imGui
 	void initImGui();
+	FrameBuffer fbo[4];
 	//returns the &io value
 	ImGuiIO& initGui();
 	void DrawNode(Transform const& t, EntityDescriptor& edt, ImGuiTreeNodeFlags const& base_flags);

@@ -19,6 +19,8 @@ public:
 	DeferredRendererFragmentBuffer drfb;
 	TiledRenderer(std::string shaderLocation=AssetManager::assetRootPath+"Shaders/Deferred/Compute/defCal.comp");
 	void set4x4Matrixfv(std::string, glm::mat4);
+	void setFloat(std::string, float);
+	void setInt(std::string, int);
 	void updateBufferSize(int height, int width);
 	void bindFrameBuffer();
 	void unBindFrameBuffer();

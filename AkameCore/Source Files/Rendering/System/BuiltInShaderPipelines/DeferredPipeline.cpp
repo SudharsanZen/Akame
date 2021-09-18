@@ -1,7 +1,7 @@
 #include<glad/glad.h>
 #include<glfw/glfw3.h>
 #include "Rendering/System/DeferredPipeline.h"
-
+#include<sstream>
 void DeferredPipeline::WindowsResizeCallBacks(int height, int width)
 {
 	drfb.updateBufferSize(height, width);
@@ -24,14 +24,25 @@ void DeferredPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSyst
 
 	drfb.unBindFrameBuffer();
 
-	glm::mat4 dirLightSpace = lsys->GetDirectionalLightSpaceMat();
+
 	//render final to quad
 	glDisable(GL_DEPTH_TEST);//disable depth to remove quad from depth calulations
+
 	drfb.setUpShader(cam, lsys);
-	lsys->dir_sMap.useDepthTexture(6);
-	drfb.set4x4Matrixfv("lightSpaceMat", dirLightSpace);
+	lsys->dir_sMap.useTextureArray(6);
 	drfb.set4x4Matrixfv("proj", cam.getProjectionMatrix());
 	drfb.set4x4Matrixfv("viewMat", cam.getViewMatrix());
+	drfb.setFloat("lambda",lsys->lambda);
+	drfb.setInt("shadowRes",lsys->dir_sMap.GetResolution());
+	lsys->dir_sMap.useTextureArray(6);
+	for (int i = 0; i < lsys->dirLightSpace.size(); i++)
+	{
+		std::stringstream ss;
+		ss << "lightSpaceMat[" << i << "]";
+		drfb.set4x4Matrixfv(ss.str().c_str(), lsys->dirLightSpace[i]);
+		
+	}
+	
 	drfb.outPutToQaud();
 
 

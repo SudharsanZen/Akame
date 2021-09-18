@@ -78,7 +78,7 @@ int main()
 	}
 
 
-
+	Editor e(window,scene);
 	
 	float acc = 0;
 	scene.OnStart();
@@ -89,11 +89,15 @@ int main()
 	{
 		
 
-
+		acc += scene.getDeltaTime();
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.clearBuffer();
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.Render();
+		e.DrawUI();
+
+		Lights &l=scene.GetComponent<Lights>(dir);
+		//l.setDirection(Quaternion(acc*100,0,0)*glm::vec3(1,-1,1));
 		scene.swapBuffers();
 
 

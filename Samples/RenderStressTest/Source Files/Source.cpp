@@ -8,7 +8,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-
+#include"Rendering/System/PSSMFBO.h"
 #include"Rendering/DeferredRendererFragmentBuffer.h"
 #include"Core/Editor/EditorUI.h"
 void app()
@@ -96,7 +96,7 @@ void app()
 	scene.AddComponent<Material>(sky)=matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
-	const int num =200;
+	const int num =500;
 	const int rt = (int)sqrt(num);
 	std::vector<EntityID> lightsVec;
 	for (int i = 0; i < num; i++)
@@ -132,9 +132,11 @@ void app()
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.3f;
 	float acc = 0;
+	bool stopRot=false;
 	while (!window.closeWindow())
 	{
-		acc += scene.getDeltaTime();
+		if(stopRot)
+			acc += scene.getDeltaTime();
 		
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
@@ -150,8 +152,33 @@ void app()
 			T.SetGlobalPosition(glm::vec3(pose.x, 1 + sin(acc + i),pose.z));
 		}
 		Lights &t=scene.GetComponent<Lights>(dir);
-		Quaternion rot(0,0, fmod(acc * 10.0f, 180));
-		//t.setDirection(rot*glm::vec3(-1,0, 0));
+		Quaternion rot(0, fmod(acc * 5, 180), fmod(acc * 10.0f, 180));
+		t.setDirection(rot*glm::vec3(0,-1, 0));
+		if (Input::getKeyDown(KEY_F))
+		{
+			std::cout << "hhhhhhhhhhh";
+			stopRot = !stopRot;
+		}
+		/*
+		if (Input::getKeyDown(KEY_F))
+		{
+			auto vec=CalculateFrustumCorners(scene.cam,3,0.2f);
+			for (int i = 0; i < vec.size(); i++)
+			{
+				for (int j = 0; j < vec[i].size(); j++)
+				{
+					EntityID box = scene.CreateEntity();
+					Mesh& bm = scene.AddComponent<Mesh>(box);
+				
+						bm.CreateMesh(generateCubeVertices());
+		
+					scene.AddComponent<Transform>(box).SetGlobalPosition(vec[i][j]);
+					scene.AddComponent<Material>(box) = boxMat;
+					scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
+				}
+			}
+		}
+		*/
 		scene.swapBuffers();
 	}
 

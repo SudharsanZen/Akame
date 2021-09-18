@@ -82,7 +82,6 @@ void RenderingSystem::Run(Camera& cam)
 
 	//directional shadow maps 
 	shader=ShaderManager::GetShader("SHADOW_DIRECTIONAL");
-	shader->useShaderProgram();
 	lsys->BindDirectionalLightShadowMap(shader,cam);
 		RenderAllMesh(shader,cam);
 	lsys->unBindDirectionalShadowMap();

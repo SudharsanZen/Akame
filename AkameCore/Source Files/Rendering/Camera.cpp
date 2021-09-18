@@ -38,6 +38,33 @@ glm::mat4 Camera::getProjectionMatrix()
 	return glm::perspective(fovy,aspectRatio,nearz,farz);
 }
 
+float Camera::getNear()
+{
+	return nearz;
+}
+
+float Camera::getFar()
+{
+	return farz;
+}
+
+void Camera::setNear(float n)
+{
+	nearz = n;
+}
+
+void Camera::setFar(float f)
+{
+	farz = f;
+}
+
+float Camera::getFov()
+{
+	return fovy;
+}
+
+
+
 glm::mat4 Camera::lookAt(Transform& transform, glm::vec3& pos)
 {
 	glm::vec3 const f(transform.forward());

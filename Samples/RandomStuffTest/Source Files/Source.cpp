@@ -12,7 +12,7 @@
 
 int main()
 {
-	AssetManager::setAssetRoot("../../../Assets/");
+	AssetManager::setAssetRoot("../../../../Assets/");
 	std::string rootDir(AssetManager::getAssetRoot());
 	Window window(800, 800, "DUMBSTUFF");
 	
@@ -90,7 +90,7 @@ int main()
 	Transform& t1 = scene.GetComponent<Transform>(cubeList[4]);
 	
 	//t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30, glm::vec3(0, 0, 1)));
-
+	Editor edt(window,scene);
 	scene.OnStart();
 	scene.vsyncOn(false);
 	float deltaTime = 0;
@@ -101,7 +101,7 @@ int main()
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.clearBuffer();
 		scene.Render();
-		
+		edt.DrawUI();
 		glm::vec3 pose = t.GetLocalPosition();
 		//t.SetLocalScale(-1.0f* glm::vec3(1));
 		//t1.SetGlobalScale(sin(time)*glm::vec3(1));

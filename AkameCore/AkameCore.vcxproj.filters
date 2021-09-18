@@ -234,6 +234,9 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Rendering\System\PSSMFBO.h">
+      <Filter>Header Files\Rendering\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Assets\Asset.cpp">
@@ -358,6 +361,9 @@
     </ClCompile>
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Rendering\System\PSSMFBO.cpp">
+      <Filter>Source Files\Rendering\System</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

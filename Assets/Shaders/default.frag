@@ -61,5 +61,6 @@ void main()
     vec3 result = (ambient + diffuse + specular) * texture(material.diffuseMap,uvCoord).xyz;
     //vec3 result = (ambient + diffuse + specular)*(objectColor);
     FragColor = vec4(result, 1.0);
+
     //FragColor=vec4(vec3(LinearizeDepth(gl_FragCoord.z))/10,1.0);
 } 

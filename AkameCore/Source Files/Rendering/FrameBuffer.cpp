@@ -45,7 +45,8 @@ void FrameBuffer::generateFrameBuffer()
 }
 void FrameBuffer::updateTextureSize(int height,int width)
 {
-
+	this->height = height;
+	this->width = width;
 	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -65,7 +66,9 @@ FrameBuffer::FrameBuffer()
 
 void FrameBuffer::Bind()
 {
+	
 	glBindFramebuffer(GL_FRAMEBUFFER,framebuffer);
+	glViewport(0, 0, width, height);
 	glClearColor(0.0f,0.1f,0.1f,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

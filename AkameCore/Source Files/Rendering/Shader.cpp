@@ -5,12 +5,23 @@
 #include<glad/glad.h>
 #include"Core/Log/Log.h"
 #include"Assets/AssetManager.h"
+Shader::Shader(std::string vertexShaderDir, std::string fragmentShaderDir,std::string geometryShaderDir)
+{
+    //contructor
+    //callAfterUseProgram = [](GLuint progID) {};
+    vertDir = vertexShaderDir;
+    fragDir = fragmentShaderDir;
+    geoDir = geometryShaderDir;
+    programID = 0;
+    compileShader();
+}
 Shader::Shader(std::string vertexShaderDir, std::string fragmentShaderDir)
 {
     //contructor
     //callAfterUseProgram = [](GLuint progID) {};
     vertDir = vertexShaderDir;
     fragDir = fragmentShaderDir;
+    geoDir = "";
     programID = 0;
     compileShader();
 }
@@ -19,6 +30,7 @@ Shader::Shader()
 {
     vertDir = AssetManager::getAssetRoot() + std::string("Shaders/default.vert");
     fragDir = AssetManager::getAssetRoot() + std::string("Shaders/default.frag");
+    geoDir = "";
     programID = 0;
     compileShader();
 }
@@ -121,21 +133,22 @@ bool Shader::compileShader()
     * compile the shader and set programID
     */
     deleteProgram();
-    GLuint v_ShaderID, f_ShaderID;
-    char** vCode,**fCode;
-    unsigned int vCount, fCount;
+    GLuint v_ShaderID, f_ShaderID,g_ShaderID;
+    char** vCode,**fCode,**gCode;
+    unsigned int vCount, fCount,gCount;
     GLint success;
 
     //read shaderFiles and get a char** pointer to it's content string
     vCode = readShaderFile(vertDir, vCount);
     fCode = readShaderFile(fragDir, fCount);   
 
+
     //Generate Shader objects
     v_ShaderID = glCreateShader(GL_VERTEX_SHADER);
     f_ShaderID = glCreateShader(GL_FRAGMENT_SHADER);
     
     
-
+   
     //compile and add the shader
     addShader(vCode,v_ShaderID,vCount,GL_VERTEX_SHADER);
     addShader(fCode,f_ShaderID,fCount,GL_FRAGMENT_SHADER);
@@ -145,6 +158,15 @@ bool Shader::compileShader()
     //attach the compiled shader to shader program and link
     glAttachShader(programID,v_ShaderID);
     glAttachShader(programID, f_ShaderID);
+
+    if (geoDir != "")
+    {
+        gCode = readShaderFile(geoDir, gCount);
+        g_ShaderID = glCreateShader(GL_GEOMETRY_SHADER);
+        addShader(gCode, g_ShaderID, gCount, GL_GEOMETRY_SHADER);
+        glAttachShader(programID, g_ShaderID);
+    }
+
     glLinkProgram(programID);
 
     //check if linking is sucessful
@@ -160,10 +182,14 @@ bool Shader::compileShader()
     //deleting vertex and fragment shader object since it has been compiled
     glDeleteShader(v_ShaderID);
     glDeleteShader(f_ShaderID);
+    if (geoDir != "")
+        glDeleteShader(g_ShaderID);
 
     //de allocating the char** pointer to the shaderFileContent 
     freeCodePointer(vCode,vCount);
     freeCodePointer(fCode,fCount);
+    if(geoDir!="")
+        freeCodePointer(gCode,gCount);
 
     //getIndex of unfirom buffer for view and projection matrix
   

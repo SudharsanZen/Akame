@@ -34,6 +34,13 @@ public:
 
 	glm::mat4 getViewMatrix();
 	glm::mat4 getProjectionMatrix();
+	float getNear();
+	float getFar();
+	void setNear(float n);
+	void setFar(float f);
+	float getFov();
+	float getAspectRatio() { return aspectRatio; }
+
 
 };
 

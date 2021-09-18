@@ -11,6 +11,10 @@
     <Vertex path="SCREENSHADER.vert"/>
     <Fragment path="SCREENSHADER.frag"/>
 </Shader>
+<Shader name="PSSM" queue="NULL">
+    <Vertex path="SCREENSHADER.vert"/>
+    <Fragment path="misc/layeredTexture.frag"/>
+</Shader>
 <Shader name="DEFERRED_OUT" queue="NULL">
     <Vertex path="deferred/finalOut.vert"/>
     <Fragment path="deferred/finalOut.frag"/>
@@ -22,6 +26,7 @@
 <Shader name="SHADOW_DIRECTIONAL" queue="NULL">
     <Vertex path="LightingAndShadows/dir_shadowMap.vert"/>
     <Fragment path="LightingAndShadows/dir_shadowMap.frag"/>
+    <Geometry path="geometryShaders/test.geom"/>
 </Shader>
 <Shader name="GRIDS" queue="OVERLAY+1">
     <Vertex path="Misc/grids.vert"/>

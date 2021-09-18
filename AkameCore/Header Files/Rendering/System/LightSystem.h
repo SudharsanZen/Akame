@@ -4,7 +4,9 @@
 #include"Core/Log/Log.h"
 #include"Rendering/System/ShadowFBO.h"
 #include"Rendering/Camera.h"
-#define DIR_MAP_SIZE 2048
+#include"Rendering/System/PSSMFBO.h"
+#define DIR_MAP_SIZE 1024
+#define FRUSTUM_SPLIT_NUM 4
 class LightSystem:public System
 {
 private:
@@ -42,7 +44,7 @@ private:
 			lightsList[l.getType()].push_back(ent);
 		}
 	}
-	glm::mat4 dirLightSpace = glm::mat4(0);
+	
 	
 	friend class Scene;
 	friend class Lights;
@@ -53,15 +55,16 @@ public:
 	//point light vector for storing in point light uniform buffer
 	std::vector<pointLight> ptVector;
 	std::vector<directionalLight> drVector;
-
-	ShadowFBO dir_sMap;
+	std::vector<glm::mat4> dirLightSpace;
+	float lambda = 0.07f;
+	PSSMFBO dir_sMap;
 	//empty point light list completely and create a new one, call when entity is added or removed
 	void updatePointLightBuffer();
 	//calculates and sets the necesary variables for shadow map calculations
 	void BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader,Camera &cam);
 	
 	//get the directional light's view projection matrix
-	glm::mat4 GetDirectionalLightSpaceMat()
+	std::vector<glm::mat4> GetDirectionalLightSpaceMat()
 	{
 		return dirLightSpace;
 	}

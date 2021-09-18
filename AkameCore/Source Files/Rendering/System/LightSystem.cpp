@@ -1,6 +1,7 @@
 #include "Rendering/System/LightSystem.h"
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
+#include<sstream>
 void LightSystem::updatePointLightBuffer()
 {
 	ptVector.clear();
@@ -105,13 +106,13 @@ void LightSystem::bindPointLightBuffer(int layoutIndex)
 	glBindBufferBase(GL_UNIFORM_BUFFER,layoutIndex,plUBO);
 	
 }
-LightSystem::LightSystem() :dir_sMap(DIR_MAP_SIZE, DIR_MAP_SIZE)
+LightSystem::LightSystem() :dir_sMap(FRUSTUM_SPLIT_NUM,DIR_MAP_SIZE)
 {
 	glGenBuffers(1, &plUBO);
 	glBindBuffer(GL_UNIFORM_BUFFER, plUBO);
 	glBufferData(GL_UNIFORM_BUFFER,800*80,NULL,GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER,0);
-	
+	dirLightSpace = std::vector<glm::mat4>(FRUSTUM_SPLIT_NUM);
 
 }
 
@@ -125,43 +126,30 @@ void LightSystem::BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader,C
 		glCullFace(GL_FRONT);
 		glViewport(0, 0, DIR_MAP_SIZE, DIR_MAP_SIZE);
 		auto const& drLight = drVector[0];
-
-	
-
-		glm::mat4 cp = cam.getProjectionMatrix();
-		glm::mat4 cv = cam.getViewMatrix();
-		
-
 		glm::vec3 forward = glm::normalize(drLight.lightDir);
-		glm::vec3 pose = -forward * 36.0f;
-		glm::vec3 up = normalize(glm::cross(forward, -worldRight));
-		glm::vec3 center = glm::vec4(pose + (forward * 10.0f), 1);
 
-		dir_sMap.bindShadowBuffer();
+		dir_sMap.bind();
 		shader->useShaderProgram();
+		shader->setUniformInteger("numOfFrustum", FRUSTUM_SPLIT_NUM);
+		std::vector<glm::mat4> lightSpaceMatList = CalculatePSSMLightSpaceMats(cam,forward,FRUSTUM_SPLIT_NUM,lambda);
+		
+		for (int i = 0; i < FRUSTUM_SPLIT_NUM; i++)
+		{
+			std::stringstream ss;
+			ss << "lightSpaceMat[" << i << "]";
+			shader->setUniformMat4fv(ss.str().c_str(),1,glm::value_ptr(lightSpaceMatList[i]));
+			dirLightSpace[i] = lightSpaceMatList[i];
+		}
+
 		
 		
-
-
-		glm::mat4 viewMat = glm::lookAt(pose, center, up);
-		float boxSize = 50;
-
-		glm::mat4 projOrtho = glm::ortho(-boxSize, boxSize, -boxSize, boxSize, 0.1f, 100.0f);
-		
-		
-		dirLightSpace = projOrtho * viewMat;
-		shader->setUniformMat4fv("lightSpaceMat", 1, glm::value_ptr(dirLightSpace));
-
-
-
-
-
 	}
+
 }
 void LightSystem::unBindDirectionalShadowMap()
 {
 
-	dir_sMap.unBindShadowBuffer();
+	dir_sMap.unbind();
 	glCullFace(GL_BACK);
 	
 }

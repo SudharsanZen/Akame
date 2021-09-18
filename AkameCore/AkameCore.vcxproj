@@ -140,8 +140,10 @@
     <ClInclude Include="Header Files\Rendering\System\TiledRenderer.h" />
     <ClInclude Include="Header Files\Rendering\Texture.h" />
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h" />
+    <ClInclude Include="Header Files\Rendering\System\PSSMFBO.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source Files\Rendering\System\PSSMFBO.cpp" />
     <ClCompile Include="Source Files\Assets\Asset.cpp" />
     <ClCompile Include="Source Files\Assets\AssetArray.cpp" />
     <ClCompile Include="Source Files\Assets\AssetManager.cpp" />

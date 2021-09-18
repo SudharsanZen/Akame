@@ -7,7 +7,7 @@ private:
 	unsigned int framebuffer;
 	unsigned int rbo;
 	unsigned int texColorBuffer;
-	
+	int height, width;
 	void generateFrameBuffer();
 	
 public:
@@ -22,6 +22,7 @@ public:
 
 	void RenderToQuad();
 
+	unsigned int getColorBuffer() { return texColorBuffer; }
 	~FrameBuffer();
 
 

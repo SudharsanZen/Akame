@@ -55,14 +55,22 @@ void ShaderManager::loadAllShaders()
 		}
 		std::string vertPath =shaderRoot+ShaderNode.child("Vertex").attribute("path").value();
 		std::string fragPath = shaderRoot+ShaderNode.child("Fragment").attribute("path").value();
-
+		std::string geoPath = ShaderNode.child("Geometry").attribute("path").value();
+		
 		auto itr = shaderList.find(shaderName);
 		if (itr == shaderList.end())
 		{
 			ENGINE_CORE_INFO("ShaderName:"+shaderName);
 			ENGINE_CORE_INFO("vert:path="+vertPath);
 			ENGINE_CORE_INFO("frag:path="+fragPath);
-			shaderList[shaderName] = std::make_shared<Shader>(vertPath,fragPath);
+			if (geoPath != "")
+			{
+				geoPath = shaderRoot +geoPath;
+				ENGINE_CORE_INFO("geo:path=" + geoPath);
+				shaderList[shaderName] = std::make_shared<Shader>(vertPath, fragPath,geoPath);
+			}
+			else
+				shaderList[shaderName] = std::make_shared<Shader>(vertPath,fragPath);
 			if (queueName != "NULL")
 			{
 				auto fitr = shaderQueues.find(queueName);

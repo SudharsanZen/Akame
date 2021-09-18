@@ -19,6 +19,7 @@ private:
 	friend class RenderingSystem;
 	friend class DeferredRendererFragmentBuffer;
 	friend class LightSystem;
+	
 
 	float calPointLightRadius(glm::vec3 C, float intensity);
 	float pointLightRadius;
@@ -44,5 +45,6 @@ public:
 	LIGHT getType();
 	void setType(LIGHT ty) { type = ty; };
 	void reset() {};
+	glm::vec3 getDirection() { return lightDirection; }
 };
 

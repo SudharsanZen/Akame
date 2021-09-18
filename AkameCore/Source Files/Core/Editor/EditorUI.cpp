@@ -8,8 +8,13 @@
 #include<sstream>
 #include"Components/EntityDescriptor.h"
 #include"Rendering/System/LightSystem.h"
+
 void Editor::initImGui()
 {
+	fbo[0].updateTextureSize(512,512);
+	fbo[1].updateTextureSize(512,512);
+	fbo[2].updateTextureSize(512,512);
+	fbo[3].updateTextureSize(512,512);
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
@@ -162,8 +167,10 @@ void Editor::DrawUI()
 
 	ImGui::End();
 
-	ImGui::Begin("DirShadowMap");
+	ImGui::Begin("DirShadowMaps");
 	//get the mouse position
+	ImGui::SliderFloat("log-uniform lambda", &lambda, 0.0f, 1.0f, "ratio = %.3f");
+	scene.lightSys->lambda = lambda;
 	ImVec2 pos = ImGui::GetCursorScreenPos();
 	
 	//pass the texture of the FBO
@@ -172,12 +179,27 @@ void Editor::DrawUI()
 	//the third parameter is the lower right corner
 	//the last two parameters are the UVs
 	//they have to be flipped (normally they would be (0,0);(1,1) 
-	ImGui::GetWindowDrawList()->AddImage(
-		(void*) scene.lightSys->dir_sMap.getMapBuff(),
-		ImVec2(ImGui::GetCursorScreenPos()),
-		ImVec2(ImGui::GetCursorScreenPos().x + scene.lightSys->dir_sMap.getWidth() / 3,
-			ImGui::GetCursorScreenPos().y + scene.lightSys->dir_sMap.getHeight() / 3), ImVec2(0, 1), ImVec2(1, 0));
-    
+	
+	ShaderManager::GetShader("PSSM")->useShaderProgram();
+	
+	
+	for (int i = 0; i < 4; i++)
+	{
+		glDisable(GL_CULL_FACE);
+		fbo[i].Bind();
+		ShaderManager::GetShader("PSSM")->setUniformInteger("layer", i);
+		scene.lightSys->dir_sMap.useTextureArray(0);
+		fbo[i].quadMesh.renderMesh();
+		fbo[i].unBind();
+		glEnable(GL_CULL_FACE);
+		float gap = (i != 0) * 5.0f;
+		ImVec2 pos= ImGui::GetCursorScreenPos();
+		ImGui::GetWindowDrawList()->AddImage(
+			(void*)fbo[i].getColorBuffer(),
+			ImVec2(ImVec2(pos.x+512/2*i+gap,pos.y)),
+			ImVec2(pos.x + 512.0f/2.0f*(i+1.0f),
+				pos.y + 512.0f/2.0f), ImVec2(0, 1), ImVec2(1, 0));
+	}
 	ImGui::End();
 
 	ImGui::Render();
