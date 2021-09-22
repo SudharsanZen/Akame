@@ -7,5 +7,5 @@ uniform sampler2DArray screenTexture;
 uniform int layer;
 void main()
 { 
-    FragColor =texture(screenTexture,vec3(TexCoords,layer));
+    FragColor =vec4(texture(screenTexture,vec3(TexCoords,layer)).rrr,1);
 }

@@ -9,8 +9,9 @@
 class DeferredPipeline :public ShaderRenderPipeline
 {
 	TiledRenderer drfb;
-	
+	friend class Editor;
 public:
+	DeferredPipeline(int height,int width) { drfb.updateBufferSize(height, width); }
 	void  WindowsResizeCallBacks(int height, int width) override;
     void OnPreRender(std::shared_ptr<Shader> shader,RenderingSystem* rsys, Camera cam) override;
 	void OnPostRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam) override;

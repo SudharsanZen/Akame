@@ -49,8 +49,26 @@ uniform float lambda;
 uniform int numOfFrustum;
 uniform int shadowRes;
 uniform mat4 lightSpaceMat[5];
-#define near 0.1f
-#define far 1000.0f
+uniform float near;
+uniform float far;
+vec2 poissonDisk[16] = vec2[](
+    vec2(-0.94201624, -0.39906216),
+    vec2(0.94558609, -0.76890725),
+    vec2(-0.094184101, -0.92938870),
+    vec2(0.34495938, 0.29387760),
+    vec2(-0.91588581, 0.45771432),
+    vec2(-0.81544232, -0.87912464),
+    vec2(-0.38277543, 0.27676845),
+    vec2(0.97484398, 0.75648379),
+    vec2(0.44323325, -0.97511554),
+    vec2(0.53742981, -0.47373420),
+    vec2(-0.26496911, -0.41893023),
+    vec2(0.79197514, 0.19090188),
+    vec2(-0.24188840, 0.99706507),
+    vec2(-0.81409955, 0.91437590),
+    vec2(0.19984126, 0.78641367),
+    vec2(0.14383161, -0.14100790)
+);
 float divDist(float nthPlane,float lambda)
 {
       //float bias = 1.0f-((numOfFrustum-nthPlane)/(numOfFrustum))-(1.0f/numOfFrustum);
@@ -58,7 +76,7 @@ float divDist(float nthPlane,float lambda)
       float logrithmic=near*pow(far/near,nthPlane/numOfFrustum);
       float uni=near+(far-near)*(nthPlane/numOfFrustum);
 
-      return logrithmic*(1.0f-lambda)+uni*(lambda);
+      return (logrithmic*(1.0f-lambda)+uni*(lambda));
 }
 vec4 unProject(vec4 point)
 {
@@ -114,44 +132,82 @@ uniform sampler2D AlbedoSpec;
 
 uniform vec3 viewPos; 
 uniform int emissive;
-  int layer=0;
+int layer=0;
+float lightWidth=0.4f;
+#define BLOCKER_SARCH_SAMPLE_COUNT 16
+void FindBlocker(out float avgBlockerDepth, out float numBlockers, uint mapLayer, vec2 uv, float zReceiver) {
+    //This uses similar triangles to compute what
+    //area of the shadow map we should search
+    float searchWidth = lightWidth * (zReceiver - near) / zReceiver;
+    float blockerSum = 0;
+    numBlockers = 0;
+
+    for (int i = 0; i < BLOCKER_SARCH_SAMPLE_COUNT; ++i) {
+        float shadowMapDepth = texture(dir_sMap, vec3(uv + poissonDisk[i] * searchWidth*(1.0f/shadowRes), mapLayer)).r;
+        if (shadowMapDepth < zReceiver) {
+            blockerSum += shadowMapDepth;
+            numBlockers++;
+        }
+    }
+    avgBlockerDepth = blockerSum / numBlockers;
+}
+
+float PCF_Filter(uint mapLayer, vec2 uv, float zReceiver, float filterRadiusUV) {
+    float sum = 0.0;
+    float shadow_bias = 0.000;
+
+    for (int i = 0; i < 16; ++i) {
+        vec2 offset = poissonDisk[i] * filterRadiusUV;
+        float shadowMapDepth = texture(dir_sMap, vec3(uv + offset, mapLayer)).r;
+        sum += float(shadowMapDepth < zReceiver - shadow_bias);
+    }
+
+    return sum / 16.0f;
+}
+float PCSS(int mapLayer,vec3 coord)
+{
+      vec2 uv=coord.xy;
+      float zReceiver=coord.z;
+      
+      float avgBlockerSize=0;
+      float blockerCount=0;
+      FindBlocker(avgBlockerSize,blockerCount,mapLayer,uv,zReceiver);
+      if(blockerCount<1)
+            return 0;
+      
+      float zb=texture(dir_sMap, vec3(uv,layer)).r;
+      float penumbraSize=(zReceiver-zb)*lightWidth/zb;
+      float filterRadius=penumbraSize*near/coord.z;
+      filterRadius=clamp(filterRadius,0.0002,0.1);
+      return PCF_Filter(mapLayer,uv,zReceiver,filterRadius);
+}
 float shadowCalculation(vec4 fragPose)
 {
       float splitPose=0;
       
       float depth=0;
       vec4 camSpace=abs(viewMat*fragPose);
-      float shadow = 0.0;
-    
       vec3 projCoord;
+      float shadow=0;
       for(int i=1;i<=numOfFrustum;i++)
       {
             splitPose=divDist(i,lambda);
             if(camSpace.z<splitPose)
             {
                   layer=i-1;
+                     fragPose=lightSpaceMat[layer]*fragPose;
+                  projCoord=fragPose.xyz/fragPose.w;
+                  projCoord=projCoord*0.5+0.5;
+                  return PCSS(layer,projCoord);
                   break;
             }
       }
-      int con=2;
-      fragPose=lightSpaceMat[layer]*fragPose;
-      projCoord=fragPose.xyz/fragPose.w;
-      projCoord=projCoord*0.5+0.5;
-      depth=texture(dir_sMap, vec3(projCoord.xy,layer)).r; 
-      float pcfDepth=0;
-      float texel=1.0f/shadowRes;
-      for(int i=-con;i<=con;++i)
-      {
-            for(int j=-con;j<=con;++j)
-            {
-                  pcfDepth=texture(dir_sMap, vec3(projCoord.xy+vec2(i,j)*texel,layer)).r; 
-                  shadow += projCoord.z  > pcfDepth ? 1.0 : 0.0;
-            }            
-      }
-      shadow/=(con*2+1)*(con*2+1);
-     
-      return shadow;
       
+  
+
+      
+      
+      return 0;
 }
 
 vec3 calcPointLight(PointLight ptl,BufferPixelValues P)
@@ -342,6 +398,6 @@ void main()
       //float lightConcentration=(float(lightIndex)/float(NUM_POINT_LIGHT));
       //imageStore(outTexture, pixel, vec4(result, 1.0)+vec4(mix(vec3(0,0,0.1),vec3(1,0,0),lightConcentration),0));
       imageStore(outTexture, pixel,vec4(result, 1.0));
-      //imageStore(outTexture, pixel, mix(vec4(result, 1.0),cols[layer],0.5));
+      //imageStore(outTexture, pixel, mix(vec4(result, 1.0),cols[layer],0.1));
       //imageStore(outTexture,pixel,vec4(vec3(texture(dir_sMap,vec3(n,1)).r),1));
 }

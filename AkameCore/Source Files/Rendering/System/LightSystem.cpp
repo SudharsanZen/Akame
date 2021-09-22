@@ -131,7 +131,7 @@ void LightSystem::BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader,C
 		dir_sMap.bind();
 		shader->useShaderProgram();
 		shader->setUniformInteger("numOfFrustum", FRUSTUM_SPLIT_NUM);
-		std::vector<glm::mat4> lightSpaceMatList = CalculatePSSMLightSpaceMats(cam,forward,FRUSTUM_SPLIT_NUM,lambda);
+		std::vector<glm::mat4> lightSpaceMatList = CalculatePSSMLightSpaceMats(cam,forward,FRUSTUM_SPLIT_NUM,lambda,shadowDistance);
 		
 		for (int i = 0; i < FRUSTUM_SPLIT_NUM; i++)
 		{

@@ -155,6 +155,9 @@ void Scene::release()
 	ecs.reset();
 	behaviourSys.reset();
 	renderSys.reset();
+	lightSys.reset();
+	EDS.reset();
+	transformManager.reset();
 }
 
 void Scene::clearBuffer()
@@ -181,9 +184,9 @@ void Scene::Render()
 		physicsSys->Run(deltaTime);
 		fn();
 	
-		lines(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0)).renderMesh();
-		lines(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0)).renderMesh();
-		lines(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1)).renderMesh();
+		//lines(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0)).renderMesh();
+		//lines(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0)).renderMesh();
+		//lines(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1)).renderMesh();
 	deltaTime = currTime - lastTime;
 	lastTime = currTime;
 	

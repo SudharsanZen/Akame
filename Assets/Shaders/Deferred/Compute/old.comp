@@ -1,0 +1,369 @@
+#version 430
+#define TILE_DIM_X 32
+#define TILE_DIM_Y 32
+#define MAX_NUM_LIGHTS 800
+uniform int NUM_POINT_LIGHT=0;
+uniform int NUM_DIR_LIGHT=0;
+struct PointLight
+{
+    vec4 lightPose;  //16    0
+    vec4 lightColor; //16    16
+    vec4 ambient;    //16    32
+    //constants has: xyz the three constants for point light attenuation and w the radius of the point light
+    vec4 constants;  //16    48
+    float intensity; //4     64
+    //
+
+};
+
+struct DirectionalLight
+{
+    vec3 lightDir;
+    vec3 lightColor;
+    vec3 ambient;
+    float intensity;
+
+};
+
+vec2 poissonDisk[16] = vec2[](
+    vec2(-0.94201624, -0.39906216),
+    vec2(0.94558609, -0.76890725),
+    vec2(-0.094184101, -0.92938870),
+    vec2(0.34495938, 0.29387760),
+    vec2(-0.91588581, 0.45771432),
+    vec2(-0.81544232, -0.87912464),
+    vec2(-0.38277543, 0.27676845),
+    vec2(0.97484398, 0.75648379),
+    vec2(0.44323325, -0.97511554),
+    vec2(0.53742981, -0.47373420),
+    vec2(-0.26496911, -0.41893023),
+    vec2(0.79197514, 0.19090188),
+    vec2(-0.24188840, 0.99706507),
+    vec2(-0.81409955, 0.91437590),
+    vec2(0.19984126, 0.78641367),
+    vec2(0.14383161, -0.14100790)
+);
+layout (binding = 0,rgba16f)  uniform readonly image2D albedoSpec;
+layout (binding = 1, rgba16f) uniform readonly image2D normal;
+layout (binding = 2, rgba16f) uniform readonly image2D position;
+layout (binding = 3) uniform sampler2D depBuffer;
+layout (binding = 4, rgba16f) uniform writeonly image2D outTexture;
+layout (std140,binding = 5) uniform ptLightBuffer
+{
+      PointLight ptLight[MAX_NUM_LIGHTS];
+};
+layout (binding = 6) uniform 	sampler2DArray dir_sMap;
+
+uniform DirectionalLight DIR_L[4];
+layout (local_size_x = TILE_DIM_X, local_size_y = TILE_DIM_Y) in;
+
+uniform int height;
+uniform int width;
+uniform mat4 projInv;
+uniform mat4 proj;
+uniform mat4 viewMat;
+uniform float lambda;
+uniform int numOfFrustum;
+uniform int shadowRes;
+uniform mat4 lightSpaceMat[5];
+uniform float near;
+uniform float lightw=100;
+uniform float far;
+float divDist(float nthPlane,float lambda)
+{
+      //float bias = 1.0f-((numOfFrustum-nthPlane)/(numOfFrustum))-(1.0f/numOfFrustum);
+	//lambda += bias;
+      float logrithmic=near*pow(far/near,nthPlane/numOfFrustum);
+      float uni=near+(far-near)*(nthPlane/numOfFrustum);
+
+      return (logrithmic*(1.0f-lambda)+uni*(lambda));
+}
+vec4 unProject(vec4 point)
+{
+      return projInv*point;
+}
+
+
+//check if AABB and a given sphere are intersecting each other
+bool checkAABBSphereIntersection(vec3 minim,vec3 maxim, vec3 c, float r)
+{
+      if(
+            (c.x > minim.x && c.x <maxim.x) &&
+            (c.y > minim.y && c.y <maxim.y) &&
+            (c.z > minim.z && c.z <maxim.z)
+      )
+      return true;
+
+      //the nearest point
+      vec3 p;
+
+      //caculate the nearest point 'p' from the centre of the circle to the AABB
+      p.x=max(minim.x,min(maxim.x,c.x));
+      p.y=max(minim.y,min(maxim.y,c.y));
+      p.z=max(minim.z,min(maxim.z,c.z));
+
+
+      float dist = length((p-c));
+
+      
+      if(dist < r)
+            return true;
+
+      return false;
+
+}
+shared uint maxDepth,minDepth,lightIndex;
+
+shared uint lightList[MAX_NUM_LIGHTS];
+
+
+struct BufferPixelValues
+{
+    vec4 albedo;
+    float specular;
+    vec4 norm;
+    vec4 FragPos;
+};
+uniform sampler2D Position;
+uniform sampler2D Normal;
+uniform sampler2D AlbedoSpec;
+
+
+
+uniform vec3 viewPos; 
+uniform int emissive;
+  int layer=0;
+float shadowCalculation(vec4 fragPose)
+{
+      float splitPose=0;
+      
+      float depth=0;
+      vec4 camSpace=abs(viewMat*fragPose);
+      float shadow = 0.0;
+    
+      vec3 projCoord;
+      for(int i=1;i<=numOfFrustum;i++)
+      {
+            splitPose=divDist(i,lambda);
+            if(camSpace.z<splitPose)
+            {
+                  layer=i-1;
+                  break;
+            }
+      }
+      int con=1;
+      fragPose=lightSpaceMat[layer]*fragPose;
+      projCoord=fragPose.xyz/fragPose.w;
+      projCoord=projCoord*0.5+0.5;
+      //depth=texture(dir_sMap, vec3(projCoord.xy,layer)).r; 
+      float pcfDepth=0;
+      float texel=1.0f/shadowRes;
+      float dr=projCoord.z;
+      float db=texture(dir_sMap, vec3(projCoord.xy,layer)).r;
+      float penUmbra=(dr-db)*lightw/db;
+
+      for(int i=0;i<16;++i)
+      {
+           
+                  pcfDepth=texture(dir_sMap, vec3(projCoord.xy+poissonDisk[i]*texel,layer)).r; 
+                  float s= projCoord.z-0.0001f  > pcfDepth ? 1.0 : 0.0;
+                  shadow+=pow(s, 2);
+                     
+      }
+      shadow/=16;
+      shadow = pow(shadow,2.2);
+      return shadow;
+      
+}
+
+vec3 calcPointLight(PointLight ptl,BufferPixelValues P)
+{
+    vec3 lightDir= ptl.lightPose.xyz-P.FragPos.xyz;
+    float lightDistance=length(lightDir);
+    lightDir=normalize(lightDir);
+  
+    vec3 viewDir = -normalize(P.FragPos.xyz-viewPos);
+    vec3 halfwayDir = normalize(lightDir+viewDir);
+    float attenuation=1.0/( ptl.constants.x + ptl.constants.y*lightDistance + pow(lightDistance,2)*ptl.constants.z);
+
+    float diff=max(dot(P.norm.xyz,lightDir),0);
+
+    float spec=pow(max(dot(P.norm.xyz,halfwayDir),0.0),128);
+
+    vec3 diffuse=diff*(P.albedo.xyz*ptl.lightColor.xyz);
+    vec3 ambient=ptl.ambient.xyz*P.albedo.xyz;
+    vec3 specular= vec3(spec*P.specular);
+    vec3 result=(attenuation)*((diffuse+specular)*ptl.intensity+ambient);
+    return result;
+
+}
+BufferPixelValues pV;
+
+vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P,float shadow)
+{
+    //flip light and make it's direction from fragment pose to lightSource
+    vec3 lightDir=normalize(-l.lightDir);
+    float diff= max(dot(P.norm.xyz, lightDir), 0.0);
+
+    //calculate specular highlight
+    vec3 viewDir=normalize(viewPos-P.FragPos.xyz);
+    vec3 halfwayDir = normalize( lightDir+ viewDir);  
+    float spec = pow(max(dot(P.norm.xyz, halfwayDir), 0.0), 128.0);
+    vec3 specular=vec3(spec * P.specular);
+
+    //calculate diffuse and ambient color
+    vec3 diffuse=diff * l.lightColor * P.albedo.xyz;
+    vec3 ambient=l.ambient*P.albedo.xyz;
+    
+    
+    //add all the resultant values
+    vec3 result=(((diffuse+specular)*l.intensity*(1.0f-shadow))+ambient);
+    
+    return result;
+}
+
+vec4 createFrustumFromPoints(vec4 tp1,vec4 tp2,vec4 planePoint)
+{
+     
+     
+      tp1=tp1;
+      tp2=tp2;
+     
+
+      vec4 norm=vec4(normalize(cross((tp1.xyz-tp2.xyz),planePoint.xyz-tp2.xyz)),1);
+      norm.w=-norm.x*tp1.x+norm.y*tp1.y+norm.z*tp1.z;
+
+      return norm;
+
+}
+
+float getSignedDistanceFromPlane(vec4 frustum,vec3 point)
+{
+      float dist= (dot(frustum.xyz,point)+frustum.w);
+      return dist;
+}
+void main()
+{
+      lightIndex=0;
+      ivec2 pixel = ivec2(gl_GlobalInvocationID.xy);
+      uint loc=(gl_WorkGroupID.x+gl_WorkGroupID.y)%2;
+      vec2 n=vec2(pixel)/vec2(width,height);
+      float depthValue=texture(depBuffer,n).r;
+     
+
+      uint depthInt=uint(depthValue*0xFFFFFFFF);
+
+      //get the maximu and minum depth for the current tile
+      atomicMax(maxDepth,depthInt);
+      atomicMin(minDepth,depthInt);
+      
+      pV.norm = vec4(normalize(imageLoad(normal,pixel).xyz),1);
+      pV.FragPos=imageLoad(position,pixel);
+      pV.specular = imageLoad(albedoSpec,pixel).a;  
+      pV.albedo=vec4(imageLoad(albedoSpec,pixel).xyz,1);
+
+      barrier();
+
+      //the tile's screen coordinates for the current workGroup
+      uint minX=gl_WorkGroupID.x*TILE_DIM_X;
+      uint minY=gl_WorkGroupID.y*TILE_DIM_Y;
+      uint maxX=(gl_WorkGroupID.x+1)*TILE_DIM_X;
+      uint maxY=(gl_WorkGroupID.y+1)*TILE_DIM_Y;
+
+      //unprojecting the screen coordinates the viewSpace
+      vec4 tileCorners[4];
+
+      //constants for converting screenSpace points to NDC
+      float xC=2.0f/(float(width));
+      float yC=2.0f/(float(height));
+
+      //convert the tile corner points to NDC coordinate and then unProject it to get viewSpace coordinate
+      /*
+      tile Coordinate's Indices with an intutive picture ;)
+      y+
+         |   3*-----*2
+         |    *     *
+         |   0*-----*1
+         |______________x+
+      */
+      float maxD=float(maxDepth)/float(0xFFFFFFFF);
+      tileCorners[0]=unProject(vec4(float(minX)*xC-1.0f,float(minY)*yC-1.0f,maxD,1.0f));
+      tileCorners[1]=unProject(vec4(float(maxX)*xC-1.0f,float(minY)*yC-1.0f,maxD,1.0f));
+      tileCorners[2]=unProject(vec4(float(maxX)*xC-1.0f,float(maxY)*yC-1.0f,maxD,1.0f));
+      tileCorners[3]=unProject(vec4(float(minX)*xC-1.0f,float(maxY)*yC-1.0f,maxD,1.0f));
+      
+   
+
+      // vec4(nx,ny,nz,D)
+      vec4 frustum[6];
+
+      for(int i=0;i<4;i++)
+      {
+            frustum[i]=createFrustumFromPoints(tileCorners[i],tileCorners[(i+1)%4],viewMat*vec4(viewPos,1));
+      }
+
+      //tiles for calculating near plane
+      tileCorners[0]=unProject(vec4(float(minX)*xC-1.0f,float(minY)*yC-1.0f,0.1,1.0f));
+      tileCorners[1]=unProject(vec4(float(maxX)*xC-1.0f,float(minY)*yC-1.0f,0.1,1.0f));
+      tileCorners[2]=unProject(vec4(float(maxX)*xC-1.0f,float(maxY)*yC-1.0f,0.1,1.0f));
+      tileCorners[3]=unProject(vec4(float(minX)*xC-1.0f,float(maxY)*yC-1.0f,0.1,1.0f));
+  
+ 
+      frustum[4]=createFrustumFromPoints(tileCorners[0],tileCorners[1],tileCorners[2]);
+    
+     
+      uint lightPerIndex=int(ceil(float(NUM_POINT_LIGHT)/float(TILE_DIM_X*TILE_DIM_Y)));
+      uint startIndex=((gl_LocalInvocationID.x)+(gl_LocalInvocationID.y*TILE_DIM_Y))*lightPerIndex;
+      for(uint i=startIndex;i<startIndex+lightPerIndex && i< NUM_POINT_LIGHT;i++)
+      {
+      bool inside=true;
+          for(uint j=0;j<5;j++)
+          {
+                float d=getSignedDistanceFromPlane(frustum[j],(viewMat*ptLight[i].lightPose).xyz);
+                if(d<0 && abs(d)>ptLight[i].constants.w )
+                {
+                  inside=false;
+                  break;
+                }
+          }
+          if(inside)
+          {
+            uint lindx= atomicAdd(lightIndex,1);
+            lightList[lindx]=i;
+          }
+      }
+
+
+
+
+     groupMemoryBarrier();
+     barrier();
+
+
+
+   vec4 cols[4];
+   cols[0]=vec4(1,0,0,1);
+   cols[1]=vec4(0,1,0,1);
+   cols[2]=vec4(0,0,1,1);
+   cols[3]=vec4(1,0,1,1);
+    
+    vec3 result=vec3(0,0,0);
+     
+    for(uint i=0;i<lightIndex;i++)
+    {
+        result+=calcPointLight(ptLight[lightList[i]],pV);
+    }
+
+      for(uint i=0;i<NUM_DIR_LIGHT;i++)
+      {
+            float s=shadowCalculation(pV.FragPos);
+            result+=calcDirecLight(DIR_L[i],pV,s);
+
+      }
+ 
+      //float lightConcentration=(float(lightIndex)/float(NUM_POINT_LIGHT));
+      //imageStore(outTexture, pixel, vec4(result, 1.0)+vec4(mix(vec3(0,0,0.1),vec3(1,0,0),lightConcentration),0));
+      imageStore(outTexture, pixel,vec4(result, 1.0));
+      //imageStore(outTexture, pixel, mix(vec4(result, 1.0),cols[layer],0.1));
+      //imageStore(outTexture,pixel,vec4(vec3(texture(dir_sMap,vec3(n,1)).r),1));
+}

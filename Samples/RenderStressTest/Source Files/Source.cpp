@@ -1,3 +1,4 @@
+#define _CRTDBG_MAP_ALLOC
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -5,7 +6,7 @@
 #include"Core/Engine.h"
 #include"Core/Scene.h"
 #include<vector>
-#define _CRTDBG_MAP_ALLOC
+
 #include <stdlib.h>
 #include <crtdbg.h>
 #include"Rendering/System/PSSMFBO.h"
@@ -13,6 +14,7 @@
 #include"Core/Editor/EditorUI.h"
 void app()
 {
+	
 	AssetManager::setAssetRoot("../../../../Assets/");
 	std::string rootDir(AssetManager::getAssetRoot());
 	Window window(800, 800, "testWindow");
@@ -96,7 +98,7 @@ void app()
 	scene.AddComponent<Material>(sky)=matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
-	const int num =500;
+	const int num =200;
 	const int rt = (int)sqrt(num);
 	std::vector<EntityID> lightsVec;
 	for (int i = 0; i < num; i++)
@@ -144,41 +146,8 @@ void app()
 		scene.Render();
 		edt.DrawUI();
 		
-		for (int i = 0; i < lightsVec.size(); i++)
-		{
 		
-			Transform& T = scene.GetComponent<Transform>(lightsVec[i]);
-			glm::vec3 pose = T.GetGlobalPosition();
-			T.SetGlobalPosition(glm::vec3(pose.x, 1 + sin(acc + i),pose.z));
-		}
-		Lights &t=scene.GetComponent<Lights>(dir);
-		Quaternion rot(0, fmod(acc * 5, 180), fmod(acc * 10.0f, 180));
-		t.setDirection(rot*glm::vec3(0,-1, 0));
-		if (Input::getKeyDown(KEY_F))
-		{
-			std::cout << "hhhhhhhhhhh";
-			stopRot = !stopRot;
-		}
-		/*
-		if (Input::getKeyDown(KEY_F))
-		{
-			auto vec=CalculateFrustumCorners(scene.cam,3,0.2f);
-			for (int i = 0; i < vec.size(); i++)
-			{
-				for (int j = 0; j < vec[i].size(); j++)
-				{
-					EntityID box = scene.CreateEntity();
-					Mesh& bm = scene.AddComponent<Mesh>(box);
-				
-						bm.CreateMesh(generateCubeVertices());
 		
-					scene.AddComponent<Transform>(box).SetGlobalPosition(vec[i][j]);
-					scene.AddComponent<Material>(box) = boxMat;
-					scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
-				}
-			}
-		}
-		*/
 		scene.swapBuffers();
 	}
 
@@ -188,7 +157,8 @@ int main()
 {
 
 	app();
-
+	//AssetManager::reset();
+	_CrtDumpMemoryLeaks();
 	return 0;
 }
 

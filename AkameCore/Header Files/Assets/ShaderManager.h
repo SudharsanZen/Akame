@@ -11,7 +11,7 @@ class ShaderManager
 	static std::map<std::string, std::shared_ptr<ShaderRenderPipeline>> shaderRenderPipeline;
 	static bool checkForPipeline(std::string shaderName);
 	friend class RenderingSystem;
-
+	friend class Editor;
 public:
 
 	ShaderManager();
@@ -20,12 +20,13 @@ public:
 	static void releaseAllShaders() 
 	{
 		shaderList.clear();
+		shaderQueues.clear();
 	}
-	template<typename T>
-	static void AttachShaderPipeline(std::string SHADERNAME) 
+	template<typename T,typename ...Args>
+	static void AttachShaderPipeline(std::string SHADERNAME,Args&& ...args) 
 	{
 		
-		shaderRenderPipeline[SHADERNAME] = std::make_shared<T>();
+		shaderRenderPipeline[SHADERNAME] = std::make_shared<T>(std::forward<Args>(args)...);
 
 	}
 	//void loadShader(std::string shaderName);

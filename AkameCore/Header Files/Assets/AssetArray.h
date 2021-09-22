@@ -56,6 +56,16 @@ public:
 		return refcount[index];
 	}
 
+	void reset()
+	{
+		assetList.clear();
+		freelist.clear();
+		refcount.clear();
+	}
 
+	~AssetArray()
+	{
+		reset();
+	}
 };
 

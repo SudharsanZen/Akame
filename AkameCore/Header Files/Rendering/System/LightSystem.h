@@ -5,12 +5,12 @@
 #include"Rendering/System/ShadowFBO.h"
 #include"Rendering/Camera.h"
 #include"Rendering/System/PSSMFBO.h"
-#define DIR_MAP_SIZE 1024
-#define FRUSTUM_SPLIT_NUM 4
+#define DIR_MAP_SIZE 2048
+#define FRUSTUM_SPLIT_NUM 3
 class LightSystem:public System
 {
 private:
-
+	
 	//struct for use in uniform buffer
 	struct pointLight
 	{
@@ -52,11 +52,12 @@ private:
 	friend class TiledRenderer;
 	friend class Editor;
 public:
+	float shadowDistance = 350;
 	//point light vector for storing in point light uniform buffer
 	std::vector<pointLight> ptVector;
 	std::vector<directionalLight> drVector;
 	std::vector<glm::mat4> dirLightSpace;
-	float lambda = 0.07f;
+	float lambda = 0.138f;
 	PSSMFBO dir_sMap;
 	//empty point light list completely and create a new one, call when entity is added or removed
 	void updatePointLightBuffer();
@@ -92,4 +93,3 @@ public:
 	}
 
 };
-

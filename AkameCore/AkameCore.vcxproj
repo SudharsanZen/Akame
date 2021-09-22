@@ -133,6 +133,7 @@
     <ClInclude Include="Header Files\Rendering\Shader.h" />
     <ClInclude Include="Header Files\Rendering\System\DeferredPipeline.h" />
     <ClInclude Include="Header Files\Rendering\System\LightSystem.h" />
+    <ClInclude Include="Header Files\Rendering\System\PSSMFBO.h" />
     <ClInclude Include="Header Files\Rendering\System\RenderingSystem.h" />
     <ClInclude Include="Header Files\Rendering\System\SceneTransformManager.h" />
     <ClInclude Include="Header Files\Rendering\System\ShaderRenderPipeline.h" />
@@ -140,10 +141,8 @@
     <ClInclude Include="Header Files\Rendering\System\TiledRenderer.h" />
     <ClInclude Include="Header Files\Rendering\Texture.h" />
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h" />
-    <ClInclude Include="Header Files\Rendering\System\PSSMFBO.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source Files\Rendering\System\PSSMFBO.cpp" />
     <ClCompile Include="Source Files\Assets\Asset.cpp" />
     <ClCompile Include="Source Files\Assets\AssetArray.cpp" />
     <ClCompile Include="Source Files\Assets\AssetManager.cpp" />
@@ -176,6 +175,7 @@
     <ClCompile Include="Source Files\Rendering\System\BuiltInShaderPipelines\DeferredPipeline.cpp" />
     <ClCompile Include="Source Files\Rendering\System\DepthFrameBuffer.cpp" />
     <ClCompile Include="Source Files\Rendering\System\LightSystem.cpp" />
+    <ClCompile Include="Source Files\Rendering\System\PSSMFBO.cpp" />
     <ClCompile Include="Source Files\Rendering\System\RenderingSystem.cpp" />
     <ClCompile Include="Source Files\Rendering\System\ShaderRenderPipeline.cpp" />
     <ClCompile Include="Source Files\Rendering\System\ShadowFBO.cpp" />

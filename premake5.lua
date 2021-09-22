@@ -88,6 +88,10 @@ group "Samples"
     include "premakeconfig/RandomStuffTest.lua"
 group ""
 
+group "tools"
+    include "premakeConfig/AkameExporter"
+group ""
+
 
 
 

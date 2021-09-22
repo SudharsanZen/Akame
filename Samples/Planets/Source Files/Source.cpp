@@ -88,7 +88,7 @@ public:
 
 int main()
 {
-	AssetManager::setAssetRoot("../../../Assets/");
+	AssetManager::setAssetRoot("../../../../Assets/");
 	std::string rootDir(AssetManager::getAssetRoot());
 	std::cout << AssetManager::getAssetRoot();
 	Window window(800,800,"planets");

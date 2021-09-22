@@ -63,14 +63,14 @@ float CalSplitDistance(float farPlaneNum,float numOfFrustum, float znear, float 
 	float interPolatedValue = lambda*uniform+(1.0f-lambda)*logrithimic;
 	return interPolatedValue;
 }
-std::vector<std::vector<glm::vec3>> CalculateFrustumCorners(Camera &cam,int numOfFrus,float lambda)
+std::vector<std::vector<glm::vec3>> CalculateFrustumCorners(Camera &cam,int numOfFrus,float lambda,float shadowDist)
 {
 	
 	std::vector<std::vector<glm::vec3>> frustumList;
 	glm::vec3 camUp = cam.transform.up();
 	glm::vec3 camRight = cam.transform.right();
 
-	float nearz = cam.getNear(), farz = cam.getFar();
+	float nearz = cam.getNear(), farz =shadowDist;
 
 	glm::vec3 viewDir = cam.transform.forward();
 
@@ -111,7 +111,7 @@ std::vector<std::vector<glm::vec3>> CalculateFrustumCorners(Camera &cam,int numO
 
 	return frustumList;
 }
-std::vector<glm::mat4> CalculatePSSMLightSpaceMats(Camera& cam, glm::vec3  l, int numOfFrustums,float lambda)
+std::vector<glm::mat4> CalculatePSSMLightSpaceMats(Camera& cam, glm::vec3  l, int numOfFrustums,float lambda,float shadowDist)
 {
 
 	std::vector<glm::mat4> matList;
@@ -141,7 +141,7 @@ std::vector<glm::mat4> CalculatePSSMLightSpaceMats(Camera& cam, glm::vec3  l, in
 	float farz = cam.getFar();
 	cp = cam.getProjectionMatrix();
 	cv = cam.getViewMatrix();
-	std::vector<std::vector<glm::vec3>> frustumList=CalculateFrustumCorners(cam,numOfFrustums,lambda);
+	std::vector<std::vector<glm::vec3>> frustumList=CalculateFrustumCorners(cam,numOfFrustums,lambda,shadowDist);
 	for (int i = 0; i < frustumList.size(); i++)
 	{
 	
@@ -175,15 +175,16 @@ std::vector<glm::mat4> CalculatePSSMLightSpaceMats(Camera& cam, glm::vec3  l, in
 		min = min - center;
 
 		
-		float nearz=cam.getNear(), farz=cam.getFar();
+		float nearz=cam.getNear(), farz=shadowDist;
 		glm::vec3 viewDir = cam.transform.forward();
 		glm::vec3 camPose = cam.transform.GetGlobalPosition();
 		float iN = CalSplitDistance(i,numOfFrustums,nearz,farz,lambda);
 		float iF = CalSplitDistance(i+1,numOfFrustums,nearz,farz,lambda);
 		glm::vec3 cen = camPose+viewDir*((iN+iF)/2.0f);
-		glm::vec3 pose = cen;
+		glm::vec3 pose = cen-forward*200.0f;
 		glm::mat4 lViewMat=glm::lookAt(pose,cen+forward,up);
-		glm::mat4 lProjMat = glm::ortho(min.x,max.x,min.y,max.y,2.0f*min.z,2.0f*max.z);
+
+		glm::mat4 lProjMat = glm::ortho(min.x*pssmx,max.x*pssmx,min.y*pssmy,max.y*pssmy,-1000.0f,1000.0f);
 
 		matList.push_back(lProjMat*lViewMat);
 	}

@@ -19,7 +19,7 @@ private:
 	friend class RenderingSystem;
 	friend class DeferredRendererFragmentBuffer;
 	friend class LightSystem;
-	
+	friend class Editor;
 
 	float calPointLightRadius(glm::vec3 C, float intensity);
 	float pointLightRadius;

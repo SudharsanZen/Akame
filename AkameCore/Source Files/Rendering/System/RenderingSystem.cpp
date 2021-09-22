@@ -51,7 +51,8 @@ void RenderingSystem::updateUniformBuffer(Camera& cam)
 
 void RenderingSystem::attachAllBuiltInSRP()
 {
-	ShaderManager::AttachShaderPipeline<DeferredPipeline>("DEFERRED");
+	ShaderManager::shaderRenderPipeline.clear();
+	ShaderManager::AttachShaderPipeline<DeferredPipeline>("DEFERRED",height,width);
 	ShaderManager::AttachShaderPipeline<RM_SKY_BOXPipeline>("SPHERE");
 }
 

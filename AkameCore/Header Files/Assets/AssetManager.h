@@ -30,7 +30,10 @@ public:
 	static std::string getAssetRoot() { return assetRootPath; }
 	static void reloadAllShaders() { shaderManager.loadAllShaders(); }
 
+	static void reset() 
+	{
 
+	}
 
 	
 };

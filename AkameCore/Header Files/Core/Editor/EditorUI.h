@@ -9,14 +9,14 @@ typedef int ImGuiTreeNodeFlags;
 class Editor
 {
 private:
-	float lambda=0.07f;
+	bool viewDebugInfo;
 	std::set<EntityID> selected;
 	ImGuiIO& io;
 	std::weak_ptr<GLFWwindow> context;
 	Scene &scene;
 	//initializes imGui
 	void initImGui();
-	FrameBuffer fbo[4];
+	FrameBuffer fbo[5];
 	//returns the &io value
 	ImGuiIO& initGui();
 	void DrawNode(Transform const& t, EntityDescriptor& edt, ImGuiTreeNodeFlags const& base_flags);

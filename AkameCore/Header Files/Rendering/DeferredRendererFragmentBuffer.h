@@ -18,11 +18,15 @@ class DeferredRendererFragmentBuffer
 	//render buffer for using as Depth/Stencil buffer
 	unsigned int rbo=0;
 	void GenerateFrameBuffer();
-
+	unsigned int getAlbedoBuff() { return AlbedoSpec; }
+	unsigned int getDepthBuff() { return depthBuffer; }
+	unsigned int getNormalBuff() { return this->Normal; }
+	unsigned int getPositionBuff() { return Position; }
+	friend class Editor;
 	friend class TiledRenderer;
 	friend class RenderingSystem;
 public:
-
+	
 	DeferredRendererFragmentBuffer();
 	unsigned int frameBuffer = 0;
 	
