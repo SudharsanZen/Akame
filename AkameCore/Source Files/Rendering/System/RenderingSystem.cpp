@@ -9,6 +9,7 @@
 #include<sstream>
 #include"Rendering/Camera.h"
 #include"Rendering/System/DeferredPipeline.h"
+#include"Core/Debug/Debug.h"
 
 //returns the point where the ray intersects the plane
 glm::vec3 rayPlaneIntersectionPoint(glm::vec3 rayOrigin,glm::vec3 rayDir,glm::vec3 planeNormal,glm::vec3 planePoint)
@@ -91,7 +92,20 @@ void RenderingSystem::Run(Camera& cam)
 	glViewport(0, 0, width, height);
 	RenderQueue("GEOMETRY",cam);
 	RenderQueue("OVERLAY",cam);
+
+	ShaderManager::GetShader("LINES_DEBUG")->useShaderProgram();
+	glDisable(GL_DEPTH_TEST);
+
+	for (auto ent : entities)
+	{
+		Transform& t = ecs.lock()->GetComponent<Transform>(ent);
+		Mesh& m = ecs.lock()->GetComponent<Mesh>(ent);
+		Debug::DrawBB(m.min, m.max, t.transformMatrix(), glm::vec3(1, 1, 1));
+	}
+	Debug::updateBufferContent();
+	Debug::DrawDebug();
 	
+	glEnable(GL_DEPTH_TEST);
 
 
 

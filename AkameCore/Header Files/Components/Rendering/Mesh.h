@@ -20,7 +20,9 @@ private:
 	//number of IBO indices
 	size_t numOfIndices,numOfVertices;
 	void setupMesh();
-	
+	glm::vec4 max,min;
+	friend class RenderingSystem;
+
 public:
 	std::vector<vert> vertices;
 	std::vector<unsigned int> indices;

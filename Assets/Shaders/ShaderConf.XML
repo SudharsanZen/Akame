@@ -36,3 +36,7 @@
     <Vertex path="Misc/grids.vert"/>
     <Fragment path="Misc/sphere.frag"/>
 </Shader>
+<Shader name="LINES_DEBUG" queue="OVERLAY+0">
+    <Vertex path="DebugShader/lines.vert"/>
+    <Fragment path="DebugShader/lines.frag"/>
+</Shader>

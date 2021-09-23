@@ -8,7 +8,7 @@
 #include<GLFW/glfw3.h>
 #include"Core/Log/Log.h"
 #include"Core/Input.h"
-
+#include"Core/Debug/Debug.h"
 Window::Window(int width,int height,std::string winName,Window *shareWindow)
 {
 	Log::Init();
@@ -25,6 +25,7 @@ Window::Window(int width,int height,std::string winName,Window *shareWindow)
 
 Window::~Window()
 {
+	//Debug::DeleteBuffers();
 	glfwTerminate();
 }
 
@@ -51,6 +52,7 @@ int Window::getBufferWidth()
 bool Window::closeWindow()
 {
 	Input::flush();
+	Debug::FlushDebugInformation();
 	//returns true if windows close event has occured
 	if (mainWindow)
 		return glfwWindowShouldClose(mainWindow.get());
@@ -134,7 +136,7 @@ bool Window::initialize()
 	glGetIntegerv(GL_MAX_VERTEX_UNIFORM_BLOCKS,&a);
 	ENGINE_CORE_CRITICAL("MAX UNIFORM BLOCK SIZE:{0:d}",a);
 	glfwSetKeyCallback(mainWindow.get(), Input::handleKeys);
-	
+	Debug::CreateBuffers();
 	return true;
 }
 

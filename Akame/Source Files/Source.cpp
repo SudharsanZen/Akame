@@ -8,6 +8,7 @@
 #include<Rendering/DeferredRendererFragmentBuffer.h>
 #include<Core/Scene.h>
 #include<sstream>
+#include"Core/Debug/Debug.h"
 #include"Core/Editor/EditorUI.h"
 #define sizeX 10.0f
 #define sizeY 10.0f
@@ -105,12 +106,13 @@ int main()
 
 	Editor editor(window,scene);
 	scene.OnStart();
-	scene.vsyncOn(false);
+	scene.vsyncOn(true);
 	float deltaTime = 0;
 	i=3;
 	while (!window.closeWindow())
 	{
-		
+		Debug::DrawLine(glm::vec3(0,0,0),glm::vec3(0,10,0),glm::vec3(0,1,0));
+		Debug::DrawCircle(glm::vec3(0),glm::vec3(0,1,0),3,glm::vec3(0,1,0),20);
 		deltaTime = scene.getDeltaTime();
 		flyCam(scene.cam,scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());

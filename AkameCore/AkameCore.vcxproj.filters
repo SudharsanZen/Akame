@@ -237,6 +237,7 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Core\Debug\Debug.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Assets\Asset.cpp">
@@ -365,5 +366,6 @@
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Core\Debug\Debug.cpp" />
   </ItemGroup>
 </Project>

@@ -9,7 +9,8 @@ Mesh::Mesh()
 	VBO = 0;
 	VAO = 0;
 	IBO = 0;
-	
+	min = glm::vec4(-1);
+	max = glm::vec4(1);
 }
 
 Mesh::~Mesh()
@@ -52,6 +53,28 @@ void Mesh::CreateMesh(std::vector<vert> vertices, std::vector<GLuint> indices)
 	
 	numOfIndices = indices.size();
 	numOfVertices = vertices.size();
+
+	//Calculate local Bounding boxes for mesh
+	glm::vec3 minPose = vertices[0].pos;
+	glm::vec3 maxPose = vertices[0].pos;
+	for (int i = 1; i < numOfVertices; i++)
+	{
+		if (minPose.x > vertices[i].pos.x)
+			minPose.x = vertices[i].pos.x;
+		if (minPose.y > vertices[i].pos.y)
+			minPose.y = vertices[i].pos.y;
+		if (minPose.z > vertices[i].pos.z)
+			minPose.z = vertices[i].pos.z;
+
+		if (maxPose.x < vertices[i].pos.x)
+			maxPose.x = vertices[i].pos.x;
+		if (maxPose.y < vertices[i].pos.y)
+			maxPose.y = vertices[i].pos.y;
+		if (maxPose.z < vertices[i].pos.z)
+			maxPose.z = vertices[i].pos.z;
+	}
+	min = glm::vec4(minPose,1);
+	max = glm::vec4(maxPose,1);
 	setupMesh();
 }
 
@@ -65,7 +88,8 @@ void Mesh::reset()
 		glDeleteBuffers(1,&VBO);
 	if (VAO)
 		glDeleteVertexArrays(1,&VAO);
-
+	max = glm::vec4(1);
+	min = glm::vec4(-1);
 	//reset the number of IBO indices
 	numOfIndices = 0;
 	numOfVertices = 0;
