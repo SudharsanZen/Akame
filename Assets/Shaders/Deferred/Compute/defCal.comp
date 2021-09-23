@@ -35,7 +35,7 @@ layout (std140,binding = 5) uniform ptLightBuffer
 {
       PointLight ptLight[MAX_NUM_LIGHTS];
 };
-layout (binding = 6) uniform 	sampler2DArray dir_sMap;
+layout (binding = 6) uniform 	sampler2DArrayShadow dir_sMap;
 
 uniform DirectionalLight DIR_L[4];
 layout (local_size_x = TILE_DIM_X, local_size_y = TILE_DIM_Y) in;
@@ -143,7 +143,7 @@ void FindBlocker(out float avgBlockerDepth, out float numBlockers, uint mapLayer
     numBlockers = 0;
 
     for (int i = 0; i < BLOCKER_SARCH_SAMPLE_COUNT; ++i) {
-        float shadowMapDepth = texture(dir_sMap, vec3(uv + poissonDisk[i] * searchWidth*(1.0f/shadowRes), mapLayer)).r;
+        float shadowMapDepth = texture(dir_sMap, vec4(uv + poissonDisk[i] * searchWidth*(1.0f/shadowRes), mapLayer,zReceiver)).r;
         if (shadowMapDepth < zReceiver) {
             blockerSum += shadowMapDepth;
             numBlockers++;
@@ -158,7 +158,7 @@ float PCF_Filter(uint mapLayer, vec2 uv, float zReceiver, float filterRadiusUV) 
 
     for (int i = 0; i < 16; ++i) {
         vec2 offset = poissonDisk[i] * filterRadiusUV;
-        float shadowMapDepth = texture(dir_sMap, vec3(uv + offset, mapLayer)).r;
+        float shadowMapDepth = texture(dir_sMap, vec4(uv + offset, mapLayer,zReceiver)).r;
         sum += float(shadowMapDepth < zReceiver - shadow_bias);
     }
 
@@ -175,10 +175,10 @@ float PCSS(int mapLayer,vec3 coord)
       if(blockerCount<1)
             return 0;
       
-      float zb=texture(dir_sMap, vec3(uv,layer)).r;
+      float zb=texture(dir_sMap, vec4(uv,layer,zReceiver)).r;
       float penumbraSize=(zReceiver-zb)*lightWidth/zb;
       float filterRadius=penumbraSize*near/coord.z;
-      filterRadius=clamp(filterRadius,0.0002,0.1);
+      filterRadius=clamp(filterRadius,0.0002,0.001);
       return PCF_Filter(mapLayer,uv,zReceiver,filterRadius);
 }
 float shadowCalculation(vec4 fragPose)

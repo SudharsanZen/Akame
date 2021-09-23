@@ -78,10 +78,10 @@ int main()
 	scene.AddComponent<Material>(plane) = mat;
 	pm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
-	EntityID model=LoadModelToScene(scene,"D:/Projects/GameEngine/Sponza/Sponza.fbx");
+	EntityID model=LoadModelToScene(scene,"D:/Projects/GameEngine/cit/obj/cit.obj");
 	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
 	Transform &T=scene.GetComponent<Transform>(model);
-	T.SetGlobalScale(glm::vec3(0.5));
+	T.SetGlobalScale(glm::vec3(3));
 	T.SetGlobalPosition(glm::vec3(0,12,0));
 
 	Material matS("SPHERE");
