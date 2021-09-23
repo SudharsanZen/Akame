@@ -11,6 +11,7 @@
 #include"Rendering/System/RenderingSystem.h"
 #include"Rendering/System/DeferredPipeline.h"
 #include"Rendering/System/PSSMFBO.h"
+#include"Core/Debug/Debug.h"
 float pssmx = 1.45f;
 float pssmy = 1.45f;
 void Editor::initImGui()
@@ -129,6 +130,35 @@ void Editor::DrawNode(Transform const& t, EntityDescriptor &edt, ImGuiTreeNodeFl
 
 void Editor::DrawUI()
 {
+	for (auto ent : selected)
+	{
+		if (scene.ecs->IsComponentAttached<Transform>(ent))
+		{
+			Transform& t = scene.GetComponent<Transform>(ent);
+			if (scene.ecs->IsComponentAttached<Mesh>(ent))
+			{
+				Mesh& m = scene.GetComponent<Mesh>(ent);
+				Debug::DrawBB(m.min, m.max, t.transformMatrix(), glm::vec3(1, 1, 1));
+
+			}
+			else if (scene.ecs->IsComponentAttached<Lights>(ent))
+			{
+				Lights& l = scene.GetComponent<Lights>(ent);
+				glm::vec3 pose = t.GetGlobalPosition();
+				if (l.getType() == LIGHT::POINT)
+				{
+					Debug::DrawCircle(pose,t.up(),0.5,glm::vec3(1,0.5,0));
+					Debug::DrawCircle(pose,t.forward(),0.5,glm::vec3(1,0.5,0));
+					Debug::DrawCircle(pose,t.right(),0.5,glm::vec3(1,0.5,0));
+				}
+				else if (l.getType() == LIGHT::DIRECTIONAL)
+				{
+					Debug::DrawCircle(pose,l.getDirection(),1,glm::vec3(1,0.8,1),20);
+					Debug::DrawRay(pose,l.getDirection(),1.5,glm::vec3(0,0,1));
+				}
+			}
+		}
+	}
 	if (ImGui::IsKeyDown(KEY_DELETE))
 	{
 

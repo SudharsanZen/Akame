@@ -73,7 +73,7 @@ void app()
 	Lights &d = scene.AddComponent<Lights>(dir);
 	d.setType(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
-	d.setDirection(-1,-1,0);
+	d.setDirection(1,0,0);
 	d.setIntensity(0.6f);
 	d.setPointLightConst(1,2,10);
 	d.ambientLigting(0.1f,0.1f,0.1f);

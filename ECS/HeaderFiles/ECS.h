@@ -126,6 +126,25 @@ public:
 		return componentManager.GetComponentBitPose<T>();
 	}
 
+	Signature GetEntitySignature(EntityID entityID)
+	{
+		assert(versionOfEntity[entityID.index] == entityID.version && "trying to get signature of non existing entity!");
+		
+		return signature[entityID.index];
+	}
+
+	template<typename T>
+	bool IsComponentAttached(EntityID entityID)
+	{
+		assert(versionOfEntity[entityID.index] == entityID.version && "trying to access non existing entity!");
+		
+		return signature[entityID.index][componentManager.GetComponentBitPose<T>()];
+		
+	}
+	bool IsEntityValid(EntityID entityID)
+	{
+		return (versionOfEntity[entityID.index] == entityID.version);
+	}
 	~ECS()
 	{
 		std::cout << "\n~ECS()\n";

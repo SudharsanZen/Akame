@@ -45,6 +45,6 @@ public:
 	LIGHT getType();
 	void setType(LIGHT ty) { type = ty; };
 	void reset() {};
-	glm::vec3 getDirection() { return lightDirection; }
+	glm::vec3 getDirection() { return glm::normalize(lightDirection); }
 };
 

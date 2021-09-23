@@ -22,6 +22,7 @@ private:
 	void setupMesh();
 	glm::vec4 max,min;
 	friend class RenderingSystem;
+	friend class Editor;
 
 public:
 	std::vector<vert> vertices;

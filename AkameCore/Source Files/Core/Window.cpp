@@ -52,7 +52,7 @@ int Window::getBufferWidth()
 bool Window::closeWindow()
 {
 	Input::flush();
-	Debug::FlushDebugInformation();
+
 	//returns true if windows close event has occured
 	if (mainWindow)
 		return glfwWindowShouldClose(mainWindow.get());

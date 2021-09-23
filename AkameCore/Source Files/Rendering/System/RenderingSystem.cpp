@@ -95,16 +95,9 @@ void RenderingSystem::Run(Camera& cam)
 
 	ShaderManager::GetShader("LINES_DEBUG")->useShaderProgram();
 	glDisable(GL_DEPTH_TEST);
-
-	for (auto ent : entities)
-	{
-		Transform& t = ecs.lock()->GetComponent<Transform>(ent);
-		Mesh& m = ecs.lock()->GetComponent<Mesh>(ent);
-		Debug::DrawBB(m.min, m.max, t.transformMatrix(), glm::vec3(1, 1, 1));
-	}
 	Debug::updateBufferContent();
 	Debug::DrawDebug();
-	
+	Debug::FlushDebugInformation();
 	glEnable(GL_DEPTH_TEST);
 
 

@@ -14,6 +14,7 @@
 #include"Core/Log/Log.h"
 #include"Rendering/System/LightSystem.h"
 #include"misc/temp.h"
+#include"Core/Debug/Debug.h"
 std::vector<std::shared_ptr<RenderingSystem>> listScene;
 
 
@@ -179,8 +180,8 @@ void Scene::Render()
 	//renderStuff
 		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		transformManager->UpdateTransforms();
-		renderSys->Run(cam);
 		behaviourSys->Update(deltaTime);
+		renderSys->Run(cam);
 		physicsSys->Run(deltaTime);
 		fn();
 	
@@ -189,7 +190,7 @@ void Scene::Render()
 		//lines(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1)).renderMesh();
 	deltaTime = currTime - lastTime;
 	lastTime = currTime;
-	
+
 	
 	
 }

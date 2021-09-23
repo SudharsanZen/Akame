@@ -117,10 +117,10 @@ int main()
 		flyCam(scene.cam,scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.clearBuffer();
-
+		editor.DrawUI();
 		scene.Render();
 		
-		editor.DrawUI();
+		
 		glm::vec3 pose = t.GetLocalPosition();
 
 		t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(deltaTime*10,glm::vec3(0,1,0))* t.GetGlobalRotation());
