@@ -20,3 +20,6 @@
 [submodule "Opengl1/vendor/spdlog"]
 	path = AkameCore/vendor/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "AkameCore/vendor/glad-akame-"]
+	path = AkameCore/vendor/glad-akame-
+	url = https://github.com/SudharsanZen/glad-akame-.git

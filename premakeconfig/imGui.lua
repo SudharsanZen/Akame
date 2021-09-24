@@ -10,7 +10,7 @@ project "imGui"
         "%{prj.location}/*.h",
         "%{prj.location}/*.c",
         "%{prj.location}/*.cpp",
-        "%{wks.location}/AkameCore/vendor/glad/glad.c",
+        "%{wks.location}/AkameCore/vendor/glad-akame-/glad/glad.c",
         "%{prj.location}/backends/imgui_impl_opengl3.cpp",
         "%{prj.location}/backends/imgui_impl_opengl3.h",
         "%{prj.location}/backends/imgui_impl_glfw.h",
@@ -20,6 +20,7 @@ project "imGui"
     includedirs
     {
         "%{IncludeDir.GLFW}",
+        "%{IncludeDir.glad}",
         "%{IncludeDir.vendor}",
         "%{prj.location}"
     }

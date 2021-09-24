@@ -1,4 +1,4 @@
-#version 430
+#version 450
 #define TILE_DIM_X 32
 #define TILE_DIM_Y 32
 #define MAX_NUM_LIGHTS 800

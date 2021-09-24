@@ -25,6 +25,9 @@
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{192C3F5D-8542-3DF3-CEB9-C8143A0F0E7B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\Debug">
+      <UniqueIdentifier>{4F250A0A-BB5C-52A1-C466-B6C4301D799A}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Core\Editor">
       <UniqueIdentifier>{2FB3954D-1BD8-E4CD-4423-CA5D30A7E3EB}</UniqueIdentifier>
     </Filter>
@@ -63,6 +66,9 @@
     </Filter>
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{E145AD0A-4D5C-ABA0-96D3-36C202297C28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Debug">
+      <UniqueIdentifier>{17756625-83AC-AEBC-8CB6-12E0F86CD5B5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Core\Editor">
       <UniqueIdentifier>{F7FB7BD4-E320-CB54-0C6C-B0E4F8EFC972}</UniqueIdentifier>
@@ -134,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="Header Files\Components\Rendering\Transform.h">
       <Filter>Header Files\Components\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Core\Debug\Debug.h">
+      <Filter>Header Files\Core\Debug</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Core\Editor\EditorUI.h">
       <Filter>Header Files\Core\Editor</Filter>
@@ -207,6 +216,9 @@
     <ClInclude Include="Header Files\Rendering\Shader.h">
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Rendering\System\DefaultRenderingPipeline.h">
+      <Filter>Header Files\Rendering\System</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Rendering\System\DeferredPipeline.h">
       <Filter>Header Files\Rendering\System</Filter>
     </ClInclude>
@@ -237,8 +249,6 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Core\Debug\Debug.h" />
-    <ClInclude Include="Header Files\Rendering\System\DefaultRenderingPipeline.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Assets\Asset.cpp">
@@ -270,6 +280,9 @@
     </ClCompile>
     <ClCompile Include="Source Files\Components\Mesh.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Core\Debug\Debug.cpp">
+      <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Core\Editor\EditorUI.cpp">
       <Filter>Source Files\Core\Editor</Filter>
@@ -328,6 +341,9 @@
     <ClCompile Include="Source Files\Rendering\Shader.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Rendering\System\BuiltInShaderPipelines\DefaultRenderingPipeline.cpp">
+      <Filter>Source Files\Rendering\System\BuiltInShaderPipelines</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\Rendering\System\BuiltInShaderPipelines\DeferredPipeline.cpp">
       <Filter>Source Files\Rendering\System\BuiltInShaderPipelines</Filter>
     </ClCompile>
@@ -367,7 +383,5 @@
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Core\Debug\Debug.cpp" />
-    <ClCompile Include="Source Files\Rendering\System\BuiltInShaderPipelines\DefaultRenderingPipeline.cpp" />
   </ItemGroup>
 </Project>

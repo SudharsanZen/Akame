@@ -56,7 +56,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\glfw\include;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor\glfw\include;vendor\glad-akame-;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -75,7 +75,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\glfw\include;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor\glfw\include;vendor\glad-akame-;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

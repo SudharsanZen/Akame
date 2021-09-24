@@ -10,9 +10,6 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F4B2E3E9-603E-51AE-694F-D4A2D559ADAE}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
@@ -92,6 +89,9 @@
       <AdditionalLibraryDirectories>..\..\AkameCore\bin\Release;..\..\AkameCore\vendor\assimp\lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
