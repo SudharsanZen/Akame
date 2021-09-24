@@ -30,7 +30,7 @@ void app()
 	EntityID plane = scene.CreateEntity();
 	EntityID plane2 = scene.CreateEntity();
 	
-	Material boxMat("DEFERRED");
+	Material boxMat("DEFAULT");
 	boxMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/crate/basecolor.jpg");
 	boxMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/crate/roughness.jpg");
 	boxMat.setTexture2D("material.normalMap",rootDir+"Media/pbr/crate/normal.jpg");
@@ -38,7 +38,7 @@ void app()
 	boxMat.setValue("normalStrength",1);
 
 	scene.vsyncOn(true);
-	Material planeMat("DEFERRED");
+	Material planeMat("DEFAULT");
 	planeMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/rust/diffuse.png");
 	planeMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/rust/roughness.png");
 	planeMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/rust/normal.png");
@@ -73,7 +73,7 @@ void app()
 	Lights &d = scene.AddComponent<Lights>(dir);
 	d.setType(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
-	d.setDirection(1,0,0);
+	d.setDirection(1,-1,0);
 	d.setIntensity(0.6f);
 	d.setPointLightConst(1,2,10);
 	d.ambientLigting(0.1f,0.1f,0.1f);
@@ -106,7 +106,7 @@ void app()
 		float off = (float)(rt-1);
 	
 
-		EntityID point = scene.CreateEntity();
+		/*EntityID point = scene.CreateEntity();
 		Lights &p = scene.AddComponent<Lights>(point);
 	
 		p.setColor(1,0.5,0);
@@ -116,7 +116,7 @@ void app()
 		
 		scene.AddComponent<Transform>(point)= Transform(2 * (i / rt)-1 -off, 0.5, (2) * (i % rt)-off);
 		
-		lightsVec.push_back(point);
+		lightsVec.push_back(point);*/
 		
 		EntityID box = scene.CreateEntity();
 		Mesh& bm=scene.AddComponent<Mesh>(box);
@@ -142,7 +142,7 @@ void app()
 		
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
-	
+		scene.clearBuffer();
 		scene.Render();
 		edt.DrawUI();
 		

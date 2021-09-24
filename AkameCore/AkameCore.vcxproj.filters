@@ -238,6 +238,7 @@
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Core\Debug\Debug.h" />
+    <ClInclude Include="Header Files\Rendering\System\DefaultRenderingPipeline.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Assets\Asset.cpp">
@@ -367,5 +368,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Core\Debug\Debug.cpp" />
+    <ClCompile Include="Source Files\Rendering\System\BuiltInShaderPipelines\DefaultRenderingPipeline.cpp" />
   </ItemGroup>
 </Project>

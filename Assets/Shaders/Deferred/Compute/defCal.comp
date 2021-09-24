@@ -36,6 +36,7 @@ layout (std140,binding = 5) uniform ptLightBuffer
       PointLight ptLight[MAX_NUM_LIGHTS];
 };
 layout (binding = 6) uniform 	sampler2DArrayShadow dir_sMap;
+layout (binding = 7) uniform 	sampler2DArray dir_Map;
 
 uniform DirectionalLight DIR_L[4];
 layout (local_size_x = TILE_DIM_X, local_size_y = TILE_DIM_Y) in;
@@ -154,7 +155,7 @@ void FindBlocker(out float avgBlockerDepth, out float numBlockers, uint mapLayer
 
 float PCF_Filter(uint mapLayer, vec2 uv, float zReceiver, float filterRadiusUV) {
     float sum = 0.0;
-    float shadow_bias = 0.000;
+    float shadow_bias = 0.1;
 
     for (int i = 0; i < 16; ++i) {
         vec2 offset = poissonDisk[i] * filterRadiusUV;
@@ -198,7 +199,20 @@ float shadowCalculation(vec4 fragPose)
                      fragPose=lightSpaceMat[layer]*fragPose;
                   projCoord=fragPose.xyz/fragPose.w;
                   projCoord=projCoord*0.5+0.5;
-                  return PCSS(layer,projCoord);
+
+                   float texel=1/shadowRes;
+                  int con=2;
+                  float pcf=0.0f;
+                  for(int i=-con;i<=con;i++)
+                  for(int j=-con;j<=con;j++)
+                  {
+                        
+                    pcf+=texture(dir_sMap, vec4(projCoord.xy+vec2(i,j)*texel,layer,projCoord.z));
+                    
+                  }
+                  pcf/=(2*con+1)*(2*con+1);
+                  return 1.0f-pcf;
+                  
                   break;
             }
       }

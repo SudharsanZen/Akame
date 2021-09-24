@@ -10,12 +10,15 @@ void PSSMFBO::initialize()
 	glTexImage3D(GL_TEXTURE_2D_ARRAY,0,GL_DEPTH_COMPONENT32F,
 		resolution,resolution,numOfFrustum,0,
 		GL_DEPTH_COMPONENT,GL_FLOAT,nullptr);
-	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+	glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+
 	constexpr float bordercolor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	glTexParameterfv(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BORDER_COLOR, bordercolor);
 
@@ -54,6 +57,8 @@ void PSSMFBO::useTextureArray(unsigned int unit)
 { 
 	glActiveTexture(GL_TEXTURE0 + unit); 
 	glBindTexture(GL_TEXTURE_2D_ARRAY, shadowMapsArray); 
+	glActiveTexture(GL_TEXTURE0 + unit+1);
+	glBindTexture(GL_TEXTURE_2D_ARRAY, shadowMapsArray);
 }
 
 float CalSplitDistance(float farPlaneNum,float numOfFrustum, float znear, float zfar, float lambda)
@@ -186,7 +191,7 @@ std::vector<glm::mat4> CalculatePSSMLightSpaceMats(Camera& cam, glm::vec3  l, in
 		glm::vec3 pose = cen-forward*200.0f;
 		glm::mat4 lViewMat=glm::lookAt(pose,cen+forward,up);
 
-		glm::mat4 lProjMat = glm::ortho(min.x*pssmx,max.x*pssmx,min.y*pssmy,max.y*pssmy,-1000.0f,1000.0f);
+		glm::mat4 lProjMat = glm::ortho(min.x*pssmx,max.x*pssmx,min.y*pssmy,max.y*pssmy,-100.0f,1000.0f);
 
 		matList.push_back(lProjMat*lViewMat);
 	}

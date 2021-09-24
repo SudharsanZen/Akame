@@ -120,7 +120,7 @@ void TiledRenderer::outPutToQaud()
    
     glDispatchCompute(width / 32, (height / 32 + 1), 1);
     glMemoryBarrier(GL_ALL_BARRIER_BITS);
-
+    
 
     std::shared_ptr<Shader> quadRend = ShaderManager::GetShader("SCREENSHADER");
     quadRend->useShaderProgram();

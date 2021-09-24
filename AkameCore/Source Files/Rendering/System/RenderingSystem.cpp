@@ -9,6 +9,7 @@
 #include<sstream>
 #include"Rendering/Camera.h"
 #include"Rendering/System/DeferredPipeline.h"
+#include"Rendering/System/DefaultRenderingPipeline.h"
 #include"Core/Debug/Debug.h"
 
 //returns the point where the ray intersects the plane
@@ -55,6 +56,7 @@ void RenderingSystem::attachAllBuiltInSRP()
 	ShaderManager::shaderRenderPipeline.clear();
 	ShaderManager::AttachShaderPipeline<DeferredPipeline>("DEFERRED",height,width);
 	ShaderManager::AttachShaderPipeline<RM_SKY_BOXPipeline>("SPHERE");
+	ShaderManager::AttachShaderPipeline<DefaultRenderingPipeline>("DEFAULT");
 }
 
 RenderingSystem::RenderingSystem()

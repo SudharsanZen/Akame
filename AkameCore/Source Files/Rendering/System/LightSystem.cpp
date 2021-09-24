@@ -103,6 +103,7 @@ void LightSystem::updatePointLightContents()
 }
 void LightSystem::bindPointLightBuffer(int layoutIndex)
 {
+	
 	glBindBufferBase(GL_UNIFORM_BUFFER,layoutIndex,plUBO);
 	
 }
@@ -122,7 +123,18 @@ void LightSystem::BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader,C
 	//currently only rendering one shadow map
 	if (drVector.size() > 0)
 	{
-		
+		drVector.clear();
+		for (auto& ent : lightsList[LIGHT::DIRECTIONAL])
+		{
+
+			Lights& l = ecs.lock()->GetComponent<Lights>(ent);
+			directionalLight drl;
+			drl.lightDir = l.lightDirection;
+			drl.lightColor = l.lightColor;
+			drl.ambient = l.ambient;
+			drl.intensity = l.intensity;
+			drVector.push_back(drl);
+		}
 		glCullFace(GL_FRONT);
 		glViewport(0, 0, DIR_MAP_SIZE, DIR_MAP_SIZE);
 		auto const& drLight = drVector[0];

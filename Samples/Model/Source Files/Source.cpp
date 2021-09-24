@@ -64,34 +64,21 @@ int main()
 	EntityID dir = scene.CreateEntity();
 	Lights d = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
-	d.setDirection(0, -1, 0.1f);
+	d.setDirection(1, -0.45, 1);
 	d.setIntensity(1);
 	d.setPointLightConst(1, 2, 10);
 	scene.AddComponent<Lights>(dir)=d;
 	scene.AddComponent<Transform>(dir);
-	Material mat("GRIDS");
-	EntityID plane = scene.CreateEntity();
-	Transform planeInf;
-
-	scene.AddComponent<Transform>(plane) = planeInf;
-	Mesh& pm = scene.AddComponent<Mesh>(plane);
-	scene.AddComponent<Material>(plane) = mat;
-	pm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
-	EntityID model=LoadModelToScene(scene,"D:/Projects/GameEngine/Sponza/Sponza.fbx");
+	EntityID model=LoadModelToScene(scene,"D:/Projects/GameEngine/cit/obj/cit2.obj");
 	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
 	Transform &T=scene.GetComponent<Transform>(model);
 	T.SetGlobalScale(glm::vec3(0.5));
 	T.SetGlobalPosition(glm::vec3(0,12,0));
 
-	Material matS("SPHERE");
-	EntityID sky = scene.CreateEntity();
-	scene.AddComponent<Material>(sky) = matS;
-	scene.AddComponent<Transform>(sky);
-	Mesh& skMesh = scene.AddComponent<Mesh>(sky);
-	skMesh.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
-	Material boxMat("DEFERRED");
+	
+	Material boxMat("DEFAULT");
 	boxMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/crate/basecolor.jpg");
 	boxMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/crate/roughness.jpg");
 	boxMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/crate/normal.jpg");
@@ -109,7 +96,7 @@ t =Transform(0, 10, 0);
 	scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 
 	std::vector<EntityID> lights;
-	int m = 40;
+	int m = 0;
 	int maxi = 20;
 	for (int i = 0; i < m; i++)
 	{
@@ -129,7 +116,7 @@ t =Transform(0, 10, 0);
 	
 	float acc = 0;
 	scene.OnStart();
-	scene.vsyncOn(true);
+	scene.vsyncOn(false);
 	unsigned int count = 0;
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.3f;

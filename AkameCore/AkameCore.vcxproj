@@ -132,6 +132,7 @@
     <ClInclude Include="Header Files\Rendering\MeshInstance.h" />
     <ClInclude Include="Header Files\Rendering\Model.h" />
     <ClInclude Include="Header Files\Rendering\Shader.h" />
+    <ClInclude Include="Header Files\Rendering\System\DefaultRenderingPipeline.h" />
     <ClInclude Include="Header Files\Rendering\System\DeferredPipeline.h" />
     <ClInclude Include="Header Files\Rendering\System\LightSystem.h" />
     <ClInclude Include="Header Files\Rendering\System\PSSMFBO.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="Source Files\Rendering\MeshInstance.cpp" />
     <ClCompile Include="Source Files\Rendering\Model.cpp" />
     <ClCompile Include="Source Files\Rendering\Shader.cpp" />
+    <ClCompile Include="Source Files\Rendering\System\BuiltInShaderPipelines\DefaultRenderingPipeline.cpp" />
     <ClCompile Include="Source Files\Rendering\System\BuiltInShaderPipelines\DeferredPipeline.cpp" />
     <ClCompile Include="Source Files\Rendering\System\DepthFrameBuffer.cpp" />
     <ClCompile Include="Source Files\Rendering\System\LightSystem.cpp" />
