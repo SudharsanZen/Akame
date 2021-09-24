@@ -64,7 +64,7 @@ int main()
 	EntityID dir = scene.CreateEntity();
 	Lights d = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
-	d.setDirection(1, -0.45, 1);
+	d.setDirection(0, -1, 0);
 	d.setIntensity(1);
 	d.setPointLightConst(1, 2, 10);
 	scene.AddComponent<Lights>(dir)=d;
@@ -78,7 +78,7 @@ int main()
 
 	
 	
-	Material boxMat("DEFAULT");
+	Material boxMat("DEFERRED");
 	boxMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/crate/basecolor.jpg");
 	boxMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/crate/roughness.jpg");
 	boxMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/crate/normal.jpg");
@@ -90,13 +90,13 @@ int main()
 		
 	
 		bm.CreateMesh(generateSphereVertices(16, 32, 0.5));
-Transform &t=	scene.AddComponent<Transform>(box);
-t =Transform(0, 10, 0);
+		Transform &t=	scene.AddComponent<Transform>(box);
+		t =Transform(0, 10, 0);
 	scene.AddComponent<Material>(box) = boxMat;
 	scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 
 	std::vector<EntityID> lights;
-	int m = 0;
+	int m = 40;
 	int maxi = 20;
 	for (int i = 0; i < m; i++)
 	{
@@ -116,7 +116,7 @@ t =Transform(0, 10, 0);
 	
 	float acc = 0;
 	scene.OnStart();
-	scene.vsyncOn(false);
+	scene.vsyncOn(true);
 	unsigned int count = 0;
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.3f;

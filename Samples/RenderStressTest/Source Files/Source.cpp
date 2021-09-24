@@ -106,7 +106,7 @@ void app()
 		float off = (float)(rt-1);
 	
 
-		/*EntityID point = scene.CreateEntity();
+		EntityID point = scene.CreateEntity();
 		Lights &p = scene.AddComponent<Lights>(point);
 	
 		p.setColor(1,0.5,0);
@@ -116,7 +116,7 @@ void app()
 		
 		scene.AddComponent<Transform>(point)= Transform(2 * (i / rt)-1 -off, 0.5, (2) * (i % rt)-off);
 		
-		lightsVec.push_back(point);*/
+		lightsVec.push_back(point);
 		
 		EntityID box = scene.CreateEntity();
 		Mesh& bm=scene.AddComponent<Mesh>(box);

@@ -62,7 +62,7 @@ void TiledRenderer::bindTextures()
    
     glBindImageTexture(0, drfb.AlbedoSpec, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
     glBindImageTexture(1, drfb.Normal, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
-    glBindImageTexture(2, drfb.Position, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
+    glBindImageTexture(2, drfb.Position, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D,drfb.depthBuffer);
     glBindImageTexture(4, outTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA16F);
@@ -120,7 +120,7 @@ void TiledRenderer::outPutToQaud()
    
     glDispatchCompute(width / 32, (height / 32 + 1), 1);
     glMemoryBarrier(GL_ALL_BARRIER_BITS);
-    
+
 
     std::shared_ptr<Shader> quadRend = ShaderManager::GetShader("SCREENSHADER");
     quadRend->useShaderProgram();
