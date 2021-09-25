@@ -57,7 +57,7 @@ public:
 	std::vector<pointLight> ptVector;
 	std::vector<directionalLight> drVector;
 	std::vector<glm::mat4> dirLightSpace;
-	float lambda = 0.138f;
+	float lambda = 0.238f;
 	PSSMFBO dir_sMap;
 	//empty point light list completely and create a new one, call when entity is added or removed
 	void updatePointLightBuffer();

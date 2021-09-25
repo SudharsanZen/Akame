@@ -1,20 +1,38 @@
+/*-------------------------------------------------------
+
+      Akame Engine's Default Deferred Rendering pipeline.
+      Deferred Rendering Compute Shader
+
+--------------------------------------------------------*/
+
 #version 450
+//local workgroup size
 #define TILE_DIM_X 32
 #define TILE_DIM_Y 32
+layout (local_size_x = TILE_DIM_X, local_size_y = TILE_DIM_Y) in;
+
+//----------------------------------------------------------------
+//Light Paramenters and Definitions 
+//----------------------------------------------------------------
+//max point lights
+
 #define MAX_NUM_LIGHTS 800
 uniform int NUM_POINT_LIGHT=0;
-uniform int NUM_DIR_LIGHT=0;
+
 struct PointLight
 {
-    vec4 lightPose;  //16    0
-    vec4 lightColor; //16    16
-    vec4 ambient;    //16    32
-    //constants has: xyz the three constants for point light attenuation and w the radius of the point light
-    vec4 constants;  //16    48
-    float intensity; //4     64
-    //
-
+    vec4 lightPose;  
+    vec4 lightColor; 
+    vec4 ambient;    
+    //constants has: xyz the three constants 
+    //for point light attenuation and w 
+    //the radius of the point light
+    vec4 constants;  
+    float intensity; 
 };
+
+#define MAX_DIRECTIONAL_LIGHT 4
+uniform int NUM_DIR_LIGHT=0;
 
 struct DirectionalLight
 {
@@ -22,36 +40,83 @@ struct DirectionalLight
     vec3 lightColor;
     vec3 ambient;
     float intensity;
-
 };
 
-
+//----------------------------------------------------------------
+//gBuffers
+//----------------------------------------------------------------
 layout (binding = 0,rgba16f)  uniform readonly image2D albedoSpec;
 layout (binding = 1, rgba16f) uniform readonly image2D normal;
 layout (binding = 2,rgba32f) uniform readonly image2D position;
+struct BufferPixelValues
+{
+    vec4 albedo;
+    float specular;
+    vec4 norm;
+    vec4 FragPos;
+};
+
+
 layout (binding = 3) uniform sampler2D depBuffer;
+//----------------------------------------------------------------
+//texture output parameters
+//----------------------------------------------------------------
+                  //final output texture//
 layout (binding = 4, rgba16f) uniform writeonly image2D outTexture;
+uniform int height;//Render window height
+uniform int width;//Render window width
+//-----------------------------------------------------------------
+//Light Arrays
+//-----------------------------------------------------------------
+
+//currently only supports 800 point lights on this Hardware (RTX 2070 inno 3D):
 layout (std140,binding = 5) uniform ptLightBuffer
 {
       PointLight ptLight[MAX_NUM_LIGHTS];
 };
+
+//currently only supports shadows for the top most Directional light
+uniform DirectionalLight DIR_L[MAX_DIRECTIONAL_LIGHT];
+
+//-----------------------------------------------------------------
+//Shadow Bindings
+//-----------------------------------------------------------------
 layout (binding = 6) uniform 	sampler2DArrayShadow dir_sMap;
 layout (binding = 7) uniform 	sampler2DArray dir_Map;
 
-uniform DirectionalLight DIR_L[4];
-layout (local_size_x = TILE_DIM_X, local_size_y = TILE_DIM_Y) in;
-
-uniform int height;
-uniform int width;
-uniform mat4 projInv;
-uniform mat4 proj;
-uniform mat4 viewMat;
-uniform float lambda;
+//------------------------------------------------------------------
+//Shared Variables
+//------------------------------------------------------------------
+shared uint maxDepth,minDepth,lightIndex;
+shared uint lightList[MAX_NUM_LIGHTS];
+//------------------------------------------------------------------
+//Shadow Calculation Parameters
+//------------------------------------------------------------------
+int layer=0;
+float lightWidth=0.2f;
+#define BLOCKER_SARCH_SAMPLE_COUNT 16
+uniform float lambda; //paramter to mix uniform and logrithmic splitting scheme
 uniform int numOfFrustum;
 uniform int shadowRes;
 uniform mat4 lightSpaceMat[5];
-uniform float near;
-uniform float far;
+uniform float near;//camera's near plane
+uniform float far;//shadow distance
+
+//------------------------------------------------------------------
+//Camera Parameters
+//------------------------------------------------------------------
+uniform mat4 projInv;
+uniform vec3 viewPos; 
+uniform mat4 proj;
+uniform mat4 viewMat;
+
+vec4 unProject(vec4 point)
+{
+      return projInv*point;
+}
+//------------------------------------------------------------------
+//poisson Disc sampling point
+//------------------------------------------------------------------
 vec2 poissonDisk[16] = vec2[](
     vec2(-0.94201624, -0.39906216),
     vec2(0.94558609, -0.76890725),
@@ -70,24 +135,202 @@ vec2 poissonDisk[16] = vec2[](
     vec2(0.19984126, 0.78641367),
     vec2(0.14383161, -0.14100790)
 );
+
+//-----------------------------------------------------------------
+//Shadow Calculation Functions
+//-----------------------------------------------------------------
+//calculate the distance of the given nth far plane from the camera
 float divDist(float nthPlane,float lambda)
 {
-      //float bias = 1.0f-((numOfFrustum-nthPlane)/(numOfFrustum))-(1.0f/numOfFrustum);
-	//lambda += bias;
+
       float logrithmic=near*pow(far/near,nthPlane/numOfFrustum);
       float uni=near+(far-near)*(nthPlane/numOfFrustum);
 
       return (logrithmic*(1.0f-lambda)+uni*(lambda));
 }
-vec4 unProject(vec4 point)
+
+//PCSS Calculations-------------------------------------------------
+//ref: https://developer.download.nvidia.com/shaderlibrary/docs/shadow_PCSS.pdf
+
+void FindBlocker(out float avgBlockerDepth, out float numBlockers, uint mapLayer, vec2 uv, float zReceiver) 
 {
-      return projInv*point;
+    //This uses similar triangles to compute what
+    //area of the shadow map we should search
+    float searchWidth = lightWidth * (zReceiver - near) / zReceiver;
+    float blockerSum = 0;
+    numBlockers = 0;
+
+    for (int i = 0; i < BLOCKER_SARCH_SAMPLE_COUNT; ++i) 
+    {
+        float shadowMapDepth = texture(dir_Map, vec3(uv + poissonDisk[i] * searchWidth, mapLayer)).r;
+        if (shadowMapDepth < zReceiver) 
+        {
+            blockerSum += shadowMapDepth;
+            numBlockers++;
+        }
+    }
+    avgBlockerDepth = blockerSum / numBlockers;
+}
+
+float PCF_Filter(uint mapLayer, vec2 uv, float zReceiver, float filterRadiusUV) 
+{
+    float sum = 0.0;
+
+    for (int i = 0; i < 16; ++i) 
+    {
+        vec2 offset = poissonDisk[i] * filterRadiusUV/2.0f;
+        sum += (zReceiver>texture(dir_sMap, vec4(uv + offset, mapLayer,zReceiver)).r)?1:0;
+       
+    }
+
+    return (sum / 16.0f);
+}
+
+float PCSS(int mapLayer,vec3 coord)
+{
+      /*-----------------------------------------------------------------------
+        input1::   mapLayer->layer of cascaded shadowMap to sample from
+                   coord->worldspace coordinate transformed to light's uv Space
+        output::   Percentage Closer Soft shadow
+      ------------------------------------------------------------------------*/
+      vec2 uv=coord.xy;
+      float zReceiver=coord.z;
+      
+      float avgBlockerSize=0;
+      float blockerCount=0;
+      FindBlocker(avgBlockerSize,blockerCount,mapLayer,uv,zReceiver);
+      if(blockerCount<1)
+            return 0;
+      
+      float zb=texture(dir_Map, vec3(uv,layer)).r;
+      float penumbraSize=(zReceiver-zb)*lightWidth/zb;
+      float filterRadius=penumbraSize*near/coord.z;
+      float maxRad=0.09f;
+      if(layer==0)
+            maxRad/=14;
+      else if(layer>0)
+            maxRad/=pow(6,layer+1);
+      filterRadius=clamp(filterRadius,0.0001f,maxRad);
+      return PCF_Filter(mapLayer,uv,zReceiver,filterRadius);
+}
+
+float shadowCalculation(vec4 fragPose)
+{
+      /*---------------------------------------
+       do DirectLight shadow calculation for the 
+       given world position fragPose
+      ----------------------------------------*/
+      float splitPose=0;
+      
+      float depth=0;
+      vec4 camSpace=abs(viewMat*fragPose);
+      vec3 projCoord;
+      float shadow=0;
+      for(int i=1;i<=numOfFrustum;i++)
+      {
+            splitPose=divDist(i,lambda);
+            if(camSpace.z<splitPose)
+            {
+                  layer=i-1;
+                  //PCF
+                  fragPose=lightSpaceMat[layer]*fragPose;
+                  projCoord=fragPose.xyz/fragPose.w;
+                  projCoord=projCoord*0.5+0.5;
+
+                  float texel=1.0f/shadowRes;
+                  /*-----------------------------------------
+                  half width is the 
+                  number of pixels/ radius 
+                  to from sample from
+                  eg1: halfWidth=2 samples 25 points including 
+                  the current pixel and gives the average of it
+                  -------------------------------------------*/
+                  int halfWidth=2;
+                  
+                  float pcf=0.0f;
+                  for(int j=-halfWidth;j<=halfWidth;j++)
+                  {
+                        for(int k=-halfWidth;k<=halfWidth;k++)
+                        {
+                              pcf+=texture(dir_sMap, vec4(projCoord.xy+vec2(j,k)*texel,layer,projCoord.z)).r;
+                        }
+                  }
+                  //do the average
+                  pcf/=(2*halfWidth+1)*(2*halfWidth+1);
+
+                  //float lam=1;
+                  //return (1.0f-pcf)*(1.0f-lam)+PCSS(layer,projCoord)*lam;
+                  
+                  return 1.0f-pcf;
+                  
+            }
+      }
+      
+      //no shadow if the fragment is greater than the last frustum's farPlane
+      return 0;
 }
 
 
-//check if AABB and a given sphere are intersecting each other
+//-------------------------------------------------------------------
+//Light Caluculations
+//-------------------------------------------------------------------
+
+vec3 calcPointLight(PointLight ptl,BufferPixelValues P)
+{
+    vec3 lightDir= ptl.lightPose.xyz-P.FragPos.xyz;
+    float lightDistance=length(lightDir);
+    lightDir=normalize(lightDir);
+  
+    vec3 viewDir = -normalize(P.FragPos.xyz-viewPos);
+    vec3 halfwayDir = normalize(lightDir+viewDir);
+    float attenuation=1.0/( ptl.constants.x + ptl.constants.y*lightDistance + pow(lightDistance,2)*ptl.constants.z);
+
+    float diff=max(dot(P.norm.xyz,lightDir),0);
+
+    float spec=pow(max(dot(P.norm.xyz,halfwayDir),0.0),128);
+
+    vec3 diffuse=diff*(P.albedo.xyz*ptl.lightColor.xyz);
+    vec3 ambient=ptl.ambient.xyz*P.albedo.xyz;
+    vec3 specular= vec3(spec*P.specular);
+    vec3 result=(attenuation)*((diffuse+specular)*ptl.intensity+ambient);
+    return result;
+
+}
+
+
+vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P,float shadow)
+{
+    //flip light and make it's direction from fragment pose to lightSource
+    vec3 lightDir=normalize(-l.lightDir);
+    float diff= max(dot(P.norm.xyz, lightDir), 0.0);
+
+    //calculate specular highlight
+    vec3 viewDir=normalize(viewPos-P.FragPos.xyz);
+    vec3 halfwayDir = normalize( lightDir+ viewDir);  
+    float spec = pow(max(dot(P.norm.xyz, halfwayDir), 0.0), 128.0);
+    vec3 specular=vec3(spec * P.specular);
+
+    //calculate diffuse and ambient color
+    vec3 diffuse=diff * l.lightColor * P.albedo.xyz;
+    vec3 ambient=l.ambient*P.albedo.xyz;
+    
+    
+    //add all the resultant values
+    vec3 result=(((diffuse+specular)*l.intensity*(1.0f-shadow))+ambient);
+    
+    return result;
+}
+
+
+//----------------------------------------------------------------------
+//light culling
+//----------------------------------------------------------------------
+
+
 bool checkAABBSphereIntersection(vec3 minim,vec3 maxim, vec3 c, float r)
 {
+//check if AABB and a given sphere are intersecting each other
+
       if(
             (c.x > minim.x && c.x <maxim.x) &&
             (c.y > minim.y && c.y <maxim.y) &&
@@ -113,206 +356,60 @@ bool checkAABBSphereIntersection(vec3 minim,vec3 maxim, vec3 c, float r)
       return false;
 
 }
-shared uint maxDepth,minDepth,lightIndex;
-
-shared uint lightList[MAX_NUM_LIGHTS];
-
-
-struct BufferPixelValues
-{
-    vec4 albedo;
-    float specular;
-    vec4 norm;
-    vec4 FragPos;
-};
-uniform sampler2D Position;
-uniform sampler2D Normal;
-uniform sampler2D AlbedoSpec;
-
-
-
-uniform vec3 viewPos; 
-uniform int emissive;
-int layer=0;
-float lightWidth=0.4f;
-#define BLOCKER_SARCH_SAMPLE_COUNT 16
-void FindBlocker(out float avgBlockerDepth, out float numBlockers, uint mapLayer, vec2 uv, float zReceiver) {
-    //This uses similar triangles to compute what
-    //area of the shadow map we should search
-    float searchWidth = lightWidth * (zReceiver - near) / zReceiver;
-    float blockerSum = 0;
-    numBlockers = 0;
-
-    for (int i = 0; i < BLOCKER_SARCH_SAMPLE_COUNT; ++i) {
-        float shadowMapDepth = texture(dir_sMap, vec4(uv + poissonDisk[i] * searchWidth*(1.0f/shadowRes), mapLayer,zReceiver)).r;
-        if (shadowMapDepth < zReceiver) {
-            blockerSum += shadowMapDepth;
-            numBlockers++;
-        }
-    }
-    avgBlockerDepth = blockerSum / numBlockers;
-}
-
-float PCF_Filter(uint mapLayer, vec2 uv, float zReceiver, float filterRadiusUV) {
-    float sum = 0.0;
-    float shadow_bias = 0.001;
-
-    for (int i = 0; i < 16; ++i) {
-        vec2 offset = poissonDisk[i] * filterRadiusUV;
-        sum += texture(dir_sMap, vec4(uv + offset, mapLayer,zReceiver));
-       
-    }
-
-    return 1.0f-(sum / 16.0f);
-}
-float PCSS(int mapLayer,vec3 coord)
-{
-      vec2 uv=coord.xy;
-      float zReceiver=coord.z;
-      
-      float avgBlockerSize=0;
-      float blockerCount=0;
-      FindBlocker(avgBlockerSize,blockerCount,mapLayer,uv,zReceiver);
-      if(blockerCount<1)
-            return 0;
-      
-      float zb=texture(dir_Map, vec3(uv,layer)).r;
-      float penumbraSize=(zReceiver-zb)*lightWidth/zb;
-      float filterRadius=penumbraSize*near/coord.z;
-      float maxRad=0.09f;
-      if(layer==0)
-            maxRad/=14;
-      else if(layer>0)
-            maxRad/=pow(6,layer+1);
-      filterRadius=clamp(filterRadius,0.0001f,maxRad);
-      return PCF_Filter(mapLayer,uv,zReceiver,filterRadius);
-}
-float shadowCalculation(vec4 fragPose)
-{
-      float splitPose=0;
-      
-      float depth=0;
-      vec4 camSpace=abs(viewMat*fragPose);
-      vec3 projCoord;
-      float shadow=0;
-      for(int i=1;i<=numOfFrustum;i++)
-      {
-            splitPose=divDist(i,lambda);
-            if(camSpace.z<splitPose)
-            {
-                  layer=i-1;
-                     fragPose=lightSpaceMat[layer]*fragPose;
-                  projCoord=fragPose.xyz/fragPose.w;
-                  projCoord=projCoord*0.5+0.5;
-
-                   float texel=1.0f/shadowRes;
-                  int con=2;
-                  float pcf=0.0f;
-                  for(int j=0;j<16;j++)
-                  {
-                        pcf+=texture(dir_sMap, vec4(projCoord.xy+poissonDisk[j]*texel,layer,projCoord.z)).r;
-                  }
-                  pcf/=(2*con+1)*(2*con+1);
-                  float lam=0.1;
-                  return pow(1.0f-pcf,2.2f)*(1.0f-lam)+pow(PCSS(layer,projCoord),2.2f)*lam;
-                  break;
-            }
-      }
-      
-  
-
-      
-      
-      return 0;
-}
-
-vec3 calcPointLight(PointLight ptl,BufferPixelValues P)
-{
-    vec3 lightDir= ptl.lightPose.xyz-P.FragPos.xyz;
-    float lightDistance=length(lightDir);
-    lightDir=normalize(lightDir);
-  
-    vec3 viewDir = -normalize(P.FragPos.xyz-viewPos);
-    vec3 halfwayDir = normalize(lightDir+viewDir);
-    float attenuation=1.0/( ptl.constants.x + ptl.constants.y*lightDistance + pow(lightDistance,2)*ptl.constants.z);
-
-    float diff=max(dot(P.norm.xyz,lightDir),0);
-
-    float spec=pow(max(dot(P.norm.xyz,halfwayDir),0.0),128);
-
-    vec3 diffuse=diff*(P.albedo.xyz*ptl.lightColor.xyz);
-    vec3 ambient=ptl.ambient.xyz*P.albedo.xyz;
-    vec3 specular= vec3(spec*P.specular);
-    vec3 result=(attenuation)*((diffuse+specular)*ptl.intensity+ambient);
-    return result;
-
-}
-BufferPixelValues pV;
-
-vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P,float shadow)
-{
-    //flip light and make it's direction from fragment pose to lightSource
-    vec3 lightDir=normalize(-l.lightDir);
-    float diff= max(dot(P.norm.xyz, lightDir), 0.0);
-
-    //calculate specular highlight
-    vec3 viewDir=normalize(viewPos-P.FragPos.xyz);
-    vec3 halfwayDir = normalize( lightDir+ viewDir);  
-    float spec = pow(max(dot(P.norm.xyz, halfwayDir), 0.0), 128.0);
-    vec3 specular=vec3(spec * P.specular);
-
-    //calculate diffuse and ambient color
-    vec3 diffuse=diff * l.lightColor * P.albedo.xyz;
-    vec3 ambient=l.ambient*P.albedo.xyz;
-    
-    
-    //add all the resultant values
-    vec3 result=(((diffuse+specular)*l.intensity*(1.0f-shadow))+ambient);
-    
-    return result;
-}
-
 vec4 createFrustumFromPoints(vec4 tp1,vec4 tp2,vec4 planePoint)
 {
-     
-     
+      //create frustum from three points on the plane
+      //tile point 1, tile point 2 and a tile point on the  farPlane 
       tp1=tp1;
       tp2=tp2;
      
 
       vec4 norm=vec4(normalize(cross((tp1.xyz-tp2.xyz),planePoint.xyz-tp2.xyz)),1);
       norm.w=-norm.x*tp1.x+norm.y*tp1.y+norm.z*tp1.z;
-
       return norm;
-
 }
 
 float getSignedDistanceFromPlane(vec4 frustum,vec3 point)
 {
+      //check which side of the plane the given point is
       float dist= (dot(frustum.xyz,point)+frustum.w);
       return dist;
 }
+
 void main()
 {
+
+      /*----------------------------------------------------------------------------------------------------
+      light index: it's the index of the light being added to the list of lights to be used after culling.
+      The local workgroup divide the work of iterating througg all the lights and culling them.
+      the light index is incremented atomically by the current invocation if the light is inside the frustum.
+
+      this value may not exceed 800 or the max point light count.
+      this value, by the end of the calculation per workgroup will be the count of point lights afer culling
+      initialize the light index to zero.
+      ------------------------------------------------------------------------------------------------------*/
       lightIndex=0;
+
+      //current pixel 
       ivec2 pixel = ivec2(gl_GlobalInvocationID.xy);
       uint loc=(gl_WorkGroupID.x+gl_WorkGroupID.y)%2;
       vec2 n=vec2(pixel)/vec2(width,height);
+      
+      //initialize depth value with current pixel's depth value
       float depthValue=texture(depBuffer,n).r;
      
-
+      //convert the depthValue [0,1] to unsigned integer [0,MAX_UNSIGNED_INT_VALUE/0XFFFFFFFF]
+      //we do this to compare minimum and maximum depth per workGroup
+      //the minimum and maximum depth values are use to construct culling frustums
       uint depthInt=uint(depthValue*0xFFFFFFFF);
 
       //get the maximu and minum depth for the current tile
       atomicMax(maxDepth,depthInt);
       atomicMin(minDepth,depthInt);
-      
-      pV.norm = vec4(normalize(imageLoad(normal,pixel).xyz),1);
-      pV.FragPos=vec4(imageLoad(position,pixel).xyz,1);
-      pV.specular = imageLoad(albedoSpec,pixel).a;  
-      pV.albedo=vec4(imageLoad(albedoSpec,pixel).xyz,1);
-
       barrier();
+      
+      //transform the maxDepth back to normalized floating point value
+      float maxD=float(maxDepth)/float(0xFFFFFFFF);
 
       //the tile's screen coordinates for the current workGroup
       uint minX=gl_WorkGroupID.x*TILE_DIM_X;
@@ -320,100 +417,111 @@ void main()
       uint maxX=(gl_WorkGroupID.x+1)*TILE_DIM_X;
       uint maxY=(gl_WorkGroupID.y+1)*TILE_DIM_Y;
 
-      //unprojecting the screen coordinates the viewSpace
+      //unprojecting the screen coordinates to the viewSpace
       vec4 tileCorners[4];
 
       //constants for converting screenSpace points to NDC
       float xC=2.0f/(float(width));
       float yC=2.0f/(float(height));
 
-      //convert the tile corner points to NDC coordinate and then unProject it to get viewSpace coordinate
-      /*
-      tile Coordinate's Indices with an intutive picture ;)
-      y+
+      /*------------------------------------------------------------------------------------------------
+      convert the tile corner points to NDC coordinate and then unProject it to get viewSpace coordinate
+      Shown below is an intutive ¯\_(ツ)_/¯ picture of the tileCorners and their respective index 
+         y+
          |   3*-----*2
          |    *     *
          |   0*-----*1
-         |______________x+
-      */
-      float maxD=float(maxDepth)/float(0xFFFFFFFF);
+         |______________ x+
+      --------------------------------------------------------------------------------------------------*/
+    
+      //tiles corners on the farPlane
       tileCorners[0]=unProject(vec4(float(minX)*xC-1.0f,float(minY)*yC-1.0f,maxD,1.0f));
       tileCorners[1]=unProject(vec4(float(maxX)*xC-1.0f,float(minY)*yC-1.0f,maxD,1.0f));
       tileCorners[2]=unProject(vec4(float(maxX)*xC-1.0f,float(maxY)*yC-1.0f,maxD,1.0f));
       tileCorners[3]=unProject(vec4(float(minX)*xC-1.0f,float(maxY)*yC-1.0f,maxD,1.0f));
       
-   
-
-      // vec4(nx,ny,nz,D)
+      //all six bounding frustum plane's normals
       vec4 frustum[6];
 
+      //calculating bounding frustum normals
       for(int i=0;i<4;i++)
       {
             frustum[i]=createFrustumFromPoints(tileCorners[i],tileCorners[(i+1)%4],viewMat*vec4(viewPos,1));
       }
 
-      //tiles for calculating near plane
+      //tiles corner on the near plane to calculate the near culling plane
       tileCorners[0]=unProject(vec4(float(minX)*xC-1.0f,float(minY)*yC-1.0f,0.1,1.0f));
       tileCorners[1]=unProject(vec4(float(maxX)*xC-1.0f,float(minY)*yC-1.0f,0.1,1.0f));
       tileCorners[2]=unProject(vec4(float(maxX)*xC-1.0f,float(maxY)*yC-1.0f,0.1,1.0f));
       tileCorners[3]=unProject(vec4(float(minX)*xC-1.0f,float(maxY)*yC-1.0f,0.1,1.0f));
   
- 
+      //creating the near culling frustum plane
       frustum[4]=createFrustumFromPoints(tileCorners[0],tileCorners[1],tileCorners[2]);
     
-     
+      //the number of point lights to process per invocation in local workgroup
       uint lightPerIndex=int(ceil(float(NUM_POINT_LIGHT)/float(TILE_DIM_X*TILE_DIM_Y)));
+      //starting index of main point light buffer for the current invocation to calculate from 
       uint startIndex=((gl_LocalInvocationID.x)+(gl_LocalInvocationID.y*TILE_DIM_Y))*lightPerIndex;
+
+      //do the light culling and create lightList that has indices of un culled point lights from the point light buffer
       for(uint i=startIndex;i<startIndex+lightPerIndex && i< NUM_POINT_LIGHT;i++)
       {
-      bool inside=true;
-          for(uint j=0;j<5;j++)
-          {
-                float d=getSignedDistanceFromPlane(frustum[j],(viewMat*ptLight[i].lightPose).xyz);
-                if(d<0 && abs(d)>ptLight[i].constants.w )
-                {
-                  inside=false;
-                  break;
-                }
-          }
-          if(inside)
-          {
-            uint lindx= atomicAdd(lightIndex,1);
-            lightList[lindx]=i;
-          }
+            bool inside=true;
+            for(uint j=0;j<5;j++)
+            {
+                  float d=getSignedDistanceFromPlane(frustum[j],(viewMat*ptLight[i].lightPose).xyz);
+
+                  if(d<0 && abs(d)>ptLight[i].constants.w )
+                  {
+                        inside=false;
+                        break;
+                  }
+
+            }
+            if(inside)
+            {
+                  uint lindx= atomicAdd(lightIndex,1);
+                  lightList[lindx]=i;
+            }
       }
 
+      /*------------------------------------------
+      calling barriers to wait for all invocations 
+      of the current workgroup to finish calculating
+      point light list for this workgroup.
+      --------------------------------------------*/
+      groupMemoryBarrier();
+      barrier();
 
+      /*----------------------------------------------------------------------
+      do the remaining Lighting calculations
+      -----------------------------------------------------------------------/
+      /----------------------------------------------------------------------
+      set the buffer value for the current invocation.this value will be used 
+      by most of the functions used for lighting or
+      shadow calculations.
+      -----------------------------------------------------------------------*/ 
 
+      BufferPixelValues pV;
 
-     groupMemoryBarrier();
-     barrier();
-
-
-
-   vec4 cols[4];
-   cols[0]=vec4(1,0,0,1);
-   cols[1]=vec4(0,1,0,1);
-   cols[2]=vec4(0,0,1,1);
-   cols[3]=vec4(1,0,1,1);
+      pV.norm = vec4(normalize(imageLoad(normal,pixel).xyz),1);
+      pV.FragPos=vec4(imageLoad(position,pixel).xyz,1);
+      pV.specular = imageLoad(albedoSpec,pixel).a;  
+      pV.albedo=vec4(imageLoad(albedoSpec,pixel).xyz,1);
     
-    vec3 result=vec3(0,0,0);
-     
-    for(uint i=0;i<lightIndex;i++)
-    {
-        result+=calcPointLight(ptLight[lightList[i]],pV);
-    }
+      vec3 result=vec3(0,0,0);
+      
+      for(uint i=0;i<lightIndex;i++)
+      {
+            result+=calcPointLight(ptLight[lightList[i]],pV);
+      }
 
       for(uint i=0;i<NUM_DIR_LIGHT;i++)
       {
             float s=shadowCalculation(pV.FragPos);
             result+=calcDirecLight(DIR_L[i],pV,s);
-
-      }
- 
-      //float lightConcentration=(float(lightIndex)/float(NUM_POINT_LIGHT));
-      //imageStore(outTexture, pixel, vec4(result, 1.0)+vec4(mix(vec3(0,0,0.1),vec3(1,0,0),lightConcentration),0));
-      imageStore(outTexture, pixel,vec4(result, 1.0));
-      //imageStore(outTexture, pixel, mix(vec4(result, 1.0),cols[layer],0.1));
-      //imageStore(outTexture,pixel,vec4(vec3(texture(dir_sMap,vec3(n,1)).r),1));
+      }  
+      
+      //store the final calculated pixel value to the output buffer
+      imageStore(outTexture, pixel,vec4(result, 1.0));       
 }

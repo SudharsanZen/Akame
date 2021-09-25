@@ -70,7 +70,7 @@ int main()
 	scene.AddComponent<Lights>(dir)=d;
 	scene.AddComponent<Transform>(dir);
 	
-	EntityID model=LoadModelToScene(scene,"D:/Projects/GameEngine/cit/obj/cit2.obj");
+	EntityID model=LoadModelToScene(scene,"D:/Projects/GameEngine/sponza/sponza.fbx");
 	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
 	Transform &T=scene.GetComponent<Transform>(model);
 	T.SetGlobalScale(glm::vec3(0.5));
@@ -116,7 +116,7 @@ int main()
 	
 	float acc = 0;
 	scene.OnStart();
-	scene.vsyncOn(true);
+	scene.vsyncOn(false);
 	unsigned int count = 0;
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.3f;
