@@ -5,6 +5,7 @@
 
 class Snake :public Behaviour
 {
+	Scene& scene;
 	int bX,bY;
 	bool gameWon=false;
 	bool started=false;
@@ -41,7 +42,12 @@ class Snake :public Behaviour
 	
 public:
 
-	Snake(Camera &cam,float snakeSize=1,int x=2,int y=2) :headMat("DEFERRED"),tailMat("DEFERRED"),appleMat("DEFERRED"), mainCam(cam)
+	Snake(Scene &s,Camera &cam,float snakeSize=1,int x=2,int y=2) :
+		scene(s),
+		headMat("DEFERRED"),
+		tailMat("DEFERRED"),
+		appleMat("DEFERRED"), 
+		mainCam(cam)
 	{
 		bX = x;
 		bY = y;
@@ -73,31 +79,34 @@ public:
 
 	void OnStart()override
 	{
-		appleModel = std::make_shared<Model>(rootDir + "Media/Apple/apple.fbx");
+		
 		head = createCube(headMat);
 
 		for(int i=1;i<3;i++)
 			tailList.push_back(createCube(tailMat,glm::vec3(0.5f,0,(0.5f-1.0f)*(float)i)));
 
 		
-		apple = CreateEntity();
+		apple = LoadModelToScene(scene,rootDir + "Media/Apple/apple.fbx");
 		Transform aT(1.5, 0, -1.5);
-		aT.SetGlobalScale(glm::vec3(0.025f));
-		
-		AddComponent<Transform>(apple)=( aT);
-		AddComponent<Mesh>(apple)= appleModel->meshes[0];
-		AddComponent<Material>(apple)=( appleMat);
+		aT.SetGlobalScale(glm::vec3(0.001f));
+
 		Lights point(LIGHT::POINT);
 		point.setColor(1,0.5,0);
 		point.setPointLightConst(1,5,7);
 		point.setIntensity(6);
 		AddComponent<Lights>(apple)=point;
+		Transform &t=GetComponent<Transform>(apple);
+		t.SetGlobalScale(glm::vec3(0.001));
+		t.SetGlobalPosition(glm::vec3(1.5,0,-1.5));
+		scene.SetEntityName(apple,"apple");
 		
 		
 	}
 	void Update(float deltaTime) override
 	{
+	
 		AppleBehv(deltaTime);
+
 		Transform& headPose = GetComponent<Transform>(head);
 
 		glm::vec3 prevDir = moveDir;

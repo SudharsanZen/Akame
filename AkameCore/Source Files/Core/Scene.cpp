@@ -31,6 +31,10 @@ void callBack(GLFWwindow* window,int w,int h)
 
 	
 }
+void Scene::groupEntWithShader()
+{
+	renderSys->GroupEntityWithCommonShader();
+}
 void Scene::vsyncOn(bool status)
 {
 	if (status)
@@ -179,8 +183,9 @@ void Scene::Render()
 	float currTime = glfwGetTime();
 	//renderStuff
 		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
-		transformManager->UpdateTransforms();
+		//call this in this same order
 		behaviourSys->Update(deltaTime);
+		transformManager->UpdateTransforms();
 		renderSys->Run(cam);
 		physicsSys->Run(deltaTime);
 		fn();

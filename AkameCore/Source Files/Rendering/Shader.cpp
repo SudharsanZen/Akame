@@ -1,10 +1,42 @@
 #include<iostream>
+
 #include "Rendering/Shader.h"
 #include<fstream>
 #include<math.h>
 #include<glad/glad.h>
+#include<math.h>
 #include"Core/Log/Log.h"
 #include"Assets/AssetManager.h"
+
+void Shader::ParseUniforms()
+{
+    //max allowed length of a uniform variable name
+    int max=0;
+    glGetProgramiv(programID,GL_ACTIVE_UNIFORM_MAX_LENGTH,&max);
+    char *name=(char*)malloc((max+(unsigned long long)1)*sizeof(char));
+    if (programID)
+    {
+
+        int uniformCount=0;
+        
+        glGetProgramiv(programID,GL_ACTIVE_UNIFORMS,&uniformCount);
+        for (int i = 0; i < uniformCount; i++)
+        {
+            int nameLength = 0;
+            int size=0;
+            GLenum type;
+            glGetActiveUniform(programID, i, max + 1, &nameLength, &size, &type, name);
+            if (name)
+            {
+                
+                std::string st = name;
+                uniformLocationMap[st] = glGetUniformLocation(programID, st.c_str());
+                ENGINE_CORE_CRITICAL(st + ": {0:d}", uniformLocationMap[st]);
+            }
+        }
+    }
+    free(name);
+}
 Shader::Shader(std::string vertexShaderDir, std::string fragmentShaderDir,std::string geometryShaderDir)
 {
     //contructor
@@ -36,13 +68,22 @@ Shader::Shader()
 }
 //functions for setting uniform variables
 
-unsigned int Shader::getUniformLocation(std::string varName) { return glGetUniformLocation(programID, varName.c_str()); }
+unsigned int Shader::getUniformLocation(std::string varName) 
+{
+    return uniformLocationMap[varName]; 
+}
 
 void Shader::setUniformInteger(std::string varName, unsigned int value) { glUniform1i(getUniformLocation(varName), value); }
 
 void Shader::setUniformVec3(std::string varName, const glm::vec3& vec) { glUniform3fv(getUniformLocation(varName), 1, glm::value_ptr(vec)); }
 
 void Shader::setUniformMat4fv(std::string varName, unsigned int count, float* valuePtr) { glUniformMatrix4fv(getUniformLocation(varName), count, GL_FALSE, valuePtr); }
+
+void Shader::setUniformMat4fvArray(std::string varName, unsigned int index, float* valuePtr)
+{
+    unsigned int loc = getUniformLocation(varName + "[0]");
+    glUniformMatrix4fv(loc+index,1, GL_FALSE, valuePtr);
+}
 
 void Shader::setUniformFloat(std::string varName, float value)
 {
@@ -62,6 +103,10 @@ void Shader::deleteProgram()
         glDeleteProgram(programID);
         programID = 0;
     }
+}
+void Shader::setUniformMat4fv(unsigned int uniformLocation, unsigned int count, float* valuePtr)
+{
+    glUniformMatrix4fv(uniformLocation, count, GL_FALSE, valuePtr);
 }
 void Shader::useShaderProgram()
 {
@@ -192,7 +237,7 @@ bool Shader::compileShader()
         freeCodePointer(gCode,gCount);
 
     //getIndex of unfirom buffer for view and projection matrix
-  
+    ParseUniforms();
 
     return true;
 }

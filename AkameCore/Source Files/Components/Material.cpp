@@ -1,9 +1,11 @@
 #include "Components/Rendering/Material.h"
 #include"Core/Log/Log.h"
-
+unsigned long long shaderCount = 0;
 //set the texture uniform and it's value
 Material::Material(std::string shaderName)
 {
+	materialID = std::make_shared<unsigned long long>();
+	*materialID = shaderCount++;
 	SHADER_NAME = shaderName;
 	refCount = std::make_shared<int>();
 	*refCount = 1;
@@ -61,8 +63,9 @@ void Material::isEmissive(bool em)
 }
 
 
-void Material::setUniforms(std::shared_ptr<Shader> shader, glm::vec3& lightPose, glm::vec3& viewPose)
+void Material::setUniformsOnce(std::shared_ptr<Shader> shader, glm::vec3& viewPose)
 {
+	shader->setUniformVec3("viewPos", viewPose);
 
 	for (auto& t : *uniformToTexDetails)
 	{
@@ -75,24 +78,16 @@ void Material::setUniforms(std::shared_ptr<Shader> shader, glm::vec3& lightPose,
 		shader->setUniformFloat(t.first, t.second);
 	}
 
-	shader->setUniformVec3("lightPos", lightPose);
-	shader->setUniformVec3("viewPos", viewPose);
+	transformLocation = shader->getUniformLocation("transform");
 
 
-
-
-	shader->setUniformInteger("emissive", (int)emissive);
-	shader->setUniformVec3("lightColor", glm::vec3(1, 1, 1));
-	shader->setUniformVec3("objectColor", glm::vec3(1, 1, 1));
 }
 
-void Material::use(Transform& t, glm::vec3& lightPose, glm::vec3& viewPose, std::shared_ptr<Shader> shader)
+void Material::setUniformEveryObject(Transform& t, std::shared_ptr<Shader> shader)
 {
 
-	setUniforms(shader, lightPose, viewPose);
-	glm::mat4 trans = t.transformMatrix();
-	shader->setUniformVec3("viewPos", viewPose);
-	shader->setUniformMat4fv("transform", 1, glm::value_ptr(trans));
+	
+	shader->setUniformMat4fv(transformLocation, 1, glm::value_ptr(t.transformMat));
 }
 
 void Material::reset()

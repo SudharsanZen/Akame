@@ -66,10 +66,10 @@ bool Window::closeWindow()
 
 void Window::swapBuffers()
 {
-	if (mainWindow)
+	//if (mainWindow)
 		glfwSwapBuffers(mainWindow.get());
-	else
-		ENGINE_CORE_ERROR("window ptr has been deleted or has not been initialized!");
+	//else
+		//ENGINE_CORE_ERROR("window ptr has been deleted or has not been initialized!");
 }
 
 

@@ -22,6 +22,7 @@ class Transform:public Components
 
 	glm::mat4 localToWorld;
 	glm::mat4 worldToLocal;
+	glm::mat4 transformMat;
 
 	glm::mat4 formTransformMatrix(glm::vec3 position,Quaternion rotation,glm::vec3 scale)
 	{
@@ -34,6 +35,7 @@ class Transform:public Components
 	}
 	void updateChildBaseTransformDetails()
 	{
+		transformMat = transformMatrix();
 		for (auto e : child)
 		{
 			Transform& t = ecs.lock()->GetComponent<Transform>(e);
@@ -50,6 +52,8 @@ class Transform:public Components
 	}
 	friend class SceneTransformManager;
 	friend class Editor;
+	friend class Material;
+	friend class RenderingSystem;
 
 	void destroyChildren()
 	{
@@ -64,6 +68,11 @@ class Transform:public Components
 			ecs.lock()->DestroyEntity(e);
 		
 		}
+	}
+
+	glm::mat4 getCalculatedTransform()
+	{
+		return transformMat;
 	}
 	
 public:
@@ -165,7 +174,6 @@ public:
 		localScale = globalScale / baseScale;
 
 		//push this entity to the parent's child list
-		
 		updateChildBaseTransformDetails();
 		
 

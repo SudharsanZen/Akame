@@ -8,6 +8,8 @@
 class Material:public Components
 {
 private:
+	unsigned int transformLocation;
+	std::shared_ptr<unsigned long long> materialID;
 	AssetManager a;
 	unsigned int nextTexUnit = 0;
 	std::string SHADER_NAME;
@@ -30,8 +32,13 @@ private:
 	float ambientIntensity;
 
 	friend class RenderingSystem;
+	friend class ECS;
+	friend class ComponentArray<Material>;
+	void setUniformsOnce(std::shared_ptr<Shader> shader, glm::vec3& viewPose);
+	void setUniformEveryObject(Transform& t,std::shared_ptr<Shader> shader);
 public:
-	Material(std::string shaderName = "DEFAULT");
+	Material() :Material("DEFAULT") {}
+	Material(std::string shaderName);
 	//set float uniforms and it's values
 	void setValue(std::string varName, float value);
 	//set the texture uniform and it's value
@@ -42,6 +49,7 @@ public:
 	{
 		*mat.refCount += 1;
 		this->refCount = mat.refCount;
+		this->materialID = mat.materialID;
 		this->emissive = mat.emissive;
 		this->diffColor = mat.diffColor;
 		this->uniformToTexDetails = mat.uniformToTexDetails;
@@ -64,8 +72,8 @@ public:
 		this->SHADER_NAME = mat.SHADER_NAME;
 	}*/
 
-	void setUniforms(std::shared_ptr<Shader> shader, glm::vec3& lightPose, glm::vec3& viewPose);
-	void use(Transform& t, glm::vec3& lightPose, glm::vec3& viewPose, std::shared_ptr<Shader> shader);
+
+	
 	
 	
 

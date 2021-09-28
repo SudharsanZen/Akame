@@ -8,6 +8,7 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
+#include"Core/Debug/Debug.h"
 #include<Rendering/DeferredRendererFragmentBuffer.h>
 
 class rotateBehv :public Behaviour
@@ -19,6 +20,7 @@ public:
 	}
 	void Update(float deltaTime) override
 	{
+
 		angle += deltaTime * 5.0f;
 		angle = angle - floor(angle / 360.0f) * 360.0f;
 		Transform& t = GetComponent<Transform>();
@@ -42,6 +44,8 @@ public:
 	{
 		acc += deltaTime;
 		Transform& t = GetComponent<Transform>();
+		Lights& l = GetComponent<Lights>();
+		Debug::DrawCircle(t.GetGlobalPosition(),worldUp,l.getPointLightRadius(),glm::vec3(1,0,0),20);
 		glm::vec3 pose = t.GetGlobalPosition();
 		t.SetGlobalPosition(glm::vec3(pose.x,pose.y, sin(offSet + acc) * 3.0f));
 	}
@@ -66,7 +70,7 @@ int main()
 	d.setColor(1, 1, 1);
 	d.setDirection(0, -1, 0);
 	d.setIntensity(1);
-	d.setPointLightConst(1, 2, 10);
+	d.setPointLightConst(1, 10, 10);
 	scene.AddComponent<Lights>(dir)=d;
 	scene.AddComponent<Transform>(dir);
 	
@@ -86,9 +90,6 @@ int main()
 	boxMat.setValue("normalStrength", 1);
 	EntityID box = scene.CreateEntity();
 	Mesh& bm = scene.AddComponent<Mesh>(box);
-	
-		
-	
 		bm.CreateMesh(generateSphereVertices(16, 32, 0.5));
 		Transform &t=	scene.AddComponent<Transform>(box);
 		t =Transform(0, 10, 0);
@@ -96,7 +97,7 @@ int main()
 	scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 
 	std::vector<EntityID> lights;
-	int m = 40;
+	int m = 0;
 	int maxi = 20;
 	for (int i = 0; i < m; i++)
 	{
@@ -106,8 +107,8 @@ int main()
 		Lights &l=scene.AddComponent<Lights>(lights[i]);
 
 		l.setType(LIGHT::POINT);
-		l.setPointLightConst(4,2,2);
-		l.setIntensity(3);
+		l.setPointLightConst(4,10,100);
+		l.setIntensity(10);
 		l.setColor(1,0.5,0);
 		scene.AddComponent<BehaviourComponent>(lights[i]).setBehaviour<strafe>(float(i));
 	}
@@ -118,7 +119,7 @@ int main()
 	scene.OnStart();
 	scene.vsyncOn(false);
 	unsigned int count = 0;
-	scene.backGroundColor(0, 0, 0, 1);
+	scene.backGroundColor(1, 0, 0, 1);
 	float step = 0.3f;
 	while (!window.closeWindow())
 	{
@@ -129,7 +130,7 @@ int main()
 		scene.clearBuffer();
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.Render();
-		e.DrawUI();
+		//e.DrawUI();
 
 		Lights &l=scene.GetComponent<Lights>(dir);
 	
@@ -138,7 +139,7 @@ int main()
 
 	}
 
-	std::cout <<"\ncount:"<<count<<"\n";
+	
 
 	return 0;
 }

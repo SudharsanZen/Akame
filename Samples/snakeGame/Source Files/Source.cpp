@@ -47,7 +47,7 @@ int main()
 	
 	EntityID snake = scene.CreateEntity();
 	scene.AddComponent<BehaviourComponent>(snake);
-	scene.GetComponent<BehaviourComponent>(snake).setBehaviour<Snake>(scene.cam,1,sizeX,sizeY);
+	scene.GetComponent<BehaviourComponent>(snake).setBehaviour<Snake>(scene,scene.cam,1,sizeX,sizeY);
 
 
 	EntityID floor = scene.CreateEntity();
@@ -64,7 +64,7 @@ int main()
 	while (!window.closeWindow())
 	{
 		scene.clearBuffer();
-	
+
 		scene.Render();
 		editor.DrawUI();
 		scene.swapBuffers();

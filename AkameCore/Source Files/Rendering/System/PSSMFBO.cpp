@@ -189,7 +189,7 @@ std::vector<glm::mat4> CalculatePSSMLightSpaceMats(Camera& cam, glm::vec3  l, in
 		glm::vec3 pose = cen-forward*200.0f;
 		glm::mat4 lViewMat=glm::lookAt(pose,cen+forward,up);
 		float x=1, y=1;
-		if (i < 1)
+		if (i < 2)
 		{
 			x *= pssmx;
 			y *= pssmy;

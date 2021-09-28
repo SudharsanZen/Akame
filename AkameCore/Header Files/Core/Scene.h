@@ -41,6 +41,7 @@ private:
 	friend class Editor;
 	
 public:
+	void groupEntWithShader();
 	void vsyncOn(bool status);
 	//fn will be called when Scene::Render() is called. this method will be dprecated
 	std::function<void()> fn;

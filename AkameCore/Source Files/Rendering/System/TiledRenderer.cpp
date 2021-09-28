@@ -11,6 +11,7 @@ TiledRenderer::TiledRenderer(std::string shaderLocation)
 	progID = 0;
 	outTex = 0;
     compileComputeShader(shaderLocation);
+    ParseUniforms();
     height = 800;
     width = 600;
     glGenTextures(1,&outTex);
@@ -25,17 +26,22 @@ TiledRenderer::TiledRenderer(std::string shaderLocation)
 
 void TiledRenderer::set4x4Matrixfv(std::string name, glm::mat4 value)
 {
-    glUniformMatrix4fv(glGetUniformLocation(progID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
+    glUniformMatrix4fv(GetUniformLocation(name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
+}
+
+void TiledRenderer::set4x4MatrixfvArray(std::string name,unsigned int index, glm::mat4 value)
+{
+    glUniformMatrix4fv(GetUniformLocation(name.c_str())+index, 1, GL_FALSE, glm::value_ptr(value));
 }
 
 void TiledRenderer::setFloat(std::string name, float value)
 {
-    glUniform1f(glGetUniformLocation(progID, name.c_str()), value);
+    glUniform1f(GetUniformLocation(name.c_str()), value);
 }
 
 void TiledRenderer::setInt(std::string name, int value)
 {
-    glUniform1i(glGetUniformLocation(progID, name.c_str()), value);
+    glUniform1i(GetUniformLocation(name.c_str()), value);
 }
 
 void TiledRenderer::updateBufferSize(int height, int width)
@@ -70,6 +76,36 @@ void TiledRenderer::bindTextures()
 
 }
 
+void TiledRenderer::ParseUniforms()
+{
+    //max allowed length of a uniform variable name
+    int max = 0;
+    glGetProgramiv(progID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max);
+    char* name = (char*)malloc((max + (unsigned long long)1) * sizeof(char));
+    if (progID)
+    {
+
+        int uniformCount = 0;
+
+        glGetProgramiv(progID, GL_ACTIVE_UNIFORMS, &uniformCount);
+        for (int i = 0; i < uniformCount; i++)
+        {
+            int nameLength = 0;
+            int size = 0;
+            GLenum type;
+            glGetActiveUniform(progID, i, max + 1, &nameLength, &size, &type, name);
+            if (name)
+            {
+
+                std::string st = name;
+                uniformNameToLoc[st] = glGetUniformLocation(progID, st.c_str());
+                //ENGINE_CORE_CRITICAL(st + ": {0:d}", uniformNameToLoc[st]);
+            }
+        }
+    }
+    free(name);
+}
+
 
 void TiledRenderer::setUpShader(Camera& cam, std::shared_ptr<LightSystem> lsys)
 {
@@ -82,33 +118,31 @@ void TiledRenderer::setUpShader(Camera& cam, std::shared_ptr<LightSystem> lsys)
     lsys->updatePointLightContents();
     lsys->bindPointLightBuffer(5);
 
-    glUniform1i(glGetUniformLocation(progID, "height"), height);
-    glUniform1i(glGetUniformLocation(progID, "width"), width);
-    glUniform1i(glGetUniformLocation(progID, "numOfFrustum"), lsys->dirLightSpace.size());
-    glUniform3fv(glGetUniformLocation(progID, "viewPos"), 1, glm::value_ptr(cam.transform.GetGlobalPosition()));
-    glUniform1i(glGetUniformLocation(progID, "NUM_POINT_LIGHT"), int(lsys->ptVector.size()));
-    glUniformMatrix4fv(glGetUniformLocation(progID, "projInv"), 1, GL_FALSE, glm::value_ptr(glm::inverse(cam.getProjectionMatrix())));
-    glUniformMatrix4fv(glGetUniformLocation(progID, "viewMat"), 1, GL_FALSE, glm::value_ptr(cam.getViewMatrix()));
+    glUniform1i(GetUniformLocation("height"), height);
+    glUniform1i(GetUniformLocation("width"), width);
+    glUniform1i(GetUniformLocation("numOfFrustum"), lsys->dirLightSpace.size());
+    glUniform3fv(GetUniformLocation("viewPos"), 1, glm::value_ptr(cam.transform.GetGlobalPosition()));
+    glUniform1i(GetUniformLocation("NUM_POINT_LIGHT"), int(lsys->ptVector.size()));
+    glUniformMatrix4fv(GetUniformLocation("projInv"), 1, GL_FALSE, glm::value_ptr(glm::inverse(cam.getProjectionMatrix())));
+    glUniformMatrix4fv(GetUniformLocation("viewMat"), 1, GL_FALSE, glm::value_ptr(cam.getViewMatrix()));
   
-    glUniform1i(glGetUniformLocation(progID, "NUM_DIR_LIGHT"), int(lsys->drVector.size()));
-    auto dirVarName = [](std::string structVar, int index)
-    {
-        std::stringstream str;
-        str << "DIR_L[" << index << "]." + structVar;
-        return str.str();
-    };
+    glUniform1i(GetUniformLocation("NUM_DIR_LIGHT"), int(lsys->drVector.size()));
+  
     int ith_dirLight = 0;
     for (auto& l : lsys->drVector)
     {
+        char ith ='0'+ith_dirLight;
+        std::string varBase= std::string("DIR_L[0].");
+        varBase[6] = ith;
 
-        std::string var = dirVarName("lightDir", ith_dirLight);
-        glUniform3fv(glGetUniformLocation(progID, var.c_str()), 1, glm::value_ptr(l.lightDir));
-        var = dirVarName("lightColor", ith_dirLight);
-        glUniform3fv(glGetUniformLocation(progID, var.c_str()), 1, glm::value_ptr(l.lightColor));
-        var = dirVarName("ambient", ith_dirLight);
-        glUniform3fv(glGetUniformLocation(progID, var.c_str()), 1, glm::value_ptr(l.ambient));
-        var = dirVarName("intensity", ith_dirLight);
-        glUniform1f(glGetUniformLocation(progID, var.c_str()), l.intensity);
+        std::string var = varBase+"lightDir";
+        glUniform3fv(GetUniformLocation(var.c_str()), 1, glm::value_ptr(l.lightDir));
+        var = varBase +"lightColor";
+        glUniform3fv(GetUniformLocation(var.c_str()), 1, glm::value_ptr(l.lightColor));
+        var = varBase + "ambient";
+        glUniform3fv(GetUniformLocation(var.c_str()), 1, glm::value_ptr(l.ambient));
+        var = varBase + "intensity";
+        glUniform1f(GetUniformLocation(var.c_str()), l.intensity);
         ith_dirLight++;
     }
 

@@ -22,8 +22,7 @@ Mesh::~Mesh()
 
 void Mesh::renderMesh()
 {
-	glad_glPointSize(2);
-	glad_glLineWidth(1);
+	
 	//if all the buffers were successfully generated, then render the mesh
 	if ((!IBO && numOfIndices )|| !VBO || !VAO)
 	{
@@ -44,9 +43,10 @@ void Mesh::renderMesh()
 	}
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	
 }
 
-void Mesh::CreateMesh(std::vector<vert> vertices, std::vector<GLuint> indices)
+void Mesh::CreateMesh(std::vector<vert> &vertices, std::vector<GLuint> &indices)
 {
 	this->vertices = vertices;
 	this->indices = indices;

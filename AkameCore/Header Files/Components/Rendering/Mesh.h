@@ -34,7 +34,7 @@ public:
 
 	void reset();
 	void renderMesh();
-	void CreateMesh(std::vector<vert> vertices, std::vector<unsigned int> indices=std::vector<unsigned int>());
+	void CreateMesh(std::vector<vert> &vertices, std::vector<unsigned int> &indices=std::vector<unsigned int>());
 
 };
 

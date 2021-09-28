@@ -147,9 +147,7 @@ void LightSystem::BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader,C
 		
 		for (int i = 0; i < FRUSTUM_SPLIT_NUM; i++)
 		{
-			std::stringstream ss;
-			ss << "lightSpaceMat[" << i << "]";
-			shader->setUniformMat4fv(ss.str().c_str(),1,glm::value_ptr(lightSpaceMatList[i]));
+			shader->setUniformMat4fvArray("lightSpaceMat", i, glm::value_ptr(lightSpaceMatList[i]));
 			dirLightSpace[i] = lightSpaceMatList[i];
 		}
 

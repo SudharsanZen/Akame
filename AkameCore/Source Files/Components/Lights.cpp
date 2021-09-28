@@ -73,18 +73,17 @@ void Lights::setPointLightConst(float Kc, float Kl, float Kq)
 
 float Lights::calPointLightRadius(glm::vec3 C,float Intensity)
 {
-	float a, b, c;
+	float kc=C.x, kl=C.y, kq=C.z;
 	float r1,r2;
-	c = (C.x - 10.0f * Intensity) / 10.0f;
-	b = (C.y / 10.0f);
-	a = (C.z/10.0f);
+	float goalAtten = 0.02f;
+	float D = sqrt((kl*kl)-4.0f*kq*(kc-(intensity/goalAtten)));
 	
-	r1 = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-	r2 = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+	r1 = -kl - D;
+	r2 = -kl + D;
 
-	if (r1 >= 0)
-		return r1*5;
-	else
-		return r2*5;
+	r1 /= 2.0f * kq;
+	r2 /= 2.0f * kq;
+
+	return glm::max(r1,r2);
 
 }

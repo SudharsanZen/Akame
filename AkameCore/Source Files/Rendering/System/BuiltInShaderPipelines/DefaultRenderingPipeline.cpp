@@ -27,9 +27,8 @@ void DefaultRenderingPipeline::OnPreRender(std::shared_ptr<Shader> shader, Rende
 		lsys->dir_sMap.useTextureArray(6);
 		for (int i = 0; i < lsys->dirLightSpace.size(); i++)
 		{
-			std::stringstream ss;
-			ss << "lightSpaceMat[" << i << "]";
-			shader->setUniformMat4fv(ss.str().c_str(), 1, glm::value_ptr(lsys->dirLightSpace[i]));
+			
+			shader->setUniformMat4fvArray("lightSpaceMat", i, glm::value_ptr(lsys->dirLightSpace[i]));
 
 		}
 			

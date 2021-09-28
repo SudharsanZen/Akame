@@ -39,9 +39,7 @@ void DeferredPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSyst
 	lsys->dir_sMap.useTextureArray(6);
 	for (int i = 0; i < lsys->dirLightSpace.size(); i++)
 	{
-		std::stringstream ss;
-		ss << "lightSpaceMat[" << i << "]";
-		drfb.set4x4Matrixfv(ss.str().c_str(), lsys->dirLightSpace[i]);
+		drfb.set4x4MatrixfvArray("lightSpaceMat[0]",i,lsys->dirLightSpace[i]);
 		
 	}
 	

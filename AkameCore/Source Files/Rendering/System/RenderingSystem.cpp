@@ -19,20 +19,25 @@ glm::vec3 rayPlaneIntersectionPoint(glm::vec3 rayOrigin,glm::vec3 rayDir,glm::ve
 	return rayOrigin + rayDir * length;
 
 }
-void RenderingSystem::GroupEntityWithCommonShader(std::shared_ptr<ECS> ecs)
+void RenderingSystem::GroupEntityWithCommonShader()
 {
-	
+	std::shared_ptr<ECS> e = ecs.lock();
 	emptyDrawList();
 	for (auto const& ent : entities)
 	{
-		std::string shdName=ecs->GetComponent<Material>(ent).SHADER_NAME;
+		Material &m= e->GetComponent<Material>(ent);
+		std::string shdName = m.SHADER_NAME;
 		if (drawList.find(shdName) == drawList.end())
 		{
-			drawList["ERROR"].push_back(ent);
+			drawList["ERROR"][0].push_back(ent);
 		}
 		else
-			drawList[shdName].push_back(ent);
+		{
+			drawList[shdName][*m.materialID].push_back(ent);
+		}
+	
 	}
+	
 }
 
 
@@ -75,10 +80,13 @@ RenderingSystem::RenderingSystem()
 
 void RenderingSystem::Run(Camera& cam)
 {
-	std::shared_ptr<LightSystem> lsys=lightsystem.lock();
 
-	GroupEntityWithCommonShader(ecs.lock());
-	
+	std::shared_ptr<LightSystem> lsys=lightsystem.lock();
+	if (m_update_Event)
+	{
+		m_update_Event = false;
+		GroupEntityWithCommonShader();
+	}
 	updateUniformBuffer(cam);
 	
 	std::shared_ptr<ECS> E = ecs.lock();
@@ -94,14 +102,14 @@ void RenderingSystem::Run(Camera& cam)
 	glViewport(0, 0, width, height);
 	RenderQueue("GEOMETRY",cam);
 	RenderQueue("OVERLAY",cam);
-
+	/*
 	ShaderManager::GetShader("LINES_DEBUG")->useShaderProgram();
 	glDisable(GL_DEPTH_TEST);
 	Debug::updateBufferContent();
 	Debug::DrawDebug();
 	Debug::FlushDebugInformation();
 	glEnable(GL_DEPTH_TEST);
-
+	*/
 
 
 }
@@ -111,7 +119,7 @@ void RenderingSystem::emptyDrawList()
 	//initialize the draw list with empty vectors for each shader name
 	for (auto const& pair : ShaderManager::shaderList)
 	{
-		drawList[pair.first] = std::vector<Entity>();
+		drawList[pair.first] = std::map<unsigned long long ,std::vector<Entity>>();
 	}
 }
 
@@ -165,12 +173,18 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 		}
 
 		//loop through all entities under the shader name and render it
-		for (auto const& ent : drawList[SHADERNAME])
+		for (auto const& entMatList : drawList[SHADERNAME])
 		{
-			Transform& t = E->GetComponent<Transform>(ent);
-			Mesh& mesh = E->GetComponent<Mesh>(ent);
-			E->GetComponent<Material>(ent).use(t, glm::vec3(0), cam.transform.GetGlobalPosition(), shader);
-			mesh.renderMesh();
+			Material &m=E->GetComponent<Material>(entMatList.second[0]);
+			m.setUniformsOnce(shader,cam.transform.GetGlobalPosition());
+			for (int i=0;i<entMatList.second.size();i++)
+			{
+				
+				Transform& t = E->GetComponent<Transform>(entMatList.second[i]);
+				Mesh& mesh = E->GetComponent<Mesh>(entMatList.second[i]);
+				m.setUniformEveryObject(t, shader);
+				mesh.renderMesh();
+			}
 		}
 
 		if (pipeReg)
@@ -186,20 +200,15 @@ void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
 {
 	std::shared_ptr<ECS> E = ecs.lock();
 
-	for (auto const& entList : drawList)
+	unsigned int transformLocation = shader->getUniformLocation("transform");
+	for (auto const& ent : entities)
 	{
 
-		//exclude DEFERRED material from being rendered here
-		for (auto const& ent : entList.second)
-		{
-			Transform& t = E->GetComponent<Transform>(ent);
-			Mesh& mesh = E->GetComponent<Mesh>(ent);
-			glm::mat4 tmat = t.transformMatrix();
-			shader->setUniformMat4fv("transform", 1, glm::value_ptr(tmat));
-			mesh.renderMesh();
-		}
-
-
+		Transform& t = E->GetComponent<Transform>(ent);
+		Mesh& mesh = E->GetComponent<Mesh>(ent);
+		
+		shader->setUniformMat4fv(transformLocation, 1, glm::value_ptr(t.transformMat));
+		mesh.renderMesh();
 	}
 }
 //renders all entities with all shaders registered under this queue type

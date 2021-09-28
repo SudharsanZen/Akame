@@ -7,6 +7,8 @@
 #include"Rendering/FrameBuffer.h"
 #include"Rendering/System/ShadowFBO.h"
 #include"Rendering/System/TiledRenderer.h"
+#include<map>
+#include<unordered_map>
 
 class Camera;
 class LightSystem;
@@ -16,10 +18,9 @@ private:
 	
 
 	//map that holds list of entities under a particular shader
-	std::unordered_map<std::string, std::vector<Entity>> drawList;
+	std::unordered_map<std::string,std::map<unsigned long long,std::vector<Entity>>> drawList;
 
-	//fill the drawList map with relevant entities to their respective shaders
-	void GroupEntityWithCommonShader(std::shared_ptr<ECS> ecs);
+	
 	
 	//a weak pointer to the current entity component system that belongs to the current scene that houses this RenderingSystem
 	std::weak_ptr<ECS> ecs;
@@ -28,19 +29,21 @@ private:
 	unsigned int uboMatrixBufferID;
 	signed   long long int mat4Size = sizeof(glm::mat4);
 	
-	
+	bool m_update_Event;
 	friend class Scene;
 	friend class Editor;
 	/*Call this to update the common global uniforms.
 	* this updates the Projection matrix and ViewMatrix 
 	*which is common to all shaders*/
 	void updateUniformBuffer(Camera& cam);
-
+	void GroupEntityWithCommonShader();
 	/*
 	* attach Shader Render pipeline class to the respective built in shaders
 	*/
 	void attachAllBuiltInSRP();
 public:
+	//fill the drawList map with relevant entities to their respective shaders
+	
 	std::weak_ptr<LightSystem> lightsystem;
 	//window heigh and width to render to
 	int height, width;
@@ -51,11 +54,14 @@ public:
 	//clear the draw list
 	void emptyDrawList();
 	//this is a call back function which is called evertime a new entity is registered under rendering system
-	void OnAddEntity(Entity entity) override {GroupEntityWithCommonShader(ecs.lock());}
+	void OnAddEntity(Entity entity) override 
+	{
+		m_update_Event = true;
+	}
 	//this is a call back function which is called when an entity is destroyed 
 	void AfterDestroyEntity() override
 	{ 
-		GroupEntityWithCommonShader(ecs.lock()); 
+		m_update_Event = true;
 	}
 	//call this update the frame buffer's size to which stuff are drawn too
 	void updateFrameBufferSize(int height,int width);

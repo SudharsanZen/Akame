@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 #include"Rendering/System/PSSMFBO.h"
+
 #include"Rendering/DeferredRendererFragmentBuffer.h"
 #include"Core/Editor/EditorUI.h"
 void app()
@@ -80,7 +81,7 @@ void app()
 	
 	scene.AddComponent<Transform>(dir)= Transform(0,2,0);
 
-	Material mat("GRIDS");
+	/*Material mat("GRIDS");
 	EntityID pl = scene.CreateEntity();
 	Transform planeInf;
 
@@ -92,20 +93,21 @@ void app()
 	EntityID sky = scene.CreateEntity();
 	Transform skyInf;
 	
-
+	
 	scene.AddComponent<Transform>(sky) =skyInf;
 	Mesh &skym=scene.AddComponent<Mesh>(sky);
 	scene.AddComponent<Material>(sky)=matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
-	
-	const int num =200;
+	*/
+	const int num =190;
 	const int rt = (int)sqrt(num);
 	std::vector<EntityID> lightsVec;
+	std::vector<vert> cv = generateCubeVertices();
 	for (int i = 0; i < num; i++)
 	{
 		float off = (float)(rt-1);
 	
-
+		/*
 		EntityID point = scene.CreateEntity();
 		Lights &p = scene.AddComponent<Lights>(point);
 	
@@ -117,24 +119,25 @@ void app()
 		scene.AddComponent<Transform>(point)= Transform(2 * (i / rt)-1 -off, 0.5, (2) * (i % rt)-off);
 		
 		lightsVec.push_back(point);
-		
+		*/
 		EntityID box = scene.CreateEntity();
 		Mesh& bm=scene.AddComponent<Mesh>(box);
-		if ((i / rt) % 2 == 1)
-		bm.CreateMesh(generateCubeVertices());
-		if((i/rt)%2==0)
-		bm.CreateMesh(generateSphereVertices(16,32,0.5));
+		//if ((i / rt) % 2 == 1)
+		bm.CreateMesh(cv);
+		//if((i/rt)%2==0)
+		//bm.CreateMesh(generateSphereVertices(16,32,0.5));
 		scene.AddComponent<Transform>(box)= Transform(2.0f * (i / rt)-off, 0.5f, (2.0f) * (i % rt)-off);
 		scene.AddComponent<Material>(box)=boxMat;
 		scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 	}
-	Editor edt(window,scene);
+	//Editor edt(window,scene);
 	scene.OnStart();
-	scene.vsyncOn(true);
+	scene.vsyncOn(false);
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.3f;
 	float acc = 0;
 	bool stopRot=false;
+
 	while (!window.closeWindow())
 	{
 		if(stopRot)
@@ -144,7 +147,7 @@ void app()
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.clearBuffer();
 		scene.Render();
-		edt.DrawUI();
+		//edt.DrawUI();
 		
 		
 		

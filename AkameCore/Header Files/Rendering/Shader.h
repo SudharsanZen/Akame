@@ -1,11 +1,13 @@
 #pragma once
 #include<functional>
 #include<string>
-
+#include<map>
 #include"Math/EngineMath.h"
 class Shader
 {
 private:
+	void ParseUniforms();
+	std::map<std::string, unsigned int> uniformLocationMap;
 	friend class Material;
 	friend class DisplacementMap;
 	//fragementShader and vertex Shader's directory
@@ -18,6 +20,9 @@ private:
 	void addShader(char** shaderCode, unsigned int shaderID, unsigned int codeLen, unsigned int shaderType);
 	void freeCodePointer(char**,unsigned int);
 	void deleteProgram();
+	friend class Material;
+	friend class RenderingSystem;
+	void setUniformMat4fv(unsigned int, unsigned int count, float* valuePtr);
 public:
 	Shader();
 	Shader(std::string vertexShaderDir,std::string fragmentShaderDir,std::string geometryShaderDir);
@@ -31,6 +36,7 @@ public:
 
 	void setUniformVec3(std::string varName, const glm::vec3& vec);
 	void setUniformMat4fv(std::string varName, unsigned int count, float* valuePtr);
+	void setUniformMat4fvArray(std::string varName, unsigned int index, float* valuePtr);
 	void setUniformFloat(std::string varName, float value);
 	//call this to use this shader program
 	void useShaderProgram();

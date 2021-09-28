@@ -156,7 +156,7 @@ float shadowCalculation(vec4 fragPose)
                     pcf+=texture(dir_sMap, vec4(projCoord.xy+vec2(i,j)*texel,layer,projCoord.z));
                   }
                   pcf/=(2*con+1)*(2*con+1);
-                  return pcf;
+                  return 1.0f-pcf;
                   break;
             }
       }
