@@ -22,7 +22,7 @@ Mesh::~Mesh()
 
 void Mesh::renderMesh()
 {
-	
+	/*
 	//if all the buffers were successfully generated, then render the mesh
 	if ((!IBO && numOfIndices )|| !VBO || !VAO)
 	{
@@ -43,7 +43,7 @@ void Mesh::renderMesh()
 	}
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	
+	*/
 }
 
 void Mesh::CreateMesh(std::vector<vert> &vertices, std::vector<GLuint> &indices)

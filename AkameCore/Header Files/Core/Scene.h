@@ -58,39 +58,39 @@ public:
 	void InitEcs();
 
 	//Creates an entity in the Scene
-	EntityID CreateEntity()
+	Entity CreateEntity()
 	{
-		EntityID eid=ecs->CreateEntity();
+		Entity eid=ecs->CreateEntity();
 		AddComponent<EntityDescriptor>(eid);
 		return eid;
 	}
-	void SetEntityTag(EntityID eid,std::string tag)
+	void SetEntityTag(Entity eid,std::string tag)
 	{
 		EDS->SetEntityTag(eid,tag);
 	}
-	void SetEntityName(EntityID eid,std::string name)
+	void SetEntityName(Entity eid,std::string name)
 	{
 		GetComponent<EntityDescriptor>(eid).SetName(name);
 	}
 	//Destroys an entity in the Scene
-	void DestroyeEntity(EntityID entityID)
+	void DestroyeEntity(Entity entityID)
 	{
 		return ecs->DestroyEntity(entityID);
 	}
 
 	//Adds a component to the Given entity
 	template<typename T>
-	T& AddComponent(EntityID entityID);
+	T& AddComponent(Entity entityID);
 
 
 
 	//Remove added component
 	template<typename T>
-	void RemoveComponent(EntityID entityID);
+	void RemoveComponent(Entity entityID);
 
 	//get added component with a given entityID
 	template<typename T>
-	T& GetComponent(EntityID entityID);
+	T& GetComponent(Entity entityID);
 
 	//set backGround color of the window
 	void backGroundColor(float r, float g, float b, float a)
@@ -112,11 +112,11 @@ public:
 };
 
 template<typename T>
-inline T& Scene::AddComponent(EntityID entityID)
+inline T& Scene::AddComponent(Entity entityID)
 {
 
 	T& comp=ecs->AddComponent<T>(entityID);
-	comp.eid = entityID ;
+
 	comp.ecs = ecs;
 	return comp;
 }
@@ -128,7 +128,7 @@ inline T& Scene::AddComponent(EntityID entityID)
 //Remove added component
 
 template<typename T>
-inline void Scene::RemoveComponent(EntityID entityID)
+inline void Scene::RemoveComponent(Entity entityID)
 {
 	ecs->RemoveComponent<T>(entityID);
 }
@@ -136,7 +136,7 @@ inline void Scene::RemoveComponent(EntityID entityID)
 //get added component with a given entityID
 
 template<typename T>
-inline T& Scene::GetComponent(EntityID entityID)
+inline T& Scene::GetComponent(Entity entityID)
 {
 	return ecs->GetComponent<T>(entityID);
 }

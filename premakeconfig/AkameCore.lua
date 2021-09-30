@@ -1,6 +1,6 @@
 project "AkameCore"
     location"%{ComDir.AkameCore}"
-    kind "StaticLib"
+    kind "ConsoleApp"
     language "C++"
     cppdialect "C++17"
     targetdir "%{ComDir.AkameCore}/bin/%{cfg.buildcfg}"

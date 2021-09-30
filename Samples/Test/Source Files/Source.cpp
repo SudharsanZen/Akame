@@ -23,7 +23,7 @@ int main()
 	Scene scene(window);
 
 
-	EntityID dir = scene.CreateEntity();
+	Entity dir = scene.CreateEntity();
 	Lights &d = scene.AddComponent<Lights>(dir) = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
 	d.setDirection(1, -1, 1);
@@ -32,7 +32,7 @@ int main()
 	
 	scene.AddComponent<Transform>(dir)= Transform(0, 2, 0);
 
-	EntityID ptl = scene.CreateEntity();
+	Entity ptl = scene.CreateEntity();
 	Lights &p = scene.AddComponent<Lights>(ptl)= Lights(LIGHT::POINT);
 	p.setColor(1, 1, 1);
 	p.setIntensity(5);
@@ -40,7 +40,7 @@ int main()
 	
 	scene.AddComponent<Transform>(ptl)= Transform(0,5,0);
 	
-	EntityID plane = scene.CreateEntity();
+	Entity plane = scene.CreateEntity();
 	
 	Material spMat("DEFERRED");
 	spMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/bark/basecolor.jpg");
@@ -95,7 +95,7 @@ int main()
 			int r = rand() % 2;
 			count++;
 			acc -= step;
-			EntityID box = scene.CreateEntity();
+			Entity box = scene.CreateEntity();
 			
 			if (r)
 			{

@@ -28,7 +28,7 @@ int main()
 	
 
 	Scene scene(window);
-	EntityID dir = scene.CreateEntity();
+	Entity dir = scene.CreateEntity();
 	Lights &d = scene.AddComponent<Lights>(dir);
 	d.setType(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
@@ -39,7 +39,7 @@ int main()
 	
 	scene.AddComponent<Transform>(dir).SetGlobalPosition(glm::vec3(0,2,0));
 	scene.SetEntityName(dir, "DirectionalLight");
-	std::vector<EntityID> cubeList;
+	std::vector<Entity> cubeList;
 	float m = 5;
 	int i;
 	{
@@ -51,7 +51,7 @@ int main()
 		{
 
 
-			EntityID cube = scene.CreateEntity();
+			Entity cube = scene.CreateEntity();
 			cubeList.push_back(cube);
 			Transform& t = scene.AddComponent<Transform>(cube);
 			t.SetGlobalRotation(Quaternion(0, 0, 0));
@@ -82,7 +82,7 @@ int main()
 	
 
 	Material mat("GRIDS");
-	EntityID plane= scene.CreateEntity();
+	Entity plane= scene.CreateEntity();
 	Transform planeInf;
 
 	scene.AddComponent<Transform>(plane)=planeInf;
@@ -92,7 +92,7 @@ int main()
 	scene.SetEntityName(plane,"grids");
 	
 	Material matS("SPHERE");
-	EntityID sky= scene.CreateEntity();
+	Entity sky= scene.CreateEntity();
 	scene.AddComponent<Material>(sky) = matS;
 	scene.AddComponent<Transform>(sky);
 	Mesh& skMesh = scene.AddComponent<Mesh>(sky);
@@ -104,7 +104,7 @@ int main()
 	
 	//t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30, glm::vec3(0, 0, 1)));
 
-	Editor editor(window,scene);
+	//Editor editor(window,scene);
 	scene.OnStart();
 	scene.vsyncOn(true);
 	float deltaTime = 0;
@@ -117,7 +117,7 @@ int main()
 		flyCam(scene.cam,scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.clearBuffer();
-		editor.DrawUI();
+		//editor.DrawUI();
 		scene.Render();
 		
 		

@@ -65,7 +65,7 @@ int main()
 	Scene scene(window);
 	scene.cam.setFar(1000);
 
-	EntityID dir = scene.CreateEntity();
+	Entity dir = scene.CreateEntity();
 	Lights d = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
 	d.setDirection(0, -1, 0);
@@ -74,7 +74,7 @@ int main()
 	scene.AddComponent<Lights>(dir)=d;
 	scene.AddComponent<Transform>(dir);
 	
-	EntityID model=LoadModelToScene(scene,"D:/Projects/GameEngine/sponza/sponza.fbx");
+	Entity model=LoadModelToScene(scene,"D:/Projects/GameEngine/sponza/sponza.fbx");
 	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
 	Transform &T=scene.GetComponent<Transform>(model);
 	T.SetGlobalScale(glm::vec3(0.5));
@@ -88,7 +88,7 @@ int main()
 	boxMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/crate/normal.jpg");
 	boxMat.setValue("specIntensity", 1);
 	boxMat.setValue("normalStrength", 1);
-	EntityID box = scene.CreateEntity();
+	Entity box = scene.CreateEntity();
 	Mesh& bm = scene.AddComponent<Mesh>(box);
 		bm.CreateMesh(generateSphereVertices(16, 32, 0.5));
 		Transform &t=	scene.AddComponent<Transform>(box);
@@ -96,7 +96,7 @@ int main()
 	scene.AddComponent<Material>(box) = boxMat;
 	scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 
-	std::vector<EntityID> lights;
+	std::vector<Entity> lights;
 	int m = 0;
 	int maxi = 20;
 	for (int i = 0; i < m; i++)

@@ -1,7 +1,7 @@
 #pragma once
 #include"ECSTYPES.h"
 #include<tuple>
-std::ostream& operator <<(std::ostream& os, const EntityID& ID)
+std::ostream& operator <<(std::ostream& os, const Entity& ID)
 {
 	os << unsigned(ID.version) << '-' << unsigned(ID.index);
 	return os;

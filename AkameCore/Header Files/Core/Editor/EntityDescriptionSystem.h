@@ -8,6 +8,7 @@ class EntityDescriptionSystem:public System
 {
 private:
 	friend class Scene;
+	bool m_needs_update;
 	void updateList()
 	{
 		tagMap.clear();
@@ -20,26 +21,36 @@ private:
 	}
 	std::weak_ptr<ECS> ecs;
 public:
+	void updateMap()
+	{
+		if (m_needs_update)
+		{
+			updateList();
+			m_needs_update = false;
+		}
+	}
+	std::map<std::string, std::vector<Entity>> tagMap;
 
-	std::map<std::string, std::vector<EntityID>> tagMap;
-
-	std::vector<EntityID> GetEntitiesWithTag(std::string tag);
+	std::vector<Entity> GetEntitiesWithTag(std::string tag);
 	
-	void SetEntityTag(EntityID eid, std::string tag)
+	void SetEntityTag(Entity eid, std::string tag)
 	{
 		EntityDescriptor& ed = ecs.lock()->GetComponent<EntityDescriptor>(eid);
 		ed.SetTag(tag);
-		updateList();
+		m_needs_update = true;
+		//updateList();
 	}
 
 	void OnAddEntity(Entity eid)override
 	{
-		updateList();
+		m_needs_update = true;
+		//updateList();
 	}
 
 	void OnDestroyEntity(Entity eid) override
 	{
-		updateList();
+		m_needs_update = true;
+		//updateList();
 	}
 };
 

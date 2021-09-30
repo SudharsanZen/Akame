@@ -11,10 +11,10 @@ class EarthBehv :public Behaviour
 	float y = 0;
 	float sunEarthAngle = 0;
 	float sunEarthDist =200;
-	EntityID sun;
+	Entity sun;
 	
 public:
-	EarthBehv(EntityID sun)
+	EarthBehv(Entity sun)
 	{
 		
 		this->sun = sun;
@@ -48,14 +48,14 @@ public:
 class MoonBehv :public Behaviour
 {
 	
-	EntityID earth;
+	Entity earth;
 	float y = 0;
 	float eartMoonAng=0;
 	float distanceFromEarth =30;
 
 	
 public:
-	MoonBehv(EntityID earth) 
+	MoonBehv(Entity earth) 
 	{
 		this->earth = earth;
 	}
@@ -118,7 +118,7 @@ int main()
 	sunMaterial.setTexture2D("material.diffuse", rootDir + "Media/Demo/Planets/Sun/diffuse.jpg");
 	sunMaterial.setTexture2D("material.specular", rootDir + "Media/Demo/Planets/Sun/Specular.jpg");
 	sunMaterial.isEmissive(true);
-	EntityID sun = scene.CreateEntity();
+	Entity sun = scene.CreateEntity();
 
 	//component that describes the shape
 	Mesh &sunM=scene.AddComponent<Mesh>(sun);
@@ -129,7 +129,7 @@ int main()
 	//get the Mesh component and define it's shape, in this case a sphere
 	sunM.CreateMesh(generateSphereVertices(30, 30, 30));
 
-	EntityID earth=scene.CreateEntity();
+	Entity earth=scene.CreateEntity();
 
 	Mesh &earthM=scene.AddComponent<Mesh>(earth);
 	scene.AddComponent<Material>(earth)=earthMaterial;
@@ -137,7 +137,7 @@ int main()
 	scene.AddComponent<BehaviourComponent>(earth).setBehaviour<EarthBehv>(sun);
 	earthM.CreateMesh(generateSphereVertices(30,30,10));
 	
-	EntityID moon = scene.CreateEntity();
+	Entity moon = scene.CreateEntity();
 
 	scene.AddComponent<Mesh>(moon).CreateMesh(generateSphereVertices(30, 30, 3));
 	scene.AddComponent<Material>(moon)= moonMaterial;

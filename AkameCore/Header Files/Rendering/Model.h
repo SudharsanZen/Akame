@@ -6,7 +6,7 @@ struct aiMesh;
 struct aiNode;
 struct aiScene;
 
-EntityID LoadModelToScene(Scene &scene, std::string modelPath);
+Entity LoadModelToScene(Scene &scene, std::string modelPath);
 class Model
 {
 public:

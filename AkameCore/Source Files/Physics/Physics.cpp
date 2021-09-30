@@ -18,8 +18,8 @@ namespace physics
 	physx::PxQuat _ToPxQuat(glm::quat q)
 	{
 		return physx::PxQuat(q.x, q.y, q.z, q.w);
-	}
-	physx::PxTransform _ToPxTrans(Transform t)
+	} 
+	physx::PxTransform _ToPxTrans(Transform  &t)
 	{
 		return physx::PxTransform(_ToPxVec3(t.GetGlobalPosition()), _ToPxQuat(t.GetGlobalRotation().quaternion));
 	}
@@ -32,11 +32,10 @@ namespace physics
 	{
 		return glm::quat(q.w, q.x, q.y, q.z);
 	}
-	Transform _PxToTrans(physx::PxTransform pxt)
+	void _PxToTrans(physx::PxTransform pxt,Transform &targetTransform)
 	{
-		Transform t(_PxToVec3(pxt.p));
-		t.SetGlobalRotation(_PxToQuat(pxt.q));
-		return t;
+		targetTransform.SetGlobalPosition(_PxToVec3(pxt.p));
+		targetTransform.SetGlobalRotation(_PxToQuat(pxt.q));
 	}
 
 	//initialize PhysX

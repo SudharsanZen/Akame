@@ -8,9 +8,9 @@
 
 class Transform:public Components
 {
-	EntityID parent=EntityID(-1,-1);
+	Entity parent=Entity(-1,-1);
 
-	std::list<EntityID> child;
+	std::list<Entity> child;
 	//global parent transform
 	glm::vec3 basePosition;
 	glm::vec3 baseScale;
@@ -35,10 +35,17 @@ class Transform:public Components
 	}
 	void updateChildBaseTransformDetails()
 	{
+		std::shared_ptr<ECS> E = ecs.lock();
+
 		transformMat = transformMatrix();
+		if (ecs.expired())
+		{
+			std::cout << "expired";
+		}
+		e_index transformIndex =E->GetComponentBitPose<Transform>();
 		for (auto e : child)
 		{
-			Transform& t = ecs.lock()->GetComponent<Transform>(e);
+			Transform& t = E->GetComponent<Transform>((*e.componentIndex)[transformIndex],transformIndex);
 			t.basePosition = GetGlobalPosition();
 			t.baseRotation = GetGlobalRotation();
 			t.baseScale = GetGlobalScale();
@@ -50,11 +57,17 @@ class Transform:public Components
 			t.updateChildBaseTransformDetails();
 		}
 	}
+	friend class Camera;
+	
+
+	template <typename T>
+	friend struct ComponentAllocator;
 	friend class SceneTransformManager;
 	friend class Editor;
 	friend class Material;
 	friend class RenderingSystem;
-
+	template <typename T>
+	friend class ComponentArray;
 	void destroyChildren()
 	{
 		/*since removeParent (called on destroy of entities with transform components) changes the original child list, to avoid access violation error
@@ -74,7 +87,9 @@ class Transform:public Components
 	{
 		return transformMat;
 	}
-	
+	Transform();
+	Transform(float posX, float posY, float posZ);
+	Transform(glm::vec3 vec) :Transform(vec.x, vec.y, vec.z) {};
 public:
 	
 	glm::vec3 GetLocalPosition()
@@ -123,7 +138,7 @@ public:
 	}
 	void SetGlobalRotation(Quaternion rotation)
 	{
-		if (parent == EntityID(-1,-1))
+		if (parent == Entity(-1,-1))
 			localRotation = rotation.quaternion;
 		else
 		localRotation= glm::inverse(baseRotation.quaternion)* rotation.quaternion;
@@ -134,19 +149,19 @@ public:
 		localScale=scale/baseScale;
 	}
 
-	std::list<EntityID>& getChildList()
+	std::list<Entity>& getChildList()
 	{
 		return child;
 	}
 
 	Transform& getParentTransform()
 	{
-		assert(parent != EntityID(-1,-1) && "trying to access non existing parent transform, this transform doesn't have any parent");
+		assert(parent != Entity(-1,-1) && "trying to access non existing parent transform, this transform doesn't have any parent");
 		return ecs.lock()->GetComponent<Transform>(parent);
 	}
 
 	
-	void setParent(EntityID parentEID)
+	void setParent(Entity parentEID)
 	{
 		//get world transform details of this transform 
 		glm::vec3 globalPose = GetGlobalPosition();
@@ -185,7 +200,7 @@ public:
 		localScale = GetGlobalScale();
 		localRotation = GetGlobalRotation();
 
-		if (parent != EntityID(-1,-1))
+		if (parent != Entity(-1,-1))
 		{
 			Transform& prevP = ecs.lock()->GetComponent<Transform>(parent);
 			auto itr = std::find(prevP.child.begin(), prevP.child.end(), eid);
@@ -196,7 +211,7 @@ public:
 			}
 			
 		}
-		parent = EntityID(-1,-1);
+		parent = Entity(-1,-1);
 		basePosition = glm::vec3(0);
 		baseScale = glm::vec3(1);
 		baseRotation = Quaternion(1, 0, 0, 0);
@@ -224,25 +239,8 @@ public:
 		localToWorld = glm::mat4(1.0f);
 		worldToLocal = glm::mat4(1.0f);
 	}
-	Transform();
-	Transform(float posX,float posY,float posZ);
-	Transform(glm::vec3 vec):Transform(vec.x,vec.y,vec.z) {};
-	Transform& operator =(const Transform& Tran)
-	{
-		parent = Tran.parent;
-		eid = Tran.eid;
-		ecs = Tran.ecs;
-		localPosition = Tran.localPosition;
-		localScale = Tran.localScale;
-		localRotation.quaternion = Tran.localRotation.quaternion;
-		basePosition = Tran.basePosition;
-		baseScale = Tran.baseScale;
-		baseRotation.quaternion = Tran.baseRotation.quaternion;
-		localToWorld = Tran.localToWorld;
-		worldToLocal = Tran.worldToLocal;
-		child = Tran.child;
-		return *this;
-	}
+	
+
 	glm::mat4 transformMatrix()
 	{
 		glm::mat4 trans = glm::mat4(1.0f);

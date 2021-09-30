@@ -25,14 +25,14 @@ namespace physics
 
 	physx::PxQuat _ToPxQuat(glm::quat q);
 
-	physx::PxTransform _ToPxTrans(Transform t);
+	physx::PxTransform _ToPxTrans(Transform &t);
 
 
 	glm::vec3 _PxToVec3(physx::PxVec3 v);
 
 	glm::quat _PxToQuat(physx::PxQuat q);
 
-	Transform _PxToTrans(physx::PxTransform pxt);
+	void _PxToTrans(physx::PxTransform pxt, Transform& targetTransform);
 
 	/*class to handle physics*/
 	class Physics

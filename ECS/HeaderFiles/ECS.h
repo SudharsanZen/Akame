@@ -6,62 +6,79 @@ class ECS
 {
 private:
 	
-	Entity MAXENTITIES;
-	
-	std::vector<Entity> versionOfEntity;
+	e_index maxEntities = 1000;
+	std::list<e_index> freeList;
 	std::vector<Signature> signature;
-	std::vector<Entity> availableEntity;
+	std::vector<std::vector<Entity>> entityList;
 
+
+	
+
+	//checks if the entity is valid and returns the value from the list
+	Entity& GetEntityFromList(Entity entity)
+	{
+		e_index a = entityList.size();
+		assert((entity.index < (a* maxEntities)) && "entity index out of range");
+
+		Entity& listValue = entityList[entity.index / maxEntities][entity.index % maxEntities];
+
+		assert(entity == listValue && listValue.entityAlive && "trying to destroy a non existing entity!");
+		return listValue;
+	}
+public:
 	ComponentManager componentManager;
 	SystemManager systemManager;
-
-	
-public:
-	ECS(Entity maxEntities=20000)
+	ECS()
 	{
-		MAXENTITIES = maxEntities;
-		
-		versionOfEntity.resize(maxEntities,0);
-		signature.resize(maxEntities,Signature(0));
-		
-		for (uint32_t i = 0; i < MAXENTITIES; i++)
-			availableEntity.push_back(i);
 		
 	}
 
-	EntityID CreateEntity()
+	Entity CreateEntity()
 	{
-		assert(availableEntity.size() != 0 && "Entity count reached MAXENTITIES, set maxEntities to a higher number while initializing ECS");
-		
-		Entity availableIndex= availableEntity.back();
-		availableEntity.pop_back();
-
-		Entity version = versionOfEntity[availableIndex];
-		EntityID entityID;
-
-		entityID.index = availableIndex;
-		entityID.version = version;
-
-		return entityID;
+		if (freeList.size()==0)
+		{
+			std::vector<Entity> newRow = std::vector<Entity>(maxEntities);
+			e_index startIndex = entityList.size()*maxEntities;
+			for (e_index i = 0; i < maxEntities; i++)
+			{
+				newRow[i]=Entity(startIndex+i,0);
+				newRow[i].signature = std::make_shared<Signature>();
+				newRow[i].componentIndex = std::make_shared<std::vector<e_index>>(newRow[i].signature->size());
+				freeList.push_back(newRow[i].index);
+			}
+			entityList.push_back(newRow);
+		}
+		e_index index = freeList.front();
+		freeList.pop_front();
+		Entity available = entityList[index/maxEntities][index%maxEntities];
+		return available;
 	}
 
-	void DestroyEntity(EntityID entityID)
+	void DestroyEntity(Entity entity)
 	{
-		assert(versionOfEntity[entityID.index] == entityID.version && "trying to destroy a non existing entity!");
+		
+
+		Entity &listValue =GetEntityFromList(entity);
+
 
 		for (auto pair : systemManager.systems)
 		{
 			auto& system = pair.second;
-			if (system->entities.find(entityID.index) != system->entities.end())
-				system->OnDestroyEntity(entityID.index);
+			if (system->entities.find(entity) != system->entities.end())
+				system->OnDestroyEntity(entity);
 		}
-		componentManager.EntityDestroyed(entityID.index);
-		systemManager.EntityDestroyed(entityID.index);
+		componentManager.EntityDestroyed(entity);
+		systemManager.EntityDestroyed(entity);
 		
-		versionOfEntity[entityID.index]++;
-		availableEntity.push_back(entityID.index);
+		listValue.version++;
+		listValue.signature->reset();
+		for (auto& index : *listValue.componentIndex)
+		{
+			index = ECS_INVALID_INDEX;
+		}
+		freeList.push_back(entity.index);
 		
-		signature[entityID.index].reset();
+		
 	}
 
 	template<typename T>
@@ -71,41 +88,40 @@ public:
 	}
 
 	template<typename T>
-	T& AddComponent(EntityID entityID)
+	T& AddComponent(Entity entity)
 	{
-		assert(versionOfEntity[entityID.index] == entityID.version && "trying to add component to a non existing entity!");
-		T& compRef=componentManager.AddComponent<T>(entityID.index);
-		Signature &sigComp = signature[entityID.index];
+		
+		Entity& listValue = GetEntityFromList(entity);
+		T& compRef=componentManager.AddComponent<T>(listValue);
+		
 
-		sigComp.set(componentManager.GetComponentBitPose<T>(),true);
-		systemManager.EntitySignatureChanged(entityID.index,signature[entityID.index]);
+		//listValue.signature->set(componentManager.GetComponentBitPose<T>(),true);
+		systemManager.EntitySignatureChanged(entity);
 
 		return compRef;
 	}
 
-	template<typename T>
-	T& GetComponent(EntityID entityID)
-	{
-		assert(versionOfEntity[entityID.index] == entityID.version && "trying to get component from a non existing entity!");
-		return componentManager.GetComponent<T>(entityID.index);
-	}
 	
 	template<typename T>
-	T& GetComponent(Entity entityID)
+	T& GetComponent(Entity entity)
 	{
-		return componentManager.GetComponent<T>(entityID);
+		Entity& listValue = GetEntityFromList(entity);
+		return componentManager.GetComponent<T>(listValue);
 	}
-	
+	template<typename T>
+	T& GetComponent(e_index dataIndex, e_index index)
+	{
+		return componentManager.GetComponent<T>(dataIndex,index);
+	}
 
 	template<typename T>
-	void RemoveComponent(EntityID entityID)
+	void RemoveComponent(Entity entity)
 	{
-		assert(versionOfEntity[entityID.index] == entityID.version && "trying to remove component from a non existing entity!");
-		componentManager.RemoveComponent<T>(entityID.index);
-		Signature& sigComp = signature[entityID.index];
+		
+		componentManager.RemoveComponent<T>(entity);
 
 		sigComp.set(componentManager.GetComponentBitPose<T>(), false);
-		systemManager.EntitySignatureChanged(entityID.index, signature[entityID.index]);
+		systemManager.EntitySignatureChanged(entityID);
 	}
 
 	template<typename T>
@@ -126,24 +142,26 @@ public:
 		return componentManager.GetComponentBitPose<T>();
 	}
 
-	Signature GetEntitySignature(EntityID entityID)
+	Signature GetEntitySignature(Entity entity)
 	{
-		assert(versionOfEntity[entityID.index] == entityID.version && "trying to get signature of non existing entity!");
+		Entity& listValue = GetEntityFromList(entity);
 		
-		return signature[entityID.index];
+		return *listValue.signature;
+	}
+	template<typename T>
+	bool IsComponentAttached(Entity entity)
+	{
+		return (entity.signature->test(GetComponentBitPose<T>()));
 	}
 
-	template<typename T>
-	bool IsComponentAttached(EntityID entityID)
+	bool IsEntityValid(Entity entity)
 	{
-		assert(versionOfEntity[entityID.index] == entityID.version && "trying to access non existing entity!");
-		
-		return signature[entityID.index][componentManager.GetComponentBitPose<T>()];
-		
-	}
-	bool IsEntityValid(EntityID entityID)
-	{
-		return (versionOfEntity[entityID.index] == entityID.version);
+		if ((entity.index > entityList.size() * maxEntities))
+			return false;
+
+		Entity& listValue = entityList[entity.index / maxEntities][entity.index % maxEntities];
+
+		return (entity == listValue && listValue.entityAlive);
 	}
 	~ECS()
 	{

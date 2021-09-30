@@ -18,17 +18,17 @@ class Snake :public Behaviour
 	Material headMat;
 	Material tailMat;
 	Material appleMat;
-	EntityID head;
-	EntityID apple;
+	Entity head;
+	Entity apple;
 	float snakeSize = 1;
 	std::vector < std::pair<float, float>> freeIndices;
-	std::vector<EntityID> tailList;
+	std::vector<Entity> tailList;
 	Mesh ap;
 	std::shared_ptr<Model> appleModel;
 
-	EntityID createCube(Material &mat,glm::vec3 pose=glm::vec3(0.5,0,0.5))
+	Entity createCube(Material &mat,glm::vec3 pose=glm::vec3(0.5,0,0.5))
 	{
-		EntityID body = CreateEntity();
+		Entity body = CreateEntity();
 		Transform cT(pose);
 		AddComponent<Material>(body) = (mat);
 		Mesh cub;

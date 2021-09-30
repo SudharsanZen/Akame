@@ -80,6 +80,8 @@ RenderingSystem::RenderingSystem()
 
 void RenderingSystem::Run(Camera& cam)
 {
+	meshArray = (ComponentArray<Mesh>*)(ecs.lock()->componentManager.compIDtoArray[typeid(Mesh).name()].get());
+	transformArray = (ComponentArray<Transform>*)(ecs.lock()->componentManager.compIDtoArray[typeid(Transform).name()].get());
 
 	std::shared_ptr<LightSystem> lsys=lightsystem.lock();
 	if (m_update_Event)
@@ -171,17 +173,21 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 			shdPipe = ShaderManager::shaderRenderPipeline[SHADERNAME];
 			shdPipe->OnPreRender(shader, this, cam);
 		}
-
+		e_index tran = transformArray->componentBitPose;;
+		e_index me = meshArray->componentBitPose;
 		//loop through all entities under the shader name and render it
 		for (auto const& entMatList : drawList[SHADERNAME])
 		{
+			
+
 			Material &m=E->GetComponent<Material>(entMatList.second[0]);
 			m.setUniformsOnce(shader,cam.transform.GetGlobalPosition());
 			for (int i=0;i<entMatList.second.size();i++)
 			{
-				
-				Transform& t = E->GetComponent<Transform>(entMatList.second[i]);
-				Mesh& mesh = E->GetComponent<Mesh>(entMatList.second[i]);
+				Entity ent = entMatList.second[i];
+
+				Transform& t = E->GetComponent<Transform>((*ent.componentIndex)[tran], tran);
+				Mesh& mesh = E->GetComponent<Mesh>((*ent.componentIndex)[me], me);
 				m.setUniformEveryObject(t, shader);
 				mesh.renderMesh();
 			}
@@ -199,13 +205,14 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
 {
 	std::shared_ptr<ECS> E = ecs.lock();
-
+	e_index tran = transformArray->componentBitPose;;
+	e_index me = meshArray->componentBitPose;
 	unsigned int transformLocation = shader->getUniformLocation("transform");
 	for (auto const& ent : entities)
 	{
 
-		Transform& t = E->GetComponent<Transform>(ent);
-		Mesh& mesh = E->GetComponent<Mesh>(ent);
+		Transform& t = E->GetComponent<Transform>((*ent.componentIndex)[tran],tran);
+		Mesh& mesh = E->GetComponent<Mesh>((*ent.componentIndex)[me],me);
 		
 		shader->setUniformMat4fv(transformLocation, 1, glm::value_ptr(t.transformMat));
 		mesh.renderMesh();

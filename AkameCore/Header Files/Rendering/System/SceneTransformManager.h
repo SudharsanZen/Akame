@@ -16,7 +16,7 @@ public:
 		for (auto ent : entities)
 		{
 			Transform& t = e->GetComponent<Transform>(ent);
-			if (t.parent == EntityID(-1,-1))
+			if (t.parent == Entity(-1,-1))
 			{
 				t.updateChildBaseTransformDetails();
 			}

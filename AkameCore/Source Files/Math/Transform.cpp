@@ -4,6 +4,7 @@
 
 Transform::Transform()
 {
+	eid = Entity(-1,-1);
 	baseScale = glm::vec3(1,1,1);
 	basePosition = glm::vec3(0,0,0);
 	localPosition = basePosition;

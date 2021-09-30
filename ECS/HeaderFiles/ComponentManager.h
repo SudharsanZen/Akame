@@ -3,12 +3,19 @@
 #include"ComponentArray.h"
 class ComponentManager
 {
-private:
-	
+public:
+
 	std::unordered_map<ComponentID, ComponentBitPosition> compIDtoBitPose;
 	std::unordered_map<ComponentID, std::shared_ptr<ComponentArrayBase>> compIDtoArray;
+	//base array pointers indexed in the order of registration
+	std::vector<std::shared_ptr<ComponentArrayBase>> compBaseArraysInOrder;
 	ComponentBitPosition bitPoseOfNextComponent;
 
+	/*template<typename T>
+	ComponentID getComponentID()
+	{
+		return typeid(T).name();
+	}*/
 	template<typename T>
 	std::shared_ptr<ComponentArray<T>> GetComponentArray()
 	{
@@ -19,7 +26,7 @@ private:
 		return std::static_pointer_cast<ComponentArray<T>>(compIDtoArray[CID]);
 	}
 
-public:
+
 	~ComponentManager()
 	{
 		for (auto i : compIDtoArray)
@@ -41,7 +48,8 @@ public:
 
 		compIDtoBitPose.insert({CID,bitPoseOfNextComponent});
 		compIDtoArray.insert({CID,std::make_shared<ComponentArray<T>>()});
-		
+		compIDtoArray[CID]->componentBitPose =GetComponentBitPose<T>();
+		compBaseArraysInOrder.push_back(compIDtoArray[CID]);
 		bitPoseOfNextComponent++;
 	}
 
@@ -59,6 +67,7 @@ public:
 	template<typename T>
 	T& AddComponent(Entity entity)
 	{
+		
 		return GetComponentArray<T>()->InsertData(entity);
 	}
 
@@ -71,6 +80,13 @@ public:
 	T& GetComponent(Entity entity)
 	{
 		return GetComponentArray<T>()->GetData(entity);
+	}
+
+	template<typename T>
+	T& GetComponent(e_index dataIndex,e_index index)
+	{
+		ComponentArray<T>* upCast = (ComponentArray<T>*)compBaseArraysInOrder[index].get();
+		return upCast->GetData(dataIndex);
 	}
 
 	void EntityDestroyed(Entity entity)

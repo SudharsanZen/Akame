@@ -37,15 +37,16 @@ public:
 		
 	}
 
-	void EntitySignatureChanged(Entity entity,Signature signature)
+	void EntitySignatureChanged(Entity entity)
 	{
+		Signature entitySig = *(entity.signature);
 		for (auto const& pair : systems)
 		{
 			ComponentID const &SID = pair.first;
 			auto const &system= pair.second;
 			Signature const &sysSig = systemSignature[SID];
 			
-			if ((sysSig & signature)==sysSig)
+			if ((sysSig & entitySig)==sysSig)
 			{
 				system->entities.insert(entity);
 				system->OnAddEntity(entity);

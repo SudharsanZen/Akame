@@ -8,7 +8,7 @@ class Behaviour
 	friend class BehaviourComponent;
 protected:
 
-	EntityID entityID;
+	Entity entityID;
 	
 	
 public:
@@ -36,13 +36,13 @@ public:
 	}
 
 	template<typename T>
-	T& GetComponent(EntityID& eid)
+	T& GetComponent(Entity& eid)
 	{
 		return ecs.lock()->GetComponent<T>(eid);
 	}
 
 	template<typename T>
-	T& AddComponent(EntityID& eid)
+	T& AddComponent(Entity& eid)
 	{
 		T& comp = ecs.lock()->AddComponent<T>(eid);
 		comp.eid = eid;
@@ -50,9 +50,9 @@ public:
 		return comp;
 	}
 
-	EntityID CreateEntity()
+	Entity CreateEntity()
 	{
-		EntityID eid = ecs.lock()->CreateEntity();
+		Entity eid = ecs.lock()->CreateEntity();
 		AddComponent<EntityDescriptor>(eid);
 		return eid;
 

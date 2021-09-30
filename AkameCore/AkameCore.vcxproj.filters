@@ -374,6 +374,9 @@
     <ClCompile Include="Source Files\Scripting\BehaviourSystem.cpp">
       <Filter>Source Files\Scripting</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\misc\StopWatch.cpp">
       <Filter>Source Files\misc</Filter>
     </ClCompile>

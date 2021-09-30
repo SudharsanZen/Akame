@@ -62,7 +62,7 @@ Editor::Editor(Window &window,Scene &scene):io(initGui()),scene(scene)
 void Editor::DrawNode(Transform const& t, EntityDescriptor &edt, ImGuiTreeNodeFlags const& base_flags)
 {
 	
-	EntityID selectedEntity(-1, -1);
+	Entity selectedEntity(-1, -1);
     int numOfChild = t.child.size();
     static int selection_mask = (1 << 2);
     int node_clicked = -1;
@@ -108,7 +108,7 @@ void Editor::DrawNode(Transform const& t, EntityDescriptor &edt, ImGuiTreeNodeFl
 
 		
     }
-	if (selectedEntity != EntityID(-1, -1))
+	if (selectedEntity != Entity(-1, -1))
 	{
 		if (ImGui::GetIO().KeyCtrl)
 		{
@@ -195,7 +195,7 @@ void Editor::DrawUI()
         {
             Transform& t = e->GetComponent<Transform>(ent);
             EntityDescriptor& edt = e->GetComponent<EntityDescriptor>(ent);
-            if (t.parent == EntityID(-1,-1))
+            if (t.parent == Entity(-1,-1))
             {
                 DrawNode(t,edt,base_flags);
             }

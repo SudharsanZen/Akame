@@ -16,7 +16,7 @@
 void app()
 {
 	
-	AssetManager::setAssetRoot("../../../../Assets/");
+	AssetManager::setAssetRoot("../../../Assets/");
 	std::string rootDir(AssetManager::getAssetRoot());
 	Window window(800, 800, "testWindow");
 	std::cout<<sizeof(glm::mat4);
@@ -47,13 +47,10 @@ void app()
 	planeMat.setValue("normalStrength", 0.1f);
 
 
-	Transform planeTransform;
 
-	planeTransform.SetGlobalScale(glm::vec3(1) *= 50);
-	planeTransform.SetGlobalPosition(glm::vec3(0.0f,0.1f,0.0f));
 	Mesh &mP=scene.AddComponent<Mesh>(plane);
 	mP.CreateMesh(generatePlaneVertices());
-	scene.AddComponent<Transform>(plane)=planeTransform;
+	scene.AddComponent<Transform>(plane);
 	scene.AddComponent<Material>(plane)=planeMat;
 
 	physics::RigidBody3D& rbdy2=scene.AddComponent<physics::RigidBody3D>(plane);
@@ -61,13 +58,11 @@ void app()
 	planeShape.setColliderShape(physics::Shapes::PLANE, 30, 30);
 	rbdy2.setRigidBodyType(physics::RigidBodyType::STATIC, planeShape);
 
-	Transform p2(0,5,0);
-	p2.SetGlobalRotation(Quaternion(90,0,0));
-	p2.SetGlobalScale(glm::vec3( 5));
+
 
 	Mesh &plane2M=scene.AddComponent<Mesh>(plane2);
 	plane2M.CreateMesh(generatePlaneVertices());
-	scene.AddComponent<Transform>(plane2)=p2;
+	scene.AddComponent<Transform>(plane2);
 	scene.AddComponent<Material>(plane2)=planeMat;
 
 	Entity dir = scene.CreateEntity();
@@ -79,7 +74,7 @@ void app()
 	d.setPointLightConst(1,2,10);
 	d.ambientLigting(0.1f,0.1f,0.1f);
 	
-	scene.AddComponent<Transform>(dir)= Transform(0,2,0);
+	scene.AddComponent<Transform>(dir);
 
 	/*Material mat("GRIDS");
 	EntityID pl = scene.CreateEntity();
@@ -99,7 +94,7 @@ void app()
 	scene.AddComponent<Material>(sky)=matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	*/
-	const int num =20000;
+	const int num =6000;
 	const int rt = (int)sqrt(num);
 	std::vector<Entity> lightsVec;
 	std::vector<vert> cv = generateCubeVertices();
@@ -126,7 +121,8 @@ void app()
 		bm.CreateMesh(cv);
 		//if((i/rt)%2==0)
 		//bm.CreateMesh(generateSphereVertices(16,32,0.5));
-		scene.AddComponent<Transform>(box)= Transform(2.0f * (i / rt)-off, 0.5f, (2.0f) * (i % rt)-off);
+		Transform& t = scene.AddComponent<Transform>(box);
+		t.SetGlobalPosition(glm::vec3(2.0f * (i / rt) - off, 0.5f, (2.0f)* (i% rt) - off));
 		scene.AddComponent<Material>(box)=boxMat;
 		scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 	}

@@ -16,6 +16,8 @@ class RenderingSystem :public System
 {
 private:
 	
+	ComponentArray<Transform>* transformArray;
+	ComponentArray<Mesh>* meshArray;
 
 	//map that holds list of entities under a particular shader
 	std::unordered_map<std::string,std::map<unsigned long long,std::vector<Entity>>> drawList;

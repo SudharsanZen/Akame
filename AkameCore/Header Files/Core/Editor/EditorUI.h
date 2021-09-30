@@ -10,7 +10,7 @@ class Editor
 {
 private:
 	bool viewDebugInfo;
-	std::set<EntityID> selected;
+	std::set<Entity> selected;
 	ImGuiIO& io;
 	std::weak_ptr<GLFWwindow> context;
 	Scene &scene;

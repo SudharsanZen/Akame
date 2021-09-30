@@ -1,8 +1,8 @@
 #include "Core/Editor/EntityDescriptionSystem.h"
 #include"Core/Log/Log.h"
-std::vector<EntityID> EntityDescriptionSystem::GetEntitiesWithTag(std::string tag)
+std::vector<Entity> EntityDescriptionSystem::GetEntitiesWithTag(std::string tag)
 {
-	std::vector<EntityID> eList;
+	std::vector<Entity> eList;
 
 	if (tagMap.find(tag) != tagMap.end())
 	{

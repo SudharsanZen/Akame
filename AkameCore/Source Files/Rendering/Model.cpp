@@ -105,7 +105,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 
 
 
-EntityID processMesh(EntityID parent,Scene &currScene,aiMesh* mesh, const aiScene* scene,std::string dir)
+Entity processMesh(Entity parent,Scene &currScene,aiMesh* mesh, const aiScene* scene,std::string dir)
 {
 	std::vector<vert> vertices;
 	std::vector<unsigned int> indices;
@@ -157,7 +157,7 @@ EntityID processMesh(EntityID parent,Scene &currScene,aiMesh* mesh, const aiScen
 		finalVert.push_back(v3);
 	}
 	
-	EntityID meshid = currScene.CreateEntity();
+	Entity meshid = currScene.CreateEntity();
 	Transform &t=currScene.AddComponent<Transform>(meshid);
 	t.setParent(parent);
 
@@ -213,10 +213,10 @@ EntityID processMesh(EntityID parent,Scene &currScene,aiMesh* mesh, const aiScen
 	return meshid;
 }
 
-void processNode(EntityID parent,Scene &currScene,aiNode* node, const aiScene* scene,std::string dir)
+void processNode(Entity parent,Scene &currScene,aiNode* node, const aiScene* scene,std::string dir)
 {
 
-	EntityID currNode;
+	Entity currNode;
 		
 	if (node->mNumMeshes <= 1 && node->mNumChildren==0)
 	{
@@ -241,7 +241,7 @@ void processNode(EntityID parent,Scene &currScene,aiNode* node, const aiScene* s
 		processNode(currNode,currScene,node->mChildren[i], scene,dir);
 	}
 }
-EntityID LoadModelToScene(Scene &currScene, std::string modelPath)
+Entity LoadModelToScene(Scene &currScene, std::string modelPath)
 {
 	unsigned int importOptions = aiProcess_Triangulate
 		| aiProcess_JoinIdenticalVertices
@@ -254,10 +254,10 @@ EntityID LoadModelToScene(Scene &currScene, std::string modelPath)
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
-		return EntityID(-1,-1);
+		return Entity(-1,-1);
 	}
 	std::string directory = modelPath.substr(0, modelPath.find_last_of('/'))+"/";
-	EntityID parent=currScene.CreateEntity();
+	Entity parent=currScene.CreateEntity();
 	currScene.AddComponent<Transform>(parent);
 	processNode(parent,currScene,scene->mRootNode,scene,directory);
 	return parent;

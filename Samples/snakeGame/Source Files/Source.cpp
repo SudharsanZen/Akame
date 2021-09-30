@@ -34,7 +34,7 @@ int main()
 	floorMat.setValue("normalStrength", 0.1f);
 	floorMat.setValue("specIntensity", 1.0f);
 
-	EntityID dir = scene.CreateEntity();
+	Entity dir = scene.CreateEntity();
 
 	Lights &d = scene.AddComponent<Lights>(dir)=Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 0.9);
@@ -45,12 +45,12 @@ int main()
 
 
 	
-	EntityID snake = scene.CreateEntity();
+	Entity snake = scene.CreateEntity();
 	scene.AddComponent<BehaviourComponent>(snake);
 	scene.GetComponent<BehaviourComponent>(snake).setBehaviour<Snake>(scene,scene.cam,1,sizeX,sizeY);
 
 
-	EntityID floor = scene.CreateEntity();
+	Entity floor = scene.CreateEntity();
 	Transform T(0, -(sizeY+0.5f), 0);
 	T.SetGlobalScale(glm::vec3(sizeY*2+0.01f));
 	scene.AddComponent<Transform>(floor)=T;

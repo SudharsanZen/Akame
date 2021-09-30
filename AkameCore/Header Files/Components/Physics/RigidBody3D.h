@@ -6,7 +6,7 @@
 #include<cassert>
 #include"Components\Components.h"
 class ECS;
-typedef std::size_t Entity;
+struct Entity;
 namespace physx
 {
 	class PxRigidActor;
@@ -39,7 +39,7 @@ namespace physics
 	public:
 		RigidBody3D()
 		{
-			eid = EntityID(-1,-1);
+			eid = Entity(-1,-1);
 			rBodyType = RigidBodyType::STATIC;
 			rigidbody = NULL;
 		}
