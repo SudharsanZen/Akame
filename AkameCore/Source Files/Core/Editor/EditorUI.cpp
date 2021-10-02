@@ -248,7 +248,9 @@ void Editor::DrawUI()
 		fbo[i].Bind();
 		ShaderManager::GetShader("PSSM")->setUniformInteger("layer", i);
 		scene.lightSys->dir_sMap.useTextureArray(0);
+		glBindVertexArray(Mesh::VAO);
 		fbo[i].quadMesh.renderMesh();
+		glBindVertexArray(0);
 		fbo[i].unBind();
 		glEnable(GL_CULL_FACE);
 		texList.push_back(fbo[i].getColorBuffer());

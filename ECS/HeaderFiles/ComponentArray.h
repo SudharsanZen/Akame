@@ -91,7 +91,8 @@ inline T& ComponentArray<T>::InsertData(Entity entity)
 
 	
 	(dataList[freeIndex / MAXELEMENT][freeIndex % MAXELEMENT].eid=entity);
-	(dataList[freeIndex / MAXELEMENT][freeIndex % MAXELEMENT].eid.index=entity.index);
+	(dataList[freeIndex / MAXELEMENT][freeIndex % MAXELEMENT].componentBitPose=componentBitPose);
+	(dataList[freeIndex / MAXELEMENT][freeIndex % MAXELEMENT].componentIndex=freeIndex);
 
 	return ((dataList[freeIndex / MAXELEMENT][freeIndex % MAXELEMENT]));
 }
@@ -100,7 +101,7 @@ template<typename T>
 inline void ComponentArray<T>::RemoveData(Entity entity)
 {
 	assert(entity.signature->test(componentBitPose) && "trying to remove non existing component!");
-	e_index index = entity.index;
+	e_index index = (*entity.componentIndex)[componentBitPose];
 	dataList[index / MAXELEMENT][index % MAXELEMENT].reset();
 	entity.signature->set(componentBitPose, false);
 	(*entity.componentIndex)[componentBitPose] = ECS_INVALID_INDEX;
@@ -121,8 +122,11 @@ inline T& ComponentArray<T>::GetData(e_index dataIndex)
 	
 	return dataList[dataIndex / MAXELEMENT][dataIndex % MAXELEMENT];
 }
+
+
 template<typename T>
 inline void ComponentArray<T>::EntityDestroyed(Entity entity)
 {
+	if((*entity.signature).test(componentBitPose))
 	RemoveData(entity);	
 }

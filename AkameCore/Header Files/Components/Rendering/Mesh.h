@@ -15,25 +15,29 @@ struct vert
 class Mesh:public Components
 {
 private:
+	static bool needsUpdate;
+	static std::vector<vert> vertexData;
+	static std::vector<unsigned int> indexList;
 	//Buffer object and Atrribute object iDs
-	unsigned int VAO, VBO, IBO;
+	static unsigned int VAO, VBO, IBO;
+	static size_t topStack;
+
 	//number of IBO indices
 	size_t numOfIndices,numOfVertices;
-	void setupMesh();
+	size_t start_i, end_i,count,maxInd,minInd;
+	static void setupMesh();
 	glm::vec4 max,min;
 	friend class RenderingSystem;
 	friend class Editor;
-
+	
 public:
-	std::vector<vert> vertices;
-	std::vector<unsigned int> indices;
 
 	Mesh();
 
 	~Mesh();
-
+	static unsigned int getVAO() { return VAO; }
 	void reset();
-	void renderMesh();
+	void renderMesh() const;
 	void CreateMesh(std::vector<vert> &vertices, std::vector<unsigned int> &indices=std::vector<unsigned int>());
 
 };

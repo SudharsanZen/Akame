@@ -1,3 +1,4 @@
+/*
 #define _CRTDBG_MAP_ALLOC
 #include<iostream>
 #include<fstream>
@@ -50,7 +51,7 @@ void app()
 
 	Mesh &mP=scene.AddComponent<Mesh>(plane);
 	mP.CreateMesh(generatePlaneVertices());
-	scene.AddComponent<Transform>(plane);
+	scene.AddComponent<Transform>(plane).SetGlobalScale(50.0f*glm::vec3(1));
 	scene.AddComponent<Material>(plane)=planeMat;
 
 	physics::RigidBody3D& rbdy2=scene.AddComponent<physics::RigidBody3D>(plane);
@@ -76,25 +77,26 @@ void app()
 	
 	scene.AddComponent<Transform>(dir);
 
-	/*Material mat("GRIDS");
-	EntityID pl = scene.CreateEntity();
-	Transform planeInf;
+	
+	Material mat("GRIDS");
+	Entity pl = scene.CreateEntity();
 
-	scene.AddComponent<Transform>(pl)= planeInf;
+
+	scene.AddComponent<Transform>(pl);
 	Mesh &plm=scene.AddComponent<Mesh>(pl);
 	scene.AddComponent<Material>(pl)= mat;
 	plm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	Material matS("SPHERE");
-	EntityID sky = scene.CreateEntity();
-	Transform skyInf;
+	Entity sky = scene.CreateEntity();
+
 	
 	
-	scene.AddComponent<Transform>(sky) =skyInf;
+	scene.AddComponent<Transform>(sky);
 	Mesh &skym=scene.AddComponent<Mesh>(sky);
 	scene.AddComponent<Material>(sky)=matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
-	*/
-	const int num =6000;
+	
+	const int num =50000;
 	const int rt = (int)sqrt(num);
 	std::vector<Entity> lightsVec;
 	std::vector<vert> cv = generateCubeVertices();
@@ -103,7 +105,7 @@ void app()
 		float off = (float)(rt-1);
 	
 		/*
-		EntityID point = scene.CreateEntity();
+		Entity point = scene.CreateEntity();
 		Lights &p = scene.AddComponent<Lights>(point);
 	
 		p.setColor(1,0.5,0);
@@ -111,10 +113,10 @@ void app()
 		p.setPointLightConst(1, 2, 10);
 		p.ambientLigting(0, 0, 0);
 		
-		scene.AddComponent<Transform>(point)= Transform(2 * (i / rt)-1 -off, 0.5, (2) * (i % rt)-off);
+		scene.AddComponent<Transform>(point).SetGlobalPosition(glm::vec3(2 * (i / rt)-1 -off, 0.5, (2) * (i % rt)-off));
 		
 		lightsVec.push_back(point);
-		*/
+		
 		Entity box = scene.CreateEntity();
 		Mesh& bm=scene.AddComponent<Mesh>(box);
 		//if ((i / rt) % 2 == 1)
@@ -128,7 +130,7 @@ void app()
 	}
 	//Editor edt(window,scene);
 	scene.OnStart();
-	scene.vsyncOn(false);
+	scene.vsyncOn(true);
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.3f;
 	float acc = 0;
@@ -165,3 +167,4 @@ int main()
 
 
 
+*/

@@ -160,9 +160,9 @@ void TiledRenderer::outPutToQaud()
     quadRend->useShaderProgram();
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,outTex);
-
+    glBindVertexArray(Mesh::getVAO());
     drfb.quad.renderMesh();
-
+    glBindVertexArray(0);
 }
 
 void TiledRenderer::drawPositionBuffer()

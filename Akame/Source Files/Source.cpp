@@ -43,7 +43,7 @@ int main()
 	float m = 5;
 	int i;
 	{
-		std::shared_ptr<Material> cmat = std::make_shared<Material>("DEFERRED");
+		std::shared_ptr<Material> cmat = std::make_shared<Material>("DEFAULT");
 		cmat->setTexture2D("material.diffuseMap", AssetManager::assetRootPath + "Media/pbr/basecolor.jpg");
 		cmat->setTexture2D("material.normalMap", AssetManager::assetRootPath + "Media/pbr/normal.jpg");
 		cmat->setTexture2D("material.specularMap", AssetManager::assetRootPath + "Media/pbr/roughness.jpg");
@@ -83,9 +83,9 @@ int main()
 
 	Material mat("GRIDS");
 	Entity plane= scene.CreateEntity();
-	Transform planeInf;
 
-	scene.AddComponent<Transform>(plane)=planeInf;
+
+	scene.AddComponent<Transform>(plane);
 	Mesh &pm=scene.AddComponent<Mesh>(plane);
 	scene.AddComponent<Material>(plane)=mat;
 	pm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
@@ -106,7 +106,7 @@ int main()
 
 	//Editor editor(window,scene);
 	scene.OnStart();
-	scene.vsyncOn(true);
+	scene.vsyncOn(false);
 	float deltaTime = 0;
 	i=3;
 	while (!window.closeWindow())

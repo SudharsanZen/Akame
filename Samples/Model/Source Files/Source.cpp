@@ -82,7 +82,7 @@ int main()
 
 	
 	
-	Material boxMat("DEFERRED");
+	Material boxMat("DEFAULT");
 	boxMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/crate/basecolor.jpg");
 	boxMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/crate/roughness.jpg");
 	boxMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/crate/normal.jpg");
@@ -92,7 +92,7 @@ int main()
 	Mesh& bm = scene.AddComponent<Mesh>(box);
 		bm.CreateMesh(generateSphereVertices(16, 32, 0.5));
 		Transform &t=	scene.AddComponent<Transform>(box);
-		t =Transform(0, 10, 0);
+		t.SetGlobalPosition(glm::vec3(0, 10, 0));
 	scene.AddComponent<Material>(box) = boxMat;
 	scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 
@@ -119,7 +119,7 @@ int main()
 	scene.OnStart();
 	scene.vsyncOn(false);
 	unsigned int count = 0;
-	scene.backGroundColor(1, 0, 0, 1);
+	scene.backGroundColor(1, 1, 1, 1);
 	float step = 0.3f;
 	while (!window.closeWindow())
 	{

@@ -1,4 +1,4 @@
-#version 330 core
+#version 430 core
 out vec4 FragColor;
 
 in vec3 Normal;  
@@ -194,6 +194,8 @@ vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P,float shadow)
 void main()
 {
     vec4 albedo=texture(material.diffuseMap,uvCoord);
+    if(albedo.a<0.5)
+        discard;
     // ambient
     if(emissive>0)
     {

@@ -66,8 +66,17 @@ void RenderingSystem::attachAllBuiltInSRP()
 
 RenderingSystem::RenderingSystem()
 {
-	
-	
+	glGenBuffers(1,&transformUBO);
+	glBindBuffer(GL_UNIFORM_BUFFER,transformUBO);
+	glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE,&maxUBOSize);
+
+	ENGINE_CORE_INFO("MAX UNIFORM BLOCK SIZE: {0:d}",maxUBOSize);
+	maxTransformUploadable = maxUBOSize/sizeof(glm::mat4);
+	glBufferData(GL_UNIFORM_BUFFER, maxTransformUploadable * mat4Size, NULL, GL_STATIC_DRAW);
+	int off;
+	glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT,&off);
+	ENGINE_CORE_INFO("MAX TRANSFORM UPLOADABLE: {0:d}", maxTransformUploadable);
+	ENGINE_CORE_INFO("UNIFORM BUFFER OFFSET ALIGNMENT: {0:d}", off);
 	emptyDrawList();
 	
 	//intialize global uniform buffer for storing projection and view matrix
@@ -80,6 +89,11 @@ RenderingSystem::RenderingSystem()
 
 void RenderingSystem::Run(Camera& cam)
 {
+	if (Mesh::needsUpdate)
+	{
+		Mesh::needsUpdate = false;
+		Mesh::setupMesh();
+	}
 	meshArray = (ComponentArray<Mesh>*)(ecs.lock()->componentManager.compIDtoArray[typeid(Mesh).name()].get());
 	transformArray = (ComponentArray<Transform>*)(ecs.lock()->componentManager.compIDtoArray[typeid(Transform).name()].get());
 
@@ -104,14 +118,14 @@ void RenderingSystem::Run(Camera& cam)
 	glViewport(0, 0, width, height);
 	RenderQueue("GEOMETRY",cam);
 	RenderQueue("OVERLAY",cam);
-	/*
+	
 	ShaderManager::GetShader("LINES_DEBUG")->useShaderProgram();
 	glDisable(GL_DEPTH_TEST);
 	Debug::updateBufferContent();
 	Debug::DrawDebug();
 	Debug::FlushDebugInformation();
 	glEnable(GL_DEPTH_TEST);
-	*/
+	
 
 
 }
@@ -176,23 +190,44 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 		e_index tran = transformArray->componentBitPose;;
 		e_index me = meshArray->componentBitPose;
 		//loop through all entities under the shader name and render it
+		glBindVertexArray(Mesh::VAO);
+		glBindBufferBase(GL_UNIFORM_BUFFER, 8, transformUBO);
 		for (auto const& entMatList : drawList[SHADERNAME])
 		{
+			auto const& entList = entMatList.second;
 			
+			
+			long int listSize=entMatList.second.size();
 
+			long int row = ceil(float(listSize) / 1000.0f);
 			Material &m=E->GetComponent<Material>(entMatList.second[0]);
 			m.setUniformsOnce(shader,cam.transform.GetGlobalPosition());
-			for (int i=0;i<entMatList.second.size();i++)
+			for (long int r = 0; r < row; r++)
 			{
-				Entity ent = entMatList.second[i];
+				long long int curr_i = 0;
+				std::vector<glm::mat4> matList;
+				for (long int i_mat = r*1000; i_mat < (1+r)*1000 && i_mat < entList.size(); i_mat++)
+				{
+					
+					const Entity& ent = entList[i_mat];
+					Transform& t = transformArray->GetData((*ent.componentIndex)[tran]);
+					matList.push_back(t.transformMat);
+				}
+				glBufferSubData(GL_UNIFORM_BUFFER,0, mat4Size*1000,&(matList[0][0].x));
+				curr_i++;
+				curr_i = 0;
+				for (long int i = r*1000; i < (r+1)*1000 && i< entList.size(); i++)
+				{
+					const Entity& ent = entList[i];
 
-				Transform& t = E->GetComponent<Transform>((*ent.componentIndex)[tran], tran);
-				Mesh& mesh = E->GetComponent<Mesh>((*ent.componentIndex)[me], me);
-				m.setUniformEveryObject(t, shader);
-				mesh.renderMesh();
+					Mesh& mesh = E->GetComponent<Mesh>((*ent.componentIndex)[me], me);
+					m.setUniformEveryObject(curr_i, shader);
+					mesh.renderMesh();
+					curr_i++;
+				}
 			}
 		}
-
+		glBindVertexArray(0);
 		if (pipeReg)
 		{
 			//call the post render call back function registered under this shader
@@ -207,16 +242,46 @@ void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
 	std::shared_ptr<ECS> E = ecs.lock();
 	e_index tran = transformArray->componentBitPose;;
 	e_index me = meshArray->componentBitPose;
-	unsigned int transformLocation = shader->getUniformLocation("transform");
-	for (auto const& ent : entities)
+	unsigned int transformLocation = shader->getUniformLocation("t_index");
+	glBindVertexArray(Mesh::VAO);
+	glBindBufferBase(GL_UNIFORM_BUFFER, 8, transformUBO);
+	
+	for (auto const& shaderEntList : drawList)
 	{
-
-		Transform& t = E->GetComponent<Transform>((*ent.componentIndex)[tran],tran);
-		Mesh& mesh = E->GetComponent<Mesh>((*ent.componentIndex)[me],me);
 		
-		shader->setUniformMat4fv(transformLocation, 1, glm::value_ptr(t.transformMat));
-		mesh.renderMesh();
+		for (auto const& entMatList : shaderEntList.second)
+		{
+			auto const& entList = entMatList.second;
+			long int listSize = entList.size();
+			long int row = ceil(float(listSize) / 1000.0f);
+			for (long int r = 0; r < row; r++)
+			{
+				long long int curr_i = 0;
+				std::vector<glm::mat4> matList;
+				for (long int i_mat = r * 1000; i_mat < (1 + r) * 1000 && i_mat < listSize; i_mat++)
+				{
+
+					const Entity& ent = entList[i_mat];
+					Transform& t = transformArray->GetData((*ent.componentIndex)[tran]);
+					matList.push_back(t.transformMat);
+				}
+				glBufferSubData(GL_UNIFORM_BUFFER, 0, mat4Size * 1000, &(matList[0][0].x));
+				curr_i++;
+				curr_i = 0;
+				for (long int i = r * 1000; i < (r + 1) * 1000 && i < listSize; i++)
+				{
+					const Entity& ent = entList[i];
+
+					Mesh& mesh = E->GetComponent<Mesh>((*ent.componentIndex)[me], me);
+					shader->setUniformInteger(transformLocation, curr_i);
+					mesh.renderMesh();
+					curr_i++;
+				}
+			}
+		}
 	}
+	
+	glBindVertexArray(0);
 }
 //renders all entities with all shaders registered under this queue type
 void RenderingSystem::RenderQueue(std::string QUEUENAME,Camera cam)

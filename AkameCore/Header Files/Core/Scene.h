@@ -116,7 +116,6 @@ inline T& Scene::AddComponent(Entity entityID)
 {
 
 	T& comp=ecs->AddComponent<T>(entityID);
-
 	comp.ecs = ecs;
 	return comp;
 }

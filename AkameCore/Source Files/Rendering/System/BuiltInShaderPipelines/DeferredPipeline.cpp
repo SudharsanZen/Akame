@@ -60,6 +60,7 @@ void DeferredPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSyst
  {
 	 std::shared_ptr<LightSystem> lsys = rsys->lightsystem.lock();
 	 shader->useShaderProgram();
+
 	 if(lsys->drVector.size()>0)
 	 shader->setUniformVec3("sunPose", -lsys->drVector[0].lightDir);
  }

@@ -79,15 +79,17 @@ void Material::setUniformsOnce(std::shared_ptr<Shader> shader, glm::vec3& viewPo
 	}
 
 	transformLocation = shader->getUniformLocation("transform");
+	transformIndexLocation = shader->getUniformLocation("t_index");
 
 
 }
 
-void Material::setUniformEveryObject(Transform& t, std::shared_ptr<Shader> shader)
+void Material::setUniformEveryObject(int index, std::shared_ptr<Shader> shader)
 {
 
 	
-	shader->setUniformMat4fv(transformLocation, 1, glm::value_ptr(t.transformMat));
+	//shader->setUniformMat4fv(transformLocation, 1, &(t.transformMat[0].x));
+	shader->setUniformInteger(transformIndexLocation, index);
 }
 
 void Material::reset()

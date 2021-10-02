@@ -93,6 +93,7 @@ public:
 	{
 		for (auto const& idArrayPair : compIDtoArray)
 		{
+
 			idArrayPair.second->EntityDestroyed(entity);
 		}
 	}

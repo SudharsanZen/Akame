@@ -88,9 +88,9 @@
     <ClInclude Include="HeaderFiles\ComponentManager.h" />
     <ClInclude Include="HeaderFiles\ECS.h" />
     <ClInclude Include="HeaderFiles\ECSTYPES.h" />
-    <ClInclude Include="HeaderFiles\ecVector.h" />
     <ClInclude Include="HeaderFiles\System.h" />
     <ClInclude Include="HeaderFiles\SystemManager.h" />
+    <ClInclude Include="HeaderFiles\ecVector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\ECSTYPES.cpp" />

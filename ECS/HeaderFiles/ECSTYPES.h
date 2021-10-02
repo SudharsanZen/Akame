@@ -25,12 +25,14 @@ private:
 
 	friend class SystemManager;
 	friend class RenderingSystem;
+	friend class SceneTransformManager;
 	friend class Transform;
 	friend class ECS;
 	friend class Editor;
 public:
 
-	
+	e_index GetVersion() { return version; }
+	e_index GetIndex() { return index; }
 
 
 	Entity():Entity(ECS_INVALID_INDEX,ECS_INVALID_INDEX)

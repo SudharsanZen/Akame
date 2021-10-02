@@ -74,8 +74,9 @@ unsigned int Shader::getUniformLocation(std::string varName)
 }
 
 void Shader::setUniformInteger(std::string varName, unsigned int value) { glUniform1i(getUniformLocation(varName), value); }
+void Shader::setUniformInteger(unsigned int uniformLoc, unsigned int value) { glUniform1i(uniformLoc, value); }
 
-void Shader::setUniformVec3(std::string varName, const glm::vec3& vec) { glUniform3fv(getUniformLocation(varName), 1, glm::value_ptr(vec)); }
+void Shader::setUniformVec3(std::string varName, const glm::vec3& vec) { glUniform3fv(glGetUniformLocation(programID,varName.c_str()), 1, glm::value_ptr(vec)); }
 
 void Shader::setUniformMat4fv(std::string varName, unsigned int count, float* valuePtr) { glUniformMatrix4fv(getUniformLocation(varName), count, GL_FALSE, valuePtr); }
 

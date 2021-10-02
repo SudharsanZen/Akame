@@ -9,7 +9,7 @@
 class Transform:public Components
 {
 	Entity parent=Entity(-1,-1);
-
+	std::shared_ptr<std::set<e_index>> transformUpdateList;
 	std::list<Entity> child;
 	//global parent transform
 	glm::vec3 basePosition;
@@ -68,6 +68,11 @@ class Transform:public Components
 	friend class RenderingSystem;
 	template <typename T>
 	friend class ComponentArray;
+	void _addToUpdateTransformList()
+	{
+		if(transformUpdateList)
+			transformUpdateList->insert(componentIndex);
+	}
 	void destroyChildren()
 	{
 		/*since removeParent (called on destroy of entities with transform components) changes the original child list, to avoid access violation error
@@ -90,6 +95,9 @@ class Transform:public Components
 	Transform();
 	Transform(float posX, float posY, float posZ);
 	Transform(glm::vec3 vec) :Transform(vec.x, vec.y, vec.z) {};
+	Transform(const Transform &obj)=default;
+	Transform(Transform &&obj)=default;
+
 public:
 	
 	glm::vec3 GetLocalPosition()
@@ -121,23 +129,28 @@ public:
 
 	void SetLocalPosition(glm::vec3 position)
 	{
+		_addToUpdateTransformList();
 		localPosition=position;
 	}
 	void SetLocalScale(glm::vec3 scale)
 	{
+		_addToUpdateTransformList();
 		localScale=scale;
 	}
 	void SetLocalRotation(Quaternion rotation)
 	{
+		_addToUpdateTransformList();
 		localRotation.quaternion=rotation.quaternion;
 	}
 
 	void SetGlobalPosition(glm::vec3 position)
 	{
+		_addToUpdateTransformList();
 		localPosition=worldToLocal*glm::vec4(position,1);
 	}
 	void SetGlobalRotation(Quaternion rotation)
 	{
+		_addToUpdateTransformList();
 		if (parent == Entity(-1,-1))
 			localRotation = rotation.quaternion;
 		else
@@ -146,6 +159,7 @@ public:
 
 	void SetGlobalScale(glm::vec3 scale)
 	{
+		_addToUpdateTransformList();
 		localScale=scale/baseScale;
 	}
 

@@ -162,7 +162,7 @@ Entity processMesh(Entity parent,Scene &currScene,aiMesh* mesh, const aiScene* s
 	t.setParent(parent);
 
 	currScene.SetEntityName(meshid,meshName);
-	Material mat("DEFERRED");
+	Material mat("DEFAULT");
 	
 
 	if (mesh->mMaterialIndex >= 0)

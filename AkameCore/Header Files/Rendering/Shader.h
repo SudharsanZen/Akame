@@ -33,6 +33,7 @@ public:
 	//functions for setting uniform variables
 	unsigned int getUniformLocation(std::string varName);
 	void setUniformInteger(std::string varName, unsigned int value);
+	void setUniformInteger(unsigned int uniformLoc, unsigned int value);
 
 	void setUniformVec3(std::string varName, const glm::vec3& vec);
 	void setUniformMat4fv(std::string varName, unsigned int count, float* valuePtr);

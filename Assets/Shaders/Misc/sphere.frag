@@ -118,7 +118,7 @@ vec3 atmosphere(vec3 r, vec3 r0, vec3 pSun, float iSun, float rPlanet, float rAt
 in vec3 nearPoint;
 in vec3 farPoint;
 uniform sampler2D texture1;
-uniform vec3 viewPose;
+
 uniform sampler2D texture2;
 uniform vec3 sunPose;
 vec4 upCol=vec4(0,0.5,1,1);

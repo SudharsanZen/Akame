@@ -29,12 +29,13 @@ class Snake :public Behaviour
 	Entity createCube(Material &mat,glm::vec3 pose=glm::vec3(0.5,0,0.5))
 	{
 		Entity body = CreateEntity();
-		Transform cT(pose);
+		Transform &cT=AddComponent<Transform>(body);
 		AddComponent<Material>(body) = (mat);
 		Mesh cub;
+		cT.SetGlobalPosition(glm::vec3(0.5,0,0.5));
 		cT.SetGlobalScale(glm::vec3(snakeSize));
 		cub.CreateMesh(generateCubeVertices());
-		AddComponent<Transform>(body)=cT;
+
 		AddComponent<Mesh>(body)=cub;
 		
 		return body;
@@ -87,8 +88,7 @@ public:
 
 		
 		apple = LoadModelToScene(scene,rootDir + "Media/Apple/apple.fbx");
-		Transform aT(1.5, 0, -1.5);
-		aT.SetGlobalScale(glm::vec3(0.001f));
+		
 
 		Lights point(LIGHT::POINT);
 		point.setColor(1,0.5,0);
@@ -158,15 +158,19 @@ public:
 		{
 			currTime = 0;
 			//update tail pose
-			Transform prevPose = headPose;
+			glm::vec3 prevPose = headPose.GetGlobalPosition();
+			Quaternion prevRotation = headPose.GetGlobalRotation();
 
 			for (long int i = 0; i < tailList.size(); i++)
 			{
-				Transform temp;
+				
 				Transform& pose = GetComponent<Transform>(tailList[i]);
-				temp = pose;
-				pose = prevPose;
-				prevPose = temp;
+				glm::vec3 tempPose = pose.GetGlobalPosition();
+				Quaternion tempQuat = pose.GetGlobalRotation();
+				pose.SetGlobalPosition(tempPose);
+				pose.SetGlobalRotation(tempQuat);
+				prevPose=tempPose;
+				prevRotation = tempQuat;
 				
 			}
 

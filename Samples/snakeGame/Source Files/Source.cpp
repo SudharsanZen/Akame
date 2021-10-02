@@ -41,7 +41,7 @@ int main()
 	d.setDirection(-1, -1, -1);
 	d.setIntensity(1);
 
-	scene.AddComponent<Transform>(dir)= Transform(0, 2.0f, 0);
+	scene.AddComponent<Transform>(dir).SetGlobalPosition(glm::vec3(0, 2.0f, 0));
 
 
 	
@@ -51,9 +51,12 @@ int main()
 
 
 	Entity floor = scene.CreateEntity();
-	Transform T(0, -(sizeY+0.5f), 0);
-	T.SetGlobalScale(glm::vec3(sizeY*2+0.01f));
-	scene.AddComponent<Transform>(floor)=T;
+	
+	
+	
+	Transform &T=scene.AddComponent<Transform>(floor);
+	T.SetGlobalScale(glm::vec3(sizeY * 2 + 0.01f));
+	T.SetGlobalPosition(glm::vec3(0, -(sizeY + 0.5f), 0));
 	Mesh &fMesh= scene.AddComponent<Mesh>(floor);
 	fMesh.CreateMesh(generateCubeVertices());
 	scene.AddComponent<Material>(floor)=(floorMat);

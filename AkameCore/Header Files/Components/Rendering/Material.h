@@ -9,6 +9,7 @@ class Material:public Components
 {
 private:
 	unsigned int transformLocation;
+	unsigned int transformIndexLocation;
 	std::shared_ptr<unsigned long long> materialID;
 	AssetManager a;
 	unsigned int nextTexUnit = 0;
@@ -35,7 +36,7 @@ private:
 	friend class ECS;
 	friend class ComponentArray<Material>;
 	void setUniformsOnce(std::shared_ptr<Shader> shader, glm::vec3& viewPose);
-	void setUniformEveryObject(Transform& t,std::shared_ptr<Shader> shader);
+	void setUniformEveryObject(int index,std::shared_ptr<Shader> shader);
 public:
 	Material() :Material("DEFAULT") {}
 	Material(std::string shaderName);

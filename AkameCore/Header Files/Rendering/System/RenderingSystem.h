@@ -15,6 +15,8 @@ class LightSystem;
 class RenderingSystem :public System
 {
 private:
+	unsigned int transformUBO;
+	int maxUBOSize,maxTransformUploadable;
 	
 	ComponentArray<Transform>* transformArray;
 	ComponentArray<Mesh>* meshArray;

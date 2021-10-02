@@ -27,7 +27,9 @@
     <ClInclude Include="HeaderFiles\SystemManager.h">
       <Filter>HeaderFiles</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\ecVector.h" />
+    <ClInclude Include="HeaderFiles\ecVector.h">
+      <Filter>HeaderFiles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\ECSTYPES.cpp">
