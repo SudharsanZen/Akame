@@ -177,7 +177,7 @@ vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P,float shadow)
     //calculate specular highlight
     vec3 viewDir=normalize(viewPos-P.FragPos.xyz);
     vec3 halfwayDir = normalize( lightDir+ viewDir);  
-    float spec = pow(max(dot(P.norm.xyz, halfwayDir), 0.0), 128.0);
+    float spec = pow(max(dot(P.norm.xyz, halfwayDir), 0.0), 64.0);
     vec3 specular=vec3(spec * P.specular);
 
     //calculate diffuse and ambient color

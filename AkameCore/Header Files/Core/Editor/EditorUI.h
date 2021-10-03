@@ -9,6 +9,7 @@ typedef int ImGuiTreeNodeFlags;
 class Editor
 {
 private:
+	float lx=-90, ly=0, lz=0;
 	bool viewDebugInfo;
 	std::set<Entity> selected;
 	ImGuiIO& io;

@@ -212,9 +212,10 @@ void Editor::DrawUI()
 	ImGui::Text("dir light");
 
 	Lights &dir = scene.ecs->GetComponent<Lights>(scene.lightSys->lightsList[LIGHT::DIRECTIONAL][0]);
-	ImGui::SliderFloat("X", &dir.lightDirection.x, -1.0f, 1.0f, "%.3f");
-	ImGui::SliderFloat("Y", &dir.lightDirection.y, -1.0f, 1.0f, "%.3f");
-	ImGui::SliderFloat("Z", &dir.lightDirection.z, -1.0f, 1.0f, "%.3f");
+	ImGui::SliderFloat("X", &lx, -180, 180, "%.3f");
+	ImGui::SliderFloat("Y", &ly, -180, 180, "%.3f");
+	ImGui::SliderFloat("Z", &lz, -180, 180, "%.3f");
+	dir.lightDirection = Quaternion(lx,ly,lz)*worldForward;
 	ImGui::SliderFloat("multX", &pssmx, 1.0f, 2.0f, "%.3f");
 	ImGui::SliderFloat("multY", &pssmy, 1.0f, 2.0f, "%.3f");
 	static float maxz = 1000;

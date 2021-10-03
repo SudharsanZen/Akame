@@ -24,15 +24,15 @@ out vec2 uvCoord;
 out mat3 TBN;
 void main()
 {
-    mat4 model=view*transform[t_index];
-    gl_Position =proj*model*vec4(aPos, 1.0);
+    mat4 model=transform[t_index];
+    gl_Position =proj*view*model*vec4(aPos, 1.0);
 
-    FragPos = transform[t_index] * vec4(aPos, 1.0);
+    FragPos = model* vec4(aPos, 1.0);
 
     
    vec3 T = normalize(vec3(model * vec4(tangent,   0.0)));
    vec3 B = normalize(vec3(model * vec4(bitangent, 0.0)));
-   vec3 N = mat3(transpose(inverse(transform[t_index]))) * normal;
+   vec3 N = normalize(mat3(transpose(inverse(model))) * normal);
    TBN = mat3(T, B, N);
     Normal=N;
     uvCoord=texCoord;

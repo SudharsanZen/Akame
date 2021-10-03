@@ -26,13 +26,13 @@ out mat3 TBN;
 void main()
 {
     vec3 disp=normal;
-    mat4 model=proj*view;
-    gl_Position =model*transformList[t_index]*vec4(aPos, 1.0);
-    FragPos = vec3(transformList[t_index] * vec4(aPos, 1.0));
+    mat4 model=transformList[t_index];
+    gl_Position =proj*view*model*vec4(aPos, 1.0);
+    FragPos = vec3(model * vec4(aPos, 1.0));
     
-    vec3 T = normalize(vec3(model * vec4(tangent,   0.0)));
-    vec3 B = normalize(vec3(model * vec4(bitangent, 0.0)));
-    vec3 N = mat3(transpose(inverse(transformList[t_index]))) * normal;
+    vec3 T = normalize(vec3(model*vec4(normalize(tangent),   0.0)));
+    vec3 B = normalize(vec3(model*vec4(normalize(bitangent), 0.0)));
+    vec3 N = mat3(transpose(model)) * normal;
     TBN = mat3(T, B, N);
     Normal=N;
     uvCoord=texCoord;

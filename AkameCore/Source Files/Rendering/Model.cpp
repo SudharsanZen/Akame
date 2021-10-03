@@ -162,7 +162,7 @@ Entity processMesh(Entity parent,Scene &currScene,aiMesh* mesh, const aiScene* s
 	t.setParent(parent);
 
 	currScene.SetEntityName(meshid,meshName);
-	Material mat("DEFAULT");
+	Material mat("DEFERRED");
 	
 
 	if (mesh->mMaterialIndex >= 0)
@@ -194,7 +194,7 @@ Entity processMesh(Entity parent,Scene &currScene,aiMesh* mesh, const aiScene* s
 		if (normC)
 		{
 			mat.setTexture2D("material.normalMap", (dir + norm.C_Str()).c_str());
-			mat.setValue("normalStrength", 0.1f);
+			mat.setValue("normalStrength", 5.0f);
 		}
 		else
 		{

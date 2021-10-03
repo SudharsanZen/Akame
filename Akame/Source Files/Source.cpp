@@ -40,45 +40,29 @@ int main()
 	scene.AddComponent<Transform>(dir).SetGlobalPosition(glm::vec3(0,2,0));
 	scene.SetEntityName(dir, "DirectionalLight");
 	std::vector<Entity> cubeList;
-	float m = 5;
-	int i;
-	{
+	float m = 1;
+	
 		std::shared_ptr<Material> cmat = std::make_shared<Material>("DEFAULT");
 		cmat->setTexture2D("material.diffuseMap", AssetManager::assetRootPath + "Media/pbr/basecolor.jpg");
 		cmat->setTexture2D("material.normalMap", AssetManager::assetRootPath + "Media/pbr/normal.jpg");
 		cmat->setTexture2D("material.specularMap", AssetManager::assetRootPath + "Media/pbr/roughness.jpg");
-		for (i = 0; i < m; i++)
-		{
+		cmat->setValue("normalStrength",10);
+		
 
 
-			Entity cube = scene.CreateEntity();
+		     Entity cube = LoadModelToScene(scene,AssetManager::assetRootPath+"/media/pbr/box.obj");
 			cubeList.push_back(cube);
 			Transform& t = scene.AddComponent<Transform>(cube);
 			t.SetGlobalRotation(Quaternion(0, 0, 0));
-			t.SetGlobalPosition(glm::vec3(float(i), 0, 0));
+			t.SetGlobalPosition(glm::vec3(0, 0, 0));
+			t.SetGlobalScale(glm::vec3(5));
 			scene.AddComponent<Material>(cube) = *cmat;
 			Mesh& cM = scene.AddComponent<Mesh>(cube);
 
-			cM.CreateMesh(generateSphereVertices(32, 16, 0.5));
+			//cM.CreateMesh(generateSphereVertices(32, 16, 0.5));
+			cM.CreateMesh(generateCubeVertices(2,2));
 
-			if (i > 0)
-			{
-				t.setParent(cubeList[i - 1]);
-			}
-			else
-			{
 
-				t.SetLocalScale(glm::vec3(3));
-				t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30, glm::vec3(0, 0, 1)));
-			}
-			std::stringstream str;
-			str << "Entity: " << i;
-
-			scene.SetEntityName(cube, str.str());
-		}
-		cmat.reset();
-	}
-	
 	
 
 	Material mat("GRIDS");
@@ -99,31 +83,30 @@ int main()
 	skMesh.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	scene.SetEntityName(sky, "skyquad");
 	
-	Transform& t = scene.GetComponent<Transform>(cubeList[0]);
-	Transform& t1 = scene.GetComponent<Transform>(cubeList[4]);
+	Transform& tr = scene.GetComponent<Transform>(cubeList[0]);
+
 	
 	//t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30, glm::vec3(0, 0, 1)));
 
-	//Editor editor(window,scene);
+	Editor editor(window,scene);
 	scene.OnStart();
-	scene.vsyncOn(false);
+	scene.vsyncOn(true);
 	float deltaTime = 0;
-	i=3;
+
 	while (!window.closeWindow())
 	{
-		Debug::DrawLine(glm::vec3(0,0,0),glm::vec3(0,10,0),glm::vec3(0,1,0));
-		Debug::DrawCircle(glm::vec3(0),glm::vec3(0,1,0),3,glm::vec3(0,1,0),20);
+		
 		deltaTime = scene.getDeltaTime();
 		flyCam(scene.cam,scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.clearBuffer();
-		//editor.DrawUI();
+	
 		scene.Render();
+		editor.DrawUI();
 		
-		
-		glm::vec3 pose = t.GetLocalPosition();
+		glm::vec3 pose = tr.GetLocalPosition();
 
-		t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(deltaTime*10,glm::vec3(0,1,0))* t.GetGlobalRotation());
+		tr.SetGlobalRotation(Quaternion::rotationAroundAxisVector(deltaTime*10,glm::vec3(0,1,0))* t.GetGlobalRotation());
 
 		scene.swapBuffers();
 		
@@ -131,7 +114,7 @@ int main()
 	}
 
 
-	std::cout << "total count:"<<i;
+
 	return 0;
 }
 
