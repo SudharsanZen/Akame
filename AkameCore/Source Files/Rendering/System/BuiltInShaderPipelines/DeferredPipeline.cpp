@@ -36,6 +36,7 @@ void DeferredPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSyst
 	drfb.setFloat("near",cam.getNear());
 	drfb.setFloat("far",lsys->shadowDistance);
 	drfb.setInt("shadowRes",lsys->dir_sMap.GetResolution());
+	drfb.setVec3("viewDirection",cam.transform.forward());
 	lsys->dir_sMap.useTextureArray(6);
 	for (int i = 0; i < lsys->dirLightSpace.size(); i++)
 	{

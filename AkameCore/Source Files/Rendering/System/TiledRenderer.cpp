@@ -34,6 +34,11 @@ void TiledRenderer::set4x4MatrixfvArray(std::string name,unsigned int index, glm
     glUniformMatrix4fv(GetUniformLocation(name.c_str())+index, 1, GL_FALSE, glm::value_ptr(value));
 }
 
+void TiledRenderer::setVec3(std::string name, glm::vec3 value)
+{
+    glUniform3fv(GetUniformLocation(name.c_str()),1,glm::value_ptr(value));
+}
+
 void TiledRenderer::setFloat(std::string name, float value)
 {
     glUniform1f(GetUniformLocation(name.c_str()), value);
@@ -66,12 +71,13 @@ void TiledRenderer::unBindFrameBuffer()
 void TiledRenderer::bindTextures()
 {
    
-    glBindImageTexture(0, drfb.AlbedoSpec, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
+    glBindImageTexture(0, drfb.AlbedoRough, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
     glBindImageTexture(1, drfb.Normal, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
     glBindImageTexture(2, drfb.Position, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D,drfb.depthBuffer);
     glBindImageTexture(4, outTex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA16F);
+    glBindImageTexture(7, drfb.PBR, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
  
 
 }

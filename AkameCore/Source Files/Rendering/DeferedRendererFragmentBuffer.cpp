@@ -27,12 +27,12 @@ void DeferredRendererFragmentBuffer::GenerateFrameBuffer()
 
 	//texture for storing albedo and specular
 	//rgb for albedo and alpha for specular 
-	glGenTextures(1, &AlbedoSpec);
-	glBindTexture(GL_TEXTURE_2D, AlbedoSpec);
+	glGenTextures(1, &AlbedoRough);
+	glBindTexture(GL_TEXTURE_2D, AlbedoRough);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, AlbedoSpec, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, AlbedoRough, 0);
 
 	//createting texture with 16 bit bit float components for storing more precise positional and normal values
 	//texture for positional data
@@ -51,6 +51,14 @@ void DeferredRendererFragmentBuffer::GenerateFrameBuffer()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D,Normal, 0);
 
+	//PBR buffer
+	glGenTextures(1, &PBR);
+	glBindTexture(GL_TEXTURE_2D, PBR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, 800, 600, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, PBR, 0);
+
 	//texture for depth data
 	glGenTextures(1, &depthBuffer);
 	glBindTexture(GL_TEXTURE_2D, depthBuffer);
@@ -62,9 +70,9 @@ void DeferredRendererFragmentBuffer::GenerateFrameBuffer()
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthBuffer, 0);
 
-	unsigned int frameBufferAttachments[]= {GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1,GL_COLOR_ATTACHMENT2};
+	unsigned int frameBufferAttachments[]= {GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1,GL_COLOR_ATTACHMENT2,GL_COLOR_ATTACHMENT3 };
 
-	glDrawBuffers(3,frameBufferAttachments);
+	glDrawBuffers(4,frameBufferAttachments);
 
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -74,7 +82,7 @@ void DeferredRendererFragmentBuffer::GenerateFrameBuffer()
 
 void DeferredRendererFragmentBuffer::updateBufferSize(int height,int width)
 {
-	glBindTexture(GL_TEXTURE_2D, AlbedoSpec);
+	glBindTexture(GL_TEXTURE_2D, AlbedoRough);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	
 	glBindTexture(GL_TEXTURE_2D, Position);
@@ -83,6 +91,9 @@ void DeferredRendererFragmentBuffer::updateBufferSize(int height,int width)
 	
 	glBindTexture(GL_TEXTURE_2D, Normal);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+
+	glBindTexture(GL_TEXTURE_2D, PBR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	
 	glBindTexture(GL_TEXTURE_2D, depthBuffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
@@ -107,7 +118,7 @@ void DeferredRendererFragmentBuffer::unBindFrameBuffer()
 void DeferredRendererFragmentBuffer::useTextures()
 {
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, AlbedoSpec);
+	glBindTexture(GL_TEXTURE_2D, AlbedoRough);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, Position);
 	glActiveTexture(GL_TEXTURE2);
@@ -152,7 +163,7 @@ void DeferredRendererFragmentBuffer::drawAlbedoBuffer()
 	std::shared_ptr<Shader> shader = ShaderManager::GetShader("SCREENSHADER");
 	shader->useShaderProgram();
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, AlbedoSpec);
+	glBindTexture(GL_TEXTURE_2D, AlbedoRough);
 	quad.renderMesh();
 }
 
@@ -160,8 +171,10 @@ DeferredRendererFragmentBuffer::~DeferredRendererFragmentBuffer()
 {
 	if (Normal)
 		glDeleteTextures(1,&Normal);
-	if (AlbedoSpec)
-		glDeleteTextures(1, &AlbedoSpec);
+	if (AlbedoRough)
+		glDeleteTextures(1, &AlbedoRough);
+	if (PBR)
+		glDeleteTextures(1, &PBR);
 	if (Position)
 		glDeleteTextures(1, &Position);
 	if (frameBuffer)
@@ -169,9 +182,10 @@ DeferredRendererFragmentBuffer::~DeferredRendererFragmentBuffer()
 	if (depthBuffer)
 		glDeleteTextures(1,&depthBuffer);
 	Normal = 0;
-	AlbedoSpec = 0;
+	AlbedoRough = 0;
 	Position = 0;
 	depthBuffer = 0;
 	frameBuffer = 0;
+	PBR = 0;
 	
 }

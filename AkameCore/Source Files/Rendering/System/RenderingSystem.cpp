@@ -213,7 +213,7 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 					Transform& t = transformArray->GetData((*ent.componentIndex)[tran]);
 					matList.push_back(t.transformMat);
 				}
-				glBufferSubData(GL_UNIFORM_BUFFER,0, mat4Size*1000,&(matList[0][0].x));
+				glBufferSubData(GL_UNIFORM_BUFFER,0, mat4Size*matList.size(),&(matList[0][0].x));
 				curr_i++;
 				curr_i = 0;
 				for (long int i = r*1000; i < (r+1)*1000 && i< entList.size(); i++)
@@ -265,7 +265,7 @@ void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
 					Transform& t = transformArray->GetData((*ent.componentIndex)[tran]);
 					matList.push_back(t.transformMat);
 				}
-				glBufferSubData(GL_UNIFORM_BUFFER, 0, mat4Size * 1000, &(matList[0][0].x));
+				glBufferSubData(GL_UNIFORM_BUFFER, 0, mat4Size * matList.size(), &(matList[0][0].x));
 				curr_i++;
 				curr_i = 0;
 				for (long int i = r * 1000; i < (r + 1) * 1000 && i < listSize; i++)

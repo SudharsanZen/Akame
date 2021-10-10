@@ -68,7 +68,7 @@ int main()
 	Entity dir = scene.CreateEntity();
 	Lights d = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
-	d.setDirection(-1, -1, 0);
+	d.setDirection(0, -1, 0);
 	d.setIntensity(1);
 	d.setPointLightConst(1, 10, 10);
 	scene.AddComponent<Lights>(dir)=d;
@@ -82,11 +82,14 @@ int main()
 
 	
 	
-	Material boxMat("DEFAULT");
-	boxMat.setTexture2D("material.diffuseMap", rootDir + "Media/pbr/crate/basecolor.jpg");
-	boxMat.setTexture2D("material.specularMap", rootDir + "Media/pbr/crate/roughness.jpg");
-	boxMat.setTexture2D("material.normalMap", rootDir + "Media/pbr/crate/normal.jpg");
-	boxMat.setValue("specIntensity", 1);
+	Material boxMat("DEFERRED");
+	boxMat.setTexture2D("material.diffuse", rootDir + "Media/pbr/crate/basecolor.jpg");
+	boxMat.setTexture2D("material.roughness", rootDir + "Media/pbr/crate/roughness.jpg");
+	boxMat.setTexture2D("material.normal", rootDir + "Media/pbr/crate/normal.jpg");
+	boxMat.setValue("noMetallic", 1);
+	boxMat.setValue("noAO", 1);
+	boxMat.setValue("metallic", 0.04);
+	boxMat.setValue("ambientocclusion", 0.04);
 	boxMat.setValue("normalStrength", 1);
 	Entity box = scene.CreateEntity();
 	Mesh& bm = scene.AddComponent<Mesh>(box);
@@ -95,9 +98,25 @@ int main()
 		t.SetGlobalPosition(glm::vec3(0, 10, 0));
 	scene.AddComponent<Material>(box) = boxMat;
 	scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
+	Material mat("GRIDS");
+	Entity pl = scene.CreateEntity();
 
+
+	scene.AddComponent<Transform>(pl);
+	Mesh& plm = scene.AddComponent<Mesh>(pl);
+	scene.AddComponent<Material>(pl) = mat;
+	plm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
+	Material matS("SPHERE");
+	Entity sky = scene.CreateEntity();
+
+
+
+	scene.AddComponent<Transform>(sky);
+	Mesh& skym = scene.AddComponent<Mesh>(sky);
+	scene.AddComponent<Material>(sky) = matS;
+	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	std::vector<Entity> lights;
-	int m = 0;
+	int m = 40;
 	int maxi = 20;
 	for (int i = 0; i < m; i++)
 	{
@@ -130,7 +149,7 @@ int main()
 		scene.clearBuffer();
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.Render();
-		//e.DrawUI();
+		e.DrawUI();
 
 		Lights &l=scene.GetComponent<Lights>(dir);
 	

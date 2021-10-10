@@ -5,9 +5,11 @@
 #include<algorithm>
 #include"ECS.h"
 #include"Components/Components.h"
-
+#include"Physics/System/RigidBodySystem.h"
 class Transform:public Components
 {
+	glm::vec3 pxPoseInit;
+	glm::quat pxRotInit;
 	Entity parent=Entity(-1,-1);
 	std::shared_ptr<std::set<e_index>> transformUpdateList;
 	std::list<Entity> child;
@@ -68,6 +70,8 @@ class Transform:public Components
 	friend class RenderingSystem;
 	template <typename T>
 	friend class ComponentArray;
+	friend class physics::RigidBodySystem;
+
 	void _addToUpdateTransformList()
 	{
 		if(transformUpdateList)

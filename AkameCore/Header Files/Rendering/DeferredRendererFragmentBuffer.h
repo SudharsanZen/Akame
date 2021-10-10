@@ -13,12 +13,12 @@ class DeferredRendererFragmentBuffer
 	
 
 	//texture render target that are going to be attached to the frameBuffer
-	unsigned int AlbedoSpec=0, Normal=0, Position=0,depthBuffer=0;
+	unsigned int AlbedoRough=0, Normal=0, Position=0,depthBuffer=0,PBR=0;
 
 	//render buffer for using as Depth/Stencil buffer
 	unsigned int rbo=0;
 	void GenerateFrameBuffer();
-	unsigned int getAlbedoBuff() { return AlbedoSpec; }
+	unsigned int getAlbedoBuff() { return AlbedoRough; }
 	unsigned int getDepthBuff() { return depthBuffer; }
 	unsigned int getNormalBuff() { return this->Normal; }
 	unsigned int getPositionBuff() { return Position; }

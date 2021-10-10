@@ -14,7 +14,8 @@ namespace physics
 		std::shared_ptr<Physics> mPhysics;
 		std::weak_ptr<ECS> ecs;
 		friend class ::Scene;
-
+		float accumulator = 0.0f;
+		float mixAmt = 0.0f;
 	public:
 		RigidBodySystem();
 		

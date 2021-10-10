@@ -28,11 +28,13 @@ namespace physics
 	physx::PxTransform _ToPxTrans(Transform &t);
 
 
+
 	glm::vec3 _PxToVec3(physx::PxVec3 v);
 
 	glm::quat _PxToQuat(physx::PxQuat q);
 
 	void _PxToTrans(physx::PxTransform pxt, Transform& targetTransform);
+	void _PxToTrans(physx::PxTransform pxt, Transform& targetTransform,float mix);
 
 	/*class to handle physics*/
 	class Physics
@@ -54,7 +56,7 @@ namespace physics
 		Physics():Physics(1.0f/60.0f) {}
 		Physics(float stepSize) { mStepSize = stepSize; }
 
-		float mStepSize = 1.0f / 60.0f;
+		float mStepSize;
 		
 		template<typename T>
 		void PX_RELEASE(T* x) { if (x)  x->release(); x = NULL; }
@@ -62,7 +64,7 @@ namespace physics
 		void cleanPhysics();
 		void initPhysics();
 
-
+		bool isAdvancing(float dt);
 
 		bool advance(float dt);
 

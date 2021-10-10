@@ -215,7 +215,11 @@ void Editor::DrawUI()
 	ImGui::SliderFloat("X", &lx, -180, 180, "%.3f");
 	ImGui::SliderFloat("Y", &ly, -180, 180, "%.3f");
 	ImGui::SliderFloat("Z", &lz, -180, 180, "%.3f");
-	dir.lightDirection = Quaternion(lx,ly,lz)*worldForward;
+	ImGui::SliderFloat("DirLight intensity", &dir.intensity, 0, 10.0f, "%.3f");
+	dir.lightDirection = Quaternion::rotationAroundAxisVector(lx,worldRight)*worldForward;
+	dir.lightDirection = Quaternion::rotationAroundAxisVector(ly,worldUp)*dir.lightDirection;
+	dir.lightDirection = Quaternion::rotationAroundAxisVector(lz,worldForward)*dir.lightDirection;
+	
 	ImGui::SliderFloat("multX", &pssmx, 1.0f, 2.0f, "%.3f");
 	ImGui::SliderFloat("multY", &pssmy, 1.0f, 2.0f, "%.3f");
 	static float maxz = 1000;

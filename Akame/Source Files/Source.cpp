@@ -33,7 +33,7 @@ int main()
 	d.setType(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
 	d.setDirection(1,-1,0);
-	d.setIntensity(0.6f);
+	d.setIntensity(0);
 	d.setPointLightConst(1,2,10);
 	d.ambientLigting(0.1f,0.1f,0.1f);
 	
@@ -42,15 +42,19 @@ int main()
 	std::vector<Entity> cubeList;
 	float m = 1;
 	
-		std::shared_ptr<Material> cmat = std::make_shared<Material>("DEFAULT");
-		cmat->setTexture2D("material.diffuseMap", AssetManager::assetRootPath + "Media/pbr/basecolor.jpg");
-		cmat->setTexture2D("material.normalMap", AssetManager::assetRootPath + "Media/pbr/normal.jpg");
-		cmat->setTexture2D("material.specularMap", AssetManager::assetRootPath + "Media/pbr/roughness.jpg");
-		cmat->setValue("normalStrength",10);
+		std::shared_ptr<Material> cmat = std::make_shared<Material>("DEFERRED");
+		cmat->setTexture2D("material.diffuse", AssetManager::assetRootPath + "Media/pbr/crate/basecolor.jpg");
+		cmat->setTexture2D("material.normal", AssetManager::assetRootPath + "Media/pbr/crate/normal.jpg");
+		cmat->setTexture2D("material.roughness", AssetManager::assetRootPath + "Media/pbr/crate/roughness.jpg");
+		cmat->setTexture2D("material.ambientocclusion", AssetManager::assetRootPath + "Media/pbr/crate/ambientOcclusion.jpg");
+	
+		cmat->setValue("normalStrength",1);
+		cmat->setValue("specIntensity",1);
 		
 
 
-		     Entity cube = LoadModelToScene(scene,AssetManager::assetRootPath+"/media/pbr/box.obj");
+		     //Entity cube = LoadModelToScene(scene,AssetManager::assetRootPath+"/media/pbr/box.obj");
+		     Entity cube = scene.CreateEntity();
 			cubeList.push_back(cube);
 			Transform& t = scene.AddComponent<Transform>(cube);
 			t.SetGlobalRotation(Quaternion(0, 0, 0));
@@ -59,12 +63,22 @@ int main()
 			scene.AddComponent<Material>(cube) = *cmat;
 			Mesh& cM = scene.AddComponent<Mesh>(cube);
 
-			//cM.CreateMesh(generateSphereVertices(32, 16, 0.5));
-			cM.CreateMesh(generateCubeVertices(2,2));
+			cM.CreateMesh(generateSphereVertices(32, 16, 0.5));
+			//cM.CreateMesh(generateCubeVertices(2,2));
 
 
-	
-
+			for (int i = 1; i <=4; i++)
+			{
+				Entity point = scene.CreateEntity();
+				Transform& t = scene.AddComponent<Transform>(point);
+				Lights &p=scene.AddComponent<Lights>(point);
+				p.setColor(1, 0.5, 0);
+				p.setIntensity(10);
+				p.setPointLightConst(1, 2, 3);
+				p.ambientLigting(0, 0, 0);
+				t.SetGlobalPosition(Quaternion(((i-1 / 2)+1) * 45,0,0)*Quaternion(0,(i%2+1)*45,0)*worldForward*5.0f);
+			}
+/*
 	Material mat("GRIDS");
 	Entity plane= scene.CreateEntity();
 
@@ -74,7 +88,7 @@ int main()
 	scene.AddComponent<Material>(plane)=mat;
 	pm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	scene.SetEntityName(plane,"grids");
-	
+	*/
 	Material matS("SPHERE");
 	Entity sky= scene.CreateEntity();
 	scene.AddComponent<Material>(sky) = matS;
@@ -106,7 +120,7 @@ int main()
 		
 		glm::vec3 pose = tr.GetLocalPosition();
 
-		tr.SetGlobalRotation(Quaternion::rotationAroundAxisVector(deltaTime*10,glm::vec3(0,1,0))* t.GetGlobalRotation());
+		//tr.SetGlobalRotation(Quaternion::rotationAroundAxisVector(deltaTime*10,glm::vec3(0,1,0))* t.GetGlobalRotation());
 
 		scene.swapBuffers();
 		

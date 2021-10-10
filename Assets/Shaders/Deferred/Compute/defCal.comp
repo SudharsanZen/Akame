@@ -6,6 +6,7 @@
 --------------------------------------------------------*/
 
 #version 450
+#define PI 3.14159265359
 //local workgroup size
 #define TILE_DIM_X 32
 #define TILE_DIM_Y 32
@@ -48,12 +49,15 @@ struct DirectionalLight
 layout (binding = 0,rgba16f)  uniform readonly image2D albedoSpec;
 layout (binding = 1, rgba16f) uniform readonly image2D normal;
 layout (binding = 2,rgba32f) uniform readonly image2D position;
+layout (binding = 7,rgba16f) uniform readonly image2D PBR;
 struct BufferPixelValues
 {
     vec4 albedo;
-    float specular;
+    float roughness;
     vec4 norm;
     vec4 FragPos;
+    float metallic;
+    float AO;
 };
 
 
@@ -82,7 +86,7 @@ uniform DirectionalLight DIR_L[MAX_DIRECTIONAL_LIGHT];
 //Shadow Bindings
 //-----------------------------------------------------------------
 layout (binding = 6) uniform 	sampler2DArrayShadow dir_sMap;
-layout (binding = 7) uniform 	sampler2DArray dir_Map;
+
 
 //------------------------------------------------------------------
 //Shared Variables
@@ -162,7 +166,7 @@ void FindBlocker(out float avgBlockerDepth, out float numBlockers, uint mapLayer
 
     for (int i = 0; i < BLOCKER_SARCH_SAMPLE_COUNT; ++i) 
     {
-        float shadowMapDepth = texture(dir_Map, vec3(uv + poissonDisk[i] * searchWidth, mapLayer)).r;
+        float shadowMapDepth = texture(dir_sMap, vec4(uv + poissonDisk[i] * searchWidth, mapLayer,zReceiver)).r;
         if (shadowMapDepth < zReceiver) 
         {
             blockerSum += shadowMapDepth;
@@ -202,7 +206,7 @@ float PCSS(int mapLayer,vec3 coord)
       if(blockerCount<1)
             return 0;
       
-      float zb=texture(dir_Map, vec3(uv,layer)).r;
+      float zb=texture(dir_sMap, vec4(uv,layer,zReceiver)).r;
       float penumbraSize=(zReceiver-zb)*lightWidth/zb;
       float filterRadius=penumbraSize*near/coord.z;
       float maxRad=0.09f;
@@ -269,6 +273,43 @@ float shadowCalculation(vec4 fragPose)
       //no shadow if the fragment is greater than the last frustum's farPlane
       return 0;
 }
+vec3 fresnelSchlick(float cosTheta, vec3 F0)
+{
+    return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 64);
+}  
+float DistributionGGX(vec3 N, vec3 H, float roughness)
+{
+    float a      = roughness*roughness;
+    float a2     = a*a;
+    float NdotH  = max(dot(N, H), 0.0);
+    float NdotH2 = NdotH*NdotH;
+	
+    float num   = a2;
+    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+    denom = PI * denom * denom;
+	
+    return num / denom;
+}
+
+float GeometrySchlickGGX(float NdotV, float roughness)
+{
+    float r = (roughness + 1.0);
+    float k = (r*r) / 8.0;
+
+    float num   = NdotV;
+    float denom = NdotV * (1.0 - k) + k;
+	
+    return num / denom;
+}
+float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
+{
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
+    float ggx2  = GeometrySchlickGGX(NdotV, roughness);
+    float ggx1  = GeometrySchlickGGX(NdotL, roughness);
+	
+    return ggx1 * ggx2;
+}
 
 
 //-------------------------------------------------------------------
@@ -285,41 +326,72 @@ vec3 calcPointLight(PointLight ptl,BufferPixelValues P)
     vec3 halfwayDir = normalize(lightDir+viewDir);
     float attenuation=1.0f/( ptl.constants.x + ptl.constants.y*lightDistance + lightDistance*lightDistance*ptl.constants.z);
 
-    float diff=max(dot(P.norm.xyz,lightDir),0);
+    vec3 N = normalize(P.norm.xyz);
+    vec3 V = viewDir;
 
-    float spec=pow(max(dot(P.norm.xyz,halfwayDir),0.0),128);
+    vec3 F0 = vec3(0.04); 
+    F0 = mix(F0, P.albedo.xyz, P.metallic);
+    vec3 L = normalize(ptl.lightPose.xyz - P.FragPos.xyz);
+    vec3 H = normalize(V + L);
 
-    vec3 diffuse=diff*(P.albedo.xyz*ptl.lightColor.xyz);
-    vec3 ambient=ptl.ambient.xyz*P.albedo.xyz;
-    vec3 specular= vec3(spec*P.specular);
-    vec3 result=(attenuation)*((diffuse+specular)*ptl.intensity+ambient);
+        float atten = 1.0 / (lightDistance * lightDistance);
+        vec3 radiance     = ptl.lightColor.xyz * atten;        
+        
+        // cook-torrance brdf
+        float NDF = DistributionGGX(N, H, P.roughness);        
+        float G   = GeometrySmith(N, V, L, P.roughness);      
+        vec3 F    = fresnelSchlick(max(dot(H, V), 0.0), F0);       
+        
+        vec3 kS = F;
+        vec3 kD = vec3(1.0) - kS;
+        kD *= 1.0 - P.metallic;	  
+        
+        vec3 numerator    = NDF * G * F;
+        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
+        vec3 specular     = numerator / denominator;  
+            
+        // add to outgoing radiance Lo
+        float NdotL = max(dot(N, L), 0.0);                
+        vec3 Lo = (kD * P.albedo.xyz / PI + specular) * radiance * NdotL; 
+        
+	
+    
     //vec3 result=(attenuation*(1.0f-smoothstep(ptRadius-(ptRadius/10.0f),ptRadius,lightDistance)))*((diffuse+specular)*ptl.intensity+ambient);
-    return result;
-
+    return Lo;
 }
 
 
 vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P,float shadow)
 {
-    //flip light and make it's direction from fragment pose to lightSource
-    vec3 lightDir=normalize(-l.lightDir);
-    float diff= max(dot(P.norm.xyz, lightDir), 0.0);
+   vec3 N = normalize(P.norm.xyz);
+    vec3 V = normalize(viewPos-P.FragPos.xyz);
 
-    //calculate specular highlight
-    vec3 viewDir=normalize(viewPos-P.FragPos.xyz);
-    vec3 halfwayDir = normalize( lightDir+ viewDir);  
-    float spec = pow(max(dot(P.norm.xyz, halfwayDir), 0.0), 128.0);
-    vec3 specular=vec3(spec * P.specular);
+    vec3 F0 = vec3(0.04); 
+    F0 = mix(F0, P.albedo.xyz, P.metallic);
+    vec3 L = -normalize(l.lightDir);
+    vec3 H = normalize(V + L);
 
-    //calculate diffuse and ambient color
-    vec3 diffuse=diff * l.lightColor * P.albedo.xyz;
-    vec3 ambient=l.ambient*P.albedo.xyz;
+       
+        vec3 radiance     = l.lightColor.xyz;        
+        
+        // cook-torrance brdf
+        float NDF = DistributionGGX(N, H, P.roughness);        
+        float G   = GeometrySmith(N, V, L, P.roughness);      
+        vec3 F    = fresnelSchlick(max(dot(H, V), 0.0), F0);       
+        
+        vec3 kS = F;
+        vec3 kD = vec3(1.0) - kS;
+        kD *= 1.0 - P.metallic;	  
+        
+        vec3 numerator    = NDF * G * F;
+        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001;
+        vec3 specular     = numerator / denominator;  
+            
+        // add to outgoing radiance Lo
+        float NdotL = max(dot(N, L), 0.0);                
+        vec3 Lo = ((kD * P.albedo.xyz / PI + specular) * radiance * NdotL*l.intensity*(1.0f-shadow)); 
     
-    
-    //add all the resultant values
-    vec3 result=(((diffuse+specular)*l.intensity*(1.0f-shadow))+ambient);
-    
-    return result;
+    return Lo;
 }
 
 
@@ -507,22 +579,28 @@ void main()
 
       pV.norm = vec4(normalize(imageLoad(normal,pixel).xyz),1);
       pV.FragPos=vec4(imageLoad(position,pixel).xyz,1);
-      pV.specular = imageLoad(albedoSpec,pixel).a;  
-      pV.albedo=vec4(imageLoad(albedoSpec,pixel).xyz,1);
+      pV.roughness = imageLoad(albedoSpec,pixel).a;  
+      pV.albedo=vec4(pow(imageLoad(albedoSpec,pixel).xyz,vec3(2.2f)),1);
+      pV.metallic=imageLoad(PBR,pixel).r;
+      pV.AO=imageLoad(PBR,pixel).g;
     
       vec3 result=vec3(0,0,0);
       
       for(uint i=0;i<lightIndex;i++)
       {
             result+=calcPointLight(ptLight[lightList[i]],pV);
+            
       }
-
+       
       for(uint i=0;i<NUM_DIR_LIGHT;i++)
       {
             float s=shadowCalculation(pV.FragPos);
             result+=calcDirecLight(DIR_L[i],pV,s);
       }  
-      
+      vec3 ambient = vec3(0.03) * pV.albedo.xyz *pV.AO;
+      result = ambient + result;
+      result=result/(result+vec3(1.0f));
+      result=pow(result,vec3(1.0f/2));
       //store the final calculated pixel value to the output buffer
       imageStore(outTexture, pixel,vec4(result, 1.0));       
 }

@@ -167,45 +167,74 @@ Entity processMesh(Entity parent,Scene &currScene,aiMesh* mesh, const aiScene* s
 
 	if (mesh->mMaterialIndex >= 0)
 	{
-		aiString diff,spec,norm;
-		int difC=0, specC=0, normC=0;
+		aiString diff,rough,norm,metallic,ao;
+		int difC=0, roughC=0, normC=0,metalC=0,aoC=0;
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 		for (int i = 0; i < (difC=material->GetTextureCount(aiTextureType_DIFFUSE)); i++)
 		{
 			material->GetTexture(aiTextureType_DIFFUSE,i,&diff);
 		}
-		for (int i = 0; i < (specC=material->GetTextureCount(aiTextureType_SPECULAR)); i++)
+		for (int i = 0; i < (roughC=material->GetTextureCount(aiTextureType_DIFFUSE_ROUGHNESS)); i++)
 		{
-			material->GetTexture(aiTextureType_SPECULAR, i, &spec);
+			material->GetTexture(aiTextureType_DIFFUSE_ROUGHNESS, i, &rough);
 		}
 		for (int i = 0; i < (normC=material->GetTextureCount(aiTextureType_DISPLACEMENT)); i++)
 		{
 			material->GetTexture(aiTextureType_DISPLACEMENT, i, &norm);
 		}
+		for (int i = 0; i < (metalC= material->GetTextureCount(aiTextureType_METALNESS)); i++)
+		{
+			material->GetTexture(aiTextureType_METALNESS, i, &metallic);
+		}
+		for (int i = 0; i < (aoC = material->GetTextureCount(aiTextureType_AMBIENT_OCCLUSION)); i++)
+		{
+			material->GetTexture(aiTextureType_AMBIENT_OCCLUSION, i, &ao);
+		}
+
 		std::string rDir = AssetManager::assetRootPath;
 		if (difC)
-			mat.setTexture2D("material.diffuseMap",(dir+diff.C_Str()).c_str() );
+			mat.setTexture2D("material.diffuse",(dir+diff.C_Str()).c_str() );
 		else
-			mat.setTexture2D("material.diffuseMap", rDir + "EngineAssets/defaultDiff.jpg");
-		if (specC)
-			mat.setTexture2D("material.specularMap", (dir + spec.C_Str()).c_str());
+			mat.setTexture2D("material.diffuse", rDir + "EngineAssets/defaultDiff.jpg");
+		if (roughC)
+			mat.setTexture2D("material.roughness", (dir + rough.C_Str()).c_str());
 		else
-			mat.setTexture2D("material.specularMap", rDir + "EngineAssets/defaultDiff.jpg");
+		{
+			mat.setValue("noRoughness",1.0f);
+			mat.setValue("roughness",0.4f);
+		}
 		if (normC)
 		{
-			mat.setTexture2D("material.normalMap", (dir + norm.C_Str()).c_str());
-			mat.setValue("normalStrength", 5.0f);
+			mat.setTexture2D("material.roughness", (dir + norm.C_Str()).c_str());
+			mat.setValue("normalStrength", 5);
 		}
 		else
 		{
-			mat.setValue("normalStrength", 0);
-			mat.setTexture2D("material.normalMap", rDir + "EngineAssets/defaultDiff.jpg");
+			mat.setValue("noNormal", 1);
+		}
+
+		if (metalC)
+			mat.setTexture2D("material.metallic", (dir + metallic.C_Str()).c_str());
+		else
+		{
+			mat.setValue("noMetallic", 1.0f);
+			mat.setValue("metallic", 1);
+		}
+
+		if (aoC)
+			mat.setTexture2D("material.metallic", (dir + ao.C_Str()).c_str());
+		else
+		{
+			mat.setValue("noAO", 1.0f);
+			mat.setValue("ambientocclusion", 1.0f);
 		}
 		std::cout << "Diffuse: " << diff.C_Str() << std::endl;
-		std::cout << "Specular: " << spec.C_Str() << std::endl;
+		std::cout << "rougness: " << rough.C_Str() << std::endl;
 		std::cout << "normal: " << norm.C_Str() << std::endl;
+		std::cout << "metallic: " << metallic.C_Str() << std::endl;
+		std::cout << "ao: " << ao.C_Str() << std::endl;
 	
-		mat.setValue("specIntensity", 1);
+		mat.setValue("roughness", 1);
 	}
 	
 	currScene.AddComponent<Material>(meshid) = mat;

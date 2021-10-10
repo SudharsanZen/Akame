@@ -12,12 +12,37 @@ physics::RigidBodySystem::RigidBodySystem()
 
 void physics::RigidBodySystem::Run(float deltaTime)
 {
-	setVisualToPXTransform();
+	if (mPhysics->isAdvancing(deltaTime))
+	{
+		//setVisualToPXTransform();
+	}
+
+	
+		
+	
 	if (mPhysics->advance(deltaTime))
 	{
+		
 		mPhysics->mScene->fetchResults(true);
-		setPxToVisualTransform();
+		accumulator = 0;
+		std::shared_ptr<ECS> e = ecs.lock();
+		//collect initial tranform position for interpolation
+		for (auto const& ent : entities)
+		{
+
+			RigidBody3D& rb3d = e->GetComponent<RigidBody3D>(ent);
+
+			Transform& transform = e->GetComponent<Transform>(ent);
+			transform.pxPoseInit = transform.GetGlobalPosition();
+			transform.pxRotInit = transform.GetGlobalRotation().quaternion;
+
+		}
 	}
+
+	accumulator += deltaTime;
+	mixAmt = accumulator / mPhysics->mStepSize;
+	mixAmt = glm::clamp(mixAmt, 0.0f, 1.0f);
+	setPxToVisualTransform();
 
 
 
@@ -47,8 +72,13 @@ void physics::RigidBodySystem::setPxToVisualTransform()
 		RigidBody3D& rb3d = e->GetComponent<RigidBody3D>(ent);
 		Transform& transform = e->GetComponent<Transform>(ent);
 		scale = transform.GetLocalScale();
-		_PxToTrans(rb3d.rigidbody->getGlobalPose(),transform);
-
+		//_PxToTrans(rb3d.rigidbody->getGlobalPose(),transform,mixAmt);
+		
+		glm::vec3 newPose = glm::mix(transform.pxPoseInit, _PxToVec3(rb3d.rigidbody->getGlobalPose().p), mixAmt);
+		glm::quat newRot = glm::mix(transform.pxRotInit, _PxToQuat(rb3d.rigidbody->getGlobalPose().q), mixAmt);
+		transform.SetGlobalPosition(newPose);
+		transform.SetGlobalRotation(newRot);
+		
 		transform.SetLocalScale(scale);
 
 	}

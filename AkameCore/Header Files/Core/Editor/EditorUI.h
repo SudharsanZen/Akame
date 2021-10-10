@@ -9,8 +9,10 @@ typedef int ImGuiTreeNodeFlags;
 class Editor
 {
 private:
+	//float lx=-125, ly=45, lz=0;
 	float lx=-90, ly=0, lz=0;
 	bool viewDebugInfo;
+	bool drawLights=false;
 	std::set<Entity> selected;
 	ImGuiIO& io;
 	std::weak_ptr<GLFWwindow> context;

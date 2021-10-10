@@ -38,6 +38,15 @@ namespace physics
 		targetTransform.SetGlobalRotation(_PxToQuat(pxt.q));
 	}
 
+	void _PxToTrans(physx::PxTransform pxt, Transform& targetTransform, float mix)
+	{
+
+		glm::vec3 newPose=glm::mix(targetTransform.GetGlobalPosition(), _PxToVec3(pxt.p),mix);
+		glm::quat newRot=glm::mix(targetTransform.GetGlobalRotation().quaternion, _PxToQuat(pxt.q),mix);
+		targetTransform.SetGlobalPosition(newPose);
+		targetTransform.SetGlobalRotation(newRot);
+	}
+
 	//initialize PhysX
 	void Physics::initPhysics()
 	{
@@ -87,6 +96,15 @@ namespace physics
 
 		
 
+	}
+
+	bool Physics::isAdvancing(physx::PxReal dt)
+	{
+		
+		if (mAccumulator + dt < mStepSize)
+			return false;
+		else
+			return true;
 	}
 
 	//get's physics calculations after the step size (fixed time interval: default= (1.0f/60.0f) sec)

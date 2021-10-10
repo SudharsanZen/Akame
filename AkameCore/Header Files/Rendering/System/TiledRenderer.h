@@ -21,6 +21,7 @@ public:
 	TiledRenderer(std::string shaderLocation=AssetManager::assetRootPath+"Shaders/Deferred/Compute/defCal.comp");
 	void set4x4Matrixfv(std::string, glm::mat4);
 	void set4x4MatrixfvArray(std::string name, unsigned int index, glm::mat4 value);
+	void setVec3(std::string name, glm::vec3 value);
 	void setFloat(std::string, float);
 	void setInt(std::string, int);
 	void updateBufferSize(int height, int width);

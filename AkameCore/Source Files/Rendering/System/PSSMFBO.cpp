@@ -55,8 +55,6 @@ void PSSMFBO::useTextureArray(unsigned int unit)
 { 
 	glActiveTexture(GL_TEXTURE0 + unit); 
 	glBindTexture(GL_TEXTURE_2D_ARRAY, shadowMapsArray); 
-	glActiveTexture(GL_TEXTURE0 + unit+1);
-	glBindTexture(GL_TEXTURE_2D_ARRAY, shadowMapsArray);
 }
 
 float CalSplitDistance(float farPlaneNum,float numOfFrustum, float znear, float zfar, float lambda)
