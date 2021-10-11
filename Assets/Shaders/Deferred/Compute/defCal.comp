@@ -335,7 +335,7 @@ vec3 calcPointLight(PointLight ptl,BufferPixelValues P)
     vec3 H = normalize(V + L);
 
         float atten = 1.0 / (lightDistance * lightDistance);
-        vec3 radiance     = ptl.lightColor.xyz * atten;        
+        vec3 radiance     = ptl.lightColor.xyz * atten*ptl.intensity;        
         
         // cook-torrance brdf
         float NDF = DistributionGGX(N, H, P.roughness);        
@@ -389,7 +389,7 @@ vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P,float shadow)
             
         // add to outgoing radiance Lo
         float NdotL = max(dot(N, L), 0.0);                
-        vec3 Lo = ((kD * P.albedo.xyz / PI + specular) * radiance * NdotL*l.intensity*(1.0f-shadow)); 
+        vec3 Lo = ((kD * P.albedo.xyz / PI + specular) * radiance * NdotL*l.intensity*10.0f*(1.0f-shadow)); 
     
     return Lo;
 }

@@ -45,7 +45,7 @@ public:
 		acc += deltaTime;
 		Transform& t = GetComponent<Transform>();
 		Lights& l = GetComponent<Lights>();
-		Debug::DrawCircle(t.GetGlobalPosition(),worldUp,l.getPointLightRadius(),glm::vec3(1,0,0),20);
+		//Debug::DrawCircle(t.GetGlobalPosition(),worldUp,l.getPointLightRadius(),glm::vec3(1,0,0),20);
 		glm::vec3 pose = t.GetGlobalPosition();
 		t.SetGlobalPosition(glm::vec3(pose.x,pose.y, sin(offSet + acc) * 3.0f));
 	}
@@ -116,7 +116,7 @@ int main()
 	scene.AddComponent<Material>(sky) = matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	std::vector<Entity> lights;
-	int m = 40;
+	int m = 0;
 	int maxi = 20;
 	for (int i = 0; i < m; i++)
 	{
@@ -126,8 +126,8 @@ int main()
 		Lights &l=scene.AddComponent<Lights>(lights[i]);
 
 		l.setType(LIGHT::POINT);
-		l.setPointLightConst(4,10,100);
-		l.setIntensity(10);
+		l.setPointLightConst(4,10,10);
+		l.setIntensity(5);
 		l.setColor(1,0.5,0);
 		scene.AddComponent<BehaviourComponent>(lights[i]).setBehaviour<strafe>(float(i));
 	}

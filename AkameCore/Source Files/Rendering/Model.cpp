@@ -218,7 +218,7 @@ Entity processMesh(Entity parent,Scene &currScene,aiMesh* mesh, const aiScene* s
 		else
 		{
 			mat.setValue("noMetallic", 1.0f);
-			mat.setValue("metallic", 1);
+			mat.setValue("metallic", 0.0f);
 		}
 
 		if (aoC)
