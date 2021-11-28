@@ -40,3 +40,7 @@
     <Vertex path="DebugShader/lines.vert"/>
     <Fragment path="DebugShader/lines.frag"/>
 </Shader>
+<Shader name="SkinnedMeshRenderer" queue="SKINNED+0">
+    <Vertex path="SkeletalMesh/SkinnedMeshRenderer.vert"/>
+    <Fragment path="SkeletalMesh/SkinnedMeshRenderer.frag"/>
+</Shader>

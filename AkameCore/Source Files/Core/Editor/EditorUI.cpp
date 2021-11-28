@@ -157,15 +157,28 @@ void Editor::DrawUI()
 					Debug::DrawRay(pose,l.getDirection(),1.5,glm::vec3(0,0,1));
 				}
 			}
+			else if (scene.ecs->IsComponentAttached<Transform>(ent))
+			{
+				Transform& t = scene.ecs->GetComponent<Transform>(ent);
+				glm::vec3 pose = t.GetGlobalPosition();
+				Debug::DrawCircle(pose, t.up(), 0.5, glm::vec3(1, 0.5, 0));
+				Debug::DrawCircle(pose, t.forward(), 0.5, glm::vec3(1, 0.5, 0));
+				Debug::DrawCircle(pose, t.right(), 0.5, glm::vec3(1, 0.5, 0));
+
+				
+
+				
+			}
 		}
 	}
+
 	if (ImGui::IsKeyDown(KEY_DELETE))
 	{
 
 		for (auto ent : selected)
 		{
 			scene.ecs->DestroyEntity(ent);
-
+		
 		}
 		selected.clear();
 	}
@@ -173,8 +186,25 @@ void Editor::DrawUI()
 	
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
-	
+
 	ImGui::NewFrame();
+
+	ImGui::Begin("properties");
+	ImGui::Text("Transform");
+	if (selected.size() > 0)
+	{
+		Transform& t = scene.GetComponent<Transform>(*selected.begin());
+		glm::vec3 pose = t.GetGlobalPosition();
+		ImGui::Text("position: x:%f  y:%f  z:%f",pose.x ,pose.y ,pose.z );
+		if (ImGui::Button("goToSelection", ImVec2(200.0f, 25.0f)))
+		{
+			glm::vec3 camPose = pose+scene.cam.transform.forward()*2.0f;
+			scene.cam.transform.SetGlobalPosition(camPose);
+		}
+	}
+	ImGui::End();
+
+
 	ImGui::Begin("SceneGraph");
 
 	if (ImGui::Button("ToggleDebugInfo", ImVec2(200.0f, 25.0f)))

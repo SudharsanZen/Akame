@@ -1,30 +1,35 @@
 #pragma once
 #include<string>
 #include"Components/Rendering/Mesh.h"
-
+#include"Components/Animation/SkeletalMesh.h"
+#include<map>
 struct aiMesh;
 struct aiNode;
 struct aiScene;
 
-Entity LoadModelToScene(Scene &scene, std::string modelPath);
+
 class Model
 {
-public:
-	Model(std::string path)
-	{
-		loadModel(path);
-	}
-
-	void Draw();
-	std::vector<Mesh> meshes;
 private:
-	
+	Scene& currScene;
+	const aiScene* scene;
+	std::string dir;
+	std::map<std::string, Bone> boneMap;
 	std::string directory;
 
-	void loadModel(std::string path);
-	void processNode(aiNode *node,const aiScene *scene);
-	Mesh processMesh(aiMesh *mesh,const aiScene *scene);
+	std::map<aiNode*, Entity> allNodeMap;
+	std::map<std::string, aiNode*> boneNodeMap;
+	std::vector<Entity> skMeshList;
+	void processNode(Entity parent, aiNode* node);
+	Entity processSkeletalMesh(Entity parent, aiMesh* mesh);
+	Entity processMesh(Entity parent, aiMesh* mesh);
+	void UpdateHierarchy(aiNode *rootNode);
+public:
+	Model(Scene &s):currScene(s)
+	{
+	}
 
+	Entity LoadModelToScene(std::string modelPath);
 
 };
 

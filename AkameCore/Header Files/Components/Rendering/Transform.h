@@ -123,7 +123,7 @@ public:
 	}
 	Quaternion GetGlobalRotation()
 	{
-		return baseRotation* localRotation;
+		return baseRotation * localRotation;
 	}
 	glm::vec3 GetGlobalScale()
 	{

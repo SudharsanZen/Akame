@@ -4,11 +4,17 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{21EB8090-0D4E-1035-B6D3-48EBA215DCB7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Animation">
+      <UniqueIdentifier>{50C1AAE9-3CBB-D33B-2528-6A4C11C139A8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Assets">
       <UniqueIdentifier>{E34259A5-4FA4-36B3-D811-7D6544726D72}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Components">
       <UniqueIdentifier>{96F9C353-0231-0CEB-0B3B-700E77F132E4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Animation">
+      <UniqueIdentifier>{0526F6E1-7194-4B61-BA7D-0661262B41FD}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Components\Behaviour">
       <UniqueIdentifier>{8A0BA0A0-F679-F51F-3F63-B01FAB10EBBB}</UniqueIdentifier>
@@ -58,6 +64,9 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{E9C7FDCE-D52A-8D73-7EB0-C5296AF258F6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Animation">
+      <UniqueIdentifier>{1838584F-0432-81A1-ED9E-17B2D937E70D}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Assets">
       <UniqueIdentifier>{ABEEB466-1750-9274-A0BD-D8260C1EC933}</UniqueIdentifier>
     </Filter>
@@ -102,6 +111,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header Files\Animation\SkeletalMeshRenderingSystem.h">
+      <Filter>Header Files\Animation</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Assets\Asset.h">
       <Filter>Header Files\Assets</Filter>
     </ClInclude>
@@ -113,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="Header Files\Assets\ShaderManager.h">
       <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Components\Animation\SkeletalMesh.h">
+      <Filter>Header Files\Components\Animation</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Components\Behaviour\Behaviour.h">
       <Filter>Header Files\Components\Behaviour</Filter>
@@ -249,8 +264,13 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Animation\AnimationControllerSystem.h" />
+    <ClInclude Include="Header Files\Components\Animation\AnimationController.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source Files\Animation\SkeletalMeshRenderingSystem.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\Assets\Asset.cpp">
       <Filter>Source Files\Assets</Filter>
     </ClCompile>
@@ -279,6 +299,9 @@
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Components\Mesh.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Components\SkeletalMesh.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Core\Debug\Debug.cpp">
@@ -386,5 +409,7 @@
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp" />
+    <ClCompile Include="Source Files\Components\AnimationController.cpp" />
   </ItemGroup>
 </Project>

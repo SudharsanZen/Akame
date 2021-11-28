@@ -9,10 +9,12 @@
 #include"Rendering/System/SceneTransformManager.h"
 #include"Components/EntityDescriptor.h"
 #include "Core/Editor/EntityDescriptionSystem.h"
+class SkeletalMeshRenderingSystem;
 class Window;
 class RenderingSystem;
 class BehaviourSystem;
 class LightSystem;
+class AnimationControllerSystem;
 namespace physics 
 {
 	class RigidBodySystem;
@@ -20,7 +22,7 @@ namespace physics
 class Scene
 {
 private:
-	
+
 	std::shared_ptr<ECS> ecs;
 	
 	std::shared_ptr<RenderingSystem> renderSys;
@@ -29,7 +31,8 @@ private:
 	std::shared_ptr<physics::RigidBodySystem> physicsSys;
 	std::shared_ptr<SceneTransformManager> transformManager;
 	std::shared_ptr<EntityDescriptionSystem> EDS;
-	
+	std::shared_ptr<SkeletalMeshRenderingSystem> animSys;
+	std::shared_ptr<AnimationControllerSystem> animContSys;
 	glm::vec4 color;
 	Window &window;
 

@@ -7,6 +7,7 @@
 #include<Core/Engine.h>
 #include<Rendering/DeferredRendererFragmentBuffer.h>
 #include<Core/Scene.h>
+#include<Core/Debug/Debug.h>
 #define sizeX 10.0f
 #define sizeY 10.0f
 
@@ -56,23 +57,27 @@ int main()
 		if (i > 0)
 		{
 			t.setParent(cubeList[i - 1]);
+			
 		}
 		else
 		{
 
 			t.SetLocalScale(glm::vec3(3));
-			t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30,glm::vec3(0,0,1)));
+			//t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30,glm::vec3(0,0,1)));
 		}
 	}
 	
 
-	
+	for (int i = 1; i < m; i++)
+	{
+		Transform& t = scene.GetComponent<Transform>(cubeList[i]);
+		t.SetLocalRotation(Quaternion(0, ((float)i / float(m)) *50, 0));
+	}
 
 	Material mat("GRIDS");
 	Entity plane= scene.CreateEntity();
-	Transform planeInf;
 
-	scene.AddComponent<Transform>(plane)=planeInf;
+	scene.AddComponent<Transform>(plane);
 	Mesh &pm=scene.AddComponent<Mesh>(plane);
 	scene.AddComponent<Material>(plane)=mat;
 	pm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
@@ -89,7 +94,7 @@ int main()
 	Transform& t = scene.GetComponent<Transform>(cubeList[0]);
 	Transform& t1 = scene.GetComponent<Transform>(cubeList[4]);
 	
-	//t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30, glm::vec3(0, 0, 1)));
+	t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30, glm::vec3(0, 0, 1)));
 	Editor edt(window,scene);
 	scene.OnStart();
 	scene.vsyncOn(false);
@@ -109,6 +114,13 @@ int main()
 		t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(deltaTime,glm::vec3(0,1,0))* t.GetGlobalRotation());
 		//t1.SetGlobalRotation(Quaternion::rotationAroundAxisVector(deltaTime, glm::vec3(0, 1, 0))*t.GetGlobalRotation());
 		scene.swapBuffers();
+		for (int i = 0; i < m; i++)
+		{
+			Transform& tr = scene.GetComponent<Transform>(cubeList[i]);
+			Debug::DrawRay(tr.GetGlobalPosition(),tr.forward(),1,glm::vec3(0,0,1));
+			Debug::DrawRay(tr.GetGlobalPosition(),tr.up(),1,glm::vec3(0,1,0));
+			Debug::DrawRay(tr.GetGlobalPosition(),tr.right(),1,glm::vec3(1,0,0));
+		}
 	}
 
 

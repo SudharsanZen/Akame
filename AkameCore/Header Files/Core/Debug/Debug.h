@@ -1,5 +1,5 @@
 
-
+#pragma once
 #include"Math/EngineMath.h"
 #include<vector>
 
@@ -36,7 +36,7 @@ public:
 	static void DrawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color = glm::vec3(1));
 	static void DrawRay(glm::vec3 origin, glm::vec3 direction, float distance,glm::vec3 color=glm::vec3(1))
 	{
-		DrawLine(origin,origin+direction*distance);
+		DrawLine(origin,origin+direction*distance,color);
 	}
 	static void DrawCircle(glm::vec3 origin, glm::vec3 up, float radius, glm::vec3 color = glm::vec3(1), int numOfSegments = 10);
 

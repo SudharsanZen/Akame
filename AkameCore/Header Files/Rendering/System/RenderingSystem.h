@@ -9,7 +9,8 @@
 #include"Rendering/System/TiledRenderer.h"
 #include<map>
 #include<unordered_map>
-
+#include"Components/Animation/SkeletalMesh.h"
+#include"Animation/SkeletalMeshRenderingSystem.h"
 class Camera;
 class LightSystem;
 class RenderingSystem :public System
@@ -17,7 +18,7 @@ class RenderingSystem :public System
 private:
 	unsigned int transformUBO;
 	int maxUBOSize,maxTransformUploadable;
-	
+	std::weak_ptr<SkeletalMeshRenderingSystem> animSys;
 	ComponentArray<Transform>* transformArray;
 	ComponentArray<Mesh>* meshArray;
 
@@ -67,7 +68,7 @@ public:
 	{ 
 		m_update_Event = true;
 	}
-	//call this update the frame buffer's size to which stuff are drawn too
+	//call this update the frame buffer's size to which Meshes are drawn to
 	void updateFrameBufferSize(int height,int width);
 	//change the viewPort's buffer size
 	void viewPortSize(int x,int y,int height,int width);

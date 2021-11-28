@@ -6,61 +6,36 @@
 #include<assimp/scene.h>
 #include<assimp/postprocess.h>
 #include"misc/temp.h"
-void Model::Draw()
+#include"Components/Animation/SkeletalMesh.h"
+#include"Animation/AnimationControllerSystem.h"
+
+Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 {
-	for (GLuint i = 0; i < meshes.size(); i++)
-	{
-		meshes[i].renderMesh();
-	}
-}
-
-void Model::loadModel(std::string path)
-{
-	unsigned int importOptions = aiProcess_Triangulate           
-    | aiProcess_JoinIdenticalVertices       
-    | aiProcess_Triangulate                         
-    | aiProcess_FlipUVs;
-
-	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path,importOptions);
-
-	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
-	{
-		std::cout <<"ERROR::ASSIMP::"<<importer.GetErrorString()<<std::endl;
-		return;
-	}
-	directory = path.substr(0,path.find_last_of('/'));
-	processNode(scene->mRootNode,scene);
-}
-
-void Model::processNode(aiNode* node, const aiScene* scene)
-{
-	for (GLuint i = 0; i < node->mNumMeshes; i++)
-	{
-		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		meshes.push_back(processMesh(mesh,scene));
-	}
-
-	for (GLuint i = 0; i < node->mNumChildren; i++)
-	{
-		processNode(node->mChildren[i],scene);
-	}
-}
-
-Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
-{
-	std::vector<vert> vertices;
+	
+	std::set<std::string> bonesNames;
+	std::vector<sk_vert> vertices;
 	std::vector<unsigned int> indices;
+	std::string meshName = mesh->mName.C_Str();
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
-		vert vertex;
-		vertex.pos.x=mesh->mVertices[i].x;
-		vertex.pos.y=mesh->mVertices[i].y;
-		vertex.pos.z=mesh->mVertices[i].z;
+		sk_vert vertex;
+		vertex.pos.x = mesh->mVertices[i].x;
+		vertex.pos.y = mesh->mVertices[i].y;
+		vertex.pos.z = mesh->mVertices[i].z;
 
-		vertex.normal.x =mesh->mNormals[i].x;
-		vertex.normal.y =mesh->mNormals[i].y;
-		vertex.normal.z =mesh->mNormals[i].z;
+		vertex.normal.x = mesh->mNormals[i].x;
+		vertex.normal.y = mesh->mNormals[i].y;
+		vertex.normal.z = mesh->mNormals[i].z;
+		vertex.boneWeight.x = 0;
+		vertex.boneWeight.y = 0;
+		vertex.boneWeight.z = 0;
+		vertex.boneWeight.w = 0;
+
+		vertex.boneIndex.x = -1;
+		vertex.boneIndex.y = -1;
+		vertex.boneIndex.z = -1;
+		vertex.boneIndex.w = -1;
+
 		if (mesh->mTextureCoords[0])
 		{
 			vertex.uv.x = mesh->mTextureCoords[0][i].x;
@@ -80,33 +55,117 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
 		{
 			indices.push_back(face.mIndices[j]);
-			
-			
+
+
 		}
 	}
-	std::vector<vert> finalVert;
-	for (size_t i = 0; i < indices.size(); i+=3)
-	{
-		vert v1, v2, v3;
-		v1 = vertices[indices[i]];
-		v2 = vertices[indices[i+1]];
-		v3 = vertices[indices[i + 2]];
 	
+
+	Entity meshid = currScene.CreateEntity();
+	skMeshList.push_back(meshid);
+	Transform& t = currScene.AddComponent<Transform>(meshid);
+	t.setParent(parent);
+
+	currScene.SetEntityName(meshid, meshName);
+	for (int i_bone = 0; i_bone < mesh->mNumBones; i_bone++)
+	{
+		int boneId = -1;
+		auto &currBone=mesh->mBones[i_bone];
+		if (bonesNames.find(currBone->mName.C_Str())==bonesNames.end())
+		{
+			bonesNames.insert(currBone->mName.C_Str());
+			
+		}
+		if (boneMap.find(currBone->mName.C_Str()) == boneMap.end())
+		{
+			
+			Bone b;
+			b.id = boneMap.size();
+			b.name = currBone->mName.C_Str();
+			
+			aiVector3D pose;
+			aiVector3D scale;
+			aiQuaternion rot;
+			ai_real angle;
+			aiVector3D angles;
+			boneId = b.id;
+			currBone->mArmature->mTransformation.Decompose(scale,rot,pose);
+		
+			b.scale = glm::vec3(scale.x,scale.y,scale.z);
+			b.pose = glm::vec3(pose.x,pose.y,pose.z);
+			b.rot = (glm::quat(rot.w,rot.x,rot.y,rot.z));
+			//b.rotAxis = glm::vec3(axis.x, axis.y, axis.z);
+			//b.rotAngle = angle;
+			
+		
+			b.parentName = "";
+			if (currBone->mNode->mParent != nullptr)
+			{
+				b.parentName=currBone->mNode->mParent->mName.C_Str();	
+			}
+
+			boneNodeMap[b.name] = currBone->mNode;
+
+			boneMap[b.name] = b;
+		}
+		else
+		{
+			boneId = boneMap[currBone->mName.C_Str()].id;
+		}
+		assert(boneId!=-1);
+		auto weights = currBone->mWeights;
+		for (int i_weight = 0; i_weight < currBone->mNumWeights; i_weight++)
+		{
+			int vertexId = weights[i_weight].mVertexId;
+			float weight = weights[i_weight].mWeight;
+			assert(vertexId<=vertices.size());
+			for (int i = 0; i < 4; i++)
+			{
+				if (vertices[vertexId].boneIndex[i] == -1)
+				{
+					vertices[vertexId].boneIndex[i] = boneId;
+					vertices[vertexId].boneWeight[i]= weight;
+					break;
+				}
+			}
+		}
+	}
+
+
+
+	
+	SkeletalMesh &m=currScene.AddComponent<SkeletalMesh>(meshid);
+	m.boneMap=std::vector<Bone>(bonesNames.size());
+
+	for (auto bStr : bonesNames)
+	{
+		assert(boneMap.find(bStr) != boneMap.end());
+		{
+			auto& bone = boneMap[bStr];
+			m.boneMap[bone.id]=bone;
+		}
+
+	}
+	std::vector<sk_vert> finalVert;
+	for (size_t i = 0; i < indices.size(); i += 3)
+	{
+		sk_vert v1, v2, v3;
+		v1 = vertices[indices[i]];
+		v2 = vertices[indices[i + 1]];
+		v3 = vertices[indices[i + 2]];
+
 		calTangentBiTangent(v1, v2, v3);
 		finalVert.push_back(v1);
 		finalVert.push_back(v2);
 		finalVert.push_back(v3);
 	}
-	Mesh m;
 	m.CreateMesh(finalVert);
-	return m;
+	return meshid;
 }
-
-
-
-
-Entity processMesh(Entity parent,Scene &currScene,aiMesh* mesh, const aiScene* scene,std::string dir)
+Entity Model::processMesh(Entity parent,aiMesh* mesh)
 {
+	if (mesh->HasBones())
+		return processSkeletalMesh(parent,mesh);
 	std::vector<vert> vertices;
 	std::vector<unsigned int> indices;
 	std::string meshName=mesh->mName.C_Str();
@@ -242,52 +301,150 @@ Entity processMesh(Entity parent,Scene &currScene,aiMesh* mesh, const aiScene* s
 	return meshid;
 }
 
-void processNode(Entity parent,Scene &currScene,aiNode* node, const aiScene* scene,std::string dir)
+void Model::processNode(Entity parent,aiNode* node)
 {
 
 	Entity currNode;
-		
+	/*
 	if (node->mNumMeshes <= 1 && node->mNumChildren==0)
 	{
 		currNode = parent;
 	}
-	else
+	else*/
 	{
 		
 		currNode=currScene.CreateEntity();
+		allNodeMap[node] = currNode;
 		Transform& t = currScene.AddComponent<Transform>(currNode);
 		t.setParent(parent);
+		aiVector3D pose;
+		aiVector3D scale;
+		aiQuaternion quat;
+		ai_real angle;
+		node->mTransformation.Decompose(scale, quat, pose);
+		glm::vec3 p = glm::vec3(pose.x, pose.y, pose.z);
+		glm::quat a = glm::quat(quat.w,quat.x,quat.y,quat.z);
+		t.SetLocalPosition(p);
+		t.SetLocalRotation(Quaternion(a));
+		t.SetLocalScale(glm::vec3(scale.x,scale.y,scale.z));
 		currScene.SetEntityName(currNode, node->mName.C_Str());
 	}
 	for (GLuint i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		processMesh(currNode,currScene,mesh, scene,dir);
+		processMesh(currNode,mesh);
 	}
 
 	for (GLuint i = 0; i < node->mNumChildren; i++)
 	{
-		processNode(currNode,currScene,node->mChildren[i], scene,dir);
+		processNode(currNode,node->mChildren[i]);
 	}
 }
-Entity LoadModelToScene(Scene &currScene, std::string modelPath)
+Entity Model::LoadModelToScene(std::string modelPath)
 {
+
 	unsigned int importOptions = aiProcess_Triangulate
 		| aiProcess_JoinIdenticalVertices
 		| aiProcess_Triangulate
+		|aiProcess_PopulateArmatureData
 		;
 
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(modelPath, importOptions);
+	scene = importer.ReadFile(modelPath, importOptions);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
 		return Entity(-1,-1);
 	}
-	std::string directory = modelPath.substr(0, modelPath.find_last_of('/'))+"/";
+	dir = modelPath.substr(0, modelPath.find_last_of('/'))+"/";
 	Entity parent=currScene.CreateEntity();
 	currScene.AddComponent<Transform>(parent);
-	processNode(parent,currScene,scene->mRootNode,scene,directory);
+	processNode(parent,scene->mRootNode);
+
+	aiNode* rootBone;
+	for (auto &bonePair : boneMap)
+	{
+		auto& bone = bonePair.second;
+		if (boneNodeMap.find(bone.name) != boneNodeMap.end())
+		{
+			aiNode *currBoneNode = boneNodeMap[bone.name];
+			if (boneNodeMap.find(currBoneNode->mParent->mName.C_Str()) == boneNodeMap.end())
+			{
+				rootBone = currBoneNode->mParent;;
+			}
+
+			if (allNodeMap.find(boneNodeMap[bone.name]) != allNodeMap.end())
+			{
+				Entity currBone = allNodeMap[boneNodeMap[bone.name]];
+				bone.eid = currBone;
+			}
+			else
+			{
+				std::cout << "Can't find node "<<bone.name<<" in the scene\n";
+			}
+		}
+		else
+		{
+			std::cout <<"can't find bone in bone list: "<<bone.name<<std::endl;
+		}
+			Transform& bT = currScene.GetComponent<Transform>(bone.eid);
+			
+		
+	}
+
+	for (auto& ent : skMeshList)
+	{
+		
+		SkeletalMesh& skm = currScene.GetComponent<SkeletalMesh>(ent);
+		for (int i = 0; i < skm.boneMap.size(); i++)
+		{
+			assert(boneMap.find(skm.boneMap[i].name)!=boneMap.end());
+			skm.boneMap[i].eid = boneMap[skm.boneMap[i].name].eid;
+		}
+
+	}
+	if (boneMap.size() > 0)
+	{
+		AnimationController& anim = currScene.AddComponent<AnimationController>(parent);
+		anim.boneList = std::make_shared<std::vector<Bone>>(boneMap.size());
+		anim.boneMap = std::make_shared<std::map<std::string, Bone>>();
+		(*anim.boneMap) = boneMap;
+		for (auto& bone : boneMap)
+		{
+			(*anim.boneList)[bone.second.id] = bone.second;
+		}
+		if (scene->HasAnimations())
+		{ 
+			unsigned int animCount=scene->mNumAnimations;
+			auto animList = scene->mAnimations;
+
+			for (unsigned int i = 0; i < animCount; i++)
+			{
+				std::cout << animList[i]->mName.C_Str();
+			}
+		}
+	}
+	//UpdateHierarchy(rootBone);
 	return parent;
+}
+void Model::UpdateHierarchy(aiNode* rootNode)
+{
+	if (!rootNode)
+		return;
+	std::string boneName = rootNode->mName.C_Str();
+	if (boneMap.find(boneName) != boneMap.end())
+	{
+		Transform& t = currScene.GetComponent<Transform>(boneMap[boneName].eid);
+		auto bone = boneMap[boneName];
+	
+		t.SetLocalPosition(bone.pose);
+		t.SetLocalRotation(bone.rot);
+		t.SetLocalScale(bone.scale);
+		
+	}
+	for (int i = 0; i < rootNode->mNumChildren; i++)
+	{
+		UpdateHierarchy(rootNode->mChildren[i]);
+	}
 }

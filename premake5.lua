@@ -87,6 +87,7 @@ group "Samples"
     include "premakeconfig/Model.lua"
     include "premakeconfig/snakeGame.lua"
     include "premakeconfig/RandomStuffTest.lua"
+    include "premakeconfig/AnimationTest.lua"
 group ""
 
 group "tools"

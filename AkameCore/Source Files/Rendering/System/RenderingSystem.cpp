@@ -89,6 +89,7 @@ RenderingSystem::RenderingSystem()
 
 void RenderingSystem::Run(Camera& cam)
 {
+	
 	if (Mesh::needsUpdate)
 	{
 		Mesh::needsUpdate = false;
@@ -108,6 +109,7 @@ void RenderingSystem::Run(Camera& cam)
 	std::shared_ptr<ECS> E = ecs.lock();
 	std::shared_ptr<Shader> shader;
 
+	
 	//directional shadow maps 
 	shader=ShaderManager::GetShader("SHADOW_DIRECTIONAL");
 	lsys->BindDirectionalLightShadowMap(shader,cam);
@@ -117,7 +119,11 @@ void RenderingSystem::Run(Camera& cam)
 	
 	glViewport(0, 0, width, height);
 	RenderQueue("GEOMETRY",cam);
+	glBindVertexArray(SkeletalMesh::VAO);
+	animSys.lock()->renderMeshes(cam);
+	glBindVertexArray(0);
 	RenderQueue("OVERLAY",cam);
+
 	
 	ShaderManager::GetShader("LINES_DEBUG")->useShaderProgram();
 	glDisable(GL_DEPTH_TEST);

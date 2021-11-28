@@ -6,6 +6,8 @@
 #include"Components/Rendering/Mesh.h"
 #include"Components/Rendering/Material.h"
 #include"Components/Physics/RigidBody3D.h"
+#include"Components/Animation/SkeletalMesh.h"
+#include"Animation/SkeletalMeshRenderingSystem.h"
 #include"Core/Window.h"
 #include"Rendering/System/RenderingSystem.h"
 #include"Scripting/BehaviourSystem.h"
@@ -15,6 +17,7 @@
 #include"Rendering/System/LightSystem.h"
 #include"misc/temp.h"
 #include"Core/Debug/Debug.h"
+#include"Animation/AnimationControllerSystem.h"
 std::vector<std::shared_ptr<RenderingSystem>> listScene;
 
 
@@ -101,7 +104,8 @@ void Scene::InitEcs()
 	ecs->RegisterComponent<physics::RigidBody3D>();
 	ecs->RegisterComponent<Lights>();
 	ecs->RegisterComponent<EntityDescriptor>();
-
+	ecs->RegisterComponent<SkeletalMesh>();
+	ecs->RegisterComponent<AnimationController>();
 
 	//create system signature
 	Signature renderSysSig;
@@ -126,6 +130,13 @@ void Scene::InitEcs()
 	Signature entityDescriptor;
 	entityDescriptor.set(ecs->GetComponentBitPose<EntityDescriptor>());
 
+	Signature animSig;
+	animSig.set(ecs->GetComponentBitPose<SkeletalMesh>());
+	animSig.set(ecs->GetComponentBitPose<Transform>());
+
+	Signature animCont;
+	animCont.set(ecs->GetComponentBitPose<AnimationController>());
+
 	//register system and it's signature
 	renderSys=ecs->RegisterSystem<RenderingSystem>();
 	behaviourSys=ecs->RegisterSystem<BehaviourSystem>();
@@ -133,20 +144,30 @@ void Scene::InitEcs()
 	lightSys = ecs->RegisterSystem<LightSystem>();
 	transformManager = ecs->RegisterSystem<SceneTransformManager>();
 	EDS = ecs->RegisterSystem<EntityDescriptionSystem>();
+	animSys = ecs->RegisterSystem<SkeletalMeshRenderingSystem>();
+	animContSys = ecs->RegisterSystem<AnimationControllerSystem>();
 
+	//setting some member attributes of the systems
 	behaviourSys->ecs = ecs;
 	physicsSys->ecs=ecs;
 	renderSys->lightsystem = lightSys;
+	renderSys->animSys = animSys;
 	lightSys->ecs = ecs;
 	renderSys-> ecs = ecs;
 	transformManager->ecs = ecs;
+	animSys->ecs = ecs;
+	animContSys->ecs = ecs;
 	EDS->ecs = ecs;
+
+	//registering system signature
 	ecs->SetSystemSignature<EntityDescriptionSystem>(entityDescriptor);
 	ecs->SetSystemSignature<RenderingSystem>(renderSysSig);
 	ecs->SetSystemSignature<BehaviourSystem>(behSysSig);
 	ecs->SetSystemSignature<physics::RigidBodySystem>(physicsSysSig);
 	ecs->SetSystemSignature<LightSystem>(lightingSysSig);
 	ecs->SetSystemSignature<SceneTransformManager>(transformSig);
+	ecs->SetSystemSignature<SkeletalMeshRenderingSystem>(animSig);
+	ecs->SetSystemSignature<AnimationControllerSystem>(animCont);
 
 
 }
@@ -186,14 +207,14 @@ void Scene::Render()
 		//call this in this same order
 		EDS->updateMap();
 		behaviourSys->Update(deltaTime);
+		animSys->Run();
+		animContSys->update(deltaTime);
 		transformManager->UpdateTransforms();
 		renderSys->Run(cam);
 		physicsSys->Run(deltaTime);
+		
 		fn();
 	
-		//lines(glm::vec3(0, 0, 0), glm::vec3(1, 0, 0), glm::vec3(1, 0, 0)).renderMesh();
-		//lines(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 1, 0)).renderMesh();
-		//lines(glm::vec3(0, 0, 0), glm::vec3(0, 0, 1), glm::vec3(0, 0, 1)).renderMesh();
 	deltaTime = currTime - lastTime;
 	lastTime = currTime;
 

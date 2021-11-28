@@ -73,8 +73,8 @@ int main()
 	d.setPointLightConst(1, 10, 10);
 	scene.AddComponent<Lights>(dir)=d;
 	scene.AddComponent<Transform>(dir);
-	
-	Entity model=LoadModelToScene(scene,"D:/Projects/GameEngine/sponza/sponza.fbx");
+	Model mLoader(scene);
+	Entity model=mLoader.LoadModelToScene("D:/Projects/GameEngine/sponza/sponza.fbx");
 	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
 	Transform &T=scene.GetComponent<Transform>(model);
 	T.SetGlobalScale(glm::vec3(0.5));
