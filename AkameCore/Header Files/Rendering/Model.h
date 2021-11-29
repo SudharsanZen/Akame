@@ -16,7 +16,7 @@ private:
 	std::string dir;
 	std::map<std::string, Bone> boneMap;
 	std::string directory;
-
+	aiNode* rootBoneNode;
 	std::map<aiNode*, Entity> allNodeMap;
 	std::map<std::string, aiNode*> boneNodeMap;
 	std::vector<Entity> skMeshList;

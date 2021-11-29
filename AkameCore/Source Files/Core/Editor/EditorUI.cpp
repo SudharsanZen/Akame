@@ -195,7 +195,21 @@ void Editor::DrawUI()
 	{
 		Transform& t = scene.GetComponent<Transform>(*selected.begin());
 		glm::vec3 pose = t.GetGlobalPosition();
-		ImGui::Text("position: x:%f  y:%f  z:%f",pose.x ,pose.y ,pose.z );
+		glm::vec3 lpose = t.GetLocalPosition();
+		glm::vec3 scale = t.GetGlobalScale();
+		glm::vec3 lscale = t.GetLocalScale();
+		Quaternion rot = t.GetGlobalRotation();
+		Quaternion lrot = t.GetLocalRotation();
+		ImGui::Text("Globalposition: x:%f  y:%f  z:%f",pose.x ,pose.y ,pose.z );
+		ImGui::Text("LocalPosition: x:%f  y:%f  z:%f",lpose.x ,lpose.y ,lpose.z );
+
+		ImGui::Text("GlobalRotation: x:%f  y:%f  z:%f w:%f", rot.quaternion.x, rot.quaternion.y, rot.quaternion.z, rot.quaternion.w);
+		ImGui::Text("LocalRotation: x:%f  y:%f  z:%f w:%f", lrot.quaternion.x, lrot.quaternion.y, lrot.quaternion.z, lrot.quaternion.w);
+		
+
+		ImGui::Text("GlobalScale: x:%f  y:%f  z:%f",scale.x ,scale.y ,scale.z );
+		ImGui::Text("LocalScale: x:%f  y:%f  z:%f",lscale.x ,lscale.y ,lscale.z );
+		
 		if (ImGui::Button("goToSelection", ImVec2(200.0f, 25.0f)))
 		{
 			glm::vec3 camPose = pose+scene.cam.transform.forward()*2.0f;

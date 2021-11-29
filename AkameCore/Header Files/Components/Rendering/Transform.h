@@ -119,7 +119,8 @@ public:
 
 	glm::vec3 GetGlobalPosition()
 	{
-		return localToWorld*glm::vec4(localPosition,1);
+		
+		return transformMatrix()*glm::vec4(0,0,0,1);
 	}
 	Quaternion GetGlobalRotation()
 	{
@@ -206,7 +207,6 @@ public:
 		localRotation = glm::inverse(baseRotation.quaternion)* globalRotation.quaternion;
 		localScale = globalScale / baseScale;
 
-		//push this entity to the parent's child list
 		updateChildBaseTransformDetails();
 		
 
@@ -261,11 +261,18 @@ public:
 
 	glm::mat4 transformMatrix()
 	{
-		glm::mat4 trans = glm::mat4(1.0f);
-		trans=glm::translate(trans,localPosition);
-		trans = trans * localRotation.getMatrix();
-		trans = glm::scale(trans, localScale);
+		
+		glm::mat4 trans=glm::translate(glm::mat4(1.0f),localPosition) * localRotation.getMatrix()* glm::scale(glm::mat4(1.0), localScale);
+
 		return localToWorld* trans;
+	}
+
+	glm::mat4 localTransformMatrix()
+	{
+
+		glm::mat4 trans = glm::translate(glm::mat4(1.0f), localPosition) * localRotation.getMatrix() * glm::scale(glm::mat4(1.0), localScale);
+
+		return trans;
 	}
 	glm::vec3 forward()
 	{

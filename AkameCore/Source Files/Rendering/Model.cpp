@@ -8,6 +8,7 @@
 #include"misc/temp.h"
 #include"Components/Animation/SkeletalMesh.h"
 #include"Animation/AnimationControllerSystem.h"
+#include<assimp/version.h>
 
 Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 {
@@ -65,7 +66,9 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 	skMeshList.push_back(meshid);
 	Transform& t = currScene.AddComponent<Transform>(meshid);
 	t.setParent(parent);
-
+	t.SetLocalScale(glm::vec3(1,1,1));
+	t.SetLocalPosition(glm::vec3(0,0,0));
+	t.SetLocalRotation(glm::quat(1,0,0,0));
 	currScene.SetEntityName(meshid, meshName);
 	for (int i_bone = 0; i_bone < mesh->mNumBones; i_bone++)
 	{
@@ -103,6 +106,7 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 			{
 				b.parentName=currBone->mNode->mParent->mName.C_Str();	
 			}
+
 
 			boneNodeMap[b.name] = currBone->mNode;
 
@@ -219,7 +223,9 @@ Entity Model::processMesh(Entity parent,aiMesh* mesh)
 	Entity meshid = currScene.CreateEntity();
 	Transform &t=currScene.AddComponent<Transform>(meshid);
 	t.setParent(parent);
-
+	t.SetLocalScale(glm::vec3(1, 1, 1));
+	t.SetLocalPosition(glm::vec3(0, 0, 0));
+	t.SetLocalRotation(glm::quat(1, 0, 0, 0));
 	currScene.SetEntityName(meshid,meshName);
 	Material mat("DEFERRED");
 	
@@ -320,7 +326,7 @@ void Model::processNode(Entity parent,aiNode* node)
 		aiVector3D pose;
 		aiVector3D scale;
 		aiQuaternion quat;
-		ai_real angle;
+
 		node->mTransformation.Decompose(scale, quat, pose);
 		glm::vec3 p = glm::vec3(pose.x, pose.y, pose.z);
 		glm::quat a = glm::quat(quat.w,quat.x,quat.y,quat.z);
@@ -332,7 +338,9 @@ void Model::processNode(Entity parent,aiNode* node)
 	for (GLuint i = 0; i < node->mNumMeshes; i++)
 	{
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		
 		processMesh(currNode,mesh);
+		
 	}
 
 	for (GLuint i = 0; i < node->mNumChildren; i++)
@@ -347,6 +355,7 @@ Entity Model::LoadModelToScene(std::string modelPath)
 		| aiProcess_JoinIdenticalVertices
 		| aiProcess_Triangulate
 		|aiProcess_PopulateArmatureData
+
 		;
 
 	Assimp::Importer importer;
@@ -360,8 +369,11 @@ Entity Model::LoadModelToScene(std::string modelPath)
 	dir = modelPath.substr(0, modelPath.find_last_of('/'))+"/";
 	Entity parent=currScene.CreateEntity();
 	currScene.AddComponent<Transform>(parent);
+
 	processNode(parent,scene->mRootNode);
 
+
+	//ignore these Mr._C , these are some useless code that doesn't affect the scene hierarchy and transforms
 	aiNode* rootBone;
 	for (auto &bonePair : boneMap)
 	{
@@ -425,6 +437,7 @@ Entity Model::LoadModelToScene(std::string modelPath)
 			}
 		}
 	}
+	
 	//UpdateHierarchy(rootBone);
 	return parent;
 }

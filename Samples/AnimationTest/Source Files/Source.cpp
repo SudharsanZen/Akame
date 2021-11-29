@@ -74,7 +74,7 @@ int main()
 	scene.AddComponent<Lights>(dir) = d;
 	scene.AddComponent<Transform>(dir);
 	Model mLoader(scene);
-	Entity model = mLoader.LoadModelToScene(rootDir+"Media/bowCharacter.fbx");
+	Entity model = mLoader.LoadModelToScene(rootDir+"Media/testA.fbx");
 	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
 	Transform& T = scene.GetComponent<Transform>(model);
 	T.SetGlobalScale(glm::vec3(0.1));
