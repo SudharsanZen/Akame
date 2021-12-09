@@ -430,11 +430,68 @@ Entity Model::LoadModelToScene(std::string modelPath)
 		{ 
 			unsigned int animCount=scene->mNumAnimations;
 			auto animList = scene->mAnimations;
-
+			std::cout << "animation list:\n";
 			for (unsigned int i = 0; i < animCount; i++)
 			{
-				std::cout << animList[i]->mName.C_Str();
+
+				std::cout << animList[i]->mName.C_Str()<<"\n";
+				//testCode:this code only for testA.fbx
+				if (i == 1)
+				{
+					AnimationClip aClip;
+					aClip.duration=animList[i]->mDuration;
+					aClip.ticksPerSec = animList[i]->mTicksPerSecond;
+					aClip.numChannels=animList[i]->mNumChannels;
+					auto mChannel = animList[i]->mChannels;
+					for (int i_channel = 0; i_channel < aClip.numChannels; i_channel++)
+					{
+						AnimationClip::AnimKeys animkeys;
+						
+						//get animation key count
+						animkeys.pose_count=animList[i]->mChannels[i_channel]->mNumPositionKeys;
+						animkeys.scale_count=animList[i]->mChannels[i_channel]->mNumScalingKeys;
+						animkeys.rot_count=animList[i]->mChannels[i_channel]->mNumRotationKeys;
+
+						//get animation keys for this the current node
+
+						//get pose keys
+						for (int i_key = 0; i_key < animkeys.pose_count; i_key++)
+						{
+							auto currKey = mChannel[i_channel]->mPositionKeys[i_key];
+							glm::vec3 pose = glm::vec3(currKey.mValue.x,currKey.mValue.y,currKey.mValue.z);
+							AnimationClip::Key key(currKey.mTime,pose);
+							animkeys.position.push_back(key);
+						}
+
+						//get rotation keys
+						for (int i_key = 0; i_key < animkeys.rot_count; i_key++)
+						{
+							auto currKey = mChannel[i_channel]->mRotationKeys[i_key];
+							glm::quat rot = glm::quat(currKey.mValue.w,currKey.mValue.x, currKey.mValue.y, currKey.mValue.z);
+							AnimationClip::Key key(currKey.mTime, rot);
+							animkeys.rotation.push_back(key);
+						}
+
+						//get scale keys
+						for (int i_key = 0; i_key < animkeys.scale_count; i_key++)
+						{
+							auto currKey = mChannel[i_channel]->mScalingKeys[i_key];
+							glm::vec3 scale = glm::vec3(currKey.mValue.x, currKey.mValue.y, currKey.mValue.z);
+							AnimationClip::Key key(currKey.mTime, scale);
+							animkeys.scale.push_back(key);
+						}
+						
+						//add the created animation keys to the boneName to Keys map in the animation clip
+						aClip.boneNameKeysMap[animList[i]->mChannels[i_channel]->mNodeName.C_Str()]= animkeys;
+
+					}
+
+					anim.setCurrentClip(aClip);
+					
+				}
 			}
+
+			
 		}
 	}
 	
@@ -450,7 +507,8 @@ void Model::UpdateHierarchy(aiNode* rootNode)
 	{
 		Transform& t = currScene.GetComponent<Transform>(boneMap[boneName].eid);
 		auto bone = boneMap[boneName];
-	
+		
+		
 		t.SetLocalPosition(bone.pose);
 		t.SetLocalRotation(bone.rot);
 		t.SetLocalScale(bone.scale);

@@ -18,10 +18,20 @@ class AnimationControllerSystem :public System
 			{
 				Transform& curr = e->GetComponent<Transform>((*anim.boneList)[i].eid);
 				glm::vec3 currPose = curr.GetGlobalPosition();
-				Debug::DrawCircle(currPose, curr.up(), 0.1, glm::vec3(1, 0.5, 0));
-				Debug::DrawCircle(currPose, curr.forward(), 0.1, glm::vec3(1, 0.5, 0));
-				Debug::DrawCircle(currPose, curr.right(), 0.1, glm::vec3(1, 0.5, 0));
+				Debug::DrawCircle(currPose, curr.up(), 0.02, glm::vec3(1, 0.5, 0));
+				Debug::DrawCircle(currPose, curr.forward(), 0.02, glm::vec3(1, 0.5, 0));
+				Debug::DrawCircle(currPose, curr.right(), 0.02, glm::vec3(1, 0.5, 0));
+
+				Entity parent=curr.getParentId();
+				if (parent != Entity(-1, -1))
+				{
+					Transform& pT = e->GetComponent<Transform>(parent);
+
+					Debug::DrawLine(curr.GetGlobalPosition(),pT.GetGlobalPosition(),glm::vec3(0,1,0));
+				}
 			}
+
+			anim.updateBoneState(deltaTime,e);
 		}
 	}
 

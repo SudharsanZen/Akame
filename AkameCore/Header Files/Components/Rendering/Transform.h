@@ -179,7 +179,12 @@ public:
 		return ecs.lock()->GetComponent<Transform>(parent);
 	}
 
-	
+	Entity getParentId()
+	{
+		assert(parent != Entity(-1, -1) && "trying to access non existing parent transform, this transform doesn't have any parent");
+		return parent;
+	}
+
 	void setParent(Entity parentEID)
 	{
 		//get world transform details of this transform 

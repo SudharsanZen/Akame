@@ -55,7 +55,7 @@ int main()
 {
 	AssetManager::setAssetRoot("../../../../Assets/");
 	std::string rootDir(AssetManager::getAssetRoot());
-	Window window(800, 800, "testWindow");
+	Window window(1080,1920, "testWindow");
 
 	if (!window.initialize())
 	{
@@ -77,7 +77,7 @@ int main()
 	Entity model = mLoader.LoadModelToScene(rootDir+"Media/testA.fbx");
 	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
 	Transform& T = scene.GetComponent<Transform>(model);
-	T.SetGlobalScale(glm::vec3(0.1));
+	T.SetGlobalScale(glm::vec3(0.02));
 	T.SetGlobalPosition(glm::vec3(0, 0, 0));
 
 
