@@ -94,6 +94,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Header Files\Animation\AnimationControllerSystem.h" />
     <ClInclude Include="Header Files\Animation\SkeletalMeshRenderingSystem.h" />
     <ClInclude Include="Header Files\Assets\Asset.h" />
     <ClInclude Include="Header Files\Assets\AssetArray.h" />
@@ -127,6 +128,7 @@
     <ClInclude Include="Header Files\Physics\ColliderShape.h" />
     <ClInclude Include="Header Files\Physics\Physics.h" />
     <ClInclude Include="Header Files\Physics\System\RigidBodySystem.h" />
+    <ClInclude Include="Header Files\Rendering\Animation\SkinnedMeshRenderer.h" />
     <ClInclude Include="Header Files\Rendering\Camera.h" />
     <ClInclude Include="Header Files\Rendering\DeferredRendererFragmentBuffer.h" />
     <ClInclude Include="Header Files\Rendering\DepthFrameBuffer.h" />
@@ -146,7 +148,6 @@
     <ClInclude Include="Header Files\Rendering\System\TiledRenderer.h" />
     <ClInclude Include="Header Files\Rendering\Texture.h" />
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h" />
-    <ClInclude Include="Header Files\Animation\AnimationControllerSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp" />

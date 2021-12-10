@@ -68,14 +68,15 @@ class AnimationController : public Components
 				auto& Keys = currentClip.boneNameKeysMap[boneName];
 
 				Transform& bTrans = ecs->GetComponent<Transform>(bone.eid);
-				
+				float minVal = 0;
 				//position animation
 				if (keyState.i_currPose+1 < Keys.pose_count)
 				{
 					unsigned long long currPose = keyState.i_currPose;
 					float timeGap = (Keys.position[currPose+1].time-Keys.position[currPose].time);
 					float interTime = currTime-Keys.position[currPose].time;
-
+					
+					interTime = glm::clamp(interTime,minVal,timeGap);//avoid extrapolation
 					glm::vec3 currInterPose =glm::mix(Keys.position[currPose].value,Keys.position[currPose+1].value,interTime/timeGap);
 					bTrans.SetLocalPosition(currInterPose);
 
@@ -95,7 +96,7 @@ class AnimationController : public Components
 					unsigned long long currPose = keyState.i_currRot;
 					float timeGap = (Keys.rotation[currPose + 1].time - Keys.rotation[currPose].time);
 					float interTime = currTime - Keys.position[currPose].time;
-
+					interTime = glm::clamp(interTime, minVal, timeGap);//avoid extrapolation
 					glm::quat currInterRot = glm::mix(Keys.rotation[currPose].value, Keys.rotation[currPose + 1].value, (interTime / timeGap));
 					bTrans.SetLocalRotation(currInterRot);
 

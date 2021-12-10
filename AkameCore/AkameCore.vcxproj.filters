@@ -55,6 +55,9 @@
     <Filter Include="Header Files\Rendering">
       <UniqueIdentifier>{AED1C9C3-9ACB-F215-8338-89266FD15882}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Rendering\Animation">
+      <UniqueIdentifier>{1DFCDA95-094D-C6D7-32B1-B4991E615941}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Rendering\System">
       <UniqueIdentifier>{02558FC7-6E6D-76F1-371A-068BA3F10A8B}</UniqueIdentifier>
     </Filter>
@@ -111,6 +114,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header Files\Animation\AnimationControllerSystem.h">
+      <Filter>Header Files\Animation</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Animation\SkeletalMeshRenderingSystem.h">
       <Filter>Header Files\Animation</Filter>
     </ClInclude>
@@ -125,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="Header Files\Assets\ShaderManager.h">
       <Filter>Header Files\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Components\Animation\AnimationController.h">
+      <Filter>Header Files\Components\Animation</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Components\Animation\SkeletalMesh.h">
       <Filter>Header Files\Components\Animation</Filter>
@@ -207,6 +216,9 @@
     <ClInclude Include="Header Files\Physics\System\RigidBodySystem.h">
       <Filter>Header Files\Physics\System</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Rendering\Animation\SkinnedMeshRenderer.h">
+      <Filter>Header Files\Rendering\Animation</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Rendering\Camera.h">
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
@@ -264,10 +276,11 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Animation\AnimationControllerSystem.h" />
-    <ClInclude Include="Header Files\Components\Animation\AnimationController.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp">
+      <Filter>Source Files\Animation</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\Animation\SkeletalMeshRenderingSystem.cpp">
       <Filter>Source Files\Animation</Filter>
     </ClCompile>
@@ -282,6 +295,9 @@
     </ClCompile>
     <ClCompile Include="Source Files\Assets\ShaderManager.cpp">
       <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Components\AnimationController.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Components\Behaviour.cpp">
       <Filter>Source Files\Components</Filter>
@@ -409,7 +425,5 @@
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp" />
-    <ClCompile Include="Source Files\Components\AnimationController.cpp" />
   </ItemGroup>
 </Project>
