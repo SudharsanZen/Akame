@@ -55,7 +55,7 @@ int main()
 {
 	AssetManager::setAssetRoot("../../../../Assets/");
 	std::string rootDir(AssetManager::getAssetRoot());
-	Window window(1080,1920, "testWindow");
+	Window window(800,800, "testWindow");
 
 	if (!window.initialize())
 	{
@@ -101,20 +101,24 @@ int main()
 	Material mat("GRIDS");
 	Entity pl = scene.CreateEntity();
 
-
+	
 	scene.AddComponent<Transform>(pl);
 	Mesh& plm = scene.AddComponent<Mesh>(pl);
 	scene.AddComponent<Material>(pl) = mat;
 	plm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
-	Material matS("SPHERE");
+	
+	/*Material matS("SPHERE");
 	Entity sky = scene.CreateEntity();
-
+	
 
 
 	scene.AddComponent<Transform>(sky);
 	Mesh& skym = scene.AddComponent<Mesh>(sky);
 	scene.AddComponent<Material>(sky) = matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
+	*/
+
+
 	std::vector<Entity> lights;
 	int m = 0;
 	int maxi = 20;
@@ -136,7 +140,7 @@ int main()
 
 	float acc = 0;
 	scene.OnStart();
-	scene.vsyncOn(false);
+	scene.vsyncOn(true);
 	unsigned int count = 0;
 	scene.backGroundColor(1, 1, 1, 1);
 	float step = 0.3f;

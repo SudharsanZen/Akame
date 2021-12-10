@@ -8,7 +8,7 @@ std::vector<unsigned int> SkeletalMesh::indexList = std::vector<unsigned int>();
 bool SkeletalMesh::needsUpdate = false;
 //Buffer object and Atrribute object iDs
 unsigned int SkeletalMesh::VAO = GL_INVALID_VALUE, SkeletalMesh::VBO = GL_INVALID_VALUE, SkeletalMesh::IBO = GL_INVALID_VALUE;
-size_t SkeletalMesh::topStack = 0;
+
 
 SkeletalMesh::SkeletalMesh()
 {
@@ -16,6 +16,7 @@ SkeletalMesh::SkeletalMesh()
 
 	min = glm::vec4(-1);
 	max = glm::vec4(1);
+	animController = Entity(-1,-1);
 	count = 0;
 }
 
@@ -23,7 +24,6 @@ SkeletalMesh::~SkeletalMesh()
 {
 	//clearMesh();
 }
-
 
 
 void SkeletalMesh::renderMesh() const
@@ -163,10 +163,10 @@ void SkeletalMesh::setupMesh()
 	glEnableVertexAttribArray(4);
 
 	//boneweigths
-	glVertexAttribPointer(5, 4, GL_INT, GL_FALSE, sizeof(sk_vert), (void*)(offsetof(struct  sk_vert, boneWeight)));
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(sk_vert), (void*)(offsetof(struct  sk_vert, boneWeight)));
 	glEnableVertexAttribArray(5);
 	//bone index 
-	glVertexAttribPointer(6, 4, GL_INT, GL_FALSE, sizeof(sk_vert), (void*)(offsetof(struct  sk_vert, boneIndex)));
+	glVertexAttribIPointer(6, 4, GL_INT, sizeof(sk_vert), (void*)(offsetof(struct  sk_vert, boneIndex)));
 	glEnableVertexAttribArray(6);
 
 	//generate Index Buffer Object

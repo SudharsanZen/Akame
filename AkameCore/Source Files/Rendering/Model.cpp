@@ -9,7 +9,17 @@
 #include"Components/Animation/SkeletalMesh.h"
 #include"Animation/AnimationControllerSystem.h"
 #include<assimp/version.h>
+template <typename real>
+void mat4x4_AiToAkame_converter(aiMatrix4x4t<real> const &aiMat,glm::mat4 &akMat)
+{
+	
+	akMat[0][0] = aiMat.a1,akMat[0][1]=aiMat.b1, akMat[0][2] = aiMat.c1, akMat[0][3] = aiMat.d1;
+	akMat[1][0] = aiMat.a2,akMat[1][1]=aiMat.b2, akMat[1][2] = aiMat.c2, akMat[1][3] = aiMat.d2;
+	akMat[2][0] = aiMat.a3,akMat[2][1]=aiMat.b3, akMat[2][2] = aiMat.c3, akMat[2][3] = aiMat.d3;
+	akMat[3][0] = aiMat.a4,akMat[3][1]=aiMat.b4, akMat[3][2] = aiMat.c4, akMat[3][3] = aiMat.d4;
 
+
+}
 Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 {
 	
@@ -62,14 +72,14 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 	}
 	
 
-	Entity meshid = currScene.CreateEntity();
-	skMeshList.push_back(meshid);
-	Transform& t = currScene.AddComponent<Transform>(meshid);
+	Entity meshid = mCurrScene.CreateEntity();
+	mSkMeshList.push_back(meshid);
+	Transform& t = mCurrScene.AddComponent<Transform>(meshid);
 	t.setParent(parent);
 	t.SetLocalScale(glm::vec3(1,1,1));
 	t.SetLocalPosition(glm::vec3(0,0,0));
 	t.SetLocalRotation(glm::quat(1,0,0,0));
-	currScene.SetEntityName(meshid, meshName);
+	mCurrScene.SetEntityName(meshid, meshName);
 	for (int i_bone = 0; i_bone < mesh->mNumBones; i_bone++)
 	{
 		int boneId = -1;
@@ -79,11 +89,11 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 			bonesNames.insert(currBone->mName.C_Str());
 			
 		}
-		if (boneMap.find(currBone->mName.C_Str()) == boneMap.end())
+		if (mBoneMap.find(currBone->mName.C_Str()) == mBoneMap.end())
 		{
 			
-			Bone b;
-			b.id = boneMap.size();
+			BoneInfo b;
+			b.id = mBoneMap.size();
 			b.name = currBone->mName.C_Str();
 			
 			aiVector3D pose;
@@ -99,6 +109,7 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 			b.rot = (glm::quat(rot.w,rot.x,rot.y,rot.z));
 			//b.rotAxis = glm::vec3(axis.x, axis.y, axis.z);
 			//b.rotAngle = angle;
+			mat4x4_AiToAkame_converter(currBone->mOffsetMatrix,b.offsetMat);
 			
 		
 			b.parentName = "";
@@ -108,13 +119,13 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 			}
 
 
-			boneNodeMap[b.name] = currBone->mNode;
+			mBoneNodeMap[b.name] = currBone->mNode;
 
-			boneMap[b.name] = b;
+			mBoneMap[b.name] = b;
 		}
 		else
 		{
-			boneId = boneMap[currBone->mName.C_Str()].id;
+			boneId = mBoneMap[currBone->mName.C_Str()].id;
 		}
 		assert(boneId!=-1);
 		auto weights = currBone->mWeights;
@@ -138,19 +149,27 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 
 
 	
-	SkeletalMesh &m=currScene.AddComponent<SkeletalMesh>(meshid);
-	m.boneMap=std::vector<Bone>(bonesNames.size());
+	SkeletalMesh &m=mCurrScene.AddComponent<SkeletalMesh>(meshid);
+	/*m.boneMap = std::vector<BoneInfo>(bonesNames.size());
 
 	for (auto bStr : bonesNames)
 	{
-		assert(boneMap.find(bStr) != boneMap.end());
+		assert(mBoneMap.find(bStr) != mBoneMap.end());
 		{
-			auto& bone = boneMap[bStr];
+			auto& bone = mBoneMap[bStr];
 			m.boneMap[bone.id]=bone;
 		}
 
-	}
+	}*/
 	std::vector<sk_vert> finalVert;
+	//
+	for (size_t i = 0; i < vertices.size(); i++)
+	{
+		//rescale vertex weights so that it adds up to one
+		float total = vertices[i].boneWeight[0] + vertices[i].boneWeight[1] + vertices[i].boneWeight[2] + vertices[i].boneWeight[3];
+		float factor = 1/total;
+		vertices[i].boneWeight *= factor;
+	}
 	for (size_t i = 0; i < indices.size(); i += 3)
 	{
 		sk_vert v1, v2, v3;
@@ -220,13 +239,13 @@ Entity Model::processMesh(Entity parent,aiMesh* mesh)
 		finalVert.push_back(v3);
 	}
 	
-	Entity meshid = currScene.CreateEntity();
-	Transform &t=currScene.AddComponent<Transform>(meshid);
+	Entity meshid = mCurrScene.CreateEntity();
+	Transform &t=mCurrScene.AddComponent<Transform>(meshid);
 	t.setParent(parent);
 	t.SetLocalScale(glm::vec3(1, 1, 1));
 	t.SetLocalPosition(glm::vec3(0, 0, 0));
 	t.SetLocalRotation(glm::quat(1, 0, 0, 0));
-	currScene.SetEntityName(meshid,meshName);
+	mCurrScene.SetEntityName(meshid,meshName);
 	Material mat("DEFERRED");
 	
 
@@ -234,7 +253,7 @@ Entity Model::processMesh(Entity parent,aiMesh* mesh)
 	{
 		aiString diff,rough,norm,metallic,ao;
 		int difC=0, roughC=0, normC=0,metalC=0,aoC=0;
-		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+		aiMaterial* material = mAiScene->mMaterials[mesh->mMaterialIndex];
 		for (int i = 0; i < (difC=material->GetTextureCount(aiTextureType_DIFFUSE)); i++)
 		{
 			material->GetTexture(aiTextureType_DIFFUSE,i,&diff);
@@ -258,11 +277,11 @@ Entity Model::processMesh(Entity parent,aiMesh* mesh)
 
 		std::string rDir = AssetManager::assetRootPath;
 		if (difC)
-			mat.setTexture2D("material.diffuse",(dir+diff.C_Str()).c_str() );
+			mat.setTexture2D("material.diffuse",(mDir+diff.C_Str()).c_str() );
 		else
 			mat.setTexture2D("material.diffuse", rDir + "EngineAssets/defaultDiff.jpg");
 		if (roughC)
-			mat.setTexture2D("material.roughness", (dir + rough.C_Str()).c_str());
+			mat.setTexture2D("material.roughness", (mDir + rough.C_Str()).c_str());
 		else
 		{
 			mat.setValue("noRoughness",1.0f);
@@ -270,7 +289,7 @@ Entity Model::processMesh(Entity parent,aiMesh* mesh)
 		}
 		if (normC)
 		{
-			mat.setTexture2D("material.roughness", (dir + norm.C_Str()).c_str());
+			mat.setTexture2D("material.roughness", (mDir + norm.C_Str()).c_str());
 			mat.setValue("normalStrength", 5);
 		}
 		else
@@ -279,7 +298,7 @@ Entity Model::processMesh(Entity parent,aiMesh* mesh)
 		}
 
 		if (metalC)
-			mat.setTexture2D("material.metallic", (dir + metallic.C_Str()).c_str());
+			mat.setTexture2D("material.metallic", (mDir + metallic.C_Str()).c_str());
 		else
 		{
 			mat.setValue("noMetallic", 1.0f);
@@ -287,7 +306,7 @@ Entity Model::processMesh(Entity parent,aiMesh* mesh)
 		}
 
 		if (aoC)
-			mat.setTexture2D("material.metallic", (dir + ao.C_Str()).c_str());
+			mat.setTexture2D("material.metallic", (mDir + ao.C_Str()).c_str());
 		else
 		{
 			mat.setValue("noAO", 1.0f);
@@ -302,8 +321,8 @@ Entity Model::processMesh(Entity parent,aiMesh* mesh)
 		mat.setValue("roughness", 1);
 	}
 	
-	currScene.AddComponent<Material>(meshid) = mat;
-	currScene.AddComponent<Mesh>(meshid).CreateMesh(finalVert);
+	mCurrScene.AddComponent<Material>(meshid) = mat;
+	mCurrScene.AddComponent<Mesh>(meshid).CreateMesh(finalVert);
 	return meshid;
 }
 
@@ -319,9 +338,9 @@ void Model::processNode(Entity parent,aiNode* node)
 	else*/
 	{
 		
-		currNode=currScene.CreateEntity();
-		allNodeMap[node] = currNode;
-		Transform& t = currScene.AddComponent<Transform>(currNode);
+		currNode=mCurrScene.CreateEntity();
+		mAllNodeMap[node] = currNode;
+		Transform& t = mCurrScene.AddComponent<Transform>(currNode);
 		t.setParent(parent);
 		aiVector3D pose;
 		aiVector3D scale;
@@ -333,11 +352,11 @@ void Model::processNode(Entity parent,aiNode* node)
 		t.SetLocalPosition(p);
 		t.SetLocalRotation(Quaternion(a));
 		t.SetLocalScale(glm::vec3(scale.x,scale.y,scale.z));
-		currScene.SetEntityName(currNode, node->mName.C_Str());
+		mCurrScene.SetEntityName(currNode, node->mName.C_Str());
 	}
 	for (GLuint i = 0; i < node->mNumMeshes; i++)
 	{
-		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		aiMesh* mesh = mAiScene->mMeshes[node->mMeshes[i]];
 		
 		processMesh(currNode,mesh);
 		
@@ -359,36 +378,36 @@ Entity Model::LoadModelToScene(std::string modelPath)
 		;
 
 	Assimp::Importer importer;
-	scene = importer.ReadFile(modelPath, importOptions);
+	mAiScene = importer.ReadFile(modelPath, importOptions);
 
-	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	if (!mAiScene || mAiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !mAiScene->mRootNode)
 	{
 		std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
 		return Entity(-1,-1);
 	}
-	dir = modelPath.substr(0, modelPath.find_last_of('/'))+"/";
-	Entity parent=currScene.CreateEntity();
-	currScene.AddComponent<Transform>(parent);
+	mDir = modelPath.substr(0, modelPath.find_last_of('/'))+"/";
+	Entity parent=mCurrScene.CreateEntity();
+	mCurrScene.AddComponent<Transform>(parent);
 
-	processNode(parent,scene->mRootNode);
+	processNode(parent,mAiScene->mRootNode);
 
 
-	//ignore these Mr._C , these are some useless code that doesn't affect the scene hierarchy and transforms
+	//finds root bone node, also assigns the bone entity ids "eid" in the BoneInfo of "mBoneMap"
 	aiNode* rootBone;
-	for (auto &bonePair : boneMap)
+	for (auto &bonePair : mBoneMap)
 	{
 		auto& bone = bonePair.second;
-		if (boneNodeMap.find(bone.name) != boneNodeMap.end())
+		if (mBoneNodeMap.find(bone.name) != mBoneNodeMap.end())
 		{
-			aiNode *currBoneNode = boneNodeMap[bone.name];
-			if (boneNodeMap.find(currBoneNode->mParent->mName.C_Str()) == boneNodeMap.end())
+			aiNode *currBoneNode = mBoneNodeMap[bone.name];
+			if (mBoneNodeMap.find(currBoneNode->mParent->mName.C_Str()) == mBoneNodeMap.end())
 			{
 				rootBone = currBoneNode->mParent;;
 			}
 
-			if (allNodeMap.find(boneNodeMap[bone.name]) != allNodeMap.end())
+			if (mAllNodeMap.find(mBoneNodeMap[bone.name]) != mAllNodeMap.end())
 			{
-				Entity currBone = allNodeMap[boneNodeMap[bone.name]];
+				Entity currBone = mAllNodeMap[mBoneNodeMap[bone.name]];
 				bone.eid = currBone;
 			}
 			else
@@ -400,36 +419,42 @@ Entity Model::LoadModelToScene(std::string modelPath)
 		{
 			std::cout <<"can't find bone in bone list: "<<bone.name<<std::endl;
 		}
-			Transform& bT = currScene.GetComponent<Transform>(bone.eid);
+			Transform& bT = mCurrScene.GetComponent<Transform>(bone.eid);
 			
 		
 	}
 
-	for (auto& ent : skMeshList)
+
+	if (mBoneMap.size() > 0)
 	{
-		
-		SkeletalMesh& skm = currScene.GetComponent<SkeletalMesh>(ent);
-		for (int i = 0; i < skm.boneMap.size(); i++)
+
+		AnimationController& anim = mCurrScene.AddComponent<AnimationController>(parent);
+		anim.boneList = std::make_shared<std::vector<BoneInfo>>(mBoneMap.size());
+		anim.boneMap = std::make_shared<std::map<std::string, BoneInfo>>();
+		(*anim.boneMap) = mBoneMap;
+
+		for (auto& ent : mSkMeshList)
 		{
-			assert(boneMap.find(skm.boneMap[i].name)!=boneMap.end());
-			skm.boneMap[i].eid = boneMap[skm.boneMap[i].name].eid;
+
+			SkeletalMesh& skm = mCurrScene.GetComponent<SkeletalMesh>(ent);
+			skm.animController = parent;
+			/*for (int i = 0; i < skm.boneMap.size(); i++)
+			{
+				assert(mBoneMap.find(skm.boneMap[i].name)!=mBoneMap.end());
+				skm.boneMap[i].eid = mBoneMap[skm.boneMap[i].name].eid;
+			}*/
+
+
 		}
 
-	}
-	if (boneMap.size() > 0)
-	{
-		AnimationController& anim = currScene.AddComponent<AnimationController>(parent);
-		anim.boneList = std::make_shared<std::vector<Bone>>(boneMap.size());
-		anim.boneMap = std::make_shared<std::map<std::string, Bone>>();
-		(*anim.boneMap) = boneMap;
-		for (auto& bone : boneMap)
+		for (auto& bone : mBoneMap)
 		{
 			(*anim.boneList)[bone.second.id] = bone.second;
 		}
-		if (scene->HasAnimations())
+		if (mAiScene->HasAnimations())
 		{ 
-			unsigned int animCount=scene->mNumAnimations;
-			auto animList = scene->mAnimations;
+			unsigned int animCount=mAiScene->mNumAnimations;
+			auto animList = mAiScene->mAnimations;
 			std::cout << "animation list:\n";
 			for (unsigned int i = 0; i < animCount; i++)
 			{
@@ -503,10 +528,10 @@ void Model::UpdateHierarchy(aiNode* rootNode)
 	if (!rootNode)
 		return;
 	std::string boneName = rootNode->mName.C_Str();
-	if (boneMap.find(boneName) != boneMap.end())
+	if (mBoneMap.find(boneName) != mBoneMap.end())
 	{
-		Transform& t = currScene.GetComponent<Transform>(boneMap[boneName].eid);
-		auto bone = boneMap[boneName];
+		Transform& t = mCurrScene.GetComponent<Transform>(mBoneMap[boneName].eid);
+		auto bone = mBoneMap[boneName];
 		
 		
 		t.SetLocalPosition(bone.pose);
@@ -518,4 +543,8 @@ void Model::UpdateHierarchy(aiNode* rootNode)
 	{
 		UpdateHierarchy(rootNode->mChildren[i]);
 	}
+}
+
+Model::Model(Scene& s) :mCurrScene(s)
+{
 }

@@ -194,13 +194,9 @@ uniform vec3 viewDir;
 void main()
 {
     vec3 ptLight=vec3(viewPos);
-    /*vec3 viewDir=FragPos-viewPos;
-    vec3 lightDir=normalize(ptLight-FragPos);
-    float len=length(viewDir);
-    viewDir=normalize(viewPos);
-    vec3 halfWay=normalize(lightDir-viewDir);*/
-    
-    float diff=max(dot(Normal,-viewDir),0);
+
+    //vec3 vDir=normalize(ptLight-FragPos);
+    float diff=max(dot(Normal,-viewDir),0)*10;
 
     FragColor=vec4(vec3(0.1f)+vec3(2)*diff,1);
     //FragColor=vec4(vec3(LinearizeDepth(gl_FragCoord.z))/10,1.0);

@@ -15,64 +15,66 @@ struct sk_vert
 	glm::ivec4 boneIndex;
 
 };
-struct Bone
+struct BoneInfo
 {
-	Entity eid;
-	std::string name;
-	int id;
-	glm::vec3 pose;
+	int				id;			//bone index
+	Entity			eid;		//entity id of this bone
+	std::string		name;		//bone name
+	std::string		parentName;	//parent bone's name, left "" ((i.e) null string) if no parents exist
 	
-	glm::quat rot;
 
-	glm::vec3 scale;
-	glm::mat4 offsetMat;
-	std::string parentName;
+	glm::vec3		pose;		//needs to be removed
+	glm::quat		rot;		//needs to be removed
+	glm::vec3		scale;		//needs to be removed
+	
+	glm::mat4		offsetMat;	//offsetMatrix to convert vertex configurations from mesh to bone's local space
+	
 };
+
+
 class SkeletalMesh:public Components
 {
 private:
+	/*******************************************************************
+	* SkeletalMesh: contains all the data of all the skeletal meshes
+	* -creates and manages single VAO,VBO and IBO for all skeletal meshes 
+	********************************************************************/
 
-	static bool needsUpdate;
-	static std::vector<sk_vert> vertexData;
-	static std::vector<unsigned int> indexList;
-	//Buffer object and Atrribute object iDs
-	static unsigned int VAO, VBO, IBO;
-	static size_t topStack;
+	static	bool							needsUpdate;		//is set to true if the vertex buffer needs to be updated
+	static	std::vector<sk_vert>			vertexData;			//global vertex list
+	static	std::vector<unsigned int>		indexList;			//global index list
+	static	unsigned int					VAO, VBO, IBO;		//Buffer object and Atrribute object iDs
 
-	//number of IBO indices
-	size_t numOfIndices, numOfVertices;
-	size_t start_i, end_i, count, maxInd, minInd;
-	static void setupMesh();
-	glm::vec4 max, min;
+
+	
+	size_t		numOfIndices, numOfVertices;//number of IBO indices and vertices
+	size_t		start_i, end_i, count, maxInd, minInd;
+	glm::vec4	max, min;	//max and min poses in xyz axis, used to calculate bounding boxes
+
 	friend class RenderingSystem;
 	friend class Editor;
 	friend class AnimationSystem;
 	friend class SkeletalMeshRenderingSystem;
+	friend class Model;
 
-	int GetBoneIdWithName(std::string name)
-	{
-		for (int i = 0; i < boneMap.size(); i++)
-		{
-			if (name == boneMap[i].name)
-			{
-				return i;
-			}
-		}
+	//only called when "needsUpdate" is true
+	//updates VBO and IBO when needed
+	static void setupMesh();
 
-		return -1;
-	}
+	//entity id of animController that holds all the animation and bone information
+	Entity animController;
 
 public:
-	std::vector<Bone> boneMap;
+	
 
-	//all the bones that are in the animation controller 
-	std::shared_ptr<std::vector<Bone>> bones;
 	SkeletalMesh();
 
 	~SkeletalMesh();
 	static unsigned int getVAO() { return VAO; }
 	void reset();
 	void renderMesh() const;
+
+	//initialize mesh with vertex and index data
 	void CreateMesh(std::vector<sk_vert>& vertices, std::vector<unsigned int>& indices = std::vector<unsigned int>());
 };
 

@@ -62,7 +62,7 @@ class AnimationController : public Components
 			auto& keyState=boneStates.second;
 			if (boneMap->find(boneName) == boneMap->end())
 				continue;
-				Bone& bone = (*boneMap)[boneName];
+				BoneInfo& bone = (*boneMap)[boneName];
 			
 				//std::cout << "\n" << boneName;
 				auto& Keys = currentClip.boneNameKeysMap[boneName];
@@ -165,8 +165,8 @@ public:
 
 	
 
-	std::shared_ptr<std::vector<Bone>> boneList;
-	std::shared_ptr<std::map<std::string,Bone>> boneMap;
+	std::shared_ptr<std::vector<BoneInfo>> boneList;
+	std::shared_ptr<std::map<std::string,BoneInfo>> boneMap;
 
 	void reset() 
 	{

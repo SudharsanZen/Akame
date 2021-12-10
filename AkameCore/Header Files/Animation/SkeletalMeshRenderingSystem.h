@@ -10,7 +10,8 @@
 #include<map>
 #include<unordered_map>
 #include"Components/Animation/SkeletalMesh.h"
-
+#include"Components/Animation/AnimationController.h"
+#include<sstream>
 class SkeletalMeshRenderingSystem: public System
 {
 	friend class Scene;
@@ -26,6 +27,18 @@ public:
 		{
 			
 			SkeletalMesh& sk = e->GetComponent<SkeletalMesh>(ent);
+			if (sk.animController != Entity(-1, -1))
+			{
+				AnimationController& animCont = e->GetComponent<AnimationController>(sk.animController);
+				for (int i = 0; i < animCont.boneList->size(); i++)
+				{
+					glm::mat4 tMat = (*animCont.boneList)[i].offsetMat;
+					Transform& boneT = e->GetComponent<Transform>(((*animCont.boneList)[i].eid));
+					tMat = boneT.transformMatrix() * tMat;
+			
+					skRend->setUniformMat4fvArray("boneTransform", (*animCont.boneList)[i].id, glm::value_ptr(tMat));
+				}
+			}
 			Transform& t = e->GetComponent<Transform>(ent);
 			glm::mat4 tMat = t.transformMatrix();
 			skRend->setUniformMat4fv("transform", 1,glm::value_ptr(tMat) );
