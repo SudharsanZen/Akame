@@ -43,7 +43,12 @@ void PSSMFBO::bind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	//glFramebufferTexture(GL_FRAMEBUFFER, GL_TEXTURE_2D_ARRAY, shadowMapsArray, 0);
-	glClear(GL_DEPTH_BUFFER_BIT);
+
+}
+
+void PSSMFBO::clearBuffer()
+{ 
+	glClear(GL_DEPTH_BUFFER_BIT); 
 }
 
 void PSSMFBO::unbind()

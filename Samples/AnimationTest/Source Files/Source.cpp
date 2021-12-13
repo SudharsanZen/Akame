@@ -55,7 +55,7 @@ int main()
 {
 	AssetManager::setAssetRoot("../../../../Assets/");
 	std::string rootDir(AssetManager::getAssetRoot());
-	Window window(800,800, "testWindow");
+	Window window(800,600, "testWindow");
 
 	if (!window.initialize())
 	{
@@ -64,29 +64,13 @@ int main()
 	}
 	Scene scene(window);
 	scene.cam.setFar(1000);
-
-	Entity dir = scene.CreateEntity();
-	Lights d = Lights(LIGHT::DIRECTIONAL);
-	d.setColor(1, 1, 1);
-	d.setDirection(0, -1, 0);
-	d.setIntensity(1);
-	d.setPointLightConst(1, 10, 10);
-	scene.AddComponent<Lights>(dir) = d;
-	scene.AddComponent<Transform>(dir);
-	Model mLoader(scene);
-	Entity model = mLoader.LoadModelToScene(rootDir+"Media/testA.fbx");
-	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
-	Transform& T = scene.GetComponent<Transform>(model);
-	T.SetGlobalScale(glm::vec3(0.02));
-	T.SetGlobalPosition(glm::vec3(0, 0, 0));
-
-
-
+	
 	Material boxMat("DEFERRED");
 	boxMat.setTexture2D("material.diffuse", rootDir + "Media/pbr/crate/basecolor.jpg");
 	boxMat.setTexture2D("material.roughness", rootDir + "Media/pbr/crate/roughness.jpg");
 	boxMat.setTexture2D("material.normal", rootDir + "Media/pbr/crate/normal.jpg");
 	boxMat.setValue("noMetallic", 1);
+	boxMat.setValue("noRougness", 0);
 	boxMat.setValue("noAO", 1);
 	boxMat.setValue("metallic", 0.04);
 	boxMat.setValue("ambientocclusion", 0.04);
@@ -98,6 +82,53 @@ int main()
 	t.SetGlobalPosition(glm::vec3(0, 10, 0));
 	scene.AddComponent<Material>(sphere) = boxMat;
 	scene.GetComponent<Transform>(sphere).SetGlobalRotation(Quaternion(0, 0, 0));
+	scene.vsyncOn(true);
+	Material planeMat("DEFERRED");
+	planeMat.setTexture2D("material.diffuse", rootDir + "Media/pbr/rust/diffuse.png");
+	planeMat.setTexture2D("material.roughness", rootDir + "Media/pbr/rust/roughness.png");
+	planeMat.setTexture2D("material.normal", rootDir + "Media/pbr/rust/normal.png");
+	planeMat.setTexture2D("material.metallic", rootDir + "Media/pbr/rust/metallic.png");
+	planeMat.setValue("noAO", 1);
+	planeMat.setValue("noRoughness", 0);
+	planeMat.setValue("ambientocclusion", 1);
+	planeMat.setValue("noMetallic", 0);
+	planeMat.setValue("normalStrength", 1);
+
+
+	Entity plane = scene.CreateEntity();
+
+
+	Mesh& mP = scene.AddComponent<Mesh>(plane);
+	scene.AddComponent<Material>(plane) = planeMat;
+	mP.CreateMesh(generatePlaneVertices());
+	Transform& tp = scene.AddComponent<Transform>(plane);
+	tp.SetGlobalScale(30.0f * glm::vec3(1));
+	tp.SetGlobalPosition(glm::vec3(0, 1, 0));
+	
+
+
+
+
+	Entity dir = scene.CreateEntity();
+	Lights& d = scene.AddComponent<Lights>(dir);
+	d.setType(LIGHT::DIRECTIONAL);
+	d.setColor(1, 1, 1);
+	d.setDirection(1, -1, 0);
+	d.setIntensity(1);
+	d.setPointLightConst(1, 2, 10);
+	d.ambientLigting(0.1f, 0.1f, 0.1f);
+
+	scene.AddComponent<Transform>(dir);
+	Model mLoader(scene);
+	Entity model = mLoader.LoadModelToScene(rootDir+"Media/Erika/Catwalk Walk Turn 180 Tight.fbx");
+	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
+	Transform& T = scene.GetComponent<Transform>(model);
+	T.SetGlobalScale(glm::vec3(0.02));
+	T.SetGlobalPosition(glm::vec3(0, 1, 0));
+
+
+
+	
 	Material mat("GRIDS");
 	Entity pl = scene.CreateEntity();
 
@@ -107,7 +138,7 @@ int main()
 	scene.AddComponent<Material>(pl) = mat;
 	plm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
-	/*Material matS("SPHERE");
+    Material matS("SPHERE");
 	Entity sky = scene.CreateEntity();
 	
 
@@ -116,25 +147,9 @@ int main()
 	Mesh& skym = scene.AddComponent<Mesh>(sky);
 	scene.AddComponent<Material>(sky) = matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
-	*/
+	
 
 
-	std::vector<Entity> lights;
-	int m = 0;
-	int maxi = 20;
-	for (int i = 0; i < m; i++)
-	{
-		lights.push_back(scene.CreateEntity());
-		Transform& t = scene.AddComponent<Transform>(lights[i]);
-		t.SetGlobalPosition(glm::vec3((i - m / 2) % (maxi / 2), (i / maxi) * 5.0f, 0));
-		Lights& l = scene.AddComponent<Lights>(lights[i]);
-
-		l.setType(LIGHT::POINT);
-		l.setPointLightConst(4, 10, 10);
-		l.setIntensity(5);
-		l.setColor(1, 0.5, 0);
-		scene.AddComponent<BehaviourComponent>(lights[i]).setBehaviour<strafe>(float(i));
-	}
 
 	Editor e(window, scene);
 
@@ -157,15 +172,13 @@ int main()
 	while (!window.closeWindow())
 	{
 
-		t.SetGlobalPosition(glm::vec3(5, fabs(sin(acc)) * 30, 0));
+		//t.SetGlobalPosition(glm::vec3(5, fabs(sin(acc)) * 30, 0));
 		acc += scene.getDeltaTime() / 3;
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.clearBuffer();
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.Render();
 		e.DrawUI();
-
-		Lights& l = scene.GetComponent<Lights>(dir);
 
 		scene.swapBuffers();
 

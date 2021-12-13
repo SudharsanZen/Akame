@@ -1,5 +1,6 @@
 #include "Components/Rendering/Material.h"
 #include"Core/Log/Log.h"
+#include"Rendering/Camera.h"
 unsigned long long shaderCount = 0;
 //set the texture uniform and it's value
 Material::Material(std::string shaderName)
@@ -82,6 +83,21 @@ void Material::setUniformsOnce(std::shared_ptr<Shader> shader, glm::vec3& viewPo
 	transformIndexLocation = shader->getUniformLocation("t_index");
 
 
+}
+
+void Material::setUniformOnceSkeletalMesh(std::shared_ptr<Shader> shader, Camera cam)
+{
+	//set all texture details
+	for (auto& t : *uniformToTexDetails)
+	{
+		a.GetTexture(t.second.assetIndex)->use(t.second.texUnit);
+		shader->setUniformInteger(t.first, t.second.texUnit);
+	}
+	//set all float uniform variables and their values
+	for (auto& t : *uniformTofloat)
+	{
+		shader->setUniformFloat(t.first, t.second);
+	}
 }
 
 void Material::setUniformEveryObject(int index, std::shared_ptr<Shader> shader)

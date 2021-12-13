@@ -66,7 +66,7 @@ private:
 
 public:
 	
-
+	Entity GetAnimControllerID() { return animController; }
 	SkeletalMesh();
 
 	~SkeletalMesh();

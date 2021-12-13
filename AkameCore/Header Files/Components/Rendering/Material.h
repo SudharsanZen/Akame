@@ -33,9 +33,11 @@ private:
 	float ambientIntensity;
 
 	friend class RenderingSystem;
+	friend class SkeletalMeshRenderingSystem;
 	friend class ECS;
 	friend class ComponentArray<Material>;
 	void setUniformsOnce(std::shared_ptr<Shader> shader, glm::vec3& viewPose);
+	void setUniformOnceSkeletalMesh(std::shared_ptr<Shader> shader,Camera cam);
 	void setUniformEveryObject(int index,std::shared_ptr<Shader> shader);
 public:
 	Material() :Material("DEFAULT") {}

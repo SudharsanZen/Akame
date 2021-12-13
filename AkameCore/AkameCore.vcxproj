@@ -129,6 +129,7 @@
     <ClInclude Include="Header Files\Physics\Physics.h" />
     <ClInclude Include="Header Files\Physics\System\RigidBodySystem.h" />
     <ClInclude Include="Header Files\Rendering\Animation\SkinnedMeshRenderer.h" />
+    <ClInclude Include="Header Files\Rendering\Animation\SkinnedRendererPipeline.h" />
     <ClInclude Include="Header Files\Rendering\Camera.h" />
     <ClInclude Include="Header Files\Rendering\DeferredRendererFragmentBuffer.h" />
     <ClInclude Include="Header Files\Rendering\DepthFrameBuffer.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Header Files\Rendering\Animation\SkinnedRendererPipeline.cpp" />
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkeletalMeshRenderingSystem.cpp" />
     <ClCompile Include="Source Files\Assets\Asset.cpp" />

@@ -12,6 +12,7 @@ class ShaderManager
 	static bool checkForPipeline(std::string shaderName);
 	friend class RenderingSystem;
 	friend class Editor;
+	friend class SkeletalMeshRenderingSystem;
 public:
 
 	ShaderManager();

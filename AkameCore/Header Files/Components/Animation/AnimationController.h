@@ -95,9 +95,9 @@ class AnimationController : public Components
 				{
 					unsigned long long currPose = keyState.i_currRot;
 					float timeGap = (Keys.rotation[currPose + 1].time - Keys.rotation[currPose].time);
-					float interTime = currTime - Keys.position[currPose].time;
+					float interTime = currTime - Keys.rotation[currPose].time;
 					interTime = glm::clamp(interTime, minVal, timeGap);//avoid extrapolation
-					glm::quat currInterRot = glm::mix(Keys.rotation[currPose].value, Keys.rotation[currPose + 1].value, (interTime / timeGap));
+					glm::quat currInterRot = glm::slerp(Keys.rotation[currPose].value, Keys.rotation[currPose + 1].value, (interTime / timeGap));
 					bTrans.SetLocalRotation(currInterRot);
 
 					if (Keys.rotation[(keyState.i_currRot + 1)].time<= currTime)
@@ -108,6 +108,26 @@ class AnimationController : public Components
 				else if (keyState.i_currRot < Keys.rot_count)
 				{
 					bTrans.SetLocalRotation(Keys.rotation[keyState.i_currRot].value);
+				}
+
+				//scale animation
+				if (keyState.i_currRot + 1 < Keys.scale_count)
+				{
+					unsigned long long currPose = keyState.i_currScale;
+					float timeGap = (Keys.scale[currPose + 1].time - Keys.scale[currPose].time);
+					float interTime = currTime - Keys.scale[currPose].time;
+					interTime = glm::clamp(interTime, minVal, timeGap);//avoid extrapolation
+					glm::vec3 currInterScale = glm::mix(Keys.scale[currPose].value, Keys.scale[currPose + 1].value, (interTime / timeGap));
+					bTrans.SetLocalScale(currInterScale);
+
+					if (Keys.scale[(keyState.i_currScale + 1)].time <= currTime)
+					{
+						keyState.i_currScale++;
+					}
+				}
+				else if (keyState.i_currScale < Keys.scale_count)
+				{
+					bTrans.SetLocalScale(Keys.scale[keyState.i_currScale].value);
 				}
 			
 		}

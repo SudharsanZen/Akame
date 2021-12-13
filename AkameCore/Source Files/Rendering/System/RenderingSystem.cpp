@@ -11,7 +11,7 @@
 #include"Rendering/System/DeferredPipeline.h"
 #include"Rendering/System/DefaultRenderingPipeline.h"
 #include"Core/Debug/Debug.h"
-
+#include"Rendering/Animation/SkinnedRendererPipeline.h"
 //returns the point where the ray intersects the plane
 glm::vec3 rayPlaneIntersectionPoint(glm::vec3 rayOrigin,glm::vec3 rayDir,glm::vec3 planeNormal,glm::vec3 planePoint)
 {
@@ -62,6 +62,7 @@ void RenderingSystem::attachAllBuiltInSRP()
 	ShaderManager::AttachShaderPipeline<DeferredPipeline>("DEFERRED",height,width);
 	ShaderManager::AttachShaderPipeline<RM_SKY_BOXPipeline>("SPHERE");
 	ShaderManager::AttachShaderPipeline<DefaultRenderingPipeline>("DEFAULT");
+	ShaderManager::AttachShaderPipeline<SkeletalMeshRenderingPipeline>("SkinnedMeshRenderer");
 }
 
 RenderingSystem::RenderingSystem()
@@ -110,17 +111,26 @@ void RenderingSystem::Run(Camera& cam)
 	std::shared_ptr<Shader> shader;
 
 	
-	//directional shadow maps 
+	//directional shadow maps for non-skeletal meshes
+
 	shader=ShaderManager::GetShader("SHADOW_DIRECTIONAL");
+	lsys->dir_sMap.bind();
+	lsys->dir_sMap.clearBuffer();
 	lsys->BindDirectionalLightShadowMap(shader,cam);
 		RenderAllMesh(shader,cam);
+	//directional shadow maps for skeletal meshes
+	shader = ShaderManager::GetShader("SK_DIR_SHADOW");
+	lsys->BindDirectionalLightShadowMap(shader, cam);
+		glBindVertexArray(SkeletalMesh::VAO);
+			animSys.lock()->RenderShadows(this,shader,cam);
+		glBindVertexArray(0);
 	lsys->unBindDirectionalShadowMap();
 	//directional shadow maps done-------------------------------------------------------------
 	
 	glViewport(0, 0, width, height);
 	RenderQueue("GEOMETRY",cam);
 	glBindVertexArray(SkeletalMesh::VAO);
-	animSys.lock()->renderMeshes(cam);
+	animSys.lock()->renderMeshes(this,cam);
 	glBindVertexArray(0);
 	RenderQueue("OVERLAY",cam);
 

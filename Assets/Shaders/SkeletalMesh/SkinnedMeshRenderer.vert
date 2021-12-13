@@ -26,11 +26,14 @@ out vec2 uvCoord;
 out mat3 TBN;
 
 uniform mat4 boneTransform[MAX_BONES];
+uniform mat4 offsetMat[MAX_BONES];
 void main()
 {
     vec3 disp=normal;
     mat4 model=transform;
     vec4 pose=vec4(0);
+    vec3 T=vec3(0),B=vec3(0),N=vec3(0);
+    mat4 cumulativeMat=mat4(1);
     //assumes every vert has at least one bone that influences it
     for(int i=0;i<MAX_BONES_PER_VERT;i++)
     {
@@ -41,15 +44,21 @@ void main()
             pose=model*vec4(aPos,1);
             break;
         }
-        vec4 locPose=(boneTransform[boneIds[i]]*vec4(aPos,1));
+        vec4 locPose=(boneTransform[boneIds[i]]*offsetMat[boneIds[i]]*vec4(aPos,1));
         pose+=boneWeights[i]*locPose;
+        
+        T += vec3(boneWeights[i]*(boneTransform[boneIds[i]]*vec4(normalize(tangent),   0.0)));
+        B += vec3(boneWeights[i]*(boneTransform[boneIds[i]]*vec4(normalize(bitangent), 0.0)));
+        N += boneWeights[i]*mat3((boneTransform[boneIds[i]])) * normal;
+        
     }
-    //FragPos = vec3(model * vec4(aPos, 1.0));
+    FragPos = vec3(pose);
     gl_Position = proj*view*pose;
-    vec3 T = normalize(vec3(model*vec4(normalize(tangent),   0.0)));
-    vec3 B = normalize(vec3(model*vec4(normalize(bitangent), 0.0)));
-    vec3 N = mat3(transpose(model)) * normal;
+    
+    Normal=normalize(N);
+    B=normalize(B);
+    T=normalize(T);
     TBN = mat3(T, B, N);
-    Normal=N;
+   
     uvCoord=texCoord;
 }

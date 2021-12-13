@@ -276,6 +276,7 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Rendering\Animation\SkinnedRendererPipeline.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp">
@@ -425,5 +426,6 @@
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Header Files\Rendering\Animation\SkinnedRendererPipeline.cpp" />
   </ItemGroup>
 </Project>

@@ -133,6 +133,7 @@ void Scene::InitEcs()
 	Signature animSig;
 	animSig.set(ecs->GetComponentBitPose<SkeletalMesh>());
 	animSig.set(ecs->GetComponentBitPose<Transform>());
+	animSig.set(ecs->GetComponentBitPose<Material>());
 
 	Signature animCont;
 	animCont.set(ecs->GetComponentBitPose<AnimationController>());

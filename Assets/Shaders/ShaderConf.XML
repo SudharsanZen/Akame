@@ -28,6 +28,11 @@
     <Fragment path="LightingAndShadows/dir_shadowMap.frag"/>
     <Geometry path="geometryShaders/test.geom"/>
 </Shader>
+<Shader name="SK_DIR_SHADOW" queue="NULL">
+    <Vertex path="LightingAndShadows/SK_DIR_SHADOW.vert"/>
+    <Fragment path="LightingAndShadows/SK_DIR_SHADOW.frag"/>
+    <Geometry path="geometryShaders/test.geom"/>
+</Shader>
 <Shader name="GRIDS" queue="OVERLAY+1">
     <Vertex path="Misc/grids.vert"/>
     <Fragment path="Misc/grids.frag"/>

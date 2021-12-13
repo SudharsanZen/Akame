@@ -11,80 +11,40 @@
 #include<unordered_map>
 #include"Components/Animation/SkeletalMesh.h"
 #include"Components/Animation/AnimationController.h"
+#include"Components/Rendering/Material.h"
 #include<sstream>
+#include"Assets/ShaderManager.h"
 class SkeletalMeshRenderingSystem: public System
 {
 	friend class Scene;
 	std::weak_ptr<ECS> ecs;
-public:
-	void renderMeshes(Camera cam)
-	{
-		std::shared_ptr<ECS> e = ecs.lock();
-		std::shared_ptr<Shader> skRend = ShaderManager::GetShader("SkinnedMeshRenderer");
-		
-		skRend->useShaderProgram();
-		for (auto& ent : entities)
-		{
-			
-			SkeletalMesh& sk = e->GetComponent<SkeletalMesh>(ent);
-			if (sk.animController != Entity(-1, -1))
-			{
-				AnimationController& animCont = e->GetComponent<AnimationController>(sk.animController);
-				for (int i = 0; i < animCont.boneList->size(); i++)
-				{
-					glm::mat4 tMat = (*animCont.boneList)[i].offsetMat;
-					Transform& boneT = e->GetComponent<Transform>(((*animCont.boneList)[i].eid));
-					tMat = boneT.transformMatrix() * tMat;
-			
-					skRend->setUniformMat4fvArray("boneTransform", (*animCont.boneList)[i].id, glm::value_ptr(tMat));
-				}
-			}
-			Transform& t = e->GetComponent<Transform>(ent);
-			glm::mat4 tMat = t.transformMatrix();
-			skRend->setUniformMat4fv("transform", 1,glm::value_ptr(tMat) );
-			skRend->setUniformVec3("viewPos",cam.transform.GetGlobalPosition());
-			skRend->setUniformVec3("viewDir",cam.transform.forward());
-			sk.renderMesh();
-		}
-	}
-	void Run()
-	{
-		if (SkeletalMesh::needsUpdate)
-		{
-			SkeletalMesh::needsUpdate = false;
-			SkeletalMesh::setupMesh();
-		}
-		/*
-		//bone debug renderer
-		std::shared_ptr<ECS> e = ecs.lock();
-		for (auto& ent : entities)
-		{
-			SkeletalMesh& sk = e->GetComponent<SkeletalMesh>(ent);
-			for (auto& bone : sk.boneMap)
-			{
-				Transform& curr = e->GetComponent<Transform>(bone.eid);
-				glm::vec3 currPose = curr.GetGlobalPosition();
-				Debug::DrawCircle(currPose, curr.up(), 0.1, glm::vec3(1, 0.5, 0));
-				Debug::DrawCircle(currPose, curr.forward(), 0.1, glm::vec3(1, 0.5, 0));
-				Debug::DrawCircle(currPose, curr.right(), 0.1, glm::vec3(1, 0.5, 0));
-				Debug::DrawRay(curr.GetGlobalPosition(),curr.forward(),1,glm::vec3(0,0,1));
-				Debug::DrawRay(curr.GetGlobalPosition(),curr.up(),1,glm::vec3(0,1,0));
-				Debug::DrawRay(curr.GetGlobalPosition(),curr.right(),1,glm::vec3(1,0,0));
-				if (bone.parentName != "")
-				{
-				
-					
-					Transform& parent = curr.getParentTransform();
-					
-					glm::vec3 parentPose = parent.GetGlobalPosition();
-					Debug::DrawLine(currPose,parentPose,glm::vec3(0,1,0));
 
-					
-				
-				}
-				
-			}
-		}*/
+	bool needs_update;
+
+	std::map<std::string, std::vector<Entity>> mShaderNameEntityMap;
+public:
+	SkeletalMeshRenderingSystem()
+	{
+		needs_update = true;
 	}
+	void OnAddEntity(Entity eid)override
+	{
+		needs_update = true;
+	}
+	void OnDestroyEntity(Entity eid)override
+	{
+		needs_update = true;
+	}
+	void renderMeshes(RenderingSystem* rendSys,Camera cam)
+	{
+		RenderSkeletalMeshQueue(rendSys,cam);
+	}
+
+	void RenderSkeletalMeshQueue(RenderingSystem* rendSys,Camera cam);
+	void RenderEntitiesWithShader(RenderingSystem* rendSys,std::string shaderName, Camera cam);
+
+	void RenderShadows(RenderingSystem* rendSys, std::shared_ptr<Shader> skrend, Camera cam);
+
+	void Run();
 };
 

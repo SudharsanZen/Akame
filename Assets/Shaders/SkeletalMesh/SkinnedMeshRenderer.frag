@@ -193,11 +193,30 @@ vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P,float shadow)
 uniform vec3 viewDir;
 void main()
 {
-    vec3 ptLight=vec3(viewPos);
+    vec4 albedo=texture(material.diffuseMap,uvCoord);
+    if(albedo.a<0.5)
+        discard;
+    // ambient
+    if(emissive>0)
+    {
+        FragColor=albedo;
+        return;
+    }
+    
+    //calculate normal from tangent sapce to world space
+    vec3 n=texture(material.normalMap,uvCoord).rgb;
+    n=normalize(n*2.0-1.0);
+    n.xy*=0.001f;
+    n=normalize(n);
+    
+  	BufferPixelValues pV;
+    pV.albedo=albedo;
+    pV.norm=vec4(normalize(TBN*n),1);
+    pV.FragPos=vec4(FragPos,1);
+    pV.specular=texture(material.specularMap,uvCoord).r;
+    
+    FragColor=vec4(calcDirecLight(dir,pV,shadowCalculation(pV.FragPos)),1);
+    //FragColor=vec4(calcDirecLight(dir,pV,0),1);
 
-    //vec3 vDir=normalize(ptLight-FragPos);
-    float diff=max(dot(Normal,-viewDir),0)*10;
-
-    FragColor=vec4(vec3(0.1f)+vec3(2)*diff,1);
     //FragColor=vec4(vec3(LinearizeDepth(gl_FragCoord.z))/10,1.0);
 } 

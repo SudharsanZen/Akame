@@ -24,6 +24,7 @@ public:
 	PSSMFBO(int numOfFrustum, int res);
 	float GetResolution() { return resolution; }
 	void bind();
+	void clearBuffer();
 
 	void unbind();
 

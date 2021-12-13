@@ -63,7 +63,7 @@ public:
 	void updatePointLightBuffer();
 	//calculates and sets the necesary variables for shadow map calculations
 	void BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader,Camera &cam);
-	
+
 	//get the directional light's view projection matrix
 	std::vector<glm::mat4> GetDirectionalLightSpaceMat()
 	{

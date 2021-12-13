@@ -9,6 +9,80 @@
 #include"Components/Animation/SkeletalMesh.h"
 #include"Animation/AnimationControllerSystem.h"
 #include<assimp/version.h>
+void set_material(Material &mat,aiMesh *mesh,const aiScene *mAiScene,std::string mDir)
+{
+	if (mesh->mMaterialIndex >= 0)
+	{
+		aiString diff, rough, norm, metallic, ao;
+		int difC = 0, roughC = 0, normC = 0, metalC = 0, aoC = 0;
+		aiMaterial* material = mAiScene->mMaterials[mesh->mMaterialIndex];
+		for (int i = 0; i < (difC = material->GetTextureCount(aiTextureType_DIFFUSE)); i++)
+		{
+			material->GetTexture(aiTextureType_DIFFUSE, i, &diff);
+		}
+		for (int i = 0; i < (roughC = material->GetTextureCount(aiTextureType_DIFFUSE_ROUGHNESS)); i++)
+		{
+			material->GetTexture(aiTextureType_DIFFUSE_ROUGHNESS, i, &rough);
+		}
+		for (int i = 0; i < (normC = material->GetTextureCount(aiTextureType_NORMALS)); i++)
+		{
+			material->GetTexture(aiTextureType_NORMALS, i, &norm);
+		}
+		for (int i = 0; i < (metalC = material->GetTextureCount(aiTextureType_METALNESS)); i++)
+		{
+			material->GetTexture(aiTextureType_METALNESS, i, &metallic);
+		}
+		for (int i = 0; i < (aoC = material->GetTextureCount(aiTextureType_AMBIENT_OCCLUSION)); i++)
+		{
+			material->GetTexture(aiTextureType_AMBIENT_OCCLUSION, i, &ao);
+		}
+
+		std::string rDir = AssetManager::assetRootPath;
+		if (difC)
+			mat.setTexture2D("material.diffuse", (mDir + diff.C_Str()).c_str());
+		else
+			mat.setTexture2D("material.diffuse", rDir + "EngineAssets/defaultDiff.jpg");
+		if (roughC)
+			mat.setTexture2D("material.roughness", (mDir + rough.C_Str()).c_str());
+		else
+		{
+			mat.setValue("noRoughness", 1.0f);
+			mat.setValue("roughness", 0.4f);
+		}
+		if (normC)
+		{
+			mat.setTexture2D("material.normalMap", (mDir + norm.C_Str()).c_str());
+			mat.setValue("normalStrength", 5);
+		}
+		else
+		{
+			mat.setValue("noNormal", 1);
+		}
+
+		if (metalC)
+			mat.setTexture2D("material.metallic", (mDir + metallic.C_Str()).c_str());
+		else
+		{
+			mat.setValue("noMetallic", 1.0f);
+			mat.setValue("metallic", 0.0f);
+		}
+
+		if (aoC)
+			mat.setTexture2D("material.metallic", (mDir + ao.C_Str()).c_str());
+		else
+		{
+			mat.setValue("noAO", 1.0f);
+			mat.setValue("ambientocclusion", 1.0f);
+		}
+		std::cout << "Diffuse: " << diff.C_Str() << std::endl;
+		std::cout << "rougness: " << rough.C_Str() << std::endl;
+		std::cout << "normal: " << norm.C_Str() << std::endl;
+		std::cout << "metallic: " << metallic.C_Str() << std::endl;
+		std::cout << "ao: " << ao.C_Str() << std::endl;
+
+		mat.setValue("roughness", 1);
+	}
+}
 template <typename real>
 void mat4x4_AiToAkame_converter(aiMatrix4x4t<real> const &aiMat,glm::mat4 &akMat)
 {
@@ -33,6 +107,14 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 		vertex.pos.x = mesh->mVertices[i].x;
 		vertex.pos.y = mesh->mVertices[i].y;
 		vertex.pos.z = mesh->mVertices[i].z;
+
+		vertex.biTangent.x = mesh->mBitangents[i].x;
+		vertex.biTangent.y = mesh->mBitangents[i].y;
+		vertex.biTangent.z = mesh->mBitangents[i].z;
+
+		vertex.tangent.x = mesh->mTangents[i].x;
+		vertex.tangent.y = mesh->mTangents[i].y;
+		vertex.tangent.z = mesh->mTangents[i].z;
 
 		vertex.normal.x = mesh->mNormals[i].x;
 		vertex.normal.y = mesh->mNormals[i].y;
@@ -149,7 +231,10 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 
 
 	
-	SkeletalMesh &m=mCurrScene.AddComponent<SkeletalMesh>(meshid);
+	SkeletalMesh &skMesh=mCurrScene.AddComponent<SkeletalMesh>(meshid);
+	Material mat("SkinnedMeshRenderer");
+	set_material(mat,mesh,mAiScene,mDir);
+	mCurrScene.AddComponent<Material>(meshid)=mat;
 	/*m.boneMap = std::vector<BoneInfo>(bonesNames.size());
 
 	for (auto bStr : bonesNames)
@@ -170,6 +255,7 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 		float factor = 1/total;
 		vertices[i].boneWeight *= factor;
 	}
+	
 	for (size_t i = 0; i < indices.size(); i += 3)
 	{
 		sk_vert v1, v2, v3;
@@ -177,12 +263,12 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 		v2 = vertices[indices[i + 1]];
 		v3 = vertices[indices[i + 2]];
 
-		calTangentBiTangent(v1, v2, v3);
+		//calTangentBiTangent(v1, v2, v3);
 		finalVert.push_back(v1);
 		finalVert.push_back(v2);
 		finalVert.push_back(v3);
 	}
-	m.CreateMesh(finalVert);
+	skMesh.CreateMesh(finalVert);
 	return meshid;
 }
 Entity Model::processMesh(Entity parent,aiMesh* mesh)
@@ -248,78 +334,8 @@ Entity Model::processMesh(Entity parent,aiMesh* mesh)
 	mCurrScene.SetEntityName(meshid,meshName);
 	Material mat("DEFERRED");
 	
-
-	if (mesh->mMaterialIndex >= 0)
-	{
-		aiString diff,rough,norm,metallic,ao;
-		int difC=0, roughC=0, normC=0,metalC=0,aoC=0;
-		aiMaterial* material = mAiScene->mMaterials[mesh->mMaterialIndex];
-		for (int i = 0; i < (difC=material->GetTextureCount(aiTextureType_DIFFUSE)); i++)
-		{
-			material->GetTexture(aiTextureType_DIFFUSE,i,&diff);
-		}
-		for (int i = 0; i < (roughC=material->GetTextureCount(aiTextureType_DIFFUSE_ROUGHNESS)); i++)
-		{
-			material->GetTexture(aiTextureType_DIFFUSE_ROUGHNESS, i, &rough);
-		}
-		for (int i = 0; i < (normC=material->GetTextureCount(aiTextureType_DISPLACEMENT)); i++)
-		{
-			material->GetTexture(aiTextureType_DISPLACEMENT, i, &norm);
-		}
-		for (int i = 0; i < (metalC= material->GetTextureCount(aiTextureType_METALNESS)); i++)
-		{
-			material->GetTexture(aiTextureType_METALNESS, i, &metallic);
-		}
-		for (int i = 0; i < (aoC = material->GetTextureCount(aiTextureType_AMBIENT_OCCLUSION)); i++)
-		{
-			material->GetTexture(aiTextureType_AMBIENT_OCCLUSION, i, &ao);
-		}
-
-		std::string rDir = AssetManager::assetRootPath;
-		if (difC)
-			mat.setTexture2D("material.diffuse",(mDir+diff.C_Str()).c_str() );
-		else
-			mat.setTexture2D("material.diffuse", rDir + "EngineAssets/defaultDiff.jpg");
-		if (roughC)
-			mat.setTexture2D("material.roughness", (mDir + rough.C_Str()).c_str());
-		else
-		{
-			mat.setValue("noRoughness",1.0f);
-			mat.setValue("roughness",0.4f);
-		}
-		if (normC)
-		{
-			mat.setTexture2D("material.roughness", (mDir + norm.C_Str()).c_str());
-			mat.setValue("normalStrength", 5);
-		}
-		else
-		{
-			mat.setValue("noNormal", 1);
-		}
-
-		if (metalC)
-			mat.setTexture2D("material.metallic", (mDir + metallic.C_Str()).c_str());
-		else
-		{
-			mat.setValue("noMetallic", 1.0f);
-			mat.setValue("metallic", 0.0f);
-		}
-
-		if (aoC)
-			mat.setTexture2D("material.metallic", (mDir + ao.C_Str()).c_str());
-		else
-		{
-			mat.setValue("noAO", 1.0f);
-			mat.setValue("ambientocclusion", 1.0f);
-		}
-		std::cout << "Diffuse: " << diff.C_Str() << std::endl;
-		std::cout << "rougness: " << rough.C_Str() << std::endl;
-		std::cout << "normal: " << norm.C_Str() << std::endl;
-		std::cout << "metallic: " << metallic.C_Str() << std::endl;
-		std::cout << "ao: " << ao.C_Str() << std::endl;
+	set_material(mat,mesh,mAiScene,mDir);
 	
-		mat.setValue("roughness", 1);
-	}
 	
 	mCurrScene.AddComponent<Material>(meshid) = mat;
 	mCurrScene.AddComponent<Mesh>(meshid).CreateMesh(finalVert);
@@ -374,6 +390,7 @@ Entity Model::LoadModelToScene(std::string modelPath)
 		| aiProcess_JoinIdenticalVertices
 		| aiProcess_Triangulate
 		|aiProcess_PopulateArmatureData
+		| aiProcess_CalcTangentSpace
 
 		;
 
@@ -461,7 +478,7 @@ Entity Model::LoadModelToScene(std::string modelPath)
 
 				std::cout << animList[i]->mName.C_Str()<<"\n";
 				//testCode:this code only for testA.fbx
-				if (i == 1)
+				if (i == 0)
 				{
 					AnimationClip aClip;
 					aClip.duration=animList[i]->mDuration;
