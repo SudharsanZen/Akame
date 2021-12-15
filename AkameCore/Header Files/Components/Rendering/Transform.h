@@ -68,6 +68,7 @@ class Transform:public Components
 	friend class Editor;
 	friend class Material;
 	friend class RenderingSystem;
+	friend class SceneHierarchyWindow;
 	template <typename T>
 	friend class ComponentArray;
 	friend class physics::RigidBodySystem;

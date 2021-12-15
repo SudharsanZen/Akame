@@ -26,6 +26,7 @@ private:
 	friend class SystemManager;
 	friend class RenderingSystem;
 	friend class SceneTransformManager;
+	friend class SceneHierarchyWindow;
 	friend class Transform;
 	friend class ECS;
 	friend class Editor;

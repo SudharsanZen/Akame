@@ -4,6 +4,7 @@
 #include"Rendering/Texture.h"
 #include"Rendering/FrameBuffer.h"
 #include"Assets/ShaderManager.h"
+#include"Core/Editor/SceneHierarchyWindow/SceneHierarchyWindow.h"
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
 class Editor
@@ -11,9 +12,9 @@ class Editor
 private:
 	//float lx=-125, ly=45, lz=0;
 	float lx=-90, ly=0, lz=0;
-	bool viewDebugInfo;
+
 	bool drawLights=false;
-	std::set<Entity> selected;
+
 	ImGuiIO& io;
 	std::weak_ptr<GLFWwindow> context;
 	Scene &scene;
@@ -22,7 +23,9 @@ private:
 	FrameBuffer fbo[5];
 	//returns the &io value
 	ImGuiIO& initGui();
-	void DrawNode(Transform const& t, EntityDescriptor& edt, ImGuiTreeNodeFlags const& base_flags);
+
+	std::shared_ptr<SceneHierarchyWindow> m_SceneHierarchy;
+
 public:
 	
 	Editor(Window &window,Scene& scene);

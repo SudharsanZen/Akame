@@ -8,7 +8,7 @@ class EntityDescriptor:public Components
 	std::string tag;
 	bool selected=false;
 
-	
+	friend class SceneHierarchyWindow;
 	friend class Editor;
 	friend class EntityDescriptionSystem;
 public:

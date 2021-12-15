@@ -219,6 +219,9 @@
     <ClInclude Include="Header Files\Rendering\Animation\SkinnedMeshRenderer.h">
       <Filter>Header Files\Rendering\Animation</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Rendering\Animation\SkinnedRendererPipeline.h">
+      <Filter>Header Files\Rendering\Animation</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Rendering\Camera.h">
       <Filter>Header Files\Rendering</Filter>
     </ClInclude>
@@ -276,7 +279,7 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Rendering\Animation\SkinnedRendererPipeline.h" />
+    <ClInclude Include="Header Files\Core\Editor\SceneHierarchyWindow\SceneHierarchyWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp">
@@ -427,5 +430,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Header Files\Rendering\Animation\SkinnedRendererPipeline.cpp" />
+    <ClCompile Include="Source Files\Core\Editor\SceneHierarchyWindow.cpp" />
   </ItemGroup>
 </Project>

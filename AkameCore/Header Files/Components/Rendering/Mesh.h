@@ -29,6 +29,7 @@ private:
 	glm::vec4 max,min;
 	friend class RenderingSystem;
 	friend class Editor;
+	friend class SceneHierarchyWindow;
 	
 public:
 

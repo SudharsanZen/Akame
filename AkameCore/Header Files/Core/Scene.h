@@ -42,6 +42,7 @@ private:
 
 	friend class BehaviourSystem;
 	friend class Editor;
+	friend class SceneHierarchyWindow;
 	
 public:
 	void groupEntWithShader();
