@@ -105,16 +105,16 @@ int main()
 
 
 
-	Material moonMaterial;
+	Material moonMaterial("DEFERRED");
 	moonMaterial.setTexture2D("material.diffuse", rootDir + "Media/Demo/Planets/Moon/diffuse.jpg");
 	moonMaterial.setTexture2D("material.specular", rootDir + "Media/Demo/Planets/Moon/Specular.jpg");
 
 	
-	Material earthMaterial;
+	Material earthMaterial("DEFERRED");
 	earthMaterial.setTexture2D("material.diffuse",rootDir + "Media/Demo/Planets/Earth/Earth map.jpg");
 	earthMaterial.setTexture2D("material.specular", rootDir + "Media/Demo/Planets/Earth/Specular map.jpg");
 
-	Material sunMaterial;
+	Material sunMaterial("DEFERRED");
 	sunMaterial.setTexture2D("material.diffuse", rootDir + "Media/Demo/Planets/Sun/diffuse.jpg");
 	sunMaterial.setTexture2D("material.specular", rootDir + "Media/Demo/Planets/Sun/Specular.jpg");
 	sunMaterial.isEmissive(true);
@@ -125,7 +125,7 @@ int main()
 	//component that describes the material
 	scene.AddComponent<Material>(sun)=sunMaterial;
 	//component that describes the location ,size and rotation
-	scene.AddComponent<Transform>(sun)= Transform(0, 0, 0); 
+	scene.AddComponent<Transform>(sun); 
 	//get the Mesh component and define it's shape, in this case a sphere
 	sunM.CreateMesh(generateSphereVertices(30, 30, 30));
 
@@ -133,7 +133,7 @@ int main()
 
 	Mesh &earthM=scene.AddComponent<Mesh>(earth);
 	scene.AddComponent<Material>(earth)=earthMaterial;
-	scene.AddComponent<Transform>(earth)=Transform(0,0,0);
+	scene.AddComponent<Transform>(earth);
 	scene.AddComponent<BehaviourComponent>(earth).setBehaviour<EarthBehv>(sun);
 	earthM.CreateMesh(generateSphereVertices(30,30,10));
 	
@@ -141,7 +141,7 @@ int main()
 
 	scene.AddComponent<Mesh>(moon).CreateMesh(generateSphereVertices(30, 30, 3));
 	scene.AddComponent<Material>(moon)= moonMaterial;
-	scene.AddComponent<Transform>(moon)= Transform(0, 0, 0);
+	scene.AddComponent<Transform>(moon);
 	scene.AddComponent<BehaviourComponent>(moon).setBehaviour<MoonBehv>(earth);
 
 

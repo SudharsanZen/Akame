@@ -53,6 +53,15 @@ void physics::RigidBody3D::setColliderShape(ColliderShape shape)
 	colShape->release();
 }
 
+void physics::RigidBody3D::setVelocity(glm::vec3 vel)
+{
+	if (rigidbody && RigidBodyType::DYNAMIC==rBodyType)
+	{
+		physx::PxRigidDynamic* drb = static_cast<physx::PxRigidDynamic*>(rigidbody);
+		drb->setLinearVelocity(physx::PxVec3(vel.x,vel.y,vel.z));
+	}
+}
+
 void physics::RigidBody3D::setRigidBodyType(RigidBodyType rbType, ColliderShape shape)
 {
 	if (rigidbody)

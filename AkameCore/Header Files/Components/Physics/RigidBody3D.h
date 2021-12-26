@@ -51,7 +51,7 @@ namespace physics
 
 		void setColliderShape(ColliderShape shape);
 
-	
+		void setVelocity(glm::vec3 vel);
 		void setRigidBodyType(RigidBodyType rbType, ColliderShape shape);
 
 

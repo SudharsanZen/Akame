@@ -98,7 +98,7 @@ int main()
 	scene.OnStart();
 	unsigned int count = 0;
 	scene.backGroundColor(0, 0, 0, 1);
-	float step = 0.5f;
+	float step = 0.1f;
 	Editor editor(window,scene);
 	while (!window.closeWindow())
 	{
@@ -121,7 +121,7 @@ int main()
 				scene.AddComponent<Mesh>(box).CreateMesh(generateCubeVertices());
 				scene.SetEntityName(box, "cube (copy)");
 			}
-			scene.AddComponent<Transform>(box).SetGlobalPosition(glm::vec3(0, 3, 0));
+			scene.AddComponent<Transform>(box).SetGlobalPosition(glm::vec3(0, 10, 0));
 			
 		
 			scene.AddComponent<physics::RigidBody3D>(box);
@@ -131,6 +131,9 @@ int main()
 			rbdy.setRigidBodyType(physics::RigidBodyType::DYNAMIC, physics::Shapes::SPHERE);
 			else
 			rbdy.setRigidBodyType(physics::RigidBodyType::DYNAMIC, physics::Shapes::BOX);
+
+			rbdy.setVelocity(glm::vec3(0,-25,0));
+			
 		}
 		acc +=scene.getDeltaTime();
 
