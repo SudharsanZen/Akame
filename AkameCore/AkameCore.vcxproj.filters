@@ -216,10 +216,10 @@
     <ClInclude Include="Header Files\Physics\System\RigidBodySystem.h">
       <Filter>Header Files\Physics\System</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Rendering\Animation\SkinnedMeshRenderer.h">
+    <ClInclude Include="Header Files\Components\Animation\SkinnedMeshRenderer.h">
       <Filter>Header Files\Rendering\Animation</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Rendering\Animation\SkinnedRendererPipeline.h">
+    <ClInclude Include="Header Files\Animation\SkinnedRendererPipeline.h">
       <Filter>Header Files\Rendering\Animation</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Rendering\Camera.h">

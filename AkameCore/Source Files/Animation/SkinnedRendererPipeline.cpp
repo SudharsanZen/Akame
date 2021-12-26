@@ -1,4 +1,4 @@
-#include"Animation/SkinnedRendererPipeline.h"
+#include"Rendering/Animation/SkinnedRendererPipeline.h"
 #include<glad/glad.h>
 
 void SkeletalMeshRenderingPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam)
