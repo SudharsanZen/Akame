@@ -155,6 +155,7 @@
     <ClCompile Include="Header Files\Rendering\Animation\SkinnedRendererPipeline.cpp" />
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkeletalMeshRenderingSystem.cpp" />
+    <ClCompile Include="Source Files\Animation\SkinnedRendererPipeline.cpp" />
     <ClCompile Include="Source Files\Assets\Asset.cpp" />
     <ClCompile Include="Source Files\Assets\AssetArray.cpp" />
     <ClCompile Include="Source Files\Assets\AssetManager.cpp" />

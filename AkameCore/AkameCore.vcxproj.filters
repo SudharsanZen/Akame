@@ -431,5 +431,6 @@
     </ClCompile>
     <ClCompile Include="Header Files\Rendering\Animation\SkinnedRendererPipeline.cpp" />
     <ClCompile Include="Source Files\Core\Editor\SceneHierarchyWindow.cpp" />
+    <ClCompile Include="Source Files\Animation\SkinnedRendererPipeline.cpp" />
   </ItemGroup>
 </Project>
