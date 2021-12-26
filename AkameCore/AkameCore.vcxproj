@@ -96,6 +96,7 @@
   <ItemGroup>
     <ClInclude Include="Header Files\Animation\AnimationControllerSystem.h" />
     <ClInclude Include="Header Files\Animation\SkeletalMeshRenderingSystem.h" />
+    <ClInclude Include="Header Files\Animation\SkinnedRendererPipeline.h" />
     <ClInclude Include="Header Files\Assets\Asset.h" />
     <ClInclude Include="Header Files\Assets\AssetArray.h" />
     <ClInclude Include="Header Files\Assets\AssetManager.h" />
@@ -114,6 +115,7 @@
     <ClInclude Include="Header Files\Core\Debug\Debug.h" />
     <ClInclude Include="Header Files\Core\Editor\EditorUI.h" />
     <ClInclude Include="Header Files\Core\Editor\EntityDescriptionSystem.h" />
+    <ClInclude Include="Header Files\Core\Editor\SceneHierarchyWindow\SceneHierarchyWindow.h" />
     <ClInclude Include="Header Files\Core\Engine.h" />
     <ClInclude Include="Header Files\Core\Input.h" />
     <ClInclude Include="Header Files\Core\Log\Log.h" />
@@ -128,8 +130,6 @@
     <ClInclude Include="Header Files\Physics\ColliderShape.h" />
     <ClInclude Include="Header Files\Physics\Physics.h" />
     <ClInclude Include="Header Files\Physics\System\RigidBodySystem.h" />
-    <ClInclude Include="Header Files\Components\Animation\SkinnedMeshRenderer.h" />
-    <ClInclude Include="Header Files\Animation\SkinnedRendererPipeline.h" />
     <ClInclude Include="Header Files\Rendering\Camera.h" />
     <ClInclude Include="Header Files\Rendering\DeferredRendererFragmentBuffer.h" />
     <ClInclude Include="Header Files\Rendering\DepthFrameBuffer.h" />
@@ -149,10 +149,8 @@
     <ClInclude Include="Header Files\Rendering\System\TiledRenderer.h" />
     <ClInclude Include="Header Files\Rendering\Texture.h" />
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h" />
-    <ClInclude Include="Header Files\Core\Editor\SceneHierarchyWindow\SceneHierarchyWindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Header Files\Rendering\Animation\SkinnedRendererPipeline.cpp" />
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkeletalMeshRenderingSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkinnedRendererPipeline.cpp" />

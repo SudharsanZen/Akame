@@ -37,7 +37,7 @@ private:
 	Window &window;
 
 	float deltaTime;
-	float lastTime;
+	float lastTime,currTime;
 	
 
 	friend class BehaviourSystem;

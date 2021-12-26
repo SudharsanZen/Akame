@@ -132,6 +132,7 @@ int main()
 		scene.AddComponent<BehaviourComponent>(lights[i]).setBehaviour<strafe>(float(i));
 	}
 	
+	//Editor is experimental, do not use this
 	Editor e(window,scene);
 	
 	float acc = 0;

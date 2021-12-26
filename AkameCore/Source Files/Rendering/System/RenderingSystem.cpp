@@ -11,7 +11,7 @@
 #include"Rendering/System/DeferredPipeline.h"
 #include"Rendering/System/DefaultRenderingPipeline.h"
 #include"Core/Debug/Debug.h"
-#include"Rendering/Animation/SkinnedRendererPipeline.h"
+#include"Animation/SkinnedRendererPipeline.h"
 //returns the point where the ray intersects the plane
 glm::vec3 rayPlaneIntersectionPoint(glm::vec3 rayOrigin,glm::vec3 rayDir,glm::vec3 planeNormal,glm::vec3 planePoint)
 {

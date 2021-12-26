@@ -5,10 +5,9 @@
 #include"Core/Engine.h"
 #include"Core/Scene.h"
 #include<vector>
-#define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
-#include <crtdbg.h>
 
+/*This is the begning of Akame Engine- this project is not started yet, this will be developed in a separate branch in the future*/
 int main()
 {
 	AssetManager::setAssetRoot("../../../../Assets/");
@@ -32,6 +31,7 @@ int main()
 	scene.SetEntityName(dir,"Directional light");
 	scene.AddComponent<Transform>(dir).SetGlobalPosition(glm::vec3(0, 2, 0));
 
+	/*
 	Entity ptl = scene.CreateEntity();
 	Lights &p = scene.AddComponent<Lights>(ptl)= Lights(LIGHT::POINT);
 	p.setColor(1, 1, 1);
@@ -39,7 +39,7 @@ int main()
 	p.setPointLightConst(1, 1, 1);
 	scene.SetEntityName(ptl, "point light");
 	scene.AddComponent<Transform>(ptl).SetGlobalPosition(glm::vec3(0,5,0));
-	
+	*/
 	Entity plane = scene.CreateEntity();
 	
 
@@ -98,7 +98,8 @@ int main()
 	scene.OnStart();
 	unsigned int count = 0;
 	scene.backGroundColor(0, 0, 0, 1);
-	float step = 0.1f;
+	float step = 0.9f;
+	//Editor is experimental, do not use this
 	Editor editor(window,scene);
 	while (!window.closeWindow())
 	{
@@ -121,7 +122,8 @@ int main()
 				scene.AddComponent<Mesh>(box).CreateMesh(generateCubeVertices());
 				scene.SetEntityName(box, "cube (copy)");
 			}
-			scene.AddComponent<Transform>(box).SetGlobalPosition(glm::vec3(0, 10, 0));
+			float x=(rand()%10-5),y=(rand()%10-5);
+			scene.AddComponent<Transform>(box).SetGlobalPosition(glm::vec3(x, 10, y));
 			
 		
 			scene.AddComponent<physics::RigidBody3D>(box);

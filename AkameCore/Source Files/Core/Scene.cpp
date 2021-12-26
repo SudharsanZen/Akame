@@ -202,7 +202,7 @@ void Scene::Render()
 {
 	window.processInput();
 	glfwPollEvents();
-	float currTime = glfwGetTime();
+		currTime = glfwGetTime();
 	//renderStuff
 		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		//call this in this same order

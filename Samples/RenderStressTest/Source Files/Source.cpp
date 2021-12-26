@@ -138,7 +138,7 @@ void app(int num=200)
 	
 	
 	const int rt = (int)sqrt(num);
-	/*
+	
 	std::vector<Entity> lightsVec;
 	std::vector<vert> cv = generateCubeVertices();
 	for (int i = 0; i < num; i++)
@@ -178,7 +178,8 @@ void app(int num=200)
 			scene.AddComponent<Material>(box) = boxMat;
 
 		scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
-	}*/
+	}
+	//Editor is experimental, do not use this
 	Editor edt(window,scene);
 	scene.OnStart();
 	scene.vsyncOn(true);
@@ -228,7 +229,7 @@ int main(int argc,char **argv)
 	}
 	else
 	{
-		app();
+		app(300);
 	}
 	//AssetManager::reset();
 	_CrtDumpMemoryLeaks();

@@ -95,6 +95,7 @@ int main()
 	Transform& t1 = scene.GetComponent<Transform>(cubeList[4]);
 	
 	t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30, glm::vec3(0, 0, 1)));
+	//Editor is experimental, do not use this
 	Editor edt(window,scene);
 	scene.OnStart();
 	scene.vsyncOn(false);

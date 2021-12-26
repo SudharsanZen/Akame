@@ -9,7 +9,7 @@ project "AkameEngine"
         files
         {
             "%{prj.location}/Header Files/**.h",
-            "%{prj.location}/Source Files/**.cpp",
+            "%{prj.location}/Source/**.cpp",
         }
 
         includedirs

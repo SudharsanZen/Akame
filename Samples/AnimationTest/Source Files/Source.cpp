@@ -150,7 +150,7 @@ int main()
 	
 
 
-
+	//Editor is experimental, do not use this
 	Editor e(window, scene);
 
 	float acc = 0;
