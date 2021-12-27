@@ -1,5 +1,5 @@
 
-<img src="/Assets/EngineAssets/logo2.png" alt="Akame" width="512" height="103">
+![Akame](/Assets/EngineAssets/logo2.png?raw=true "Akame")
 
 ## Introduction
 Akame is a Graphics framework built upon OpenGL. It's designed to be simple, fast,easy to use and easily extendible.
