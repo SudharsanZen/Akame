@@ -7,7 +7,7 @@
 struct aiMesh;
 struct aiNode;
 struct aiScene;
-
+class Scene;
 /***************************************************************
  * class is used for importing models from files into the scene*
  * constructor takes one argument of the current scene		   *

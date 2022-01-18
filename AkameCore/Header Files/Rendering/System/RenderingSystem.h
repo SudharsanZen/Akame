@@ -33,7 +33,7 @@ private:
 	//uniform buffer that stores all the common values like view matrix, projection matrix and etc
 	unsigned int uboMatrixBufferID;
 	signed   long long int mat4Size = sizeof(glm::mat4);
-	
+	bool editorMode;
 	bool m_update_Event;
 	friend class Scene;
 	friend class Editor;
@@ -48,14 +48,14 @@ private:
 	void attachAllBuiltInSRP();
 public:
 	//fill the drawList map with relevant entities to their respective shaders
-	
+	bool EditorMode() { return editorMode; };
 	std::weak_ptr<LightSystem> lightsystem;
 	//window heigh and width to render to
 	int height, width;
 	//constructor
 	RenderingSystem();
 	//Call this to render A single frame
-	void Run(Camera& cam);
+	void Run(Camera& cam, unsigned int frameBuffer=0);
 	//clear the draw list
 	void emptyDrawList();
 	//this is a call back function which is called evertime a new entity is registered under rendering system
@@ -75,10 +75,10 @@ public:
 	//Switch on depth test
 	void depthTestOn(bool state);
 	//Render all the entities under the given shader name
-	void RenderAllEntitiesWithShader(std::string SHADERNAME,Camera cam);
+	void RenderAllEntitiesWithShader(std::string SHADERNAME,Camera cam, unsigned int frameBuffer=0);
 	//Renders all the existing renderable entity under the given shader
 	void RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam);
 	//Render all the entity under the given rendering queue
-	void RenderQueue(std::string QUEUENAME,Camera cam);
+	void RenderQueue(std::string QUEUENAME,Camera cam, unsigned int frameBuffer=0);
 };
 

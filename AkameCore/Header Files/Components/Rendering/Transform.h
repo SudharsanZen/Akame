@@ -72,6 +72,7 @@ class Transform:public Components
 	template <typename T>
 	friend class ComponentArray;
 	friend class physics::RigidBodySystem;
+	friend class InspectorWindow;
 
 	void _addToUpdateTransformList()
 	{

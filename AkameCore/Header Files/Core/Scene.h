@@ -42,9 +42,12 @@ private:
 
 	friend class BehaviourSystem;
 	friend class Editor;
+	
 	friend class SceneHierarchyWindow;
+	friend class ViewPortWindow;
 	
 public:
+	
 	void groupEntWithShader();
 	void vsyncOn(bool status);
 	//fn will be called when Scene::Render() is called. this method will be dprecated

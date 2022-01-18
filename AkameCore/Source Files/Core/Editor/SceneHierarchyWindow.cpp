@@ -1,3 +1,4 @@
+#include"Core/Window.h"
 #include"Core/Editor/SceneHierarchyWindow/SceneHierarchyWindow.h"
 #include "Core\Editor\EditorUI.h"
 #include<imGui\backends\imgui_impl_glfw.h>
@@ -14,9 +15,10 @@
 #include"Rendering/System/PSSMFBO.h"
 #include"Core/Debug/Debug.h"
 
+
 void SceneHierarchyWindow::Draw()
 {
-    std::shared_ptr<ECS> e = scene.ecs;
+    std::shared_ptr<ECS> e = m_Scene.ecs;
     //draw
     ImGui::Begin("SceneGraph");
 
@@ -34,7 +36,7 @@ void SceneHierarchyWindow::Draw()
             ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
 
 
-        for (auto ent : scene.transformManager->entities)
+        for (auto ent : m_Scene.transformManager->entities)
         {
             Transform& t = e->GetComponent<Transform>(ent);
             EntityDescriptor& edt = e->GetComponent<EntityDescriptor>(ent);
@@ -49,66 +51,20 @@ void SceneHierarchyWindow::Draw()
     }
 
     ImGui::End();
-
-    //handle inputs
-
-    if (ImGui::IsKeyDown(KEY_DELETE))
-    {
-
-        for (auto ent : selected)
-        {
-            scene.ecs->DestroyEntity(ent);
-
-        }
-        selected.clear();
-    }
-
-
-
-    ImGui::Begin("properties");
-    ImGui::Text("Transform");
-
-    if (selected.size() > 0)
-    {
-        Transform& t = scene.GetComponent<Transform>(*selected.begin());
-        glm::vec3 pose = t.GetGlobalPosition();
-        glm::vec3 lpose = t.GetLocalPosition();
-        glm::vec3 scale = t.GetGlobalScale();
-        glm::vec3 lscale = t.GetLocalScale();
-        Quaternion rot = t.GetGlobalRotation();
-        Quaternion lrot = t.GetLocalRotation();
-        ImGui::Text("Globalposition: x:%f  y:%f  z:%f", pose.x, pose.y, pose.z);
-        ImGui::Text("LocalPosition: x:%f  y:%f  z:%f", lpose.x, lpose.y, lpose.z);
-
-        ImGui::Text("GlobalRotation: x:%f  y:%f  z:%f w:%f", rot.quaternion.x, rot.quaternion.y, rot.quaternion.z, rot.quaternion.w);
-        ImGui::Text("LocalRotation: x:%f  y:%f  z:%f w:%f", lrot.quaternion.x, lrot.quaternion.y, lrot.quaternion.z, lrot.quaternion.w);
-
-
-        ImGui::Text("GlobalScale: x:%f  y:%f  z:%f", scale.x, scale.y, scale.z);
-        ImGui::Text("LocalScale: x:%f  y:%f  z:%f", lscale.x, lscale.y, lscale.z);
-
-        if (ImGui::Button("goToSelection", ImVec2(200.0f, 25.0f)))
-        {
-            glm::vec3 camPose = pose + scene.cam.transform.forward() * 2.0f;
-            scene.cam.transform.SetGlobalPosition(camPose);
-        }
-    }
-    ImGui::End();
-
     for (auto ent : selected)
     {
-        if (scene.ecs->IsComponentAttached<Transform>(ent))
+        if (m_Scene.ecs->IsComponentAttached<Transform>(ent))
         {
-            Transform& t = scene.GetComponent<Transform>(ent);
-            if (scene.ecs->IsComponentAttached<Mesh>(ent))
+            Transform& t = m_Scene.GetComponent<Transform>(ent);
+            if (m_Scene.ecs->IsComponentAttached<Mesh>(ent))
             {
-                Mesh& m = scene.GetComponent<Mesh>(ent);
+                Mesh& m = m_Scene.GetComponent<Mesh>(ent);
                 Debug::DrawBB(m.min, m.max, t.transformMatrix(), glm::vec3(1, 1, 1));
 
             }
-            else if (scene.ecs->IsComponentAttached<Lights>(ent))
+            else if (m_Scene.ecs->IsComponentAttached<Lights>(ent))
             {
-                Lights& l = scene.GetComponent<Lights>(ent);
+                Lights& l = m_Scene.GetComponent<Lights>(ent);
                 glm::vec3 pose = t.GetGlobalPosition();
                 if (l.getType() == LIGHT::POINT)
                 {
@@ -122,9 +78,9 @@ void SceneHierarchyWindow::Draw()
                     Debug::DrawRay(pose, l.getDirection(), 1.5, glm::vec3(0, 0, 1));
                 }
             }
-            else if (scene.ecs->IsComponentAttached<Transform>(ent))
+            else if (m_Scene.ecs->IsComponentAttached<Transform>(ent))
             {
-                Transform& t = scene.ecs->GetComponent<Transform>(ent);
+                Transform& t = m_Scene.ecs->GetComponent<Transform>(ent);
                 glm::vec3 pose = t.GetGlobalPosition();
                 Debug::DrawCircle(pose, t.up(), 0.5, glm::vec3(1, 0.5, 0));
                 Debug::DrawCircle(pose, t.forward(), 0.5, glm::vec3(1, 0.5, 0));
@@ -135,6 +91,19 @@ void SceneHierarchyWindow::Draw()
 
             }
         }
+
+    }
+    //handle inputs
+
+    if (ImGui::IsKeyDown(KEY_DELETE))
+    {
+
+        for (auto ent : selected)
+        {
+            m_Scene.ecs->DestroyEntity(ent);
+
+        }
+        selected.clear();
     }
 
 }
@@ -168,8 +137,8 @@ void SceneHierarchyWindow::DrawNode(Transform const& t, EntityDescriptor& edt, I
         {
             for (auto child : t.child)
             {
-                Transform& t = scene.ecs->GetComponent<Transform>(child);
-                EntityDescriptor& edt = scene.ecs->GetComponent<EntityDescriptor>(child);
+                Transform& t = m_Scene.ecs->GetComponent<Transform>(child);
+                EntityDescriptor& edt = m_Scene.ecs->GetComponent<EntityDescriptor>(child);
                 DrawNode(t, edt, base_flags);
             }
             ImGui::TreePop();

@@ -9,6 +9,7 @@
 #include"Components/Animation/SkeletalMesh.h"
 #include"Animation/AnimationControllerSystem.h"
 #include<assimp/version.h>
+#include"Core/Scene.h"
 void set_material(Material &mat,aiMesh *mesh,const aiScene *mAiScene,std::string mDir)
 {
 	if (mesh->mMaterialIndex >= 0)

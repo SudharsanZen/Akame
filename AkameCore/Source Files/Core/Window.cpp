@@ -37,6 +37,7 @@ int Window::getBufferHeight()
 	else
 		ENGINE_CORE_ERROR("window ptr has been deleted or has not been initialized!");
 	return bufferHeight;
+	
 }
 
 int Window::getBufferWidth()
@@ -47,6 +48,7 @@ int Window::getBufferWidth()
 	else
 		ENGINE_CORE_ERROR("window ptr has been destroyed or has not been intialized!");
 	return bufferWidth;
+	
 }
 
 bool Window::closeWindow()
@@ -117,7 +119,7 @@ bool Window::initialize()
 		return false;
 	}
 	
-
+	
 	
 	bufferHeight = Height;
 	bufferWidth = Width;

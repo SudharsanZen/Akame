@@ -30,8 +30,9 @@ private:
 	friend class Transform;
 	friend class ECS;
 	friend class Editor;
+	friend class InspectorWindow;
 public:
-
+	
 	e_index GetVersion() { return version; }
 	e_index GetIndex() { return index; }
 

@@ -4,7 +4,7 @@
 #include"Core/Debug/Debug.h"
 class AnimationControllerSystem :public System
 {
-	friend class Scene;
+public:
 	std::weak_ptr<ECS> ecs;
 	void update(float deltaTime)
 	{

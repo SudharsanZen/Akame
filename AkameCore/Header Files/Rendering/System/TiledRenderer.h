@@ -26,7 +26,7 @@ public:
 	void setInt(std::string, int);
 	void updateBufferSize(int height, int width);
 	void bindFrameBuffer();
-	void unBindFrameBuffer();
+	void unBindFrameBuffer(unsigned int frameBuffer=0);
 	
 	void setUpShader(Camera& cam, std::shared_ptr<LightSystem> ls);
 	void outPutToQaud();

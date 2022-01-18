@@ -3,7 +3,7 @@
 #include<string>
 #include<memory>
 
-struct GLFWwindow;
+typedef struct GLFWwindow GLFWwindow;
 class Window
 {
 protected:

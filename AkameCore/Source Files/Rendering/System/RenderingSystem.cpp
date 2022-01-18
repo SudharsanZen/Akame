@@ -88,9 +88,9 @@ RenderingSystem::RenderingSystem()
 	attachAllBuiltInSRP();
 }
 
-void RenderingSystem::Run(Camera& cam)
+void RenderingSystem::Run(Camera& cam, unsigned int frameBuffer)
 {
-	
+	glBindFramebuffer(GL_FRAMEBUFFER,frameBuffer);
 	if (Mesh::needsUpdate)
 	{
 		Mesh::needsUpdate = false;
@@ -124,25 +124,29 @@ void RenderingSystem::Run(Camera& cam)
 		glBindVertexArray(SkeletalMesh::VAO);
 			animSys.lock()->RenderShadows(this,shader,cam);
 		glBindVertexArray(0);
-	lsys->unBindDirectionalShadowMap();
+	lsys->unBindDirectionalShadowMap(frameBuffer);
 	//directional shadow maps done-------------------------------------------------------------
 	
 	glViewport(0, 0, width, height);
-	RenderQueue("GEOMETRY",cam);
+	RenderQueue("GEOMETRY",cam,frameBuffer);
+	//render all skeletal mesh-----------------------------
 	glBindVertexArray(SkeletalMesh::VAO);
 	animSys.lock()->renderMeshes(this,cam);
 	glBindVertexArray(0);
-	RenderQueue("OVERLAY",cam);
+	//-----------------------------------------------------
+	RenderQueue("OVERLAY",cam,frameBuffer);
 
 	
 	ShaderManager::GetShader("LINES_DEBUG")->useShaderProgram();
 	glDisable(GL_DEPTH_TEST);
-	Debug::updateBufferContent();
+	if(!editorMode)
+		Debug::updateBufferContent();
 	Debug::DrawDebug();
-	Debug::FlushDebugInformation();
+	if(!editorMode)
+		Debug::FlushDebugInformation();
 	glEnable(GL_DEPTH_TEST);
 	
-
+	glBindFramebuffer(GL_FRAMEBUFFER,0);
 
 }
 
@@ -161,6 +165,7 @@ void RenderingSystem::updateFrameBufferSize(int height, int width)
 	for (auto& SRP : ShaderManager::shaderRenderPipeline)
 	{
 		SRP.second->WindowsResizeCallBacks(height,width);
+		
 	}
 }
 
@@ -180,7 +185,7 @@ void RenderingSystem::depthTestOn(bool state)
 
 
 //render all entities under the given shader
-void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera cam)
+void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera cam, unsigned int frameBuffer)
 {
 	
 	std::shared_ptr<ECS> E = ecs.lock();
@@ -201,7 +206,7 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 		{
 			//if registered then call the pre render call back function
 			shdPipe = ShaderManager::shaderRenderPipeline[SHADERNAME];
-			shdPipe->OnPreRender(shader, this, cam);
+			shdPipe->OnPreRender(shader, this, cam,frameBuffer);
 		}
 		e_index tran = transformArray->componentBitPose;;
 		e_index me = meshArray->componentBitPose;
@@ -247,7 +252,7 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 		if (pipeReg)
 		{
 			//call the post render call back function registered under this shader
-			shdPipe->OnPostRender(shader,this,cam);
+			shdPipe->OnPostRender(shader,this,cam,frameBuffer);
 		}
 	}
 	
@@ -300,12 +305,12 @@ void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
 	glBindVertexArray(0);
 }
 //renders all entities with all shaders registered under this queue type
-void RenderingSystem::RenderQueue(std::string QUEUENAME,Camera cam)
+void RenderingSystem::RenderQueue(std::string QUEUENAME,Camera cam, unsigned int frameBuffer)
 {
 	auto const& sQ = ShaderManager::shaderQueues[QUEUENAME];
 	for (int i = 0; i < sQ.size(); i++)
 	{
-		RenderAllEntitiesWithShader(sQ[i].second, cam);
+		RenderAllEntitiesWithShader(sQ[i].second, cam,frameBuffer);
 	}
 }
 

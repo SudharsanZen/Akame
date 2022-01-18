@@ -19,11 +19,11 @@ public:
 	}
 
 	//called just before the rendering of entities begins
-	virtual void OnPreRender(std::shared_ptr<Shader> shader,RenderingSystem *rsys,Camera cam){
+	virtual void OnPreRender(std::shared_ptr<Shader> shader,RenderingSystem *rsys,Camera cam, unsigned int frameBuffer=0){
 	}
 
 	//called after rendering stuff
-	virtual void OnPostRender(std::shared_ptr<Shader> shader,RenderingSystem *rsys, Camera cam){
+	virtual void OnPostRender(std::shared_ptr<Shader> shader,RenderingSystem *rsys, Camera cam, unsigned int frameBuffer=0){
 	}
 	//called before every time an entity is rendered
 	virtual void OnEntityRender(std::shared_ptr<Shader> shader,std::shared_ptr<ECS> e,Camera cam,Entity eid){

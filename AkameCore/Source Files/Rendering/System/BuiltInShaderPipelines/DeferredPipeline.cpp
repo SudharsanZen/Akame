@@ -6,7 +6,7 @@ void DeferredPipeline::WindowsResizeCallBacks(int height, int width)
 {
 	drfb.updateBufferSize(height, width);
 }
-void DeferredPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam)
+void DeferredPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam, unsigned int frameBuffer)
 {
 	glDisable(GL_BLEND);
 	//deferred renderer-----------------------------------------------------------------------
@@ -16,13 +16,13 @@ void DeferredPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSyst
 	drfb.bindFrameBuffer();
 }
 
- void DeferredPipeline::OnPostRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam)
+ void DeferredPipeline::OnPostRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam, unsigned int frameBuffer)
 {
 
 	std::shared_ptr<LightSystem> lsys = rsys->lightsystem.lock();
 	int height = rsys->height, width = rsys->width;
 
-	drfb.unBindFrameBuffer();
+	drfb.unBindFrameBuffer(frameBuffer);
 
 
 	//render final to quad
@@ -49,7 +49,7 @@ void DeferredPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSyst
 
 	//copy deferred rendering depth buffer to forward
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, drfb.drfb.frameBuffer);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // write to default framebuffer
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer); // write to default framebuffer
 	glBlitFramebuffer(
 		0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST
 	);
@@ -57,7 +57,7 @@ void DeferredPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSyst
 	glEnable(GL_DEPTH_TEST);
 }
 
- void RM_SKY_BOXPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam)
+ void RM_SKY_BOXPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam, unsigned int frameBuffer)
  {
 	 std::shared_ptr<LightSystem> lsys = rsys->lightsystem.lock();
 	 shader->useShaderProgram();
@@ -66,7 +66,7 @@ void DeferredPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSyst
 	 shader->setUniformVec3("sunPose", -lsys->drVector[0].lightDir);
  }
 
- void RM_SKY_BOXPipeline::OnPostRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam)
+ void RM_SKY_BOXPipeline::OnPostRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam, unsigned int frameBuffer)
  {
 
  }

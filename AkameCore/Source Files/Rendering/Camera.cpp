@@ -12,7 +12,7 @@ Camera::Camera(float fovy, float aspectRatio, float nearz, float farz, GLboolean
 	
 	//cameraTarget = transform.position+glm::vec3(0, 0, -3);
 	
-	this->fovy = fovy;
+	this->fovy = glm::radians(fovy);
 	this->aspectRatio = aspectRatio;
 	this->nearz = nearz;
 	this->farz = farz;

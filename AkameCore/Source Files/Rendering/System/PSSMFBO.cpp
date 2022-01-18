@@ -51,9 +51,9 @@ void PSSMFBO::clearBuffer()
 	glClear(GL_DEPTH_BUFFER_BIT); 
 }
 
-void PSSMFBO::unbind()
+void PSSMFBO::unbind(unsigned int frameBuffer)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 }
 
 void PSSMFBO::useTextureArray(unsigned int unit) 

@@ -110,9 +110,9 @@ void DeferredRendererFragmentBuffer::bindFrameBuffer()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void DeferredRendererFragmentBuffer::unBindFrameBuffer()
+void DeferredRendererFragmentBuffer::unBindFrameBuffer(unsigned int frameBuffer)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER,0);
+	glBindFramebuffer(GL_FRAMEBUFFER,frameBuffer);
 }
 //tex unit 1: albedoSpec,unit 2:Normal,unit 3:position
 void DeferredRendererFragmentBuffer::useTextures()

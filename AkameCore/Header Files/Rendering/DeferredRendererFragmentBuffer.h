@@ -32,7 +32,7 @@ public:
 	
 	void updateBufferSize(int height,int width);
 	void bindFrameBuffer();
-	void unBindFrameBuffer();
+	void unBindFrameBuffer(unsigned int frameBuffer=0);
 	//tex unit 1: albedoSpec,unit 2:Normal,unit 3:position
 	void useTextures();
 	void outPutToQaud(Camera& cam, std::shared_ptr<Shader> shader);

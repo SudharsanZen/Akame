@@ -116,6 +116,7 @@
     <ClInclude Include="Header Files\Core\Editor\EditorUI.h" />
     <ClInclude Include="Header Files\Core\Editor\EntityDescriptionSystem.h" />
     <ClInclude Include="Header Files\Core\Editor\SceneHierarchyWindow\SceneHierarchyWindow.h" />
+    <ClInclude Include="Header Files\Core\Editor\ViewPort\ViewPortWindow.h" />
     <ClInclude Include="Header Files\Core\Engine.h" />
     <ClInclude Include="Header Files\Core\Input.h" />
     <ClInclude Include="Header Files\Core\Log\Log.h" />
@@ -149,8 +150,10 @@
     <ClInclude Include="Header Files\Rendering\System\TiledRenderer.h" />
     <ClInclude Include="Header Files\Rendering\Texture.h" />
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h" />
+    <ClInclude Include="Header Files\Core\Editor\PropertiesWindow\InspectorWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source Files\Core\Editor\InspectorWindow.cpp" />
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkeletalMeshRenderingSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkinnedRendererPipeline.cpp" />
@@ -170,6 +173,7 @@
     <ClCompile Include="Source Files\Core\Editor\EditorUI.cpp" />
     <ClCompile Include="Source Files\Core\Editor\EntityDescriptionSystem.cpp" />
     <ClCompile Include="Source Files\Core\Editor\SceneHierarchyWindow.cpp" />
+    <ClCompile Include="Source Files\Core\Editor\ViewPortWindow.cpp" />
     <ClCompile Include="Source Files\Core\Input.cpp" />
     <ClCompile Include="Source Files\Core\Scene.cpp" />
     <ClCompile Include="Source Files\Core\Window.cpp" />

@@ -9,7 +9,7 @@ private:
 	unsigned int texColorBuffer;
 	int height, width;
 	void generateFrameBuffer();
-	
+	friend class ViewPortWindow;
 public:
 	Mesh quadMesh;
 	FrameBuffer();

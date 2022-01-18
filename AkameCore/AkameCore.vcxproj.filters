@@ -279,6 +279,8 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Core\Editor\PropertiesWindow\InspectorWindow.h" />
+    <ClInclude Include="Header Files\Core\Editor\ViewPort\ViewPortWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp">
@@ -434,5 +436,7 @@
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Core\Editor\InspectorWindow.cpp" />
+    <ClCompile Include="Source Files\Core\Editor\ViewPortWindow.cpp" />
   </ItemGroup>
 </Project>

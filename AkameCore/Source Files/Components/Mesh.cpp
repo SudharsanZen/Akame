@@ -3,6 +3,7 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include "Components/Rendering/Mesh.h"
+#include"Core/Log/Log.h"
 std::vector<vert> Mesh::vertexData=std::vector<vert>();
 std::vector<unsigned int> Mesh::indexList= std::vector<unsigned int>();
 bool Mesh::needsUpdate=false;
@@ -31,7 +32,7 @@ void Mesh::renderMesh() const
 	//if all the buffers were successfully generated, then render the mesh
 	if (IBO== GL_INVALID_VALUE|| VBO==GL_INVALID_VALUE || VAO== GL_INVALID_VALUE)
 	{
-		std::cout << "can't render";
+		ENGINE_CORE_CRITICAL("Mesh::renderMesh(): can't render");
 		return;
 	}
 	if(count)

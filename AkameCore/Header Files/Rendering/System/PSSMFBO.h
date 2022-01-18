@@ -26,7 +26,7 @@ public:
 	void bind();
 	void clearBuffer();
 
-	void unbind();
+	void unbind(unsigned int frameBuffer=0);
 
 	void useTextureArray(unsigned int unit);
 

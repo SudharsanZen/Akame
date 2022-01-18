@@ -1,7 +1,7 @@
 #include"Animation/SkinnedRendererPipeline.h"
 #include<glad/glad.h>
 
-void SkeletalMeshRenderingPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam)
+void SkeletalMeshRenderingPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam, unsigned int frameBuffer)
 {
 	glEnable(GL_MULTISAMPLE);
 	std::shared_ptr<LightSystem> lsys = rsys->lightsystem.lock();

@@ -30,6 +30,7 @@ private:
 	friend class Window;
 	friend class Scene;
 	friend class RenderingSystem;
+	friend class Editor;
 public:
 	static void DrawBB(glm::vec3 min, glm::vec3 max, glm::mat4 transform, glm::vec3 color);
 	

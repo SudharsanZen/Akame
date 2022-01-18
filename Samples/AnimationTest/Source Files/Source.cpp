@@ -1,3 +1,4 @@
+
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -151,7 +152,7 @@ int main()
 
 
 	//Editor is experimental, do not use this
-	Editor e(window, scene);
+	//Editor e(window, scene);
 
 	float acc = 0;
 	scene.OnStart();
@@ -178,7 +179,7 @@ int main()
 		scene.clearBuffer();
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.Render();
-		e.DrawUI();
+		//e.DrawUI();
 
 		scene.swapBuffers();
 

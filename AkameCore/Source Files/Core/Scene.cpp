@@ -26,9 +26,15 @@ void callBack(GLFWwindow* window,int w,int h)
 	glViewport(0, 0, w, h);
 	for (auto &f : listScene)
 	{
-		f->height = h;
-		f->width = w;
-		f->updateFrameBufferSize(h,w);
+		if (!f->EditorMode())
+		{
+			f->height = h;
+			f->width = w;
+			f->updateFrameBufferSize(h, w);
+		}
+		
+
+		
 		
 	}
 
@@ -191,8 +197,11 @@ void Scene::clearBuffer()
 {
 	//glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	//glClearColor(1,1,1,1.0f);
+
 	glClearColor(color.x, color.y, color.z, color.w);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	window.processInput();
+	glfwPollEvents();
 }
 
 /*Render a Frame of the Scene.
@@ -200,8 +209,7 @@ void Scene::clearBuffer()
 */
 void Scene::Render()
 {
-	window.processInput();
-	glfwPollEvents();
+	
 		currTime = glfwGetTime();
 	//renderStuff
 		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());

@@ -63,9 +63,9 @@ void TiledRenderer::bindFrameBuffer()
 	drfb.bindFrameBuffer();
 }
 
-void TiledRenderer::unBindFrameBuffer()
+void TiledRenderer::unBindFrameBuffer(unsigned int frameBuffer)
 {
-	drfb.unBindFrameBuffer();
+	drfb.unBindFrameBuffer(frameBuffer);
 }
 
 void TiledRenderer::bindTextures()
@@ -157,8 +157,10 @@ void TiledRenderer::setUpShader(Camera& cam, std::shared_ptr<LightSystem> lsys)
 void TiledRenderer::outPutToQaud()
 {
    
-   
-    glDispatchCompute(width / 32, (height / 32 + 1), 1);
+    int x = glm::ceil((float)width / 32.0f), y = glm::ceil((float)height / 32.0f);
+  
+    
+    glDispatchCompute(x,y, 1);
     glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
 

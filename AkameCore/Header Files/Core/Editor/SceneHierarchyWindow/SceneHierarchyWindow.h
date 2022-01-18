@@ -1,5 +1,5 @@
 #pragma once
-#include"Core/Window.h"
+
 #include"Core/Scene.h"
 #include"Rendering/Texture.h"
 #include"Rendering/FrameBuffer.h"
@@ -10,14 +10,14 @@ typedef int ImGuiTreeNodeFlags;
 class SceneHierarchyWindow
 {
 	friend class Editor;
-
+	friend class InspectorWindow;
 	std::set<Entity> selected;
-	Scene& scene;
+	Scene& m_Scene;
 	bool viewDebugInfo;
 	void Draw();
 	void DrawNode(Transform const& t, EntityDescriptor& edt, ImGuiTreeNodeFlags const& base_flags);
 public:
-	SceneHierarchyWindow(Scene& s) :scene(s)
+	SceneHierarchyWindow(Scene& s) :m_Scene(s)
 	{
 	}
 	

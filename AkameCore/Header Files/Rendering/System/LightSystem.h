@@ -69,7 +69,7 @@ public:
 	{
 		return dirLightSpace;
 	}
-	void unBindDirectionalShadowMap();
+	void unBindDirectionalShadowMap(unsigned int frameBuffer=0);
 
 	//just update the information for existing lights, call for dynamic point lights
 	void updatePointLightContents();
