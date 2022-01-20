@@ -14,6 +14,8 @@ class SceneHierarchyWindow
 	std::set<Entity> selected;
 	Scene& m_Scene;
 	bool viewDebugInfo;
+	
+	float m_menuPosex, m_menuPosey;
 	void Draw();
 	void DrawNode(Transform const& t, EntityDescriptor& edt, ImGuiTreeNodeFlags const& base_flags);
 public:

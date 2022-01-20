@@ -17,6 +17,31 @@
 #include"Components/Animation/SkeletalMesh.h"
 #include"Components/Animation/AnimationController.h"
 #include"Core/Debug/Debug.h"
+glm::vec3 Mat3ToEuler(glm::mat3 rot)
+{
+    //look http://eecs.qmul.ac.uk/~gslabaugh/publications/euler.pdf for how this works
+
+    constexpr float pi = glm::pi<float>();
+
+    float theta1 = -glm::asin(rot[2][0]);
+    float theta2 = pi - theta1;
+    if (glm::abs(rot[2][0])!=1)
+    {
+        float psi = glm::atan(rot[2][1] / glm::cos(theta1), rot[2][2] / glm::cos(theta1));
+        float phi = glm::atan(rot[1][0] / glm::cos(theta1), rot[0][0] / glm::cos(theta1));
+        return glm::degrees(glm::vec3(psi, theta1, phi));
+    }
+    else
+    {
+        //psi-phi
+        float phi = 0.0f;//phi can be anything
+        float sign = (rot[2][0]==-1.0f)?1.0f:-1.0f;
+        float theta = (pi / 2.0f)*(sign);
+        float psi_phi =phi*sign+ glm::atan(sign*rot[0][1], sign*rot[0][2]);
+        return glm::degrees(glm::vec3(psi_phi, theta, phi));
+    }
+   
+}
 void InspectorWindow::DrawTransformComponent(Entity selected)
 {
     static bool local=false;
@@ -24,7 +49,7 @@ void InspectorWindow::DrawTransformComponent(Entity selected)
     if (!selected.signature->test(m_Transform_pose))
         return;
     
-    if (ImGui::CollapsingHeader("Transform Component"))
+    if (ImGui::CollapsingHeader("Transform Component",ImGuiTreeNodeFlags_DefaultOpen))
     {
         Transform& t = m_Scene.GetComponent<Transform>(selected);
         glm::vec3 pose = t.GetGlobalPosition();
@@ -103,21 +128,20 @@ void InspectorWindow::DrawTransformComponent(Entity selected)
                 }
                 
                 ImGui::Text("Add Euler rotation to existing rotation");
-                float lRotEu[3] = {0,0,0};   
-                bool addedRotation=true;
-                if (ImGui::InputFloat3("", lRotEu) || !addedRotation)
+                glm::quat lrotq= lrot.quaternion;
+                glm::mat3 rotMat = glm::toMat3(lrotq);
+                glm::vec3 eul = Mat3ToEuler(rotMat);
+                float lRotEu[3] = {eul.x,eul.y,eul.z};   
+          
+                if (ImGui::InputFloat3("", lRotEu) )
                 {
-                    addedRotation = false;
-                    ImGui::SameLine();
-                    if (ImGui::Button("Add To Rotation"))
+                   
+                    if (ImGui::IsKeyDown(KEY_ENTER))
                     {
-                        addedRotation = true;
                         Quaternion diffRot = Quaternion((lRotEu[0]), (lRotEu[1]), (lRotEu[2]));
-                        t.SetLocalRotation(diffRot * lrot);
-                        lRotEu[0] = 0;
-                        lRotEu[1] = 0;
-                        lRotEu[2] = 0;
+                        t.SetLocalRotation(diffRot);
                     }
+                    
                 }
                 if (ImGui::Button("ResetRotation"))
                 {

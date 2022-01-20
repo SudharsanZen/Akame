@@ -3,6 +3,7 @@
 #include "Core\Editor\EditorUI.h"
 #include<imGui\backends\imgui_impl_glfw.h>
 #include<imGui\backends\imgui_impl_opengl3.h>
+#include<imgui/imgui_internal.h>
 #include<glad\glad.h>
 #include<GLFW\glfw3.h>
 #include<iostream>
@@ -25,7 +26,7 @@ void SceneHierarchyWindow::Draw()
     if (ImGui::Button("ToggleDebugInfo", ImVec2(200.0f, 25.0f)))
         viewDebugInfo = !viewDebugInfo;
 
-    if (ImGui::TreeNode("Scene"))
+    if (ImGui::TreeNodeEx("Scene",ImGuiTreeNodeFlags_DefaultOpen))
     {
 
         static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
@@ -49,7 +50,29 @@ void SceneHierarchyWindow::Draw()
 
         ImGui::TreePop();
     }
+    //handle inputs
+    
+        if (ImGui::BeginPopupContextWindow())
+        {
+            ImGui::MenuItem("Create Entity");
+            ImGui::MenuItem("Create Camera");
+            if (ImGui::BeginMenu("Primitives"))
+            {
 
+                ImGui::MenuItem("Cube");
+                ImGui::MenuItem("Sphere");
+                ImGui::MenuItem("Plane");
+                ImGui::MenuItem("Capsule");
+                ImGui::MenuItem("Cylinder");
+
+                ImGui::EndMenu();
+            }
+           
+            ImGui::EndPopup();
+        }
+   
+
+   
     ImGui::End();
     for (auto ent : selected)
     {
@@ -93,8 +116,7 @@ void SceneHierarchyWindow::Draw()
         }
 
     }
-    //handle inputs
-
+   
     if (ImGui::IsKeyDown(KEY_DELETE))
     {
 

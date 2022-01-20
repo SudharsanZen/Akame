@@ -23,11 +23,7 @@ void ViewPortWindow::Draw(float deltaTime)
 		
 		
 		ImVec2 size = ImGui::GetWindowSize();
-		if (size.x != m_window_width || size.y != m_window_height)
-		{
-			
-			
-		}
+		
 		m_window_height = size.y;
 		m_window_width = size.x;
 		setFrameBufferHeight(m_window_height, m_window_width);

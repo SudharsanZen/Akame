@@ -30,6 +30,7 @@ private:
 	std::shared_ptr<InspectorWindow> m_InspectorWindow;
 	std::vector<std::shared_ptr<ViewPortWindow>> m_ViewPortWindow;
 	void defaultStyle();
+	void Menu();
 public:
 	
 	Editor(Scene& m_Scene);
