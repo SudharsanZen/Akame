@@ -118,7 +118,7 @@ void app(int num=200)
 	scene.AddComponent<Transform>(dir);
 
 	
-	Material mat("GRIDS");
+	/*Material mat("GRIDS");
 	Entity pl = scene.CreateEntity();
 
 
@@ -135,7 +135,7 @@ void app(int num=200)
 	Mesh &skym=scene.AddComponent<Mesh>(sky);
 	scene.AddComponent<Material>(sky)=matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
-	
+	*/
 	
 	const int rt = (int)sqrt(num);
 	
@@ -145,7 +145,7 @@ void app(int num=200)
 	{
 		float off = (float)(rt - 1);
 
-
+		/*
 		Entity point = scene.CreateEntity();
 		Lights& p = scene.AddComponent<Lights>(point);
 
@@ -157,14 +157,14 @@ void app(int num=200)
 		scene.AddComponent<Transform>(point).SetGlobalPosition(glm::vec3(2 * (i / rt) - 1 - off, 0.5, (2) * (i % rt) - off));
 		scene.AddComponent<BehaviourComponent>(point).setBehaviour<strafe>(float(i));
 		lightsVec.push_back(point);
-
+		*/
 		Entity box = scene.CreateEntity();
 		Mesh& bm = scene.AddComponent<Mesh>(box);
 		int curr = (i / rt) % 2;
-		if (curr == 1)
+		//if (curr == 1)
 			bm.CreateMesh(cv);
-		if (curr == 0)
-			bm.CreateMesh(generateSphereVertices(16, 32, 0.5));
+		//if (curr == 0)
+			//bm.CreateMesh(generateSphereVertices(16, 32, 0.5));
 		Transform& t = scene.AddComponent<Transform>(box);
 		t.SetGlobalPosition(glm::vec3(2.0f * (i / rt) - off, 0.5f, (2.0f) * (i % rt) - off));
 
@@ -172,7 +172,7 @@ void app(int num=200)
 		{
 			int a = rand() % 2;
 			
-			scene.AddComponent<Material>(box) = (a==0)?rust1:planeMat;
+			scene.AddComponent<Material>(box) = rust1;
 		}
 		else
 			scene.AddComponent<Material>(box) = boxMat;
@@ -180,9 +180,9 @@ void app(int num=200)
 		scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 	}
 	//Editor is experimental, do not use this
-	Editor edt(window,scene);
+	//Editor edt(window,scene);
 	scene.OnStart();
-	scene.vsyncOn(true);
+	scene.vsyncOn(false);
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.3f;
 	float acc = 0;
@@ -197,7 +197,7 @@ void app(int num=200)
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.clearBuffer();
 		scene.Render();
-		edt.DrawUI();
+		//edt.DrawUI();
 
 		/*
 		//debug draw, point light
@@ -229,7 +229,7 @@ int main(int argc,char **argv)
 	}
 	else
 	{
-		app(300);
+		app(10000);
 	}
 	//AssetManager::reset();
 	_CrtDumpMemoryLeaks();

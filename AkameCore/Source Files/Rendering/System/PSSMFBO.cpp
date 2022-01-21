@@ -2,6 +2,7 @@
 #include"GLFW/glfw3.h"
 #include"Core/Log/Log.h"
 #include"Rendering/System/PSSMFBO.h"
+#include"Rendering/System/LightSystem.h"
 void PSSMFBO::initialize()
 {
 	glGenFramebuffers(1,&fbo);
@@ -194,8 +195,8 @@ std::vector<glm::mat4> CalculatePSSMLightSpaceMats(Camera& cam, glm::vec3  l, in
 		float x=1, y=1;
 		if (i < 2)
 		{
-			x *= pssmx;
-			y *= pssmy;
+			x *= LightSystem::pssmXMultiplier;
+			y *= LightSystem::pssmYMultiplier;
 		}
 		glm::mat4 lProjMat = glm::ortho(min.x*x,max.x*x,min.y*y,max.y*y,-100.0f,1000.0f);
 

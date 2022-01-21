@@ -14,11 +14,11 @@
 #include"Core/Editor/PropertiesWindow/InspectorWindow.h"
 #include"Core/Editor/SceneHierarchyWindow/SceneHierarchyWindow.h"
 #include"Core/Editor/ViewPort/ViewPortWindow.h"
+#include"Core/Editor/SettingsWindow/LightsAndShadows.h"
 
 #include<imGui\backends\imgui_impl_glfw.h>
 #include<imGui\backends\imgui_impl_opengl3.h>
-float pssmx = 1.45f;
-float pssmy = 1.45f;
+
 void Editor::initImGui()
 {
 	std::weak_ptr<GLFWwindow> context=m_Scene.window.mainWindow;
@@ -215,6 +215,7 @@ Editor::Editor(Scene &m_Scene):io(initGui()),m_Scene(m_Scene)
 	defaultStyle();
 	m_SceneHierarchy = std::make_shared<SceneHierarchyWindow>(m_Scene);
 	m_InspectorWindow= std::make_shared<InspectorWindow>(m_Scene,m_Scene.ecs);
+	m_LightsAndShadows = std::make_shared<LightAndShadowConfig>(m_Scene);
 	m_ViewPortWindow.push_back(std::make_shared<ViewPortWindow>(m_Scene,io));
 	m_ViewPortWindow[0]->windowName = "Scene##0";
 	m_ViewPortWindow.push_back(std::make_shared<ViewPortWindow>(m_Scene,io));
@@ -239,7 +240,7 @@ void Editor::DrawUI()
 	ImGui::DockSpaceOverViewport();
 
 	ImGui::ShowDemoWindow();
-	
+	m_LightsAndShadows->Draw();
 	m_SceneHierarchy->Draw();
 	m_InspectorWindow->Draw(m_SceneHierarchy);
 	//draw viewPortWindow-------
@@ -271,48 +272,15 @@ void Editor::DrawUI()
 
 	//---------------------------
 	/*
-	ImGui::Begin("DirShadowMaps");
-	//get the mouse position
-	ImGui::SliderFloat("multX", &pssmx, 1.0f, 2.0f, "%.3f");
-	ImGui::SliderFloat("multY", &pssmy, 1.0f, 2.0f, "%.3f");
-	static float maxz = 1000;
-	static float minz = 100;
-	ImGui::DragScalar("ShadowDist", ImGuiDataType_Float, &m_Scene.lightSys->shadowDistance, 1,&minz,&maxz, "%f");
-	bool clicked=ImGui::Button("Reload Shaders",ImVec2(200.0f,25.0f) );
-	
+	bool clicked = ImGui::Button("Reload Shaders", ImVec2(200.0f, 25.0f));
+
 	if (clicked)
 	{
 
 		ShaderManager::releaseAllShaders();
 		ShaderManager::loadAllShaders();
-		m_Scene.renderSys->attachAllBuiltInSRP();
-		
-	}
-	ImGui::SliderFloat("log-uniform lambda", &m_Scene.lightSys->lambda, 0.0f, 1.0f, "ratio = %.3f");
-	ImVec2 pos = ImGui::GetCursorScreenPos();
-	
-	//pass the texture of the FBO
-	//window.getRenderTexture() is the texture of the FBO
-	//the next parameter is the upper left corner for the uvs to be applied at
-	//the third parameter is the lower right corner
-	//the last two parameters are the UVs
-	//they have to be flipped (normally they would be (0,0);(1,1) 
-	
-	
-	ShaderManager::GetShader("PSSM")->useShaderProgram();
-	std::vector<unsigned int> texList;
-	for (int i = 0; i < m_Scene.lightSys->dirLightSpace.size(); i++)
-	{
-		glDisable(GL_CULL_FACE);
-		fbo[i].Bind();
-		ShaderManager::GetShader("PSSM")->setUniformInteger("layer", i);
-		m_Scene.lightSys->dir_sMap.useTextureArray(0);
-		glBindVertexArray(Mesh::VAO);
-		fbo[i].quadMesh.renderMesh();
-		glBindVertexArray(0);
-		fbo[i].unBind();
-		glEnable(GL_CULL_FACE);
-		texList.push_back(fbo[i].getColorBuffer());
+		m_scene.renderSys->attachAllBuiltInSRP();
+
 	}
 	std::shared_ptr<DeferredPipeline> dfrp = std::static_pointer_cast<DeferredPipeline>(ShaderManager::shaderRenderPipeline["DEFERRED"]);
 	if (dfrp)

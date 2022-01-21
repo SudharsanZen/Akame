@@ -33,7 +33,7 @@ private:
 	//uniform buffer that stores all the common values like view matrix, projection matrix and etc
 	unsigned int uboMatrixBufferID;
 	signed   long long int mat4Size = sizeof(glm::mat4);
-	bool editorMode;
+	bool editorMode=false;
 	bool m_update_Event;
 	friend class Scene;
 	friend class Editor;

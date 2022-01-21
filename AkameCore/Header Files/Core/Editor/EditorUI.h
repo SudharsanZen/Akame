@@ -29,6 +29,7 @@ private:
 	std::shared_ptr<SceneHierarchyWindow> m_SceneHierarchy;
 	std::shared_ptr<InspectorWindow> m_InspectorWindow;
 	std::vector<std::shared_ptr<ViewPortWindow>> m_ViewPortWindow;
+	std::shared_ptr<LightAndShadowConfig> m_LightsAndShadows;
 	void defaultStyle();
 	void Menu();
 public:

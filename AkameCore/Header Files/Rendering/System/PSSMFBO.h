@@ -6,8 +6,7 @@
 #include"Components/Lighting/Lights.h"
 std::vector<glm::mat4> CalculatePSSMLightSpaceMats(Camera &cam,glm::vec3 l,int numOfFrsutums,float lambda,float shadowDist);
 std::vector<std::vector<glm::vec3>> CalculateFrustumCorners(Camera& cam, int numOfFrus,float lambda,float shadowDist);
-extern float pssmx;
-extern float pssmy;
+
 class PSSMFBO
 {
 private:

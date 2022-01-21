@@ -6,6 +6,7 @@
 #include<assimp/scene.h>
 #include<assimp/postprocess.h>
 #include"misc/temp.h"
+#include"Core/Log/Log.h"
 #include"Components/Animation/SkeletalMesh.h"
 #include"Animation/AnimationControllerSystem.h"
 #include<assimp/version.h>
@@ -400,7 +401,8 @@ Entity Model::LoadModelToScene(std::string modelPath)
 
 	if (!mAiScene || mAiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !mAiScene->mRootNode)
 	{
-		std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+		std::string errstr = "ERROR::ASSIMP::" + std::string(importer.GetErrorString());
+		ENGINE_CORE_ERROR(errstr);
 		return Entity(-1,-1);
 	}
 	mDir = modelPath.substr(0, modelPath.find_last_of('/'))+"/";

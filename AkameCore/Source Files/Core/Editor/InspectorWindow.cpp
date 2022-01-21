@@ -168,6 +168,29 @@ void InspectorWindow::DrawTransformComponent(Entity selected)
     }
 
 }
+void InspectorWindow::DrawLightComponent(Entity selected) 
+{
+    
+
+    if (ImGui::CollapsingHeader("LightComponent", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        Lights& t = m_Scene.GetComponent<Lights>(selected);
+        LIGHT type = t.getType();
+        if (type == LIGHT::DIRECTIONAL)
+        {
+            glm::vec3 ang = t.lightDirection;
+            float lang[3] = {ang.x,ang.y,ang.z};
+            ImGui::DragFloat3("Directional Direction", lang);
+            t.setDirection(lang[0],lang[1],lang[2]);
+        }
+        
+       
+
+
+        
+
+    }
+}
 InspectorWindow::InspectorWindow(Scene& m_Scene, std::shared_ptr<ECS> ecs) :m_Scene(m_Scene)
 {
     m_ECS = ecs;
@@ -192,8 +215,10 @@ void InspectorWindow::Draw(std::shared_ptr<SceneHierarchyWindow> sceneHierarchy)
         
         if (selected != INVALID_ENTITY)
         {
-
-            DrawTransformComponent(selected);
+            if(selected.signature->test(m_Transform_pose))
+                DrawTransformComponent(selected);
+            if (selected.signature->test(m_Lights_pose))
+                DrawLightComponent(selected);
         }
       
     }

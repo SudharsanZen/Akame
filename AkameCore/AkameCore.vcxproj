@@ -116,6 +116,7 @@
     <ClInclude Include="Header Files\Core\Editor\EditorUI.h" />
     <ClInclude Include="Header Files\Core\Editor\EntityDescriptionSystem.h" />
     <ClInclude Include="Header Files\Core\Editor\SceneHierarchyWindow\SceneHierarchyWindow.h" />
+    <ClInclude Include="Header Files\Core\Editor\SettingsWindow\LightsAndShadows.h" />
     <ClInclude Include="Header Files\Core\Editor\ViewPort\ViewPortWindow.h" />
     <ClInclude Include="Header Files\Core\Engine.h" />
     <ClInclude Include="Header Files\Core\Input.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="Source Files\Core\Debug\Debug.cpp" />
     <ClCompile Include="Source Files\Core\Editor\EditorUI.cpp" />
     <ClCompile Include="Source Files\Core\Editor\EntityDescriptionSystem.cpp" />
+    <ClCompile Include="Source Files\Core\Editor\LightsAndShadows.cpp" />
     <ClCompile Include="Source Files\Core\Editor\SceneHierarchyWindow.cpp" />
     <ClCompile Include="Source Files\Core\Editor\ViewPortWindow.cpp" />
     <ClCompile Include="Source Files\Core\Input.cpp" />

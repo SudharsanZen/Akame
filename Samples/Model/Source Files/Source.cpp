@@ -74,7 +74,7 @@ int main()
 	scene.AddComponent<Lights>(dir)=d;
 	scene.AddComponent<Transform>(dir);
 	Model mLoader(scene);
-	Entity model=mLoader.LoadModelToScene("D:/Projects/GameEngine/sponza/sponza.fbx");
+	Entity model=mLoader.LoadModelToScene("D:/Projects/GameEngine/Assets/sponza/sponza.fbx");
 	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
 	Transform &T=scene.GetComponent<Transform>(model);
 	T.SetGlobalScale(glm::vec3(0.5));
@@ -133,7 +133,7 @@ int main()
 	}
 	
 	//Editor is experimental, do not use this
-	Editor e(window,scene);
+	Editor e(scene);
 	
 	float acc = 0;
 	scene.OnStart();
@@ -148,8 +148,8 @@ int main()
 		acc += scene.getDeltaTime()/3;
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.clearBuffer();
-		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
-		scene.Render();
+		//scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
+		//scene.Render();
 		e.DrawUI();
 
 		Lights &l=scene.GetComponent<Lights>(dir);

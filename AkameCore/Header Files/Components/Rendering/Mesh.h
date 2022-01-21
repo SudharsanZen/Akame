@@ -30,6 +30,7 @@ private:
 	friend class RenderingSystem;
 	friend class Editor;
 	friend class SceneHierarchyWindow;
+	friend class LightAndShadowConfig;
 	
 public:
 

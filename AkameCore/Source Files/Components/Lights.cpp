@@ -49,7 +49,7 @@ void Lights::setDirection(float x, float y, float z)
 
 void Lights::setDirection(glm::vec3 xyz)
 {
-	lightDirection = glm::normalize(xyz);
+	lightDirection = xyz;
 }
 
 void Lights::setIntensity(float intensity)

@@ -17,6 +17,7 @@ private:
 	float intensity;
 
 	friend class RenderingSystem;
+	friend class InspectorWindow;
 	friend class DeferredRendererFragmentBuffer;
 	friend class LightSystem;
 	friend class Editor;
@@ -35,7 +36,7 @@ public:
 	void setColor(float r,float g,float b);
 	
 	void setDirection(float x,float y,float z);
-	void setDirection(glm::vec3 direction);
+	void setDirection(glm::vec3 angles);
 
 	void ambientLigting(glm::vec3 rgb);
 	void ambientLigting(float r,float g,float b);
@@ -46,6 +47,6 @@ public:
 	LIGHT getType();
 	void setType(LIGHT ty) { type = ty; };
 	void reset() {};
-	glm::vec3 getDirection() { return glm::normalize(lightDirection); }
+	glm::vec3 getDirection() { return glm::normalize(Quaternion(lightDirection.x,lightDirection.y,lightDirection.z)*worldForward); }
 };
 

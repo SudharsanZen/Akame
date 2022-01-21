@@ -23,6 +23,7 @@ class InspectorWindow
 	ComponentBitPosition m_Material_pose;
 	
 	void DrawTransformComponent(Entity selected);
+	void DrawLightComponent(Entity selected);;
 public:
 	InspectorWindow(Scene& m_Scene, std::shared_ptr<ECS> ecs);
 

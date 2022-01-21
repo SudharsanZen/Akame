@@ -52,6 +52,8 @@ private:
 	friend class TiledRenderer;
 	friend class Editor;
 public:
+	static float pssmXMultiplier;
+	static float pssmYMultiplier;
 	float shadowDistance = 350;
 	//point light vector for storing in point light uniform buffer
 	std::vector<pointLight> ptVector;

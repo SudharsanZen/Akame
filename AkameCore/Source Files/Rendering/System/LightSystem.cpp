@@ -2,6 +2,10 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include<sstream>
+
+float LightSystem::pssmXMultiplier = 1.45f;
+float LightSystem::pssmYMultiplier = 1.45f;
+
 void LightSystem::updatePointLightBuffer()
 {
 	ptVector.clear();
@@ -45,7 +49,7 @@ void LightSystem::updatePointLightBuffer()
 	{
 		Lights& l = ecs.lock()->GetComponent<Lights>(ent);
 		directionalLight drl;
-		drl.lightDir = l.lightDirection;
+		drl.lightDir = l.getDirection();
 		drl.lightColor = l.lightColor;
 		drl.ambient = l.ambient;
 		drl.intensity = l.intensity;
@@ -93,7 +97,7 @@ void LightSystem::updatePointLightContents()
 	{
 		Lights& l = e->GetComponent<Lights>(lightsList[LIGHT::DIRECTIONAL][i]);
 		directionalLight &drl=drVector[i];
-		drl.lightDir = l.lightDirection;
+		drl.lightDir = l.getDirection();
 		drl.lightColor = l.lightColor;
 		drl.ambient = l.ambient;
 		drl.intensity = l.intensity;
@@ -129,7 +133,7 @@ void LightSystem::BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader,C
 
 			Lights& l = ecs.lock()->GetComponent<Lights>(ent);
 			directionalLight drl;
-			drl.lightDir = l.lightDirection;
+			drl.lightDir = l.getDirection();
 			drl.lightColor = l.lightColor;
 			drl.ambient = l.ambient;
 			drl.intensity = l.intensity;
