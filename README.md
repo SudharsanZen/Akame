@@ -10,7 +10,8 @@ It was originally made for the development of Akame Engine, which is a game engi
 
 ## Qucik Start
 Visual Studio 2019 is recommended.
-Make sure CMake version 3.22.0 or higher is installed and is added to the System PATH before proceeding!
+
+Make sure Python and CMake version 3.22.0 or higher is installed and is added to the System PATH before proceeding!
 
 <ins>**1.Downloading The Repository:**</ins>
 
