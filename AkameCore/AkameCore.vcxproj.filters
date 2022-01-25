@@ -282,6 +282,8 @@
     <ClInclude Include="Header Files\Core\Editor\PropertiesWindow\InspectorWindow.h" />
     <ClInclude Include="Header Files\Core\Editor\ViewPort\ViewPortWindow.h" />
     <ClInclude Include="Header Files\Core\Editor\SettingsWindow\LightsAndShadows.h" />
+    <ClInclude Include="Header Files\Core\Reflection\Reflection.h" />
+    <ClInclude Include="Header Files\Core\Editor\ImGuiUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp">
@@ -440,5 +442,7 @@
     <ClCompile Include="Source Files\Core\Editor\InspectorWindow.cpp" />
     <ClCompile Include="Source Files\Core\Editor\ViewPortWindow.cpp" />
     <ClCompile Include="Source Files\Core\Editor\LightsAndShadows.cpp" />
+    <ClCompile Include="Source Files\Core\Reflection\Reflection.cpp" />
+    <ClCompile Include="Source Files\Core\Editor\ImGuiUtils.cpp" />
   </ItemGroup>
 </Project>

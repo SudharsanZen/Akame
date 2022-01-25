@@ -45,7 +45,7 @@ private:
 		}
 	}
 	
-	
+	static bool needsUpdate;
 	friend class Scene;
 	friend class Lights;
 	friend class RenderingSystem;
@@ -77,7 +77,15 @@ public:
 	void updatePointLightContents();
 	void bindPointLightBuffer(int layoutIndex);
 	LightSystem();
-	
+	void Update()
+	{
+		if (needsUpdate)
+		{
+			updateLightList();
+			updatePointLightBuffer();
+			needsUpdate = false;
+		}
+	}
 	void OnAddEntity(Entity entity) override
 	{
 		

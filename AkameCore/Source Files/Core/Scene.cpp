@@ -215,6 +215,7 @@ void Scene::Render()
 		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		//call this in this same order
 		EDS->updateMap();
+		lightSys->Update();
 		behaviourSys->Update(deltaTime);
 		animSys->Run();
 		animContSys->update(deltaTime);

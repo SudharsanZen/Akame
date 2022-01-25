@@ -8,8 +8,40 @@
 #include<Rendering/DeferredRendererFragmentBuffer.h>
 #include<Core/Scene.h>
 #include<Core/Debug/Debug.h>
+#include<Core/Reflection/Reflection.h>
 #define sizeX 10.0f
 #define sizeY 10.0f
+class rotateBehv :public Behaviour
+{
+	float angle = 180.0f;
+	glm::vec3 pose;
+	bool spinFast=false;
+public:
+	AK_SERIALIZABLES
+	(
+		AK_ID(angle)
+	)
+
+	AK_SHOW_IN_INSPECTOR
+	(
+		AK_ID(angle)
+		AK_ID(pose)
+		AK_ID(spinFast)
+	)
+	void OnStart() override
+	{
+		pose = glm::vec3(1,0,0);
+	}
+	void Update(float deltaTime) override
+	{
+
+		angle += deltaTime * ((spinFast)?10.0f:5.0f);
+		angle = angle - floor(angle / 360.0f) * 360.0f;
+		Transform& t = GetComponent<Transform>();
+		t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(angle, glm::vec3(0, 1, 0)));
+		t.SetGlobalPosition(pose);
+	}
+};
 
 int main()
 {
@@ -33,7 +65,7 @@ int main()
 	Lights &d = scene.AddComponent<Lights>(dir);
 	d.setType(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
-	d.setDirection(1,-1,0);
+	d.setDirection(-90,0,0);
 	d.setIntensity(0.6f);
 	d.setPointLightConst(1,2,10);
 	d.ambientLigting(0.1f,0.1f,0.1f);
@@ -95,10 +127,13 @@ int main()
 	Transform& t1 = scene.GetComponent<Transform>(cubeList[4]);
 	
 	t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(30, glm::vec3(0, 0, 1)));
+
+	BehaviourComponent &b=scene.AddComponent<BehaviourComponent>(cubeList[0]);
+	b.setBehaviour<rotateBehv>();
 	//Editor is experimental, do not use this
-	Editor edt(window,scene);
+	Editor edt(scene);
 	scene.OnStart();
-	scene.vsyncOn(false);
+	scene.vsyncOn(true);
 	float deltaTime = 0;
 	while (!window.closeWindow())
 	{
@@ -106,13 +141,13 @@ int main()
 		flyCam(scene.cam,scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.clearBuffer();
-		scene.Render();
+		//scene.Render();
 		edt.DrawUI();
 		glm::vec3 pose = t.GetLocalPosition();
 		//t.SetLocalScale(-1.0f* glm::vec3(1));
 		//t1.SetGlobalScale(sin(time)*glm::vec3(1));
 		//t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(time,glm::vec3(0,0,1)));
-		t.SetGlobalRotation(Quaternion::rotationAroundAxisVector(deltaTime,glm::vec3(0,1,0))* t.GetGlobalRotation());
+		
 		//t1.SetGlobalRotation(Quaternion::rotationAroundAxisVector(deltaTime, glm::vec3(0, 1, 0))*t.GetGlobalRotation());
 		scene.swapBuffers();
 		for (int i = 0; i < m; i++)

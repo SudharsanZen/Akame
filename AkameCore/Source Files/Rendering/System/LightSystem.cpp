@@ -5,7 +5,7 @@
 
 float LightSystem::pssmXMultiplier = 1.45f;
 float LightSystem::pssmYMultiplier = 1.45f;
-
+bool LightSystem::needsUpdate=true;
 void LightSystem::updatePointLightBuffer()
 {
 	ptVector.clear();

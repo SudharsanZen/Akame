@@ -68,7 +68,7 @@ int main()
 	Entity dir = scene.CreateEntity();
 	Lights d = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
-	d.setDirection(0, -1, 0);
+	d.setDirection(-90, 0, 0);
 	d.setIntensity(1);
 	d.setPointLightConst(1, 10, 10);
 	scene.AddComponent<Lights>(dir)=d;

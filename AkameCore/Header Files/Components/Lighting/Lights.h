@@ -2,7 +2,7 @@
 #include"glm/glm/glm.hpp"
 #include"Rendering/Shader.h"
 #include"Components/Components.h"
-enum class LIGHT {DIRECTIONAL,POINT,SPOT};
+enum class LIGHT {DIRECTIONAL=0,POINT=1,SPOT=2};
 class LightSystem;
 
 class Lights:public Components
@@ -25,13 +25,13 @@ private:
 
 	float pointLightRadius;
 	
-	
+	void notifyLightSystemToUpdate();
 public:
 	float calPointLightRadius(glm::vec3 C, float intensity);
 	float getPointLightRadius() { return calPointLightRadius(pointLightConstants,intensity); }
 	Lights();
 	Lights(LIGHT ty);
-
+	
 	void setColor(glm::vec3 rgb);
 	void setColor(float r,float g,float b);
 	
@@ -45,7 +45,10 @@ public:
 	void setPointLightConst(float Kc,float Kl,float Kq);
 	void setPointLightConst(glm::vec3 constants);
 	LIGHT getType();
-	void setType(LIGHT ty) { type = ty; };
+	void setType(LIGHT ty) {
+		type = ty;
+		notifyLightSystemToUpdate();
+	};
 	void reset() {};
 	glm::vec3 getDirection() { return glm::normalize(Quaternion(lightDirection.x,lightDirection.y,lightDirection.z)*worldForward); }
 };

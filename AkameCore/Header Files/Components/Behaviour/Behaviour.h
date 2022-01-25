@@ -1,11 +1,14 @@
 #pragma once
 #include"ECS.h"
-
+#include"Core/Reflection/Reflection.h"
 #include"Components/EntityDescriptor.h"
 class Behaviour
 {
 	std::weak_ptr<ECS> ecs;
 	friend class BehaviourComponent;
+	virtual void _serialize_data(ReflectionMeta& r) {  }
+	virtual void _draw_data(ReflectionUIHandler& r) { }
+	friend class InspectorWindow;
 protected:
 
 	Entity entityID;

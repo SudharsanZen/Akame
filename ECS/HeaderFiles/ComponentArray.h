@@ -36,7 +36,7 @@ struct ComponentAllocator
 	template<class U,class ...Params>
 	void construct(U* ptr,Params&&... args)
 	{
-		new ((void*)ptr) U(std::forward<Params>(args)...);
+		new (ptr) U(std::forward<Params>(args)...);
 	}
 	void deallocate(T* p, std::size_t n) noexcept {
 		

@@ -2,6 +2,7 @@
 #include "Core/Editor/PropertiesWindow/InspectorWindow.h"
 #include"Core/Editor/SceneHierarchyWindow/SceneHierarchyWindow.h"
 #include "Core\Editor\EditorUI.h"
+#include<Core/Editor/ImGuiUtils.h>
 #include<imGui\backends\imgui_impl_glfw.h>
 #include<imGui\backends\imgui_impl_opengl3.h>
 #include<glad\glad.h>
@@ -17,6 +18,7 @@
 #include"Components/Animation/SkeletalMesh.h"
 #include"Components/Animation/AnimationController.h"
 #include"Core/Debug/Debug.h"
+
 glm::vec3 Mat3ToEuler(glm::mat3 rot)
 {
     //look http://eecs.qmul.ac.uk/~gslabaugh/publications/euler.pdf for how this works
@@ -176,19 +178,72 @@ void InspectorWindow::DrawLightComponent(Entity selected)
     {
         Lights& t = m_Scene.GetComponent<Lights>(selected);
         LIGHT type = t.getType();
+        ImGui::Text("Type");
+        ImGui::Separator();
+        const char* typeNames[] = {"Directional","Point","Spot"};
+        if (ImGui::BeginCombo("LightType##component", typeNames[(int)type]))
+        {
+            for (int i = 0; i < 3; i++)
+                if (ImGui::Selectable(typeNames[i]))
+                    t.setType((LIGHT)i);
+            ImGui::EndCombo();
+        }
+        ImGui::Text("Light Intensity");
+        ImGui::Separator();
+        float intensity = t.intensity;
+        ImGui::DragFloat("Intensity",&intensity);
+        t.setIntensity(intensity);
+        ImGui::Text("Ambient Light Color");
+        ImGui::Separator();
+        glm::vec3 amb = t.ambient;
+        float acol[3] = { amb.x,amb.y,amb.z };
+        ImGui::ColorEdit3("##Ambient Light Color",acol);
+        t.ambientLigting(acol[0],acol[1],acol[2]);
+       
         if (type == LIGHT::DIRECTIONAL)
         {
             glm::vec3 ang = t.lightDirection;
             float lang[3] = {ang.x,ang.y,ang.z};
-            ImGui::DragFloat3("Directional Direction", lang);
+            std::string names[3] = { "x","y","z"};
+            ImGui::Text("Directional Light Angles");
+            ImGui::Separator();
+            dragFloat3(names,lang,80);
+            //ImGui::DragFloat3("xyz Directional Direction", lang);
             t.setDirection(lang[0],lang[1],lang[2]);
         }
+        if (type == LIGHT::POINT)
+        {
+            glm::vec3 ptConst = t.pointLightConstants;
+
+            ImGui::Text("Point Light Constants");
+            float k[3] = { ptConst.x,ptConst.y,ptConst.z };
+            std::string names[3] = { "kC","kL","kQ" };
+            ImGui::Separator();
+            dragFloat3(names, k, 80);
+            t.setPointLightConst(k[0],k[1],k[2]);
+            ImGui::TextColored(ImVec4(0.5f,0.5f,0.0f,1),"Point Light Radius:%f",t.getPointLightRadius());
+
+
+        }
         
-       
-
-
+        ImGui::Text("Light Color");
+        ImGui::Separator();
+        float color[3] = { t.lightColor.x,t.lightColor.y,t.lightColor.z};
+        ImGui::ColorEdit3("##Light Color",color);
+        t.lightColor = glm::vec3(color[0],color[1],color[2]);
         
 
+    }
+}
+void InspectorWindow::DrawScriptComponent(Entity selected)
+{
+    if (!selected.signature->test(m_BehaviourComp_pose))
+        return;
+    if (ImGui::CollapsingHeader("ScriptableComponent", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        std::shared_ptr<Behaviour> bh = m_Scene.GetComponent<BehaviourComponent>(selected).behaviour;
+        ReflectionUIHandler uiHandle;
+        bh->_draw_data(uiHandle);
     }
 }
 InspectorWindow::InspectorWindow(Scene& m_Scene, std::shared_ptr<ECS> ecs) :m_Scene(m_Scene)
@@ -215,10 +270,12 @@ void InspectorWindow::Draw(std::shared_ptr<SceneHierarchyWindow> sceneHierarchy)
         
         if (selected != INVALID_ENTITY)
         {
-            if(selected.signature->test(m_Transform_pose))
-                DrawTransformComponent(selected);
-            if (selected.signature->test(m_Lights_pose))
-                DrawLightComponent(selected);
+           
+            DrawTransformComponent(selected);
+            
+            DrawLightComponent(selected);
+
+            DrawScriptComponent(selected);
         }
       
     }

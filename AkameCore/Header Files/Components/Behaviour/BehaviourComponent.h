@@ -6,11 +6,12 @@ static float behvCount=0;
 class BehaviourComponent:public Components
 {
 private:
-	//Id of the entity to which this component belongs to
+	
 	std::shared_ptr<Behaviour> behaviour;
 	friend class BehaviourSystem;
 	friend class Scene;
 	friend class Behaviour;
+	friend class InspectorWindow;
 	
 public:
 	

@@ -246,10 +246,12 @@ void Editor::DrawUI()
 	//draw viewPortWindow-------
 
 		m_Scene.EDS->updateMap();
+		m_Scene.lightSys->Update();
 		m_Scene.behaviourSys->Update(deltaTime);
 		m_Scene.animSys->Run();
 		m_Scene.animContSys->update(deltaTime);
 		m_Scene.transformManager->UpdateTransforms();
+		
 		Debug::updateBufferContent();
 		bool viewPortListUpdate;
 		for (auto viewPort : m_ViewPortWindow)
@@ -340,6 +342,7 @@ void Editor::DrawUI()
 	}
 
 	deltaTime = currTime - lastTime;
+	m_Scene.deltaTime = deltaTime;
 	lastTime = currTime;
 }
 

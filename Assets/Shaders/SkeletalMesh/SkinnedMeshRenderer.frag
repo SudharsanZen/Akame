@@ -18,6 +18,7 @@ uniform float shadowRes;
 uniform mat4 viewMat;
 uniform mat4 lightSpaceMat[5];
 uniform int numOfFrustum;
+uniform int num_of_dir_lights;
 uniform float lambda;
 struct Material
 {
@@ -202,6 +203,10 @@ void main()
         FragColor=albedo;
         return;
     }
+    else
+    {
+        FragColor=vec4(0,0,0,1);
+    }
     
     //calculate normal from tangent sapce to world space
     vec3 n=texture(material.normalMap,uvCoord).rgb;
@@ -215,7 +220,8 @@ void main()
     pV.FragPos=vec4(FragPos,1);
     pV.specular=texture(material.specularMap,uvCoord).r;
     
-    FragColor=vec4(calcDirecLight(dir,pV,shadowCalculation(pV.FragPos)),1);
+    if(num_of_dir_lights>0)
+        FragColor=vec4(calcDirecLight(dir,pV,shadowCalculation(pV.FragPos)),1);
     //FragColor=vec4(calcDirecLight(dir,pV,0),1);
 
     //FragColor=vec4(vec3(LinearizeDepth(gl_FragCoord.z))/10,1.0);

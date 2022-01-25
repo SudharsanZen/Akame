@@ -25,7 +25,16 @@ LightAndShadowConfig::LightAndShadowConfig(Scene& scene) :m_scene(scene)
 void LightAndShadowConfig::Draw()
 {
 	ImGui::Begin("Shadows:");
+	bool clicked = ImGui::Button("Reload Shaders", ImVec2(200.0f, 25.0f));
 
+	if (clicked)
+	{
+
+		ShaderManager::releaseAllShaders();
+		ShaderManager::loadAllShaders();
+		m_scene.renderSys->attachAllBuiltInSRP();
+
+	}
 	if (ImGui::CollapsingHeader("Directional Shadow", ImGuiTreeNodeFlags_DefaultOpen))
 	{
 

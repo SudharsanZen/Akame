@@ -115,7 +115,7 @@ int main()
 	Lights& d = scene.AddComponent<Lights>(dir);
 	d.setType(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
-	d.setDirection(90, 0, 0);
+	d.setDirection(-90, 0, 0);
 	d.setIntensity(1);
 	d.setPointLightConst(1, 2, 10);
 	d.ambientLigting(0.1f, 0.1f, 0.1f);

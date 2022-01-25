@@ -24,6 +24,7 @@ class InspectorWindow
 	
 	void DrawTransformComponent(Entity selected);
 	void DrawLightComponent(Entity selected);;
+	void DrawScriptComponent(Entity selected);
 public:
 	InspectorWindow(Scene& m_Scene, std::shared_ptr<ECS> ecs);
 

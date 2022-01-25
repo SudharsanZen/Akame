@@ -4,10 +4,13 @@
 void SkeletalMeshRenderingPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam, unsigned int frameBuffer)
 {
 	glEnable(GL_MULTISAMPLE);
+	glm::mat4 camViewMat = cam.getViewMatrix();
 	std::shared_ptr<LightSystem> lsys = rsys->lightsystem.lock();
+	shader->setUniformInteger("num_of_dir_lights", lsys->drVector.size());
+	shader->setUniformMat4fv("viewMat", 1, glm::value_ptr(camViewMat));
 	if (lsys->drVector.size() > 0)
 	{
-		glm::mat4 camViewMat = cam.getViewMatrix();
+		
 		shader->setUniformVec3("dir.lightDir", lsys->drVector[0].lightDir);
 		shader->setUniformVec3("dir.lightColor", lsys->drVector[0].lightColor);
 		shader->setUniformVec3("dir.ambient", lsys->drVector[0].ambient);
@@ -18,7 +21,7 @@ void SkeletalMeshRenderingPipeline::OnPreRender(std::shared_ptr<Shader> shader, 
 		shader->setUniformInteger("dir_sMap", 6);
 		shader->setUniformInteger("numOfFrustum", lsys->dirLightSpace.size());
 		shader->setUniformFloat("shadowRes", lsys->dir_sMap.GetResolution());
-		shader->setUniformMat4fv("viewMat", 1, glm::value_ptr(camViewMat));
+		
 		lsys->dir_sMap.useTextureArray(6);
 		for (int i = 0; i < lsys->dirLightSpace.size(); i++)
 		{
@@ -29,6 +32,7 @@ void SkeletalMeshRenderingPipeline::OnPreRender(std::shared_ptr<Shader> shader, 
 
 
 	}
+	
 }
 
 void SkeletalMeshRenderingPipeline::OnEntityRender(std::shared_ptr<Shader> skRend, std::shared_ptr<ECS> e, Camera cam, Entity eid)

@@ -14,5 +14,6 @@ protected:
 	Entity eid;
 	e_index componentIndex;
 	e_index componentBitPose;
+	
 };
 
