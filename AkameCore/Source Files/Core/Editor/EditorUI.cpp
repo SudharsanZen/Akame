@@ -15,7 +15,7 @@
 #include"Core/Editor/SceneHierarchyWindow/SceneHierarchyWindow.h"
 #include"Core/Editor/ViewPort/ViewPortWindow.h"
 #include"Core/Editor/SettingsWindow/LightsAndShadows.h"
-
+#include"Assets/Asset.h"
 #include<imGui\backends\imgui_impl_glfw.h>
 #include<imGui\backends\imgui_impl_opengl3.h>
 
@@ -58,7 +58,11 @@ ImGuiIO& Editor::initGui()
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	return ImGui::GetIO();
+	ImGuiIO& IO = ImGui::GetIO();
+	iniName = (AssetManager::assetRootPath + "EngineAssets/imgui.ini");
+	IO.IniFilename = iniName.c_str();
+	ImGui::LoadIniSettingsFromDisk(iniName.c_str());
+	return IO ;
 }
 
 void Editor::defaultStyle()
@@ -188,6 +192,17 @@ void Editor::Menu()
 
 		ImGui::EndMenu();
 	}
+
+	if (ImGui::BeginMenu("Edit##Editor"))
+	{
+		if (ImGui::BeginMenu("Scriptable Project"))
+		{
+			ImGui::MenuItem("Create New");
+			ImGui::MenuItem("Set Current");
+			ImGui::EndMenu();
+		}
+		ImGui::EndMenu();
+	}
 	if (ImGui::BeginMenu("Windows##EDITOR"))
 	{
 		if (ImGui::BeginMenu("new"))
@@ -207,8 +222,14 @@ void Editor::Menu()
 	ImGui::EndMainMenuBar();
 }
 
+void Editor::createNewScriptProject()
+{
+
+}
+
 Editor::Editor(Scene &m_Scene):io(initGui()),m_Scene(m_Scene)
 {
+	
 	std::weak_ptr<GLFWwindow> context = m_Scene.window.mainWindow;
 	m_Scene.renderSys->editorMode = true;
 	initImGui();
@@ -220,7 +241,8 @@ Editor::Editor(Scene &m_Scene):io(initGui()),m_Scene(m_Scene)
 	m_ViewPortWindow[0]->windowName = "Scene##0";
 	m_ViewPortWindow.push_back(std::make_shared<ViewPortWindow>(m_Scene,io));
 	m_ViewPortWindow[1]->windowName = "Scene##1";
-
+	ContentBrowserFlags flg = ak_Open_Mode | ak_Only_Show_given_files;
+	m_contentBrowser = std::make_shared<ContentBrowser>("Project",flg,AssetManager::assetRootPath);
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 }
 
@@ -242,6 +264,7 @@ void Editor::DrawUI()
 	ImGui::ShowDemoWindow();
 	m_LightsAndShadows->Draw();
 	m_SceneHierarchy->Draw();
+	m_contentBrowser->DrawUI();
 	m_InspectorWindow->Draw(m_SceneHierarchy);
 	//draw viewPortWindow-------
 
@@ -344,5 +367,23 @@ void Editor::DrawUI()
 	deltaTime = currTime - lastTime;
 	m_Scene.deltaTime = deltaTime;
 	lastTime = currTime;
+	if (io.KeysDown[KEY_LEFT_CONTROL])
+	{
+		if (io.KeysDown[KEY_S] && !saveEvent)
+		{
+			saveEvent = true;
+		}
+	}
+
+	if (saveEvent)
+	{
+		saveEvent = false;
+		
+	}
+}
+
+Editor::~Editor()
+{
+	ImGui::SaveIniSettingsToDisk(iniName.c_str());
 }
 

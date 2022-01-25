@@ -37,11 +37,26 @@
     <Filter Include="Header Files\Core\Editor">
       <UniqueIdentifier>{2FB3954D-1BD8-E4CD-4423-CA5D30A7E3EB}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\Editor\ContentBrowsing">
+      <UniqueIdentifier>{04238578-F09F-78BB-191D-79CF05F9144F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Editor\PropertiesWindow">
+      <UniqueIdentifier>{438818CD-AFA2-7B6E-F8C4-8B02641EA375}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Core\Editor\SceneHierarchyWindow">
       <UniqueIdentifier>{434E4599-AFBE-4712-78DD-C19AE40C8013}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\Editor\SettingsWindow">
+      <UniqueIdentifier>{E7393968-53C9-FA52-5CC5-DB6AC8D3355F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Editor\ViewPort">
+      <UniqueIdentifier>{1E1769CE-8A85-BE4D-D36E-794D3F1CB4E9}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Core\Log">
       <UniqueIdentifier>{6AA8D402-D614-90FD-9F08-285B0B34B265}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Reflection">
+      <UniqueIdentifier>{3381D61E-1F3C-C6CA-C8F3-3E15B48D105B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Math">
       <UniqueIdentifier>{9A6C445D-0683-42F3-4FFA-CD14BB4F137B}</UniqueIdentifier>
@@ -84,6 +99,9 @@
     </Filter>
     <Filter Include="Source Files\Core\Editor">
       <UniqueIdentifier>{F7FB7BD4-E320-CB54-0C6C-B0E4F8EFC972}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core\Reflection">
+      <UniqueIdentifier>{FBEDC3CD-E7A8-B379-9060-2CC47CFAFD09}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Log">
       <UniqueIdentifier>{3AAC1C27-26A5-3B79-4FD7-20FE3B2F1B85}</UniqueIdentifier>
@@ -171,14 +189,29 @@
     <ClInclude Include="Header Files\Core\Debug\Debug.h">
       <Filter>Header Files\Core\Debug</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Core\Editor\ContentBrowsing\ContentBrowser.h">
+      <Filter>Header Files\Core\Editor\ContentBrowsing</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Core\Editor\EditorUI.h">
       <Filter>Header Files\Core\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Core\Editor\EntityDescriptionSystem.h">
       <Filter>Header Files\Core\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Core\Editor\ImGuiUtils.h">
+      <Filter>Header Files\Core\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Core\Editor\PropertiesWindow\InspectorWindow.h">
+      <Filter>Header Files\Core\Editor\PropertiesWindow</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Core\Editor\SceneHierarchyWindow\SceneHierarchyWindow.h">
       <Filter>Header Files\Core\Editor\SceneHierarchyWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Core\Editor\SettingsWindow\LightsAndShadows.h">
+      <Filter>Header Files\Core\Editor\SettingsWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Core\Editor\ViewPort\ViewPortWindow.h">
+      <Filter>Header Files\Core\Editor\ViewPort</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Core\Engine.h">
       <Filter>Header Files\Core</Filter>
@@ -188,6 +221,9 @@
     </ClInclude>
     <ClInclude Include="Header Files\Core\Log\Log.h">
       <Filter>Header Files\Core\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Core\Reflection\Reflection.h">
+      <Filter>Header Files\Core\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Core\Scene.h">
       <Filter>Header Files\Core</Filter>
@@ -279,11 +315,6 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Core\Editor\PropertiesWindow\InspectorWindow.h" />
-    <ClInclude Include="Header Files\Core\Editor\ViewPort\ViewPortWindow.h" />
-    <ClInclude Include="Header Files\Core\Editor\SettingsWindow\LightsAndShadows.h" />
-    <ClInclude Include="Header Files\Core\Reflection\Reflection.h" />
-    <ClInclude Include="Header Files\Core\Editor\ImGuiUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp">
@@ -334,17 +365,35 @@
     <ClCompile Include="Source Files\Core\Debug\Debug.cpp">
       <Filter>Source Files\Core\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Core\Editor\ContentBrowser.cpp">
+      <Filter>Source Files\Core\Editor</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\Core\Editor\EditorUI.cpp">
       <Filter>Source Files\Core\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Core\Editor\EntityDescriptionSystem.cpp">
       <Filter>Source Files\Core\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Core\Editor\ImGuiUtils.cpp">
+      <Filter>Source Files\Core\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Core\Editor\InspectorWindow.cpp">
+      <Filter>Source Files\Core\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Core\Editor\LightsAndShadows.cpp">
+      <Filter>Source Files\Core\Editor</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\Core\Editor\SceneHierarchyWindow.cpp">
+      <Filter>Source Files\Core\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Core\Editor\ViewPortWindow.cpp">
       <Filter>Source Files\Core\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Core\Input.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Core\Reflection\Reflection.cpp">
+      <Filter>Source Files\Core\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Core\Scene.cpp">
       <Filter>Source Files\Core</Filter>
@@ -439,10 +488,5 @@
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Core\Editor\InspectorWindow.cpp" />
-    <ClCompile Include="Source Files\Core\Editor\ViewPortWindow.cpp" />
-    <ClCompile Include="Source Files\Core\Editor\LightsAndShadows.cpp" />
-    <ClCompile Include="Source Files\Core\Reflection\Reflection.cpp" />
-    <ClCompile Include="Source Files\Core\Editor\ImGuiUtils.cpp" />
   </ItemGroup>
 </Project>

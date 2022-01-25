@@ -19,7 +19,7 @@ private:
 
 	unsigned char* imageData;
 	unsigned int texFormat;
-
+	friend class ContentBrowser;
 	
 public:
 	void reset();

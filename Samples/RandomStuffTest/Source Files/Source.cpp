@@ -152,10 +152,14 @@ int main()
 		scene.swapBuffers();
 		for (int i = 0; i < m; i++)
 		{
-			Transform& tr = scene.GetComponent<Transform>(cubeList[i]);
-			Debug::DrawRay(tr.GetGlobalPosition(),tr.forward(),1,glm::vec3(0,0,1));
-			Debug::DrawRay(tr.GetGlobalPosition(),tr.up(),1,glm::vec3(0,1,0));
-			Debug::DrawRay(tr.GetGlobalPosition(),tr.right(),1,glm::vec3(1,0,0));
+			
+			
+			
+				Transform& tr = scene.GetComponent<Transform>(cubeList[i]);
+				Debug::DrawRay(tr.GetGlobalPosition(), tr.forward(), 1, glm::vec3(0, 0, 1));
+				Debug::DrawRay(tr.GetGlobalPosition(), tr.up(), 1, glm::vec3(0, 1, 0));
+				Debug::DrawRay(tr.GetGlobalPosition(), tr.right(), 1, glm::vec3(1, 0, 0));
+			
 		}
 	}
 

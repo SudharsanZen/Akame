@@ -9,8 +9,8 @@ class TiledRenderer
 	unsigned int outTex;
 	int height, width;
 	std::map<std::string, unsigned int> uniformNameToLoc;
-	char** readShaderFile(std::string fileName, int& len);
-	void compileComputeShader(std::string fileName);
+	char** readShaderFile(std::string currPath, int& len);
+	void compileComputeShader(std::string currPath);
 	void freeCodePointer(char** code, int len);
 	void bindTextures();
 	friend class RenderingSystem;

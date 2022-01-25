@@ -122,14 +122,14 @@ void Shader::useShaderProgram()
 }
 
 
-char** Shader::readShaderFile(std::string fileName,unsigned int &len)
+char** Shader::readShaderFile(std::string currPath,unsigned int &len)
 {
     /*read shader file content from the given location
     and then store the content in an array of strings
     with each string containing a part of the code*/
 
     const GLuint CODE_BLOCK_SIZE = 512;
-    std::fstream file(fileName, std::ios::in);
+    std::fstream file(currPath, std::ios::in);
     std::string content;
     char cnt[512];
 
@@ -147,7 +147,7 @@ char** Shader::readShaderFile(std::string fileName,unsigned int &len)
     }
     else
     {
-        ENGINE_CORE_ERROR("SHADER_CLASS::can't open File: "+ fileName);
+        ENGINE_CORE_ERROR("SHADER_CLASS::can't open File: "+ currPath);
     }
     size_t contentLength = content.length();
     unsigned int numOfChunks =(unsigned int) ceil((float)contentLength / (float)(CODE_BLOCK_SIZE - 1));

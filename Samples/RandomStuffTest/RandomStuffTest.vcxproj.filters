@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..">
+      <UniqueIdentifier>{61705900-4DFC-870B-B6AA-880BA255880B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Assets">
+      <UniqueIdentifier>{23603F16-8FCA-F38C-D808-A53244B2D1E1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Assets\EngineAssets">
+      <UniqueIdentifier>{BB5A3330-A754-5C82-90C1-F2927C5AC2EE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Assets\EngineAssets\AppIcons">
+      <UniqueIdentifier>{67F1FDDB-D3D4-0C1C-DCD7-3A58483AD36C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{E9C7FDCE-D52A-8D73-7EB0-C5296AF258F6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source Files\Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Assets\EngineAssets\AppIcons\logo1_128x128.ico">
+      <Filter>..\Assets\EngineAssets\AppIcons</Filter>
+    </None>
+    <None Include="..\..\Assets\EngineAssets\AppIcons\logo1_16x16.ico">
+      <Filter>..\Assets\EngineAssets\AppIcons</Filter>
+    </None>
+    <None Include="..\..\Assets\EngineAssets\AppIcons\logo1_256x256.ico">
+      <Filter>..\Assets\EngineAssets\AppIcons</Filter>
+    </None>
+    <None Include="..\..\Assets\EngineAssets\AppIcons\logo1_32x32.ico">
+      <Filter>..\Assets\EngineAssets\AppIcons</Filter>
+    </None>
+    <None Include="..\..\Assets\EngineAssets\AppIcons\logo1_64x64.ico">
+      <Filter>..\Assets\EngineAssets\AppIcons</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\resources.rc">
+      <Filter>..</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

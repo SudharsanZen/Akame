@@ -20,7 +20,7 @@ public:
 	//call this once to initialize assets manager
 	static void init();
 	static long long createTexture(std::string location);
-	std::shared_ptr<Texture>GetTexture(long long index);
+	static std::shared_ptr<Texture> GetTexture(long long index);
 	static void notUsingTex(std::string location);
 
 	std::shared_ptr<Shader> getShader(std::string shaderName);

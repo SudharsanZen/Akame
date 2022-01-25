@@ -9,6 +9,8 @@
 #include"Core/Log/Log.h"
 #include"Core/Input.h"
 #include"Core/Debug/Debug.h"
+#include"Assets/AssetManager.h"
+#include"stb_image.h"
 Window::Window(int width,int height,std::string winName,Window *shareWindow)
 {
 	Log::Init();
@@ -137,6 +139,16 @@ bool Window::initialize()
 	int a;
 	glGetIntegerv(GL_MAX_VERTEX_UNIFORM_BLOCKS,&a);
 	ENGINE_CORE_CRITICAL("MAX UNIFORM BLOCK SIZE:{0:d}",a);
+	GLFWimage images[4];
+	int channel = 4;
+	
+	images[0].pixels = stbi_load((AssetManager::assetRootPath+"EngineAssets/AppIcons/Png/logo1_32x32.png").c_str(), &images[0].width, &images[0].height, &channel, 0);
+	images[1].pixels = stbi_load((AssetManager::assetRootPath+"EngineAssets/AppIcons/Png/logo1_64x64.png").c_str(), &images[1].width, &images[1].height, &channel, 0);
+	images[2].pixels = stbi_load((AssetManager::assetRootPath+"EngineAssets/AppIcons/Png/logo1_128x128.png").c_str(), &images[2].width, &images[2].height, &channel, 0);
+	images[3].pixels = stbi_load((AssetManager::assetRootPath+"EngineAssets/AppIcons/Png/logo1_256x256.png").c_str(), &images[3].width, &images[3].height, &channel, 0);
+	glfwSetWindowIcon(mainWindow.get(),4,images);
+	for(int i=0;i<4;i++)
+		stbi_image_free(images[i].pixels);
 	glfwSetKeyCallback(mainWindow.get(), Input::handleKeys);
 	Debug::CreateBuffers();
 	return true;
