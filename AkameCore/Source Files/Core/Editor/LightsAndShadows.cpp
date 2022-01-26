@@ -61,34 +61,37 @@ void LightAndShadowConfig::Draw()
 			std::vector<unsigned int> texList;
 			for (int i = 0; i < m_scene.lightSys->dirLightSpace.size(); i++)
 			{
+				
 				glDisable(GL_CULL_FACE);
 				fbo[i].Bind();
 				ShaderManager::GetShader("PSSM")->setUniformInteger("layer", i);
 				m_scene.lightSys->dir_sMap.useTextureArray(0);
 				glBindVertexArray(Mesh::VAO);
+				glViewport(0, 0, fbo[i].getFrameSize().x, fbo[i].getFrameSize().y);
 				fbo[i].quadMesh.renderMesh();
 				glBindVertexArray(0);
 				fbo[i].unBind();
 				glEnable(GL_CULL_FACE);
 				texList.push_back(fbo[i].getColorBuffer());
 			}
-			int div = 2, res = 512 / 3;
-			for (int i = 0; i < texList.size(); i++)
+			int div = 2;
+			float size = ImGui::GetWindowWidth()/2.0f;
+			int maxCol = glm::ceil(ImGui::GetWindowWidth()/(size+0.1f*size));
+			
+			if (ImGui::BeginTable("DirectionalSS",maxCol))
 			{
-
-				float size = res;
-				float gapx = 5.0f * (i % div);
-				float gapy = 5.0f * ((i / div));
-				float dispY = (i / div) * (size);
-				ImVec2 pos = ImGui::GetCursorScreenPos();
-				float x = pos.x + (size) * ((i) % div);
-				float y = pos.y + dispY;
-				unsigned int tex = texList[i];
-				ImGui::GetWindowDrawList()->AddImage(
-					(void*)tex,
-					ImVec2(ImVec2(x + gapx, y + gapy)),
-					ImVec2(x + size + gapx,
-						y + size + gapy), ImVec2(0, 1), ImVec2(1, 0));
+				for (int i = 0; i < texList.size(); i++)
+				{
+					if (i % (maxCol) == 0)
+					{
+						ImGui::TableNextRow();
+					}
+					ImGui::TableSetColumnIndex(i%maxCol);
+					GLuint t = texList[i];
+					ImGui::Image((ImTextureID)t,ImVec2(size,size),ImVec2(0,0),ImVec2(1,1));
+				
+				}
+				ImGui::EndTable();
 			}
 		}
 

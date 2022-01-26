@@ -173,7 +173,8 @@ void InspectorWindow::DrawTransformComponent(Entity selected)
 void InspectorWindow::DrawLightComponent(Entity selected) 
 {
     
-
+    if (!selected.signature->test(m_Lights_pose))
+        return;
     if (ImGui::CollapsingHeader("LightComponent", ImGuiTreeNodeFlags_DefaultOpen))
     {
         Lights& t = m_Scene.GetComponent<Lights>(selected);

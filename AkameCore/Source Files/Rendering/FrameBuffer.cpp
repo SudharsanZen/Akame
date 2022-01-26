@@ -23,7 +23,7 @@ void FrameBuffer::generateFrameBuffer()
 	//Generate texture buffer
 	glGenTextures(1,&texColorBuffer);
 	glBindTexture(GL_TEXTURE_2D,texColorBuffer);
-	glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,800,600,0,GL_RGB,GL_UNSIGNED_BYTE,NULL);
+	glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -34,7 +34,7 @@ void FrameBuffer::generateFrameBuffer()
 	//create render buffer
 	glGenRenderbuffers(1,&rbo);
 	glBindRenderbuffer(GL_RENDERBUFFER,rbo);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 800, 600);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
@@ -47,6 +47,7 @@ void FrameBuffer::updateTextureSize(int height,int width)
 {
 	this->height = height;
 	this->width = width;
+
 	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -58,6 +59,8 @@ void FrameBuffer::updateTextureSize(int height,int width)
 }
 FrameBuffer::FrameBuffer()
 {
+	height = 800;
+	width = 800;
 	rbo = 0;
 	texColorBuffer = 0;
 	framebuffer = 0;

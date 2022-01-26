@@ -219,7 +219,7 @@ void ContentBrowser::DrawUI()
         ImGui::SameLine();
         //spliter button
 
-        if (ImGui::Button("|", ImVec2(10, height))||spliterClicked)
+        if (ImGui::Button("##content|", ImVec2(10, height))||spliterClicked)
         {
            
             ImGuiIO io=ImGui::GetIO();

@@ -21,12 +21,11 @@ uniform int numOfFrustum;
 uniform float lambda;
 struct Material
 {
-    sampler2D diffuseMap;
-    sampler2D specularMap;
-    sampler2D normalMap;
+    sampler2D diffuse;
+    sampler2D roughness;
+    sampler2D normal;
     vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+
     float shininess;
 
 };
@@ -46,7 +45,7 @@ uniform DirectionalLight dir;
 struct BufferPixelValues
 {
     vec4 albedo;
-    float specular;
+    float roughness;
     vec4 norm;
     vec4 FragPos;
 };
@@ -174,11 +173,11 @@ vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P,float shadow)
     vec3 lightDir=normalize(-l.lightDir);
     float diff= max(dot(P.norm.xyz, lightDir), 0.0);
 
-    //calculate specular highlight
+    //calculate roughness highlight
     vec3 viewDir=normalize(viewPos-P.FragPos.xyz);
     vec3 halfwayDir = normalize( lightDir+ viewDir);  
     float spec = pow(max(dot(P.norm.xyz, halfwayDir), 0.0), 64.0);
-    vec3 specular=vec3(spec * P.specular);
+    vec3 roughness=vec3(spec * P.roughness);
 
     //calculate diffuse and ambient color
     vec3 diffuse=diff * l.lightColor * P.albedo.xyz;
@@ -186,14 +185,14 @@ vec3 calcDirecLight(DirectionalLight l,BufferPixelValues P,float shadow)
     
     
     //add all the resultant values
-    vec3 result=(((diffuse+specular)*l.intensity*(1.0f-shadow))+ambient);
+    vec3 result=(((diffuse+roughness)*l.intensity*(1.0f-shadow))+ambient);
     
     return result;
 }
 
 void main()
 {
-    vec4 albedo=texture(material.diffuseMap,uvCoord);
+    vec4 albedo=texture(material.diffuse,uvCoord);
     if(albedo.a<0.5)
         discard;
     // ambient
@@ -204,7 +203,7 @@ void main()
     }
     
     //calculate normal from tangent sapce to world space
-    vec3 n=texture(material.normalMap,uvCoord).rgb;
+    vec3 n=texture(material.normal,uvCoord).rgb;
     n=normalize(n*2.0-1.0);
     n.xy*=normalStrength;
     n=normalize(n);
@@ -213,7 +212,7 @@ void main()
     pV.albedo=albedo;
     pV.norm=vec4(normalize(TBN*n),1);
     pV.FragPos=vec4(FragPos,1);
-    pV.specular=texture(material.specularMap,uvCoord).r;
+    pV.roughness=texture(material.roughness,uvCoord).r;
     
     FragColor=vec4(calcDirecLight(dir,pV,shadowCalculation(pV.FragPos)),1);
 

@@ -10,9 +10,11 @@ void DefaultRenderingPipeline::OnPreRender(std::shared_ptr<Shader> shader, Rende
 {
 	glEnable(GL_MULTISAMPLE);
 	std::shared_ptr<LightSystem> lsys = rsys->lightsystem.lock();
+	glm::mat4 camViewMat = cam.getViewMatrix();
+	shader->setUniformMat4fv("viewMat", 1, glm::value_ptr(camViewMat));
 	if (lsys->drVector.size() > 0)
 	{
-		glm::mat4 camViewMat = cam.getViewMatrix();
+		
 		shader->setUniformVec3("dir.lightDir", lsys->drVector[0].lightDir);
 		shader->setUniformVec3("dir.lightColor", lsys->drVector[0].lightColor);
 		shader->setUniformVec3("dir.ambient", lsys->drVector[0].ambient);
@@ -23,7 +25,7 @@ void DefaultRenderingPipeline::OnPreRender(std::shared_ptr<Shader> shader, Rende
 		shader->setUniformInteger("dir_sMap",6);
 		shader->setUniformInteger("numOfFrustum",lsys->dirLightSpace.size());
 		shader->setUniformFloat("shadowRes",lsys->dir_sMap.GetResolution());
-		shader->setUniformMat4fv("viewMat",1,glm::value_ptr(camViewMat));
+		
 		lsys->dir_sMap.useTextureArray(6);
 		for (int i = 0; i < lsys->dirLightSpace.size(); i++)
 		{

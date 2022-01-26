@@ -276,7 +276,7 @@ void Editor::DrawUI()
 		m_Scene.transformManager->UpdateTransforms();
 		
 		Debug::updateBufferContent();
-		bool viewPortListUpdate;
+		bool viewPortListUpdate=false;
 		for (auto viewPort : m_ViewPortWindow)
 		{
 			viewPortListUpdate |= !viewPort->open;

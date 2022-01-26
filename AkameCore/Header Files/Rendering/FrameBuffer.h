@@ -14,7 +14,7 @@ public:
 	Mesh quadMesh;
 	FrameBuffer();
 	void updateTextureSize(int height,int width);
-
+	glm::vec2 getFrameSize() { return glm::vec2(width, height); }
 
 	void Bind();
 

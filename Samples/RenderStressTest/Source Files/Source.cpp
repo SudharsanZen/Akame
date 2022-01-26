@@ -50,7 +50,16 @@ void app(int num=200)
 	}
 	Scene scene(window);
 
+	Entity dir = scene.CreateEntity();
+	Lights& d = scene.AddComponent<Lights>(dir);
+	d.setType(LIGHT::DIRECTIONAL);
+	d.setColor(1, 1, 1);
+	d.setDirection(-90, 0, 0);
+	d.setIntensity(3);
+	d.setPointLightConst(1, 2, 10);
+	d.ambientLigting(0.1f, 0.1f, 0.1f);
 
+	scene.AddComponent<Transform>(dir);
 	Entity plane = scene.CreateEntity();
 	Entity plane2 = scene.CreateEntity();
 
@@ -106,16 +115,7 @@ void app(int num=200)
 	scene.AddComponent<Transform>(plane2);
 	scene.AddComponent<Material>(plane2) = boxMat;
 
-	Entity dir = scene.CreateEntity();
-	Lights& d = scene.AddComponent<Lights>(dir);
-	d.setType(LIGHT::DIRECTIONAL);
-	d.setColor(1, 1, 1);
-	d.setDirection(1, -1, 0);
-	d.setIntensity(3);
-	d.setPointLightConst(1, 2, 10);
-	d.ambientLigting(0.1f, 0.1f, 0.1f);
-
-	scene.AddComponent<Transform>(dir);
+	
 
 	
 	/*Material mat("GRIDS");
@@ -180,7 +180,7 @@ void app(int num=200)
 		scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 	}
 	//Editor is experimental, do not use this
-	//Editor edt(window,scene);
+	Editor edt(scene);
 	scene.OnStart();
 	scene.vsyncOn(false);
 	scene.backGroundColor(0, 0, 0, 1);
@@ -196,8 +196,8 @@ void app(int num=200)
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.clearBuffer();
-		scene.Render();
-		//edt.DrawUI();
+		//scene.Render();
+		edt.DrawUI();
 
 		/*
 		//debug draw, point light
