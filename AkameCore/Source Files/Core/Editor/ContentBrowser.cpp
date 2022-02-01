@@ -53,11 +53,11 @@ void ContentBrowser::setCurrentPath(std::string newPath)
 {
     currPath = newPath;
 }
-ContentBrowser::ContentBrowser(std::string windowName,ContentBrowserFlags mode,std::string path)
+ContentBrowser::ContentBrowser(std::string windowName,std::string path)
 {
     open = true;
     this->windowTitle = windowName;
-    this->mode = mode;
+
     this->currPath = path;
     unknownfileIconID = AssetManager::createTexture(AssetManager::assetRootPath+"\\EngineAssets\\Icons\\file.png");;
     folderIconID =AssetManager::createTexture(AssetManager::assetRootPath+ "\\EngineAssets\\Icons\\folder1.png");
@@ -167,7 +167,7 @@ void ContentBrowser::DrawContentPanel()
             std::string name = entry.path().filename().string();
             ImGui::Spacing();
             ImGui::SameLine(ImGui::GetColumnWidth(i_col) / 2.0f -iconSize / 2.0f);
-            ImGui::PushID(i_col + i_row * i_col);
+            ImGui::PushID(i_col + i_row * max_col);
             if (entry.is_directory())
             {
                

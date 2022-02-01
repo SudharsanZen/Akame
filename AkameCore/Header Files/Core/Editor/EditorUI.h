@@ -34,10 +34,12 @@ private:
 	std::vector<std::shared_ptr<ViewPortWindow>> m_ViewPortWindow;
 	std::shared_ptr<LightAndShadowConfig> m_LightsAndShadows;
 	std::shared_ptr<ContentBrowser> m_contentBrowser;
-	void defaultStyle();
+	static void defaultStyle(ImGuiIO& io);
 	void Menu();
 	void createNewScriptProject();
 	bool saveEvent;
+
+	friend class Exporter;
 public:
 	
 	Editor(Scene& m_Scene);

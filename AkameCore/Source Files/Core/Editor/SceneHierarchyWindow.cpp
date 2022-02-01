@@ -21,37 +21,38 @@ void SceneHierarchyWindow::Draw()
 {
     std::shared_ptr<ECS> e = m_Scene.ecs;
     //draw
-    ImGui::Begin("SceneGraph");
-
-    if (ImGui::Button("ToggleDebugInfo", ImVec2(200.0f, 25.0f)))
-        viewDebugInfo = !viewDebugInfo;
-
-    if (ImGui::TreeNodeEx("Scene",ImGuiTreeNodeFlags_DefaultOpen))
+    if (ImGui::Begin("SceneGraph"))
     {
 
-        static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-        static bool align_label_with_current_x_position = false;
-        static bool test_drag_and_drop = false;
+        if (ImGui::Button("ToggleDebugInfo", ImVec2(200.0f, 25.0f)))
+            viewDebugInfo = !viewDebugInfo;
 
-        if (align_label_with_current_x_position)
-            ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
-
-
-        for (auto ent : m_Scene.transformManager->entities)
+        if (ImGui::TreeNodeEx("Scene", ImGuiTreeNodeFlags_DefaultOpen))
         {
-            Transform& t = e->GetComponent<Transform>(ent);
-            EntityDescriptor& edt = e->GetComponent<EntityDescriptor>(ent);
-            if (t.parent == Entity(-1, -1))
+
+            static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+            static bool align_label_with_current_x_position = false;
+            static bool test_drag_and_drop = false;
+
+            if (align_label_with_current_x_position)
+                ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
+
+
+            for (auto ent : m_Scene.transformManager->entities)
             {
-                DrawNode(t, edt, base_flags);
+                Transform& t = e->GetComponent<Transform>(ent);
+                EntityDescriptor& edt = e->GetComponent<EntityDescriptor>(ent);
+                if (t.parent == Entity(-1, -1))
+                {
+                    DrawNode(t, edt, base_flags);
+                }
             }
+
+
+            ImGui::TreePop();
         }
+        //handle inputs
 
-
-        ImGui::TreePop();
-    }
-    //handle inputs
-    
         if (ImGui::BeginPopupContextWindow())
         {
             ImGui::MenuItem("Create Entity");
@@ -67,67 +68,67 @@ void SceneHierarchyWindow::Draw()
 
                 ImGui::EndMenu();
             }
-           
+
             ImGui::EndPopup();
         }
-   
 
-   
-    ImGui::End();
-    for (auto ent : selected)
-    {
-        if (m_Scene.ecs->IsComponentAttached<Transform>(ent))
+
+
+        ImGui::End();
+        for (auto ent : selected)
         {
-            Transform& t = m_Scene.GetComponent<Transform>(ent);
-            if (m_Scene.ecs->IsComponentAttached<Mesh>(ent))
+            if (m_Scene.ecs->IsComponentAttached<Transform>(ent))
             {
-                Mesh& m = m_Scene.GetComponent<Mesh>(ent);
-                Debug::DrawBB(m.min, m.max, t.transformMatrix(), glm::vec3(1, 1, 1));
-
-            }
-            else if (m_Scene.ecs->IsComponentAttached<Lights>(ent))
-            {
-                Lights& l = m_Scene.GetComponent<Lights>(ent);
-                glm::vec3 pose = t.GetGlobalPosition();
-                if (l.getType() == LIGHT::POINT)
+                Transform& t = m_Scene.GetComponent<Transform>(ent);
+                if (m_Scene.ecs->IsComponentAttached<Mesh>(ent))
                 {
+                    Mesh& m = m_Scene.GetComponent<Mesh>(ent);
+                    Debug::DrawBB(m.min, m.max, t.transformMatrix(), glm::vec3(1, 1, 1));
+
+                }
+                else if (m_Scene.ecs->IsComponentAttached<Lights>(ent))
+                {
+                    Lights& l = m_Scene.GetComponent<Lights>(ent);
+                    glm::vec3 pose = t.GetGlobalPosition();
+                    if (l.getType() == LIGHT::POINT)
+                    {
+                        Debug::DrawCircle(pose, t.up(), 0.5, glm::vec3(1, 0.5, 0));
+                        Debug::DrawCircle(pose, t.forward(), 0.5, glm::vec3(1, 0.5, 0));
+                        Debug::DrawCircle(pose, t.right(), 0.5, glm::vec3(1, 0.5, 0));
+                    }
+                    else if (l.getType() == LIGHT::DIRECTIONAL)
+                    {
+                        Debug::DrawCircle(pose, l.getDirection(), 1, glm::vec3(1, 0.8, 1), 20);
+                        Debug::DrawRay(pose, l.getDirection(), 1.5, glm::vec3(0, 0, 1));
+                    }
+                }
+                else if (m_Scene.ecs->IsComponentAttached<Transform>(ent))
+                {
+                    Transform& t = m_Scene.ecs->GetComponent<Transform>(ent);
+                    glm::vec3 pose = t.GetGlobalPosition();
                     Debug::DrawCircle(pose, t.up(), 0.5, glm::vec3(1, 0.5, 0));
                     Debug::DrawCircle(pose, t.forward(), 0.5, glm::vec3(1, 0.5, 0));
                     Debug::DrawCircle(pose, t.right(), 0.5, glm::vec3(1, 0.5, 0));
-                }
-                else if (l.getType() == LIGHT::DIRECTIONAL)
-                {
-                    Debug::DrawCircle(pose, l.getDirection(), 1, glm::vec3(1, 0.8, 1), 20);
-                    Debug::DrawRay(pose, l.getDirection(), 1.5, glm::vec3(0, 0, 1));
+
+
+
+
                 }
             }
-            else if (m_Scene.ecs->IsComponentAttached<Transform>(ent))
-            {
-                Transform& t = m_Scene.ecs->GetComponent<Transform>(ent);
-                glm::vec3 pose = t.GetGlobalPosition();
-                Debug::DrawCircle(pose, t.up(), 0.5, glm::vec3(1, 0.5, 0));
-                Debug::DrawCircle(pose, t.forward(), 0.5, glm::vec3(1, 0.5, 0));
-                Debug::DrawCircle(pose, t.right(), 0.5, glm::vec3(1, 0.5, 0));
 
-
-
-
-            }
         }
 
-    }
-   
-    if (ImGui::IsKeyDown(KEY_DELETE))
-    {
-
-        for (auto ent : selected)
+        if (ImGui::IsKeyDown(KEY_DELETE))
         {
-            m_Scene.ecs->DestroyEntity(ent);
 
+            for (auto ent : selected)
+            {
+                m_Scene.ecs->DestroyEntity(ent);
+
+            }
+            selected.clear();
         }
-        selected.clear();
     }
-
 }
 void SceneHierarchyWindow::DrawNode(Transform const& t, EntityDescriptor& edt, ImGuiTreeNodeFlags const& base_flags)
 {

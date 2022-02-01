@@ -39,3 +39,7 @@ project "AnimationTest"
         filter "configurations:Release"
             defines{"NDEBUG"}
             optimize "On"
+        filter { 'system:windows' }
+            files { '%{wks.location}/resources.rc', "%{wks.location}/Assets/EngineAssets/AppIcons/**.ico"}
+            vpaths { ['Resources/*'] = { '*.rc',  "%{wks.location}/Assets/EngineAssets/AppIcons/**.ico" }}
+            filter {}

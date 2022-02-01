@@ -6,21 +6,25 @@
 #include"Core/Window.h"
 void ViewPortWindow::Draw(float deltaTime)
 {
-	sceneFrame.Bind();
-	cam.setAspectRation((float)m_window_width / (float)m_window_height);
+	
+
 	//call this in this same order
 	
 	
-	
+	sceneFrame.Bind();
 
-	
 	sceneFrame.unBind();
-	bool renderStuff = ImGui::Begin(windowName.c_str(),&open);
-	flyCamScene(cam, deltaTime, ImGui::IsWindowFocused(ImGuiFocusedFlags_RootWindow));
+	
+	bool renderStuff=true;
+	if (closable)
+		renderStuff = ImGui::Begin(windowName.c_str(), &open);
+	else
+		renderStuff = ImGui::Begin(windowName.c_str());
+
 	if (renderStuff)
 	{
 	
-		
+		flyCamScene(cam, deltaTime, ImGui::IsWindowFocused(ImGuiFocusedFlags_RootWindow));
 		
 		ImVec2 size = ImGui::GetWindowSize();
 		
@@ -28,6 +32,7 @@ void ViewPortWindow::Draw(float deltaTime)
 		m_window_width = size.x;
 		setFrameBufferHeight(m_window_height, m_window_width);
 		m_scene.renderSys->updateFrameBufferSize(m_window_height, m_window_width);
+		cam.setAspectRation((float)m_window_width / (float)m_window_height);
 		m_scene.renderSys->height = m_window_height;
 		m_scene.renderSys->width = m_window_width;
 		ImVec2 pose = ImGui::GetCursorScreenPos();
@@ -36,8 +41,11 @@ void ViewPortWindow::Draw(float deltaTime)
 			ImVec2(0, 1), ImVec2(1, 0));
 		m_scene.renderSys->Run(cam, sceneFrame.framebuffer);
 		
+		ImGui::End();
+		
 	}
-	ImGui::End();
+	sceneFrame.unBind();
+	
 }
 
 void ViewPortWindow::setFrameBufferHeight(float height, float width)

@@ -20,6 +20,7 @@ private:
 	unsigned char* imageData;
 	unsigned int texFormat;
 	friend class ContentBrowser;
+	friend class FileOpenSaveDialogBox;
 	
 public:
 	void reset();

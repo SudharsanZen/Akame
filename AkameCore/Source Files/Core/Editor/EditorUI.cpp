@@ -65,7 +65,7 @@ ImGuiIO& Editor::initGui()
 	return IO ;
 }
 
-void Editor::defaultStyle()
+void Editor::defaultStyle(ImGuiIO& io)
 {
 	ImGuiStyle& style = ImGui::GetStyle();
 	io.Fonts->AddFontFromFileTTF((AssetManager::assetRootPath+"EngineAssets/liberation-sans/LiberationSans-Regular.ttf").c_str(),15.0f);
@@ -233,7 +233,7 @@ Editor::Editor(Scene &m_Scene):io(initGui()),m_Scene(m_Scene)
 	std::weak_ptr<GLFWwindow> context = m_Scene.window.mainWindow;
 	m_Scene.renderSys->editorMode = true;
 	initImGui();
-	defaultStyle();
+	defaultStyle(io);
 	m_SceneHierarchy = std::make_shared<SceneHierarchyWindow>(m_Scene);
 	m_InspectorWindow= std::make_shared<InspectorWindow>(m_Scene,m_Scene.ecs);
 	m_LightsAndShadows = std::make_shared<LightAndShadowConfig>(m_Scene);
@@ -241,8 +241,8 @@ Editor::Editor(Scene &m_Scene):io(initGui()),m_Scene(m_Scene)
 	m_ViewPortWindow[0]->windowName = "Scene##0";
 	m_ViewPortWindow.push_back(std::make_shared<ViewPortWindow>(m_Scene,io));
 	m_ViewPortWindow[1]->windowName = "Scene##1";
-	ContentBrowserFlags flg = ak_Open_Mode | ak_Only_Show_given_files;
-	m_contentBrowser = std::make_shared<ContentBrowser>("Project",flg,AssetManager::assetRootPath);
+	deltaTime = 0.0f;
+	m_contentBrowser = std::make_shared<ContentBrowser>("Project",AssetManager::assetRootPath);
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 }
 

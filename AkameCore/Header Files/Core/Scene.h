@@ -41,11 +41,14 @@ private:
 	
 
 	friend class BehaviourSystem;
+	friend class Exporter;
 	friend class Editor;
 	friend class LightAndShadowConfig;
 	friend class SceneHierarchyWindow;
 	friend class ViewPortWindow;
-	
+	friend class Exporter;
+	friend class InspectorWindow;
+	friend class Exporter;
 public:
 	
 	void groupEntWithShader();

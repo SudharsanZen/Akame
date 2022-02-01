@@ -10,6 +10,8 @@ project "imGui"
         "%{prj.location}/*.h",
         "%{prj.location}/*.c",
         "%{prj.location}/*.cpp",
+        "%{prj.location}/misc/cpp/*.h",
+        "%{prj.location}/misc/cpp/*.cpp",
         "%{wks.location}/AkameCore/vendor/glad-akame-/glad/glad.c",
         "%{prj.location}/backends/imgui_impl_opengl3.cpp",
         "%{prj.location}/backends/imgui_impl_opengl3.h",

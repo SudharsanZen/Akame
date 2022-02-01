@@ -27,7 +27,7 @@ public:
 	~Window();
 	friend class Editor;
 	friend class Input;
-	
+	friend class Exporter;
 
 	int getBufferHeight();
 	int getBufferWidth();

@@ -10,6 +10,7 @@ typedef int ImGuiTreeNodeFlags;
 class SceneHierarchyWindow
 {
 	friend class Editor;
+	friend class Exporter;
 	friend class InspectorWindow;
 	std::set<Entity> selected;
 	Scene& m_Scene;

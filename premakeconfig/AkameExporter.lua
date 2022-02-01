@@ -2,6 +2,7 @@ project "Akame3DExporter"
         location"%{wks.location}/tools/AkameExporter"
         kind "ConsoleApp"
         language "C++"
+        cppdialect "C++17"
         targetdir "%{wks.location}/bin/%{cfg.buildcfg}/%{cfg.architecture}/tools/"
         objdir "%{wks.location}/bin/Intermediate/%{cfg.buildcfg}/%{prj.name}"
         dependson{"imGui","glfw","AkameCore","assimp"}
@@ -14,17 +15,32 @@ project "Akame3DExporter"
 
         includedirs
         {
-            IncludeDir["AkameCore"],IncludeDir["ECS"],IncludeDir["vendor"],IncludeDir["assimp"]
+            string.explode(AllIncludeDir,";")
         }
 
 		libdirs
 		{
-			LibraryDir["AkameCore"], LibraryDir["assimp"]
+			LibraryDir["AkameCore"],
+            "%{LibraryDir.GLFW}",
+            "%{LibraryDir.Physx}",
+            "%{LibraryDir.imGui}",
+            "%{LibraryDir.assimp}",
+            "%{LibraryDir.pugixml}"
 		}
 
 		links
 		{
-			"AkameCore.lib"
+			"AkameCore.lib",
+            "glfw3.lib",
+            "opengl32.lib",
+            "imGui.lib",
+            "PhysX_64.lib",
+            "PhysXCommon_64.lib",
+            "PhysXCooking_64.lib",
+            "PhysXFoundation_64.lib",
+            "PhysXPvdSDK_static_64.lib",
+            "PhysXExtensions_static_64.lib",
+		    "pugixml.lib"
 		}
 		debugenvs
         {
@@ -47,3 +63,7 @@ project "Akame3DExporter"
 		{
 			"assimp-vc142-mt.lib",
 		}
+    filter { 'system:windows' }
+        files { '%{wks.location}/resources.rc', "%{wks.location}/Assets/EngineAssets/AppIcons/**.ico"}
+        vpaths { ['Resources/*'] = { '*.rc',  "%{wks.location}/Assets/EngineAssets/AppIcons/**.ico" }}
+        filter {}

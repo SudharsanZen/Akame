@@ -38,6 +38,7 @@ private:
 	friend class Scene;
 	friend class Editor;
 	friend class LightAndShadowConfig;
+	friend class Exporter;
 	/*Call this to update the common global uniforms.
 	* this updates the Projection matrix and ViewMatrix 
 	*which is common to all shaders*/

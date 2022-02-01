@@ -16,14 +16,17 @@
     <Filter Include="..\Assets\EngineAssets\AppIcons\Png">
       <UniqueIdentifier>{9B75F1A2-072F-5C4D-908E-7627FC4612BD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{E9C7FDCE-D52A-8D73-7EB0-C5296AF258F6}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source Files\Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="ExporterUI.h" />
+    <ClInclude Include="FileOpenSaveDialogBox.h" />
+    <ClInclude Include="OS_Interface.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ExporterUI.cpp" />
+    <ClCompile Include="FileOpenSaveDialogBox.cpp" />
+    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="OS_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\EngineAssets\AppIcons\Png\icon.ico">

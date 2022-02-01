@@ -55,10 +55,10 @@ int main()
 		return -1;
 	}
 
-	Material cmat("DEFERRED");
-	cmat.setTexture2D("material.diffuseMap", AssetManager::assetRootPath + "Media/pbr/basecolor.jpg");
-	cmat.setTexture2D("material.normalMap", AssetManager::assetRootPath + "Media/pbr/normal.jpg");
-	cmat.setTexture2D("material.specularMap", AssetManager::assetRootPath + "Media/pbr/roughness.jpg");
+	Material cmat("DEFAULT");
+	cmat.setTexture2D("material.diffuse", AssetManager::assetRootPath + "Media/pbr/basecolor.jpg");
+	cmat.setTexture2D("material.normal", AssetManager::assetRootPath + "Media/pbr/normal.jpg");
+	cmat.setTexture2D("material.specular", AssetManager::assetRootPath + "Media/pbr/roughness.jpg");
 
 	Scene scene(window);
 	Entity dir = scene.CreateEntity();
@@ -105,7 +105,7 @@ int main()
 		Transform& t = scene.GetComponent<Transform>(cubeList[i]);
 		t.SetLocalRotation(Quaternion(0, ((float)i / float(m)) *50, 0));
 	}
-
+	/*
 	Material mat("GRIDS");
 	Entity plane= scene.CreateEntity();
 
@@ -121,7 +121,7 @@ int main()
 	scene.AddComponent<Transform>(sky);
 	Mesh& skMesh = scene.AddComponent<Mesh>(sky);
 	skMesh.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
-	
+	*/
 	
 	Transform& t = scene.GetComponent<Transform>(cubeList[0]);
 	Transform& t1 = scene.GetComponent<Transform>(cubeList[4]);
@@ -133,7 +133,7 @@ int main()
 	//Editor is experimental, do not use this
 	Editor edt(scene);
 	scene.OnStart();
-	scene.vsyncOn(true);
+	scene.vsyncOn(false);
 	float deltaTime = 0;
 	while (!window.closeWindow())
 	{

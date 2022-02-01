@@ -29,6 +29,7 @@ private:
 
 	friend class Window;
 	friend class Scene;
+	friend class Exporter;
 	friend class RenderingSystem;
 	friend class Editor;
 public:

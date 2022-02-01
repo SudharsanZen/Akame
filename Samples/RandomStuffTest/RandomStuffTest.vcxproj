@@ -101,6 +101,7 @@
     <ClCompile Include="Source Files\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Assets\EngineAssets\AppIcons\Png\icon.ico" />
     <None Include="..\..\Assets\EngineAssets\AppIcons\logo1_128x128.ico" />
     <None Include="..\..\Assets\EngineAssets\AppIcons\logo1_16x16.ico" />
     <None Include="..\..\Assets\EngineAssets\AppIcons\logo1_256x256.ico" />

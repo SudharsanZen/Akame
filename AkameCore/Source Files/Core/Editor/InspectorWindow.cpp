@@ -263,24 +263,25 @@ InspectorWindow::InspectorWindow(Scene& m_Scene, std::shared_ptr<ECS> ecs) :m_Sc
 }
 void InspectorWindow::Draw(std::shared_ptr<SceneHierarchyWindow> sceneHierarchy)
 {
-    ImGui::Begin("properties");
-    if (sceneHierarchy->selected.size() > 0)
+    if (ImGui::Begin("properties"))
     {
-
-        Entity selected =*(sceneHierarchy->selected.begin());
-        
-        if (selected != INVALID_ENTITY)
+        if (sceneHierarchy->selected.size() > 0)
         {
-           
-            DrawTransformComponent(selected);
-            
-            DrawLightComponent(selected);
 
-            DrawScriptComponent(selected);
+            Entity selected = *(sceneHierarchy->selected.begin());
+
+            if (selected != INVALID_ENTITY)
+            {
+
+                DrawTransformComponent(selected);
+
+                DrawLightComponent(selected);
+
+                DrawScriptComponent(selected);
+            }
+
         }
-      
+        ImGui::End();
+
     }
-    ImGui::End();
-
-
 }
