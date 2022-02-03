@@ -36,8 +36,8 @@ private:
 	glm::vec4 color;
 	Window &window;
 
-	float deltaTime;
-	float lastTime,currTime;
+	float deltaTime=0.0f;
+	float lastTime=0.0f,currTime=0.0f;
 	
 
 	friend class BehaviourSystem;

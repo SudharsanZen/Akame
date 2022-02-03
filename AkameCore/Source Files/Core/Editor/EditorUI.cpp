@@ -241,7 +241,9 @@ Editor::Editor(Scene &m_Scene):io(initGui()),m_Scene(m_Scene)
 	m_ViewPortWindow[0]->windowName = "Scene##0";
 	m_ViewPortWindow.push_back(std::make_shared<ViewPortWindow>(m_Scene,io));
 	m_ViewPortWindow[1]->windowName = "Scene##1";
-	deltaTime = 0.0f;
+	deltaTime	= 0.0f;
+	lastTime	= 0.0f;
+	currTime	= 0.0f;
 	m_contentBrowser = std::make_shared<ContentBrowser>("Project",AssetManager::assetRootPath);
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 }
