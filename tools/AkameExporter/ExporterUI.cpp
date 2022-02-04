@@ -123,7 +123,6 @@ void Exporter::DrawUI()
 			}
 			ImGui::End();
 		}
-
 	}
 	
 	m_SceneHierarchy->Draw();

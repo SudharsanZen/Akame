@@ -26,14 +26,14 @@ class Transform:public Components
 	glm::mat4 localToWorld;
 	glm::mat4 worldToLocal;
 	glm::mat4 transformMat;
-	/*
+	
 	AK_SERIALIZABLES
 	(
 		AK_ID(localPosition)
 		AK_ID(localScale)
 		AK_ID(localRotation)
-		AK_ID(child)
-	)*/
+		//AK_ID_COMPX_LIST(child)
+	)
 	glm::mat4 formTransformMatrix(glm::vec3 position,Quaternion rotation,glm::vec3 scale)
 	{
 		

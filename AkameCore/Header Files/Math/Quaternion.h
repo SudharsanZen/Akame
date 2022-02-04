@@ -23,9 +23,6 @@ public:
 	Quaternion inverse() { return glm::inverse(quaternion); }
 	glm::vec3 getEulerAngle() { return glm::degrees(glm::eulerAngles(quaternion)); }
 
-
-
-
 	operator std::string()const;
 
 	glm::mat4 getMatrix()
