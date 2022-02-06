@@ -55,7 +55,7 @@ void ReflectionUIHandler::DrawUIField(std::string name, Quaternion* val)
 void ReflectionUIHandler::DrawUIField(std::string name, glm::quat* val)
 {
 	static ImGuiTableFlags flags = ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg;
-	if (ImGui::BeginTable("rotation", 4, flags))
+	if (ImGui::BeginTable("Rotation", 4, flags))
 	{
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0);
