@@ -10,6 +10,22 @@
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
 class Scene;
+struct EntitySignatures
+{
+private:
+	Scene& m_Scene;
+public:
+	EntitySignatures(Scene& scene);
+	ComponentBitPosition m_Transform_pose;
+	ComponentBitPosition m_Descriptor_pose;
+	ComponentBitPosition m_Mesh_pose;
+	ComponentBitPosition m_RigidBody3D_pose;
+	ComponentBitPosition m_SkeletalMesh_pose;
+	ComponentBitPosition m_AnimationController_pose;
+	ComponentBitPosition m_BehaviourComp_pose;
+	ComponentBitPosition m_Lights_pose;
+	ComponentBitPosition m_Material_pose;
+};
 class Editor
 {
 

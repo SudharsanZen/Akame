@@ -3,6 +3,7 @@
 #include<bitset>
 #include<tuple>
 #include<vector>
+
 using ComponentBitPosition = std::uint8_t;
 using ComponentID = const char*;
 using Signature = std::bitset<32>;
@@ -30,6 +31,7 @@ private:
 	friend class Transform;
 	friend class ECS;
 	friend class Editor;
+	friend class ReflectionMeta;
 	friend class InspectorWindow;
 public:
 	

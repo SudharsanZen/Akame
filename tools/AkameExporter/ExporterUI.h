@@ -18,6 +18,24 @@
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
 class Scene;
+class EDFExporter
+{
+	Scene& m_scene;
+	std::shared_ptr<ECS> ecs;
+	EDFExporter(Scene& scene, Entity selected) :m_scene(scene)
+	{
+		ecs=m_scene.ecs;
+	}
+
+public:
+	void ExportEntity(Entity eid)
+	{
+		if (eid == INVALID_ENTITY)
+			throw("Invalid entity!");
+
+	}
+
+};
 class Exporter
 {
 

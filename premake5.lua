@@ -13,6 +13,7 @@ IncludeDir={}
 
 IncludeDir["vendor"]="%{wks.location}/AkameCore/vendor"
 IncludeDir["glad"]="%{IncludeDir.vendor}/glad-akame-"
+IncludeDir["json"]="%{IncludeDir.vendor}/single_include/nlohmann"
 IncludeDir["GLFW"]="%{IncludeDir.vendor}/glfw/include"
 IncludeDir["imGui"]="%{IncludeDir.vendor}/imGui"
 IncludeDir["assimp"]="%{IncludeDir.vendor}/assimp/include"
@@ -64,7 +65,7 @@ LiblinksDebug={
     "PhysXPvdSDK_static_64.lib",
     "PhysXExtensions_static_64.lib"
     }
-AllIncludeDir="%{IncludeDir.GLFW};%{IncludeDir.glad};%{IncludeDir.vendor};%{IncludeDir.imGui};%{IncludeDir.assimp};%{IncludeDir.ECS};%{IncludeDir.AkameCore};%{IncludeDir.pugixml};%{IncludeDir.spdlog};"..IncludeDir["Physx"]
+AllIncludeDir="%{IncludeDir.GLFW};%{IncludeDir.json};%{IncludeDir.glad};%{IncludeDir.vendor};%{IncludeDir.imGui};%{IncludeDir.assimp};%{IncludeDir.ECS};%{IncludeDir.AkameCore};%{IncludeDir.pugixml};%{IncludeDir.spdlog};"..IncludeDir["Physx"]
 
 AllDebugEnvPaths="PATH=$(SolutionDir)/AkameCore/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};$(SolutionDir)/AkameCore/vendor/assimp/bin/%{cfg.buildcfg}"
 

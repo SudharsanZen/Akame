@@ -389,3 +389,17 @@ Editor::~Editor()
 	ImGui::SaveIniSettingsToDisk(iniName.c_str());
 }
 
+EntitySignatures::EntitySignatures(Scene& scene) :m_Scene(scene)
+{
+	auto m_ECS=m_Scene.ecs;
+
+	m_Transform_pose = m_ECS->GetComponentBitPose<Transform>();
+	m_Descriptor_pose = m_ECS->GetComponentBitPose<EntityDescriptor>();
+	m_Mesh_pose = m_ECS->GetComponentBitPose<Mesh>();
+	m_RigidBody3D_pose = m_ECS->GetComponentBitPose<physics::RigidBody3D>();
+	m_SkeletalMesh_pose = m_ECS->GetComponentBitPose<SkeletalMesh>();
+	m_AnimationController_pose = m_ECS->GetComponentBitPose<AnimationController>();
+	m_BehaviourComp_pose = m_ECS->GetComponentBitPose<BehaviourComponent>();
+	m_Lights_pose = m_ECS->GetComponentBitPose<Lights>();
+	m_Material_pose = m_ECS->GetComponentBitPose<Material>();
+}

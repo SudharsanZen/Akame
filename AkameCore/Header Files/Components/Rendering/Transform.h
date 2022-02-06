@@ -6,7 +6,7 @@
 #include"ECS.h"
 #include"Components/Components.h"
 #include"Physics/System/RigidBodySystem.h"
-#include"Core/Reflection/Reflection.h"
+#include"Core/Reflection/ReflectionUIHandler.h"
 class Transform:public Components
 {
 	glm::vec3 pxPoseInit;
@@ -26,14 +26,15 @@ class Transform:public Components
 	glm::mat4 localToWorld;
 	glm::mat4 worldToLocal;
 	glm::mat4 transformMat;
-	
+	/*
 	AK_SERIALIZABLES
 	(
 		AK_ID(localPosition)
 		AK_ID(localScale)
 		AK_ID(localRotation)
-		//AK_ID_COMPX_LIST(child)
-	)
+		AK_ID_COMPX_LIST(child)
+		AK_ID_COMPX(parent)
+	)*/
 	glm::mat4 formTransformMatrix(glm::vec3 position,Quaternion rotation,glm::vec3 scale)
 	{
 		
@@ -68,7 +69,7 @@ class Transform:public Components
 		}
 	}
 	friend class Camera;
-	
+	friend class ReflectionMeta;
 
 	template <typename T>
 	friend struct ComponentAllocator;

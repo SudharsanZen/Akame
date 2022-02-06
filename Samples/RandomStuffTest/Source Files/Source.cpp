@@ -8,7 +8,8 @@
 #include<Rendering/DeferredRendererFragmentBuffer.h>
 #include<Core/Scene.h>
 #include<Core/Debug/Debug.h>
-#include<Core/Reflection/Reflection.h>
+#include<Core/Reflection/ReflectionUIHandler.h>
+#include<Core/Reflection/ReflectionMeta.h>
 #define sizeX 10.0f
 #define sizeY 10.0f
 class rotateBehv :public Behaviour

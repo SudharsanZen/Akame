@@ -21,12 +21,14 @@
     <ClInclude Include="ExporterUI.h" />
     <ClInclude Include="FileOpenSaveDialogBox.h" />
     <ClInclude Include="OS_Interface.h" />
+    <ClInclude Include="RefMEta.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ExporterUI.cpp" />
     <ClCompile Include="FileOpenSaveDialogBox.cpp" />
-    <ClCompile Include="Source.cpp" />
     <ClCompile Include="OS_interface.cpp" />
+    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="RefMEta.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\EngineAssets\AppIcons\Png\icon.ico">

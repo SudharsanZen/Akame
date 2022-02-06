@@ -23,3 +23,6 @@
 [submodule "AkameCore/vendor/glad-akame-"]
 	path = AkameCore/vendor/glad-akame-
 	url = https://github.com/SudharsanZen/glad-akame-.git
+[submodule "AkameCore/vendor/json"]
+	path = AkameCore/vendor/json
+	url = https://github.com/nlohmann/json.git

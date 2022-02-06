@@ -49,6 +49,8 @@ private:
 	friend class Exporter;
 	friend class InspectorWindow;
 	friend class Exporter;
+	friend class EntitySignatures;
+	friend class EDFExporter;
 public:
 	
 	void groupEntWithShader();

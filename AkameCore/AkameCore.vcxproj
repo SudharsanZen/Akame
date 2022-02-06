@@ -56,7 +56,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\glfw\include;vendor\glad-akame-;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor\glfw\include;vendor\single_include\nlohmann;vendor\glad-akame-;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -75,7 +75,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\glfw\include;vendor\glad-akame-;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>vendor\glfw\include;vendor\single_include\nlohmann;vendor\glad-akame-;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -124,7 +124,8 @@
     <ClInclude Include="Header Files\Core\Engine.h" />
     <ClInclude Include="Header Files\Core\Input.h" />
     <ClInclude Include="Header Files\Core\Log\Log.h" />
-    <ClInclude Include="Header Files\Core\Reflection\Reflection.h" />
+    <ClInclude Include="Header Files\Core\Reflection\ReflectionMeta.h" />
+    <ClInclude Include="Header Files\Core\Reflection\ReflectionUIHandler.h" />
     <ClInclude Include="Header Files\Core\Scene.h" />
     <ClInclude Include="Header Files\Core\Window.h" />
     <ClInclude Include="Header Files\Math\EngineMath.h" />
@@ -182,7 +183,8 @@
     <ClCompile Include="Source Files\Core\Editor\SceneHierarchyWindow.cpp" />
     <ClCompile Include="Source Files\Core\Editor\ViewPortWindow.cpp" />
     <ClCompile Include="Source Files\Core\Input.cpp" />
-    <ClCompile Include="Source Files\Core\Reflection\Reflection.cpp" />
+    <ClCompile Include="Source Files\Core\Reflection\ReflectionMeta.cpp" />
+    <ClCompile Include="Source Files\Core\Reflection\ReflectionUIHandler.cpp" />
     <ClCompile Include="Source Files\Core\Scene.cpp" />
     <ClCompile Include="Source Files\Core\Window.cpp" />
     <ClCompile Include="Source Files\Log\Log.cpp" />
