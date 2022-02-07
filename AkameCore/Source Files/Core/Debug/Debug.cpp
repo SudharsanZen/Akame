@@ -132,6 +132,11 @@ void Debug::DrawLine(glm::vec3 start, glm::vec3 end, glm::vec3 color)
 
 }
 
+void Debug::DrawRay(glm::vec3 origin, glm::vec3 direction, float distance, glm::vec3 color)
+{
+	DrawLine(origin, origin + direction * distance, color);
+}
+
 void Debug::DrawCircle(glm::vec3 origin, glm::vec3 up, float radius, glm::vec3 color, int numOfSegments)
 {
 

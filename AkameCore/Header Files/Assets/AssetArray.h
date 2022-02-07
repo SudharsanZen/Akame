@@ -5,7 +5,7 @@
 #include<iostream>
 #include"Core/AkameCore.h"
 template<class T>
-class AKAME_API AssetArray
+class AssetArray
 {
 
 	std::vector<long long> freelist;

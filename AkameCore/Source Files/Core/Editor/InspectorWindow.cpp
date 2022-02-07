@@ -18,6 +18,7 @@
 #include"Components/Animation/SkeletalMesh.h"
 #include"Components/Animation/AnimationController.h"
 #include"Core/Debug/Debug.h"
+#include"ECS.h"
 
 glm::vec3 Mat3ToEuler(glm::mat3 rot)
 {

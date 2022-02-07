@@ -1,29 +1,29 @@
 #pragma once
 #include"Components/Rendering/Mesh.h"
 
-class AKAME_API FrameBuffer
+class FrameBuffer
 {
 private:
 	unsigned int framebuffer;
 	unsigned int rbo;
 	unsigned int texColorBuffer;
 	int height, width;
-	void generateFrameBuffer();
+	AKAME_API void generateFrameBuffer();
 	friend class ViewPortWindow;
 public:
 	Mesh quadMesh;
-	FrameBuffer();
-	void updateTextureSize(int height,int width);
-	glm::vec2 getFrameSize() { return glm::vec2(width, height); }
+	AKAME_API FrameBuffer();
+	AKAME_API void updateTextureSize(int height,int width);
+	AKAME_API glm::vec2 getFrameSize();
 
-	void Bind();
+	AKAME_API void Bind();
 
-	void unBind();
+	AKAME_API void unBind();
 
-	void RenderToQuad();
+	AKAME_API void RenderToQuad();
 
-	unsigned int getColorBuffer() { return texColorBuffer; }
-	~FrameBuffer();
+	AKAME_API unsigned int getColorBuffer();
+	AKAME_API ~FrameBuffer();
 
 
 };

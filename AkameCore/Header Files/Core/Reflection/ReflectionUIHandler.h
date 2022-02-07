@@ -21,18 +21,18 @@ namespace ID_TYPE
 	class SIMPLE_LIST {};
 	class COMPLEX_LIST {};
 };
-class AKAME_API ReflectionUIHandler
+class ReflectionUIHandler
 {
-	void DrawTitle(std::string name);
-	void DrawUIField(std::string name, int *val);
-	void DrawUIField(std::string name, float *val);
-	void DrawUIField(std::string name, double *val);
-	void DrawUIField(std::string name, glm::vec3* val);
-	void DrawUIField(std::string name, glm::vec4* val);
-	void DrawUIField(std::string name, bool *val);
-	void DrawUIField(std::string name, Quaternion *val);
-	void DrawUIField(std::string name, glm::quat *val);
-	void DrawUIField(std::string name, std::string *val);
+	AKAME_API void DrawTitle(std::string name);
+	AKAME_API void DrawUIField(std::string name, int *val);
+	AKAME_API void DrawUIField(std::string name, float *val);
+	AKAME_API void DrawUIField(std::string name, double *val);
+	AKAME_API void DrawUIField(std::string name, glm::vec3* val);
+	AKAME_API void DrawUIField(std::string name, glm::vec4* val);
+	AKAME_API void DrawUIField(std::string name, bool *val);
+	AKAME_API void DrawUIField(std::string name, Quaternion *val);
+	AKAME_API void DrawUIField(std::string name, glm::quat *val);
+	AKAME_API void DrawUIField(std::string name, std::string *val);
 public:
 	
 	template<typename T,typename _dummyType>

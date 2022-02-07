@@ -3,7 +3,7 @@
 #include"Math/EngineMath.h"
 #include"Core/AkameCore.h"
 typedef unsigned char GLboolean;
-class AKAME_API Camera
+class Camera
 {
 	
 	GLboolean ortho;	//set true if camera is orthographic, set false for perspective
@@ -16,34 +16,34 @@ class AKAME_API Camera
 
 public:
 	Transform transform;//camera transform
-	Camera();
-	Camera(float fovy,float aspectRatio,float nearz,float farz,GLboolean ortho=false);
+	AKAME_API Camera();
+	AKAME_API Camera(float fovy,float aspectRatio,float nearz,float farz,GLboolean ortho=false);
 
 
-	glm::mat4 lookAt(Transform& transform, glm::vec3& pos);
+	AKAME_API glm::mat4 lookAt(Transform& transform, glm::vec3& pos);
 	
-	void setCameraPosition(float x,float y,float z);
-	void setCameraPosition(glm::vec3 pos);
-	void setCameraRotation(glm::vec3 rot);
-	void setCameraRotation(glm::quat rot) { transform.SetGlobalRotation(rot); }
-	glm::vec3 getCameraPosition() { return transform.GetGlobalPosition(); };
+	AKAME_API void setCameraPosition(float x,float y,float z);
+	AKAME_API void setCameraPosition(glm::vec3 pos);
+	AKAME_API void setCameraRotation(glm::vec3 rot);
+	AKAME_API void setCameraRotation(glm::quat rot) { transform.SetGlobalRotation(rot); }
+	AKAME_API glm::vec3 getCameraPosition();;
 
 	//sets Field of View for the camera. takes input in degrees.
-	inline void setFieldOfView(float degrees) { this->fovy = glm::radians(degrees); };
+	AKAME_API void setFieldOfView(float degrees);;
 	//sets Aspect ration of the window to render in proper proportions.
-	inline void setAspectRation(float aspecR) { this->aspectRatio = aspecR; };
+	AKAME_API void setAspectRation(float aspecR);;
 
-	glm::mat4 getViewMatrix();
-	glm::mat4 getProjectionMatrix();
-	float getNear();
-	float getFar();
-	void setNear(float n);
-	void setFar(float f);
-	float getFov();
-	float getAspectRatio() { return aspectRatio; }
+	AKAME_API glm::mat4 getViewMatrix();
+	AKAME_API glm::mat4 getProjectionMatrix();
+	AKAME_API float getNear();
+	AKAME_API float getFar();
+	AKAME_API void setNear(float n);
+	AKAME_API void setFar(float f);
+	AKAME_API float getFov();
+	AKAME_API float getAspectRatio();
 
 
 };
 
 //A default implementation of a flycam.
-void flyCam(Camera& cam,float deltaTime);
+AKAME_API void flyCam(Camera& cam,float deltaTime);

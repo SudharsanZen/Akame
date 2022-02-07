@@ -80,6 +80,14 @@ void DeferredRendererFragmentBuffer::GenerateFrameBuffer()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+unsigned int DeferredRendererFragmentBuffer::getAlbedoBuff() { return AlbedoRough; }
+
+unsigned int DeferredRendererFragmentBuffer::getDepthBuff() { return depthBuffer; }
+
+unsigned int DeferredRendererFragmentBuffer::getNormalBuff() { return this->Normal; }
+
+unsigned int DeferredRendererFragmentBuffer::getPositionBuff() { return Position; }
+
 void DeferredRendererFragmentBuffer::updateBufferSize(int height,int width)
 {
 	glBindTexture(GL_TEXTURE_2D, AlbedoRough);

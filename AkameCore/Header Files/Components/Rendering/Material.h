@@ -5,7 +5,7 @@
 #include"Assets/AssetManager.h"
 #include"Components/Components.h"
 #include<unordered_map>
-class AKAME_API Material:public Components
+class Material:public Components
 {
 private:
 	unsigned int transformLocation;
@@ -36,17 +36,17 @@ private:
 	friend class SkeletalMeshRenderingSystem;
 	friend class ECS;
 	friend class ComponentArray<Material>;
-	void setUniformsOnce(std::shared_ptr<Shader> shader, glm::vec3& viewPose);
-	void setUniformOnceSkeletalMesh(std::shared_ptr<Shader> shader,Camera cam);
-	void setUniformEveryObject(int index,std::shared_ptr<Shader> shader);
+	AKAME_API void setUniformsOnce(std::shared_ptr<Shader> shader, glm::vec3& viewPose);
+	AKAME_API void setUniformOnceSkeletalMesh(std::shared_ptr<Shader> shader,Camera cam);
+	AKAME_API void setUniformEveryObject(int index,std::shared_ptr<Shader> shader);
 public:
-	Material() :Material("DEFAULT") {}
-	Material(std::string shaderName);
+	AKAME_API Material();
+	AKAME_API Material(std::string shaderName);
 	//set float uniforms and it's values
-	void setValue(std::string varName, float value);
+	AKAME_API void setValue(std::string varName, float value);
 	//set the texture uniform and it's value
-	void setTexture2D(std::string uniformName, std::string location);
-	void isEmissive(bool em);
+	AKAME_API void setTexture2D(std::string uniformName, std::string location);
+	AKAME_API void isEmissive(bool em);
 	
 	Material& operator =(const Material& mat)
 	{
@@ -63,25 +63,11 @@ public:
 		return *this;
 	}
 	
-	/*Material(const Material& mat)
-	{
-		*mat.refCount += 1;
-		this->refCount = mat.refCount;
-		this->emissive = mat.emissive;
-		this->diffColor = mat.diffColor;
-		this->uniformToTexDetails = mat.uniformToTexDetails;
-		this->uniformTofloat = mat.uniformTofloat;
-		this->ambientIntensity = mat.ambientIntensity;
-		this->SHADER_NAME = mat.SHADER_NAME;
-	}*/
-
 
 	
-	
-	
 
-	void reset();
+	AKAME_API void reset();
 
-	~Material();
+	AKAME_API ~Material();
 };
 

@@ -24,6 +24,11 @@ Mesh::~Mesh()
 	//clearMesh();
 }
 
+unsigned int Mesh::getVAO() 
+{ 
+	return VAO; 
+}
+
 
 
 void Mesh::renderMesh() const

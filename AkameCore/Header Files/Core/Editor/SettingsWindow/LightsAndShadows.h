@@ -5,13 +5,13 @@
 #include"Core\Scene.h"
 #include"Core\Window.h"
 
-class AKAME_API LightAndShadowConfig
+class LightAndShadowConfig
 {
 private:
 	Scene& m_scene;
 	std::vector<FrameBuffer> fbo;
 public:
 
-	LightAndShadowConfig(Scene& scene);
-	void Draw();
+	AKAME_API LightAndShadowConfig(Scene& scene);
+	AKAME_API void Draw();
 };

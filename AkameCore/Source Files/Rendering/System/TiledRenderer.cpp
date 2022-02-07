@@ -112,6 +112,8 @@ void TiledRenderer::ParseUniforms()
     free(name);
 }
 
+unsigned int TiledRenderer::GetUniformLocation(std::string varName) { return uniformNameToLoc[varName]; }
+
 
 void TiledRenderer::setUpShader(Camera& cam, std::shared_ptr<LightSystem> lsys)
 {

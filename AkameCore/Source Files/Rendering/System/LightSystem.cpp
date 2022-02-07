@@ -6,6 +6,15 @@
 float LightSystem::pssmXMultiplier = 1.45f;
 float LightSystem::pssmYMultiplier = 1.45f;
 bool LightSystem::needsUpdate=true;
+void LightSystem::updateLightList()
+{
+	lightsList.clear();
+	for (auto const& ent : entities)
+	{
+		Lights& l = ecs.lock()->GetComponent<Lights>(ent);
+		lightsList[l.getType()].push_back(ent);
+	}
+}
 void LightSystem::updatePointLightBuffer()
 {
 	ptVector.clear();
@@ -121,6 +130,32 @@ LightSystem::LightSystem() :dir_sMap(FRUSTUM_SPLIT_NUM,DIR_MAP_SIZE)
 
 }
 
+AKAME_API void LightSystem::Update()
+{
+	if (needsUpdate)
+	{
+		updateLightList();
+		updatePointLightBuffer();
+		needsUpdate = false;
+	}
+}
+
+void LightSystem::OnAddEntity(Entity entity)
+{
+
+	updateLightList();
+	updatePointLightBuffer();
+
+
+
+}
+
+void LightSystem::AfterDestroyEntity()
+{
+	updateLightList();
+	updatePointLightBuffer();
+}
+
 void LightSystem::BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader,Camera &cam)
 {
 
@@ -159,6 +194,13 @@ void LightSystem::BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader,C
 		
 	}
 
+}
+
+//get the directional light's view projection matrix
+
+std::vector<glm::mat4> LightSystem::GetDirectionalLightSpaceMat()
+{
+	return dirLightSpace;
 }
 void LightSystem::unBindDirectionalShadowMap(unsigned int frameBuffer)
 {

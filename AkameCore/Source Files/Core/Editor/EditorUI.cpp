@@ -18,6 +18,7 @@
 #include"Assets/Asset.h"
 #include<imGui\backends\imgui_impl_glfw.h>
 #include<imGui\backends\imgui_impl_opengl3.h>
+#include"ECS.h"
 
 void Editor::initImGui()
 {

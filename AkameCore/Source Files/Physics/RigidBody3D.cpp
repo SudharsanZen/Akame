@@ -3,6 +3,11 @@
 #include"Physics/Physics.h"
 #include"ECS.h"
 
+AKAME_API void physics::RigidBody3D::ASSERT_RB() 
+{ 
+	assert(rigidbody && "rigidbody is not initialized, trying to access nullptr!"); 
+}
+
 void physics::RigidBody3D::detachAllAttachedShapes()
 {
 
@@ -21,6 +26,18 @@ void physics::RigidBody3D::detachAllAttachedShapes()
 
 	physx::platformAlignedFree(shapes);
 
+}
+
+physics::RigidBody3D::RigidBody3D()
+{
+	eid = Entity(-1, -1);
+	rBodyType = RigidBodyType::STATIC;
+	rigidbody = NULL;
+}
+
+physics::RigidBody3D::RigidBody3D(RigidBodyType rbType, ColliderShape shape)
+{
+	setRigidBodyType(rbType, shape);
 }
 
 void physics::RigidBody3D::setColliderShape(ColliderShape shape)
@@ -101,4 +118,9 @@ void physics::RigidBody3D::ReleaseRbody()
 		rigidbody->release();
 		rigidbody = NULL;
 	}
+}
+
+void physics::RigidBody3D::reset()
+{
+	ReleaseRbody();
 }

@@ -2,7 +2,7 @@
 #include<string>
 #include"Core/AkameCore.h"
 
-class AKAME_API Texture
+class Texture
 {
 private:
 	
@@ -23,10 +23,10 @@ private:
 	friend class FileOpenSaveDialogBox;
 	
 public:
-	void reset();
-	void loadImage();
-	void use(const unsigned int unit);
-	Texture() { imageDir = ""; texFormat = -1; }
+	AKAME_API void reset();
+	AKAME_API void loadImage();
+	AKAME_API void use(const unsigned int unit);
+	AKAME_API Texture();
 
 	Texture& operator =(Texture&& obj) noexcept
 	{
@@ -42,17 +42,17 @@ public:
 		return *this;
 	}
 
-	Texture& operator =(const Texture& obj)=default;
+	AKAME_API Texture& operator =(const Texture& obj)=default;
 
 
 	
 	
-	Texture(std::string dir);
+	AKAME_API Texture(std::string dir);
 	
 	
 	
-	void setDir(std::string dir, unsigned int imageFormat) { imageDir = dir; texFormat = imageFormat; }
+	AKAME_API void setDir(std::string dir, unsigned int imageFormat);
 
-	~Texture();
+	AKAME_API ~Texture();
 };
 

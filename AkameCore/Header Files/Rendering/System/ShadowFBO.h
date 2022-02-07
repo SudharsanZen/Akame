@@ -2,7 +2,7 @@
 #include"Core/AkameCore.h"
 
 
-class AKAME_API ShadowFBO
+class ShadowFBO
 {
 private:
 	unsigned int frameBuffer;
@@ -10,22 +10,15 @@ private:
 	int height, width;
 public:
 
-	ShadowFBO(int height, int width)
-	{
-		frameBuffer = 0;
-		outDepth = 0;
-		this->height = height;
-		this->width=width;
-		initFBO(height,width);
-	}
+	AKAME_API ShadowFBO(int height, int width);
 
-	void initFBO(int height, int width);
+	AKAME_API void initFBO(int height, int width);
 
-	void bindShadowBuffer();
-	void unBindShadowBuffer();
-	unsigned int getMapBuff() { return outDepth; }
-	void useDepthTexture(unsigned int textureUnit);
-	int getWidth() { return width; }
-	int getHeight() { return height; }
-	~ShadowFBO();
+	AKAME_API void bindShadowBuffer();
+	AKAME_API void unBindShadowBuffer();
+	AKAME_API unsigned int getMapBuff();
+	AKAME_API void useDepthTexture(unsigned int textureUnit);
+	AKAME_API int getWidth() { return width; }
+	AKAME_API int getHeight() { return height; }
+	AKAME_API ~ShadowFBO();
 };

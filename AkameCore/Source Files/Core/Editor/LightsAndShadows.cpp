@@ -16,7 +16,7 @@
 
 #include<imGui\backends\imgui_impl_glfw.h>
 #include<imGui\backends\imgui_impl_opengl3.h>
-
+#include"ECS.h"
 LightAndShadowConfig::LightAndShadowConfig(Scene& scene) :m_scene(scene)
 {
 	fbo = std::vector<FrameBuffer>(m_scene.lightSys->dirLightSpace.size());

@@ -40,6 +40,11 @@ PSSMFBO::PSSMFBO(int numOfFrustum, int res)
 	initialize();
 }
 
+float PSSMFBO::GetResolution() 
+{ 
+	return resolution;
+}
+
 void PSSMFBO::bind()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);

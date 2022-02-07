@@ -3,8 +3,9 @@
 #include<string>
 #include<memory>
 #include"AkameCore.h"
+
 typedef struct GLFWwindow GLFWwindow;
-class AKAME_API Window
+class Window
 {
 protected:
 	
@@ -23,21 +24,21 @@ private:
 
 	
 public:
-	Window(int height,int width,std::string,Window* shr=nullptr);
-	~Window();
+	AKAME_API Window(int height,int width,std::string,Window* shr=nullptr);
+	AKAME_API ~Window();
 	friend class Editor;
 	friend class Input;
 	friend class Exporter;
 
-	int getBufferHeight();
-	int getBufferWidth();
+	AKAME_API int getBufferHeight();
+	AKAME_API int getBufferWidth();
 
-	bool Window::closeWindow();
-	void swapBuffers();
+	AKAME_API bool closeWindow();
+	AKAME_API void swapBuffers();
 
-	bool initialize();
-	void setBufferSizeCallBackFunction(void (*function)(GLFWwindow*, int, int) );
-	void processInput();
+	AKAME_API bool initialize();
+	AKAME_API void setBufferSizeCallBackFunction(void (*function)(GLFWwindow*, int, int) );
+	AKAME_API void processInput();
 	
 };
 

@@ -12,7 +12,7 @@ class Scene;
  * class is used for importing models from files into the scene*
  * constructor takes one argument of the current scene		   *
  ***************************************************************/
-class AKAME_API Model
+class Model
 {
 private:
 	Scene&							mCurrScene;
@@ -28,20 +28,20 @@ private:
 	std::vector<Entity>				mSkMeshList;	//list of skeletal mesh entities if exists
 
 	
-	void	processNode(Entity parent, aiNode* node);			//process each node frommAiScene and create an entity for that node in mScene
-	Entity	processSkeletalMesh(Entity parent, aiMesh* mesh);
-	Entity	processMesh(Entity parent, aiMesh* mesh);
+	AKAME_API void	processNode(Entity parent, aiNode* node);			//process each node frommAiScene and create an entity for that node in mScene
+	AKAME_API Entity	processSkeletalMesh(Entity parent, aiMesh* mesh);
+	AKAME_API Entity	processMesh(Entity parent, aiMesh* mesh);
 
 	//this code should be removed (rendered useless)
-	void	UpdateHierarchy(aiNode *rootNode);
+	AKAME_API void	UpdateHierarchy(aiNode *rootNode);
 
 public:
 
 	//requires current scene as parameter
-	Model(Scene& s);
+	AKAME_API Model(Scene& s);
 
 	//loads model from the given "modelPath"
-	Entity	LoadModelToScene(std::string modelPath);
+	AKAME_API Entity	LoadModelToScene(std::string modelPath);
 
 };
 

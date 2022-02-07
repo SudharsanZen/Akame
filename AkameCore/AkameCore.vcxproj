@@ -57,7 +57,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;AK_DLL;AK_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\glfw\include;vendor\single_include\nlohmann;vendor\glad-akame-;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -83,7 +83,6 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -160,6 +159,7 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Header Files\Physics\ColliderShape.cpp" />
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkeletalMeshRenderingSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkinnedRendererPipeline.cpp" />
@@ -202,6 +202,7 @@
     <ClCompile Include="Source Files\Rendering\FrameBuffer.cpp" />
     <ClCompile Include="Source Files\Rendering\MeshInstance.cpp" />
     <ClCompile Include="Source Files\Rendering\Model.cpp" />
+    <ClCompile Include="Source Files\Rendering\SceneTransformManager.cpp" />
     <ClCompile Include="Source Files\Rendering\Shader.cpp" />
     <ClCompile Include="Source Files\Rendering\System\BuiltInShaderPipelines\DefaultRenderingPipeline.cpp" />
     <ClCompile Include="Source Files\Rendering\System\BuiltInShaderPipelines\DeferredPipeline.cpp" />

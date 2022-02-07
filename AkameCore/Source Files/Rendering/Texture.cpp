@@ -104,6 +104,10 @@ void Texture::use(unsigned int unit)
 		std::cout << "can't use texture. textureID not initialized!"<<std::endl;
 }
 
+Texture::Texture() { imageDir = ""; texFormat = -1; }
+
+
+void Texture::setDir(std::string dir, unsigned int imageFormat) { imageDir = dir; texFormat = imageFormat; }
 
 Texture::~Texture()
 {

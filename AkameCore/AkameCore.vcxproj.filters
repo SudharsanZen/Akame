@@ -186,6 +186,9 @@
     <ClInclude Include="Header Files\Components\Rendering\Transform.h">
       <Filter>Header Files\Components\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Core\AkameCore.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Core\Debug\Debug.h">
       <Filter>Header Files\Core\Debug</Filter>
     </ClInclude>
@@ -318,7 +321,6 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Core\AkameCore.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp">
@@ -495,5 +497,7 @@
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Header Files\Physics\ColliderShape.cpp" />
+    <ClCompile Include="Source Files\Rendering\SceneTransformManager.cpp" />
   </ItemGroup>
 </Project>

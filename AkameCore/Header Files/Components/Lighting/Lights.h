@@ -6,7 +6,7 @@
 enum class LIGHT {DIRECTIONAL=0,POINT=1,SPOT=2};
 class LightSystem;
 
-class AKAME_API Lights:public Components
+class Lights:public Components
 {
 private:
 	LIGHT type;
@@ -26,31 +26,28 @@ private:
 
 	float pointLightRadius;
 	
-	void notifyLightSystemToUpdate();
+	AKAME_API void notifyLightSystemToUpdate();
 public:
-	float calPointLightRadius(glm::vec3 C, float intensity);
-	float getPointLightRadius() { return calPointLightRadius(pointLightConstants,intensity); }
-	Lights();
-	Lights(LIGHT ty);
+	AKAME_API float calPointLightRadius(glm::vec3 C, float intensity);
+	AKAME_API float getPointLightRadius();
+	AKAME_API Lights();
+	AKAME_API Lights(LIGHT ty);
 	
-	void setColor(glm::vec3 rgb);
-	void setColor(float r,float g,float b);
+	AKAME_API void setColor(glm::vec3 rgb);
+	AKAME_API void setColor(float r,float g,float b);
 	
-	void setDirection(float x,float y,float z);
-	void setDirection(glm::vec3 angles);
+	AKAME_API void setDirection(float x,float y,float z);
+	AKAME_API void setDirection(glm::vec3 angles);
 
-	void ambientLigting(glm::vec3 rgb);
-	void ambientLigting(float r,float g,float b);
+	AKAME_API void ambientLigting(glm::vec3 rgb);
+	AKAME_API void ambientLigting(float r,float g,float b);
 
-	void setIntensity(float intenseity);
-	void setPointLightConst(float Kc,float Kl,float Kq);
-	void setPointLightConst(glm::vec3 constants);
-	LIGHT getType();
-	void setType(LIGHT ty) {
-		type = ty;
-		notifyLightSystemToUpdate();
-	};
-	void reset() {};
-	glm::vec3 getDirection() { return glm::normalize(Quaternion(lightDirection.x,lightDirection.y,lightDirection.z)*worldForward); }
+	AKAME_API void setIntensity(float intenseity);
+	AKAME_API void setPointLightConst(float Kc,float Kl,float Kq);
+	AKAME_API void setPointLightConst(glm::vec3 constants);
+	AKAME_API LIGHT getType();
+	AKAME_API void setType(LIGHT ty);;
+	AKAME_API void reset();;
+	AKAME_API glm::vec3 getDirection();
 };
 

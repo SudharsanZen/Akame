@@ -3,6 +3,14 @@
 #include"Rendering/System/ShadowFBO.h"
 #include"Core/Log/Log.h"
 #include<iostream>
+ShadowFBO::ShadowFBO(int height, int width)
+{
+	frameBuffer = 0;
+	outDepth = 0;
+	this->height = height;
+	this->width = width;
+	initFBO(height, width);
+}
 void ShadowFBO::initFBO(int height, int width)
 {
 
@@ -40,6 +48,8 @@ void ShadowFBO::unBindShadowBuffer()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER,0);
 }
+
+unsigned int ShadowFBO::getMapBuff() { return outDepth; }
 
 void ShadowFBO::useDepthTexture(unsigned int textureUnit)
 {

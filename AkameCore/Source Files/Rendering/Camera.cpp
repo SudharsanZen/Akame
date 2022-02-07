@@ -63,6 +63,8 @@ float Camera::getFov()
 	return fovy;
 }
 
+float Camera::getAspectRatio() { return aspectRatio; }
+
 
 
 glm::mat4 Camera::lookAt(Transform& transform, glm::vec3& pos)
@@ -102,6 +104,16 @@ void Camera::setCameraRotation(glm::vec3 rot)
 {
 	transform.SetGlobalRotation(Quaternion(rot.x,rot.y,rot.z));
 }
+
+glm::vec3 Camera::getCameraPosition() { return transform.GetGlobalPosition(); }
+
+//sets Field of View for the camera. takes input in degrees.
+
+void Camera::setFieldOfView(float degrees) { this->fovy = glm::radians(degrees); }
+
+//sets Aspect ration of the window to render in proper proportions.
+
+void Camera::setAspectRation(float aspecR) { this->aspectRatio = aspecR; }
 
 
 

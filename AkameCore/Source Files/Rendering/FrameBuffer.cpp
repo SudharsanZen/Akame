@@ -57,6 +57,7 @@ void FrameBuffer::updateTextureSize(int height,int width)
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
+glm::vec2 FrameBuffer::getFrameSize() { return glm::vec2(width, height); }
 FrameBuffer::FrameBuffer()
 {
 	height = 800;
@@ -92,6 +93,8 @@ void FrameBuffer::RenderToQuad()
 	quadMesh.renderMesh();
 
 }
+
+unsigned int FrameBuffer::getColorBuffer() { return texColorBuffer; }
 
 FrameBuffer::~FrameBuffer()
 {

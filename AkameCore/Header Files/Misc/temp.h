@@ -2,7 +2,7 @@
 #include"Core/Engine.h"
 #include<vector>
 #include"Core/AkameCore.h"
-class AKAME_API lines
+class lines
 {
 	unsigned int VBO, VAO;
 public:
@@ -13,12 +13,12 @@ public:
 		glm::vec3 st;
 		glm::vec3 end;
 	}vData;
-	lines(glm::vec3 st, glm::vec3 end, glm::vec3 color);
+	AKAME_API lines(glm::vec3 st, glm::vec3 end, glm::vec3 color);
 
-	void renderMesh();
+	AKAME_API void renderMesh();
 
 
-	void clearMesh();
+	AKAME_API void clearMesh();
 
 };
 

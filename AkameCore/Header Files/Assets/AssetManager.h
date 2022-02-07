@@ -5,7 +5,7 @@
 #include"Rendering/Shader.h"
 #include"Assets/ShaderManager.h"
 
-class AKAME_API AssetManager
+class AssetManager
 {
 private:
 	
@@ -15,25 +15,22 @@ private:
 	static ShaderManager shaderManager;//Manages shaders in the ASSETS_ROOT_DIR+"Shaders/" directory
 	
 public:
-	static std::string assetRootPath;
-	AssetManager();
+	AKAME_API static std::string assetRootPath;
+	AKAME_API AssetManager();
 	//call this once to initialize assets manager
-	static void init();
-	static long long createTexture(std::string location);
-	static std::shared_ptr<Texture> GetTexture(long long index);
-	static void notUsingTex(std::string location);
+	AKAME_API static void init();
+	AKAME_API static long long createTexture(std::string location);
+	AKAME_API static std::shared_ptr<Texture> GetTexture(long long index);
+	AKAME_API static void notUsingTex(std::string location);
 
-	std::shared_ptr<Shader> getShader(std::string shaderName);
+	AKAME_API std::shared_ptr<Shader> getShader(std::string shaderName);
 	
-	static bool isInitialized() { return initialized; }
-	static void setAssetRoot(std::string root) { assetRootPath = root; }
-	static std::string getAssetRoot() { return assetRootPath; }
-	static void reloadAllShaders() { shaderManager.loadAllShaders(); }
+	AKAME_API static bool isInitialized();
+	AKAME_API static void setAssetRoot(std::string root);
+	AKAME_API static std::string getAssetRoot();
+	AKAME_API static void reloadAllShaders();
 
-	static void reset() 
-	{
-
-	}
+	AKAME_API static void reset();
 
 	
 };

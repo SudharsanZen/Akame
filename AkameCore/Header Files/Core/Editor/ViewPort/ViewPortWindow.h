@@ -6,7 +6,7 @@
 #include"Assets/ShaderManager.h"
 #include"Components/Physics/RigidBody3D.h"
 struct ImGuiIO;
-class AKAME_API ViewPortWindow
+class ViewPortWindow
 {
 private:
 	Camera cam;
@@ -22,15 +22,9 @@ private:
 	friend class Editor;
 public:
 	std::string windowName;
-	ViewPortWindow(Scene& scene,ImGuiIO& io,bool closable=true) :m_scene(scene), cam(60, 1, 0.1f, 1000),m_io(io)
-	{
-		this->closable = closable;
-		cam.transform.SetGlobalPosition(glm::vec3(5, 5, 5));
-		//cam.transform.SetLocalRotation(Quaternion::rotationAroundAxisVector(-135, worldUp));
-		//cam.transform.SetLocalRotation(Quaternion::rotationAroundAxisVector(-45, cam.transform.right()) * cam.transform.GetGlobalRotation());
-	}
+	AKAME_API ViewPortWindow(Scene& scene, ImGuiIO& io, bool closable = true);
 
-	void Draw(float deltaTime);
-	void setFrameBufferHeight(float height,float width);
-	void flyCamScene(Camera& cam, float deltaTime,bool capture);
+	AKAME_API void Draw(float deltaTime);
+	AKAME_API void setFrameBufferHeight(float height,float width);
+	AKAME_API void flyCamScene(Camera& cam, float deltaTime,bool capture);
 };

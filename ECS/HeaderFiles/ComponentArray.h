@@ -13,6 +13,7 @@ class ComponentArrayBase
 		virtual ~ComponentArrayBase() = default;
 		virtual void EntityDestroyed(Entity entity)=0;
 };
+
 template<class T>
 struct ComponentAllocator
 {

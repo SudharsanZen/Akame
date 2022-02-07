@@ -1,7 +1,8 @@
 #pragma once
-#include"ECS.h"
+
 #include<memory>
 #include"Core/AkameCore.h"
+#include"System.h"
 class Components
 {
 	

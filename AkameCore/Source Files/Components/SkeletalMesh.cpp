@@ -10,6 +10,8 @@ bool SkeletalMesh::needsUpdate = false;
 unsigned int SkeletalMesh::VAO = GL_INVALID_VALUE, SkeletalMesh::VBO = GL_INVALID_VALUE, SkeletalMesh::IBO = GL_INVALID_VALUE;
 
 
+AKAME_API Entity SkeletalMesh::GetAnimControllerID() { return animController; }
+
 SkeletalMesh::SkeletalMesh()
 {
 	//initialize all values to zero or null
@@ -24,6 +26,8 @@ SkeletalMesh::~SkeletalMesh()
 {
 	//clearMesh();
 }
+
+unsigned int SkeletalMesh::getVAO() { return VAO; }
 
 
 void SkeletalMesh::renderMesh() const

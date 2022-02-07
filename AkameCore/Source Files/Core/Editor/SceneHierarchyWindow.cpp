@@ -15,7 +15,7 @@
 #include"Rendering/System/DeferredPipeline.h"
 #include"Rendering/System/PSSMFBO.h"
 #include"Core/Debug/Debug.h"
-
+#include"ECS.h"
 
 void SceneHierarchyWindow::Draw()
 {
@@ -196,4 +196,8 @@ void SceneHierarchyWindow::DrawNode(Transform const& t, EntityDescriptor& edt, I
             selected.insert(edt.eid);
         }
     }
+}
+
+SceneHierarchyWindow::SceneHierarchyWindow(Scene& s) :m_Scene(s)
+{
 }

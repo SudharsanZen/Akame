@@ -2,7 +2,7 @@
 #include"ECS.h"
 
 
-class AKAME_API SceneTransformManager :public System
+class SceneTransformManager :public System
 {
 	std::weak_ptr<ECS> ecs;
 
@@ -12,50 +12,11 @@ class AKAME_API SceneTransformManager :public System
 	friend class Editor;
 	friend class Scene;
 public:
-	SceneTransformManager()
-	{
-		updateTransformList = std::make_shared<std::set<e_index>>();
-	}
+	AKAME_API SceneTransformManager();
 	
 	//update all the transforms and their child that needs an update
-	void UpdateTransforms()
-	{
-		
-		std::shared_ptr<ECS> e = ecs.lock();
-		e_index transformIndex = e->componentManager.compIDtoBitPose[typeid(Transform).name()];
-		for (auto ent : *updateTransformList)
-		{
-			Transform& t = e->GetComponent<Transform>(ent,transformIndex);
-			//if (t.parent == Entity(-1,-1))
-			{
-				t.updateChildBaseTransformDetails();
-			}
-		}
-		updateTransformList->clear();
-	}
-
-
-
-	void OnAddEntity(Entity entity) override
-	{
-
-		const ComponentBitPosition TransformBitPose = ecs.lock()->GetComponentBitPose<Transform>();
-		e_index transformComponentIndex = (*entity.componentIndex)[TransformBitPose];
-		updateTransformList->insert(transformComponentIndex);
-		Transform& t = ecs.lock()->GetComponent<Transform>(transformComponentIndex,TransformBitPose);
-		
-		/*the pointer for the updateTransformList 
-		*is shared with all the entities that has a transform component
-		* this enables the component's to add itself to the "to be updated list"
-		*/
-		t.transformUpdateList = updateTransformList;
-	}
-
-	void OnDestroyEntity(Entity entity)override
-	{
-		Transform& t = ecs.lock()->GetComponent<Transform>(entity);
-		t.removeParent();
-		t.destroyChildren();
-	}
+	AKAME_API void UpdateTransforms();
+	AKAME_API void OnAddEntity(Entity entity) override;
+	AKAME_API void OnDestroyEntity(Entity entity)override;
 
 };

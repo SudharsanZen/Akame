@@ -4,7 +4,7 @@
 #include"Scripting/BehaviourSystem.h"
 #include"Core/AkameCore.h"
 static float behvCount=0;
-class AKAME_API BehaviourComponent:public Components
+class BehaviourComponent:public Components
 {
 private:
 	

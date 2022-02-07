@@ -120,3 +120,9 @@ std::shared_ptr<Shader> ShaderManager::GetShader(std::string shaderName)
 		return shaderList["ERROR"];
 	}
 }
+
+void ShaderManager::releaseAllShaders()
+{
+	shaderList.clear();
+	shaderQueues.clear();
+}

@@ -98,6 +98,8 @@ namespace physics
 
 	}
 
+	inline Physics::~Physics() { cleanPhysics(); }
+
 	bool Physics::isAdvancing(physx::PxReal dt)
 	{
 		
@@ -118,6 +120,16 @@ namespace physics
 
 		mScene->simulate(mStepSize);
 		return true;
+	}
+
+	inline Physics::Physics() :Physics(1.0f / 60.0f) 
+	{
+
+	}
+
+	inline Physics::Physics(float stepSize)
+	{ 
+		mStepSize = stepSize; 
 	}
 
 	//releases all the pointers that has been allocated

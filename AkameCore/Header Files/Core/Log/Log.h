@@ -8,16 +8,16 @@
 #include"Core/AkameCore.h"
 
 
-class AKAME_API Log
+class Log
 {
 public:
-	static void Init();
+	AKAME_API static void Init();
 
-	static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
-	static std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
+	AKAME_API static std::shared_ptr<spdlog::logger>& GetCoreLogger();
+	AKAME_API static std::shared_ptr<spdlog::logger>& GetClientLogger();
 private:
-	static std::shared_ptr<spdlog::logger> s_CoreLogger;
-	static std::shared_ptr<spdlog::logger> s_ClientLogger;
+	AKAME_API static std::shared_ptr<spdlog::logger> s_CoreLogger;
+	AKAME_API static std::shared_ptr<spdlog::logger> s_ClientLogger;
 };
 
 

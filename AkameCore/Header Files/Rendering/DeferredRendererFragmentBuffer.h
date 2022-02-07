@@ -8,7 +8,7 @@ namespace BasicShapes
 	extern AKAME_API std::vector<unsigned int> quadIndices;
 }
 
-class AKAME_API DeferredRendererFragmentBuffer
+class DeferredRendererFragmentBuffer
 {
 	
 
@@ -17,29 +17,29 @@ class AKAME_API DeferredRendererFragmentBuffer
 
 	//render buffer for using as Depth/Stencil buffer
 	unsigned int rbo=0;
-	void GenerateFrameBuffer();
-	unsigned int getAlbedoBuff() { return AlbedoRough; }
-	unsigned int getDepthBuff() { return depthBuffer; }
-	unsigned int getNormalBuff() { return this->Normal; }
-	unsigned int getPositionBuff() { return Position; }
+	AKAME_API void GenerateFrameBuffer();
+	AKAME_API unsigned int getAlbedoBuff();
+	AKAME_API unsigned int getDepthBuff();
+	AKAME_API unsigned int getNormalBuff();
+	AKAME_API unsigned int getPositionBuff();
 	friend class Editor;
 	friend class TiledRenderer;
 	friend class RenderingSystem;
 public:
 	Mesh quad;
-	DeferredRendererFragmentBuffer();
+	AKAME_API DeferredRendererFragmentBuffer();
 	unsigned int frameBuffer = 0;
 	
-	void updateBufferSize(int height,int width);
-	void bindFrameBuffer();
-	void unBindFrameBuffer(unsigned int frameBuffer=0);
+	AKAME_API void updateBufferSize(int height,int width);
+	AKAME_API void bindFrameBuffer();
+	AKAME_API void unBindFrameBuffer(unsigned int frameBuffer=0);
 	//tex unit 1: albedoSpec,unit 2:Normal,unit 3:position
-	void useTextures();
-	void outPutToQaud(Camera& cam, std::shared_ptr<Shader> shader);
+	AKAME_API void useTextures();
+	AKAME_API void outPutToQaud(Camera& cam, std::shared_ptr<Shader> shader);
 
-	void drawPositionBuffer();
-	void drawNormalBuffer();
-	void drawAlbedoBuffer();
-	~DeferredRendererFragmentBuffer();
+	AKAME_API void drawPositionBuffer();
+	AKAME_API void drawNormalBuffer();
+	AKAME_API void drawAlbedoBuffer();
+	AKAME_API ~DeferredRendererFragmentBuffer();
 };
 

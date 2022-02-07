@@ -34,6 +34,18 @@ LIGHT Lights::getType()
 {
 	return type;
 }
+void Lights::setType(LIGHT ty) {
+	type = ty;
+	notifyLightSystemToUpdate();
+}
+void Lights::reset() 
+{
+
+}
+AKAME_API glm::vec3 Lights::getDirection() 
+{ 
+	return glm::normalize(Quaternion(lightDirection.x, lightDirection.y, lightDirection.z) * worldForward); 
+}
 void Lights::setColor(glm::vec3 rgb)
 {
 	notifyLightSystemToUpdate();
@@ -103,3 +115,5 @@ float Lights::calPointLightRadius(glm::vec3 C,float Intensity)
 	return glm::max(r1,r2);
 
 }
+
+float Lights::getPointLightRadius() { return calPointLightRadius(pointLightConstants, intensity); }

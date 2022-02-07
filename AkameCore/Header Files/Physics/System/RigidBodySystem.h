@@ -9,7 +9,7 @@ namespace physics
 {
 	class Physics;
 
-	class AKAME_API RigidBodySystem :public System
+	class RigidBodySystem :public System
 	{
 		std::shared_ptr<Physics> mPhysics;
 		std::weak_ptr<ECS> ecs;
@@ -17,17 +17,17 @@ namespace physics
 		float accumulator = 0.0f;
 		float mixAmt = 0.0f;
 	public:
-		RigidBodySystem();
+		AKAME_API RigidBodySystem();
 		
-		void Run(float deltaTime);
+		AKAME_API void Run(float deltaTime);
 	
-		void setVisualToPXTransform();
+		AKAME_API void setVisualToPXTransform();
 		
 
-		void setPxToVisualTransform();
+		AKAME_API void setPxToVisualTransform();
 		
 
-		void OnAddEntity(Entity entity) override;
+		AKAME_API void OnAddEntity(Entity entity) override;
 	
 
 	};

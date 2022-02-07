@@ -4,7 +4,7 @@
 #include"Components/Rendering/Transform.h"
 #include"Components/Rendering/Mesh.h"
 #include"Math/GlmMath.h"
-class AKAME_API MeshInstance
+class MeshInstance
 {
 private:
 	//Buffer object and Atrribute object iDs
@@ -13,16 +13,16 @@ private:
 	size_t numOfIndices, numOfVertices;
 	std::vector<Transform>& transformList;
 	std::vector<glm::mat4> modelMatList;
-	void clearMesh();
-	void createMat4FromTransform();
+	AKAME_API void clearMesh();
+	AKAME_API void createMat4FromTransform();
 public:
 
-	MeshInstance(std::vector<Transform>&);
-	~MeshInstance();
+	AKAME_API MeshInstance(std::vector<Transform>&);
+	AKAME_API ~MeshInstance();
 
-	void createMesh(const std::vector<vert> &vertices,const std::vector<unsigned int > &indices);
-	void renderMesh();
-	void updateTransformBuffer();
+	AKAME_API void createMesh(const std::vector<vert> &vertices,const std::vector<unsigned int > &indices);
+	AKAME_API void renderMesh();
+	AKAME_API void updateTransformBuffer();
 	
 
 

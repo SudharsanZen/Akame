@@ -85,6 +85,11 @@ std::string ReflectionMeta::to_string()
 	return m_json_object.dump();
 }
 
+void ReflectionMeta::print_formatted() 
+{ 
+	std::cout << m_json_object.dump(4) << std::endl; 
+}
+
 void ReflectionMeta::from_string(std::string searialized_class)
 {
 	m_json_object = json::json::parse(searialized_class);

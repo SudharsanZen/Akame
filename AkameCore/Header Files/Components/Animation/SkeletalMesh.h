@@ -33,7 +33,7 @@ struct BoneInfo
 };
 
 
-class AKAME_API SkeletalMesh:public Components
+class SkeletalMesh:public Components
 {
 private:
 	/*******************************************************************
@@ -62,22 +62,22 @@ private:
 
 	//only called when "needsUpdate" is true
 	//updates VBO and IBO when needed
-	static  void setupMesh();
+	AKAME_API static  void setupMesh();
 
 	//entity id of animController that holds all the animation and bone information
 	Entity animController;
 
 public:
 	
-	Entity GetAnimControllerID() { return animController; }
-	SkeletalMesh();
+	AKAME_API Entity GetAnimControllerID();
+	AKAME_API SkeletalMesh();
 
-	~SkeletalMesh();
-	static unsigned int getVAO() { return VAO; }
-	void reset();
-	void renderMesh() const;
+	AKAME_API ~SkeletalMesh();
+	AKAME_API static unsigned int getVAO();
+	AKAME_API void reset();
+	AKAME_API void renderMesh() const;
 
 	//initialize mesh with vertex and index data
-	void CreateMesh(std::vector<sk_vert>& vertices, std::vector<unsigned int>& indices = std::vector<unsigned int>());
+	AKAME_API void CreateMesh(std::vector<sk_vert>& vertices, std::vector<unsigned int>& indices = std::vector<unsigned int>());
 };
 

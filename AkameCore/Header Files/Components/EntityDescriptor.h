@@ -1,8 +1,8 @@
 #pragma once
-#include"ECS.h"
+
 #include"Components/Components.h"
 #include"Core/AkameCore.h"
-class AKAME_API EntityDescriptor:public Components
+class EntityDescriptor:public Components
 {
 	std::string name;
 	std::string tag;
@@ -14,29 +14,12 @@ class AKAME_API EntityDescriptor:public Components
 public:
 	
 
-	EntityDescriptor()
-	{
-		tag = "defualt";
-		name = "Entity";
-	}
+	AKAME_API EntityDescriptor();
 
-	void SetTag(std::string str)
-	{
-		tag = str;
-	}
+	AKAME_API void SetTag(std::string str);
 
-	void SetName(std::string str)
-	{
-		name = str;
-	}
-	std::string GetName()
-	{
-		return name;
-	}
-	void reset()
-	{
-		tag = "default";
-		name = "Entity";
-	}
+	AKAME_API void SetName(std::string str);
+	AKAME_API std::string GetName();
+	AKAME_API void reset();
 };
 

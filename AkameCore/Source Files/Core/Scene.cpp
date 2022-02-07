@@ -179,7 +179,48 @@ void Scene::InitEcs()
 
 }
 
+//Creates an entity in the Scene
 
+Entity Scene::CreateEntity()
+{
+	Entity eid = ecs->CreateEntity();
+	AddComponent<EntityDescriptor>(eid);
+	return eid;
+}
+
+void Scene::SetEntityTag(Entity eid, std::string tag)
+{
+	EDS->SetEntityTag(eid, tag);
+}
+
+void Scene::SetEntityName(Entity eid, std::string name)
+{
+	GetComponent<EntityDescriptor>(eid).SetName(name);
+}
+
+//Destroys an entity in the Scene
+
+void Scene::DestroyeEntity(Entity entityID)
+{
+	return ecs->DestroyEntity(entityID);
+}
+
+
+
+
+//set backGround color of the window
+
+AKAME_API void Scene::backGroundColor(float r, float g, float b, float a)
+{
+	this->color = glm::vec4(r, g, b, a);
+
+}
+
+Scene::~Scene()
+{
+	release();
+
+}
 
 void Scene::release()
 {
@@ -191,6 +232,11 @@ void Scene::release()
 	lightSys.reset();
 	EDS.reset();
 	transformManager.reset();
+}
+
+float Scene::getDeltaTime()
+{
+	return deltaTime;
 }
 
 void Scene::clearBuffer()

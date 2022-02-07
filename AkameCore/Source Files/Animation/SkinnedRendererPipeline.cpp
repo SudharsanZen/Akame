@@ -1,4 +1,5 @@
 #include"Animation/SkinnedRendererPipeline.h"
+#include"ECS.h"
 #include<glad/glad.h>
 
 void SkeletalMeshRenderingPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam, unsigned int frameBuffer)

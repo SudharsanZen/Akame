@@ -2,6 +2,10 @@
 #include"Core/Log/Log.h"
 #include"Rendering/Camera.h"
 unsigned long long shaderCount = 0;
+Material::Material() :Material("DEFAULT") 
+{
+
+}
 //set the texture uniform and it's value
 Material::Material(std::string shaderName)
 {

@@ -7,7 +7,7 @@
 #include"Rendering/System/PSSMFBO.h"
 #define DIR_MAP_SIZE 2048
 #define FRUSTUM_SPLIT_NUM 3
-class AKAME_API LightSystem:public System
+class LightSystem:public System
 {
 private:
 	
@@ -35,15 +35,7 @@ private:
 	unsigned int plUBO;
 	std::weak_ptr<ECS> ecs;
 	std::unordered_map<LIGHT, std::vector<Entity>> lightsList;
-	void updateLightList()
-	{
-		lightsList.clear();
-		for (auto const& ent : entities)
-		{
-			Lights& l = ecs.lock()->GetComponent<Lights>(ent);
-			lightsList[l.getType()].push_back(ent);
-		}
-	}
+	AKAME_API void updateLightList();
 	
 	static bool needsUpdate;
 	friend class Scene;
@@ -62,44 +54,21 @@ public:
 	float lambda = 0.238f;
 	PSSMFBO dir_sMap;
 	//empty point light list completely and create a new one, call when entity is added or removed
-	void updatePointLightBuffer();
+	AKAME_API void updatePointLightBuffer();
 	//calculates and sets the necesary variables for shadow map calculations
-	void BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader,Camera &cam);
+	AKAME_API void BindDirectionalLightShadowMap(std::shared_ptr<Shader> shader,Camera &cam);
 
 	//get the directional light's view projection matrix
-	std::vector<glm::mat4> GetDirectionalLightSpaceMat()
-	{
-		return dirLightSpace;
-	}
-	void unBindDirectionalShadowMap(unsigned int frameBuffer=0);
+	AKAME_API std::vector<glm::mat4> GetDirectionalLightSpaceMat();
+	AKAME_API void unBindDirectionalShadowMap(unsigned int frameBuffer=0);
 
 	//just update the information for existing lights, call for dynamic point lights
-	void updatePointLightContents();
-	void bindPointLightBuffer(int layoutIndex);
-	LightSystem();
-	void Update()
-	{
-		if (needsUpdate)
-		{
-			updateLightList();
-			updatePointLightBuffer();
-			needsUpdate = false;
-		}
-	}
-	void OnAddEntity(Entity entity) override
-	{
-		
-		updateLightList();
-		updatePointLightBuffer();
+	AKAME_API void updatePointLightContents();
+	AKAME_API void bindPointLightBuffer(int layoutIndex);
+	AKAME_API LightSystem();
+	AKAME_API void Update();
+	AKAME_API void OnAddEntity(Entity entity) override;
 
-		
-
-	}
-
-	void AfterDestroyEntity() override
-	{
-		updateLightList();
-		updatePointLightBuffer();
-	}
+	AKAME_API void AfterDestroyEntity() override;
 
 };

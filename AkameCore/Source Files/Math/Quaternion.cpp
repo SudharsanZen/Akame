@@ -21,6 +21,10 @@ Quaternion operator *(const Quaternion& rhs, const Quaternion& lhs)
 	Quaternion newQuat = (rhs.quaternion * lhs.quaternion);
 	return newQuat;
 }
+inline Quaternion::Quaternion() :Quaternion(glm::quat(1, 0, 0, 0)) 
+{
+
+}
 Quaternion::Quaternion(glm::quat quat)
 {
 	quaternion = quat;
@@ -46,9 +50,34 @@ void Quaternion::setEulerAngle(float X, float Y, float Z)
 	quaternion = qx * qy* qz;
 }
 
+Quaternion Quaternion::conjugate() 
+{ 
+	return glm::conjugate(quaternion); 
+}
+
+Quaternion Quaternion::inverse() 
+{ 
+	return glm::inverse(quaternion); 
+}
+
+glm::vec3 Quaternion::getEulerAngle()
+{ 
+	return glm::degrees(glm::eulerAngles(quaternion)); 
+}
+
 Quaternion::operator std::string()const
 {
 	return std::string("quat: w:" + std::to_string(quaternion.w) + " x:" + std::to_string(quaternion.x) + " y:" + std::to_string(quaternion.y) + " z:" + std::to_string(quaternion.z));
+}
+
+glm::mat4 Quaternion::getMatrix()
+{
+	return glm::toMat4(quaternion);
+}
+
+Quaternion::Quaternion(Quaternion const& rValue)
+{
+	quaternion = rValue.quaternion;
 }
 
 Quaternion Quaternion::rotationAroundAxisVector(float angleInDegrees, glm::vec3 AxisVector)

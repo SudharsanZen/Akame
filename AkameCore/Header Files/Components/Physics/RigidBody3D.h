@@ -21,7 +21,7 @@ namespace physics
 		STATIC,DYNAMIC
 	};
 
-	class AKAME_API RigidBody3D:public Components
+	class RigidBody3D:public Components
 	{
 
 		RigidBodyType rBodyType;
@@ -30,38 +30,27 @@ namespace physics
 
 		physx::PxRigidActor* rigidbody;
 
-		void ASSERT_RB() { assert(rigidbody && "rigidbody is not initialized, trying to access nullptr!"); }
+		AKAME_API void ASSERT_RB();
 
 		//detach all the shapes attached to the rigidbody
-		void detachAllAttachedShapes();
+		AKAME_API void detachAllAttachedShapes();
 
 		friend class RigidBodySystem;
 
 	public:
-		RigidBody3D()
-		{
-			eid = Entity(-1,-1);
-			rBodyType = RigidBodyType::STATIC;
-			rigidbody = NULL;
-		}
+		AKAME_API RigidBody3D();
 
-		RigidBody3D(RigidBodyType rbType,ColliderShape shape)
-		{
-			setRigidBodyType(rbType,shape);
-		}
+		AKAME_API RigidBody3D(RigidBodyType rbType, ColliderShape shape);
 
-		void setColliderShape(ColliderShape shape);
+		AKAME_API void setColliderShape(ColliderShape shape);
 
-		void setVelocity(glm::vec3 vel);
-		void setRigidBodyType(RigidBodyType rbType, ColliderShape shape);
+		AKAME_API void setVelocity(glm::vec3 vel);
+		AKAME_API void setRigidBodyType(RigidBodyType rbType, ColliderShape shape);
 
 
-		void ReleaseRbody();
+		AKAME_API void ReleaseRbody();
 
-		void reset()
-		{
-			ReleaseRbody();
-		}
+		AKAME_API void reset();
 
 	};
 

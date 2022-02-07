@@ -9,7 +9,7 @@
 *interface for defining call backs like
 *preRender and post render actions for 
 *a particular shader.*/
-class ShaderRenderPipeline
+class AKAME_API ShaderRenderPipeline
 {
 	
 	

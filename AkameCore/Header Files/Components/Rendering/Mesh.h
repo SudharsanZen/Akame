@@ -13,7 +13,7 @@ struct vert
 	glm::vec3 biTangent;
 };
 
-class AKAME_API Mesh:public Components
+class Mesh:public Components
 {
 private:
 	static bool needsUpdate;
@@ -28,7 +28,7 @@ private:
 	//number of IBO indices
 	size_t numOfIndices,numOfVertices;
 	size_t start_i, end_i,count,maxInd,minInd;
-	static void setupMesh();
+	AKAME_API static void setupMesh();
 	glm::vec4 max,min;
 	friend class RenderingSystem;
 	friend class Editor;
@@ -37,13 +37,13 @@ private:
 	
 public:
 
-	Mesh();
+	AKAME_API Mesh();
 
-	~Mesh();
-	static unsigned int getVAO() { return VAO; }
-	void reset();
-	void renderMesh() const;
-	void CreateMesh(std::vector<vert> &vertices, std::vector<unsigned int> &indices=std::vector<unsigned int>());
+	AKAME_API ~Mesh();
+	AKAME_API static unsigned int getVAO();
+	AKAME_API void reset();
+	AKAME_API void renderMesh() const;
+	AKAME_API void CreateMesh(std::vector<vert> &vertices, std::vector<unsigned int> &indices=std::vector<unsigned int>());
 
 };
 

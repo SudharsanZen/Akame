@@ -7,7 +7,7 @@
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
 
-class AKAME_API SceneHierarchyWindow
+class SceneHierarchyWindow
 {
 	friend class Editor;
 	friend class Exporter;
@@ -17,12 +17,10 @@ class AKAME_API SceneHierarchyWindow
 	bool viewDebugInfo;
 	
 	float m_menuPosex, m_menuPosey;
-	void Draw();
-	void DrawNode(Transform const& t, EntityDescriptor& edt, ImGuiTreeNodeFlags const& base_flags);
+	AKAME_API void Draw();
+	AKAME_API void DrawNode(Transform const& t, EntityDescriptor& edt, ImGuiTreeNodeFlags const& base_flags);
 public:
-	SceneHierarchyWindow(Scene& s) :m_Scene(s)
-	{
-	}
+	AKAME_API SceneHierarchyWindow(Scene& s);
 	
 };
 

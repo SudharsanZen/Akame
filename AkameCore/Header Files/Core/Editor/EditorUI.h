@@ -10,12 +10,12 @@
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
 class Scene;
-struct AKAME_API EntitySignatures
+struct EntitySignatures
 {
 private:
 	Scene& m_Scene;
 public:
-	EntitySignatures(Scene& scene);
+	AKAME_API EntitySignatures(Scene& scene);
 	ComponentBitPosition m_Transform_pose;
 	ComponentBitPosition m_Descriptor_pose;
 	ComponentBitPosition m_Mesh_pose;
@@ -26,7 +26,7 @@ public:
 	ComponentBitPosition m_Lights_pose;
 	ComponentBitPosition m_Material_pose;
 };
-class AKAME_API Editor
+class Editor
 {
 
 private:
@@ -40,28 +40,28 @@ private:
 	
 	Scene &m_Scene;
 	//initializes imGui
-	void initImGui();
+	AKAME_API void initImGui();
 	FrameBuffer fbo[5];
 	//returns the &io value
-	ImGuiIO& initGui();
+	AKAME_API ImGuiIO& initGui();
 	float deltaTime,currTime,lastTime;
 	std::shared_ptr<SceneHierarchyWindow> m_SceneHierarchy;
 	std::shared_ptr<InspectorWindow> m_InspectorWindow;
 	std::vector<std::shared_ptr<ViewPortWindow>> m_ViewPortWindow;
 	std::shared_ptr<LightAndShadowConfig> m_LightsAndShadows;
 	std::shared_ptr<ContentBrowser> m_contentBrowser;
-	static void defaultStyle(ImGuiIO& io);
-	void Menu();
-	void createNewScriptProject();
+	AKAME_API static void defaultStyle(ImGuiIO& io);
+	AKAME_API void Menu();
+	AKAME_API void createNewScriptProject();
 	bool saveEvent;
 
 	friend class Exporter;
 public:
 	
-	Editor(Scene& m_Scene);
+	AKAME_API Editor(Scene& m_Scene);
 	//draw UI onto the screen
-	void DrawUI();//call after redering scene objects else the UI will be put behind other renderings
-	~Editor();
+	AKAME_API void DrawUI();//call after redering scene objects else the UI will be put behind other renderings
+	AKAME_API ~Editor();
 
 	
 };

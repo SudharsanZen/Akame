@@ -8,7 +8,7 @@
 #include<json/single_include/nlohmann/json.hpp>
 
 namespace json = nlohmann;
-class AKAME_API ReflectionMeta
+class ReflectionMeta
 {
 	bool _reading = false;
 	bool _writing = false;
@@ -20,18 +20,18 @@ class AKAME_API ReflectionMeta
 		meta.m_json_object = json;
 		meta.write(*val);
 	}
-	void JsonToTypeCmpx(json::json& json, Entity* val);
+	AKAME_API void JsonToTypeCmpx(json::json& json, Entity* val);
 
-	void JsonToTypeCmpx(json::json& json, Quaternion* quat);
-	void JsonToTypeCmpx(json::json& json, glm::vec3* vec3);
-	void JsonToTypeCmpx(json::json& json, glm::vec4* vec4);
-	void JsonToTypeCmpx(json::json& json, glm::quat* quat);
+	AKAME_API void JsonToTypeCmpx(json::json& json, Quaternion* quat);
+	AKAME_API void JsonToTypeCmpx(json::json& json, glm::vec3* vec3);
+	AKAME_API void JsonToTypeCmpx(json::json& json, glm::vec4* vec4);
+	AKAME_API void JsonToTypeCmpx(json::json& json, glm::quat* quat);
 
 
-	void typeToJsonCmpx(json::json& json, Quaternion* quat);
-	void typeToJsonCmpx(json::json& json, glm::vec3* vec3);
-	void typeToJsonCmpx(json::json& json, glm::vec4* vec4);
-	void typeToJsonCmpx(json::json& json, glm::quat* quat);
+	AKAME_API void typeToJsonCmpx(json::json& json, Quaternion* quat);
+	AKAME_API void typeToJsonCmpx(json::json& json, glm::vec3* vec3);
+	AKAME_API void typeToJsonCmpx(json::json& json, glm::vec4* vec4);
+	AKAME_API void typeToJsonCmpx(json::json& json, glm::quat* quat);
 	template<typename T>
 	void typeToJsonCmpx(json::json& json, T* ptr)
 	{
@@ -40,7 +40,7 @@ class AKAME_API ReflectionMeta
 		json = refMeta.m_json_object;
 	}
 
-	void typeToJsonCmpx(json::json& json, Entity* ptr);
+	AKAME_API void typeToJsonCmpx(json::json& json, Entity* ptr);
 
 
 public:
@@ -61,10 +61,10 @@ public:
 		to._serialize_data(*this);
 		_writing = false;
 	}
-	std::string to_string();
-	void print_formatted() { std::cout << m_json_object.dump(4) << std::endl; }
+	AKAME_API std::string to_string();
+	AKAME_API void print_formatted();
 
-	void from_string(std::string searialized_class);
+	AKAME_API void from_string(std::string searialized_class);
 
 	template<typename T>
 	ReflectionMeta& operator()(std::string name, T* ptr, ID_TYPE::SIMPLE _dummyType)

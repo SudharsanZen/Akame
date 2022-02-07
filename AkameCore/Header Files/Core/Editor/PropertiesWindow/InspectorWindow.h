@@ -5,9 +5,10 @@
 #include"Rendering/FrameBuffer.h"
 #include"Assets/ShaderManager.h"
 #include"Components/Physics/RigidBody3D.h"
+
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
-class AKAME_API InspectorWindow
+class InspectorWindow
 {
 	Scene& m_Scene;
 	std::shared_ptr<ECS> m_ECS;
@@ -22,12 +23,12 @@ class AKAME_API InspectorWindow
 	ComponentBitPosition m_Lights_pose;
 	ComponentBitPosition m_Material_pose;
 	
-	void DrawTransformComponent(Entity selected);
-	void DrawLightComponent(Entity selected);;
-	void DrawScriptComponent(Entity selected);
+	AKAME_API void DrawTransformComponent(Entity selected);
+	AKAME_API void DrawLightComponent(Entity selected);;
+	AKAME_API void DrawScriptComponent(Entity selected);
 public:
-	InspectorWindow(Scene& m_Scene, std::shared_ptr<ECS> ecs);
+	AKAME_API InspectorWindow(Scene& m_Scene, std::shared_ptr<ECS> ecs);
 
-	void Draw(std::shared_ptr<SceneHierarchyWindow>);
+	AKAME_API void Draw(std::shared_ptr<SceneHierarchyWindow>);
 };
 

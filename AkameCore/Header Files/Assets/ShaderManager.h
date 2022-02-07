@@ -4,25 +4,21 @@
 #include<map>
 #include<queue>
 class ShaderRenderPipeline;
-class AKAME_API ShaderManager
+class ShaderManager
 {
-	static std::map<std::string, std::vector<std::pair<int, std::string>>> shaderQueues;
-	static std::unordered_map<std::string,std::shared_ptr<Shader>> shaderList;
-	static std::map<std::string, std::shared_ptr<ShaderRenderPipeline>> shaderRenderPipeline;
-	static bool checkForPipeline(std::string shaderName);
+	AKAME_API static std::map<std::string, std::vector<std::pair<int, std::string>>> shaderQueues;
+	AKAME_API static std::unordered_map<std::string,std::shared_ptr<Shader>> shaderList;
+	AKAME_API static std::map<std::string, std::shared_ptr<ShaderRenderPipeline>> shaderRenderPipeline;
+	AKAME_API static bool checkForPipeline(std::string shaderName);
 	friend class RenderingSystem;
 	friend class Editor;
 	friend class SkeletalMeshRenderingSystem;
 public:
 
 	ShaderManager();
-	static void loadAllShaders();
-	static std::shared_ptr<Shader> GetShader(std::string shaderName);
-	static void releaseAllShaders() 
-	{
-		shaderList.clear();
-		shaderQueues.clear();
-	}
+	AKAME_API static void loadAllShaders();
+	AKAME_API static std::shared_ptr<Shader> GetShader(std::string shaderName);
+	AKAME_API static void releaseAllShaders();
 	template<typename T,typename ...Args>
 	static void AttachShaderPipeline(std::string SHADERNAME,Args&& ...args) 
 	{

@@ -100,7 +100,7 @@ int main()
 	scene.backGroundColor(0, 0, 0, 1);
 	float step = 0.9f;
 	//Editor is experimental, do not use this
-	Editor editor(window,scene);
+	Editor editor(scene);
 	while (!window.closeWindow())
 	{
 		if (acc > step)

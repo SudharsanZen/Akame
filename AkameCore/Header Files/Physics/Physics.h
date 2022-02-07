@@ -37,7 +37,7 @@ namespace physics
 	void _PxToTrans(physx::PxTransform pxt, Transform& targetTransform,float mix);
 
 	/*class to handle physics*/
-	class AKAME_API Physics
+	class Physics
 	{
 	private:
 		
@@ -53,24 +53,29 @@ namespace physics
 		friend class RigidBodySystem;
 		friend class RigidBody3D;
 	public:
-		Physics():Physics(1.0f/60.0f) {}
-		Physics(float stepSize) { mStepSize = stepSize; }
+		AKAME_API Physics();
+		AKAME_API Physics(float stepSize);
 
 		float mStepSize;
 		
 		template<typename T>
-		void PX_RELEASE(T* x) { if (x)  x->release(); x = NULL; }
+		void PX_RELEASE(T* x) 
+		{ 
+			if (x)  
+				x->release(); 
+			x = NULL; 
+		}
 
-		void cleanPhysics();
-		void initPhysics();
+		AKAME_API void cleanPhysics();
+		AKAME_API void initPhysics();
 
-		bool isAdvancing(float dt);
+		AKAME_API bool isAdvancing(float dt);
 
-		bool advance(float dt);
+		AKAME_API bool advance(float dt);
 
 	
 
-		~Physics() { cleanPhysics(); }
+		AKAME_API ~Physics();
 	
 	};
 }

@@ -2,6 +2,7 @@
 #include<glfw/glfw3.h>
 #include "Rendering/System/DeferredPipeline.h"
 #include<sstream>
+DeferredPipeline::DeferredPipeline(int height, int width) { drfb.updateBufferSize(height, width); }
 void DeferredPipeline::WindowsResizeCallBacks(int height, int width)
 {
 	drfb.updateBufferSize(height, width);

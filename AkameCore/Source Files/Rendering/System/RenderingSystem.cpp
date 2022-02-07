@@ -65,6 +65,13 @@ void RenderingSystem::attachAllBuiltInSRP()
 	ShaderManager::AttachShaderPipeline<SkeletalMeshRenderingPipeline>("SkinnedMeshRenderer");
 }
 
+//fill the drawList map with relevant entities to their respective shaders
+
+bool RenderingSystem::EditorMode() 
+{ 
+	return editorMode; 
+}
+
 RenderingSystem::RenderingSystem()
 {
 	glGenBuffers(1,&transformUBO);
@@ -157,6 +164,20 @@ void RenderingSystem::emptyDrawList()
 	{
 		drawList[pair.first] = std::map<unsigned long long ,std::vector<Entity>>();
 	}
+}
+
+//this is a call back function which is called evertime a new entity is registered under rendering system
+
+void RenderingSystem::OnAddEntity(Entity entity)
+{
+	m_update_Event = true;
+}
+
+//this is a call back function which is called when an entity is destroyed 
+
+void RenderingSystem::AfterDestroyEntity()
+{
+	m_update_Event = true;
 }
 
 void RenderingSystem::updateFrameBufferSize(int height, int width)

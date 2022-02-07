@@ -19,7 +19,7 @@ namespace physics
 }
 
 
-class AKAME_API Scene
+class Scene
 {
 private:
 
@@ -53,42 +53,28 @@ private:
 	friend class EDFExporter;
 public:
 	
-	void groupEntWithShader();
-	void vsyncOn(bool status);
+	AKAME_API void groupEntWithShader();
+	AKAME_API void vsyncOn(bool status);
 	//fn will be called when Scene::Render() is called. this method will be dprecated
 	std::function<void()> fn;
 	//main camera
 	Camera cam;
-	Scene(Window& mainWindow);
+	AKAME_API Scene(Window& mainWindow);
 	
 	//call this to render a frame
-	void clearBuffer();
-	void Render();
-	void swapBuffers();
+	AKAME_API void clearBuffer();
+	AKAME_API void Render();
+	AKAME_API void swapBuffers();
 	//call this before Scene::Render() in the main window loop 
-	void OnStart();
-	void InitEcs();
+	AKAME_API void OnStart();
+	AKAME_API void InitEcs();
 
 	//Creates an entity in the Scene
-	Entity CreateEntity()
-	{
-		Entity eid=ecs->CreateEntity();
-		AddComponent<EntityDescriptor>(eid);
-		return eid;
-	}
-	void SetEntityTag(Entity eid,std::string tag)
-	{
-		EDS->SetEntityTag(eid,tag);
-	}
-	void SetEntityName(Entity eid,std::string name)
-	{
-		GetComponent<EntityDescriptor>(eid).SetName(name);
-	}
+	AKAME_API Entity CreateEntity();
+	AKAME_API void SetEntityTag(Entity eid, std::string tag);
+	AKAME_API void SetEntityName(Entity eid, std::string name);
 	//Destroys an entity in the Scene
-	void DestroyeEntity(Entity entityID)
-	{
-		return ecs->DestroyEntity(entityID);
-	}
+	AKAME_API void DestroyeEntity(Entity entityID);
 
 	//Adds a component to the Given entity
 	template<typename T>
@@ -105,22 +91,11 @@ public:
 	T& GetComponent(Entity entityID);
 
 	//set backGround color of the window
-	void backGroundColor(float r, float g, float b, float a)
-	{
-		this->color = glm::vec4(r, g, b, a);
+	AKAME_API void backGroundColor(float r, float g, float b, float a);
 
-	}
-
-	~Scene()
-	{
-		release();
-	
-	}
-	void release();
-	float getDeltaTime()
-	{
-		return deltaTime;
-	}
+	AKAME_API ~Scene();
+	AKAME_API void release();
+	AKAME_API float getDeltaTime();
 };
 
 template<typename T>

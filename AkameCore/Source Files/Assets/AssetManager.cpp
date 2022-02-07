@@ -102,3 +102,16 @@ std::shared_ptr<Shader> AssetManager::getShader(std::string shaderName)
 	return shaderManager.GetShader(shaderName);
 }
 
+bool AssetManager::isInitialized() { return initialized; }
+
+void AssetManager::setAssetRoot(std::string root) { assetRootPath = root; }
+
+std::string AssetManager::getAssetRoot() { return assetRootPath; }
+
+void AssetManager::reloadAllShaders() { shaderManager.loadAllShaders(); }
+
+void AssetManager::reset()
+{
+
+}
+

@@ -1,5 +1,25 @@
 #include"Rendering/System/ShaderRenderPipeline.h"
 #include "Animation/SkeletalMeshRenderingSystem.h"
+#include"ECS.h"
+SkeletalMeshRenderingSystem::SkeletalMeshRenderingSystem()
+{
+	needs_update = true;
+}
+
+void SkeletalMeshRenderingSystem::OnAddEntity(Entity eid)
+{
+	needs_update = true;
+}
+
+void SkeletalMeshRenderingSystem::OnDestroyEntity(Entity eid)
+{
+	needs_update = true;
+}
+
+void SkeletalMeshRenderingSystem::renderMeshes(RenderingSystem* rendSys, Camera cam)
+{
+	RenderSkeletalMeshQueue(rendSys, cam);
+}
 
 void SkeletalMeshRenderingSystem::RenderSkeletalMeshQueue(RenderingSystem* rendSys,Camera cam)
 {

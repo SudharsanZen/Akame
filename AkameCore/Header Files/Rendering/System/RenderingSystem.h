@@ -13,7 +13,7 @@
 #include"Animation/SkeletalMeshRenderingSystem.h"
 class Camera;
 class LightSystem;
-class AKAME_API RenderingSystem :public System
+class RenderingSystem :public System
 {
 private:
 	unsigned int transformUBO;
@@ -42,45 +42,39 @@ private:
 	/*Call this to update the common global uniforms.
 	* this updates the Projection matrix and ViewMatrix 
 	*which is common to all shaders*/
-	void updateUniformBuffer(Camera& cam);
-	void GroupEntityWithCommonShader();
+	AKAME_API void updateUniformBuffer(Camera& cam);
+	AKAME_API void GroupEntityWithCommonShader();
 	/*
 	* attach Shader Render pipeline class to the respective built in shaders
 	*/
-	void attachAllBuiltInSRP();
+	AKAME_API void attachAllBuiltInSRP();
 public:
 	//fill the drawList map with relevant entities to their respective shaders
-	bool EditorMode() { return editorMode; };
+	AKAME_API bool EditorMode();;
 	std::weak_ptr<LightSystem> lightsystem;
 	//window heigh and width to render to
 	int height, width;
 	//constructor
-	RenderingSystem();
+	AKAME_API RenderingSystem();
 	//Call this to render A single frame
-	void Run(Camera& cam, unsigned int frameBuffer=0);
+	AKAME_API void Run(Camera& cam, unsigned int frameBuffer=0);
 	//clear the draw list
-	void emptyDrawList();
+	AKAME_API void emptyDrawList();
 	//this is a call back function which is called evertime a new entity is registered under rendering system
-	void OnAddEntity(Entity entity) override 
-	{
-		m_update_Event = true;
-	}
+	AKAME_API void OnAddEntity(Entity entity) override;
 	//this is a call back function which is called when an entity is destroyed 
-	void AfterDestroyEntity() override
-	{ 
-		m_update_Event = true;
-	}
+	AKAME_API void AfterDestroyEntity() override;
 	//call this update the frame buffer's size to which Meshes are drawn to
-	void updateFrameBufferSize(int height,int width);
+	AKAME_API void updateFrameBufferSize(int height,int width);
 	//change the viewPort's buffer size
-	void viewPortSize(int x,int y,int height,int width);
+	AKAME_API void viewPortSize(int x,int y,int height,int width);
 	//Switch on depth test
-	void depthTestOn(bool state);
+	AKAME_API void depthTestOn(bool state);
 	//Render all the entities under the given shader name
-	void RenderAllEntitiesWithShader(std::string SHADERNAME,Camera cam, unsigned int frameBuffer=0);
+	AKAME_API void RenderAllEntitiesWithShader(std::string SHADERNAME,Camera cam, unsigned int frameBuffer=0);
 	//Renders all the existing renderable entity under the given shader
-	void RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam);
+	AKAME_API void RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam);
 	//Render all the entity under the given rendering queue
-	void RenderQueue(std::string QUEUENAME,Camera cam, unsigned int frameBuffer=0);
+	AKAME_API void RenderQueue(std::string QUEUENAME,Camera cam, unsigned int frameBuffer=0);
 };
 

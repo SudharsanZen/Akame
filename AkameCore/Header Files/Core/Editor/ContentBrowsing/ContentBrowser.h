@@ -2,7 +2,7 @@
 #include<string>
 #include<Rendering/Texture.h>
 
-class AKAME_API ContentBrowser
+class ContentBrowser
 {
 private:
 	bool open;
@@ -11,16 +11,16 @@ private:
 	std::string prevPath;
 	std::string selectedfileName;
 
-	void DrawContentHierarchyPannel();
-	void DrawHierarchyNode(std::string path, int const& base_flags);
-	void DrawContentPanel();
+	AKAME_API void DrawContentHierarchyPannel();
+	AKAME_API void DrawHierarchyNode(std::string path, int const& base_flags);
+	AKAME_API void DrawContentPanel();
 	int drwID = 0;
 public:
-	void setCurrentPath(std::string newPath);
-	ContentBrowser(std::string windowName, std::string path);
-	bool Open();
-	void DrawUI();
-	std::string getSelectedFileName();
+	AKAME_API void setCurrentPath(std::string newPath);
+	AKAME_API ContentBrowser(std::string windowName, std::string path);
+	AKAME_API bool Open();
+	AKAME_API void DrawUI();
+	AKAME_API std::string getSelectedFileName();
 
 };
 

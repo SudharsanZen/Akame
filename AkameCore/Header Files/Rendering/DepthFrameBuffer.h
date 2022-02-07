@@ -1,28 +1,28 @@
 #pragma once
 #include"Components/Rendering/Mesh.h"
 
-class AKAME_API DepthFrameBuffer
+class DepthFrameBuffer
 {
 
 private:
 	unsigned int framebuffer;
 	unsigned int depthTex;
 	int map_height, map_width;
-	void generateFrameBuffer();
+	AKAME_API void generateFrameBuffer();
 
 public:
 	Mesh quadMesh;
-	DepthFrameBuffer(int width = 1024, int  height = 1024);
-	void updateTextureSize(int height, int width);
+	AKAME_API DepthFrameBuffer(int width = 1024, int  height = 1024);
+	AKAME_API void updateTextureSize(int height, int width);
 
 
-	void Bind();
+	AKAME_API void Bind();
 
-	void unBind();
+	AKAME_API void unBind();
 
-	void RenderToQuad();
+	AKAME_API void RenderToQuad();
 
-	~DepthFrameBuffer();
+	AKAME_API ~DepthFrameBuffer();
 
 
 
