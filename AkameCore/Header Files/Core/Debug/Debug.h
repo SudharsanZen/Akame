@@ -2,8 +2,8 @@
 #pragma once
 #include"Math/EngineMath.h"
 #include<vector>
-
-class Debug
+#include"Core/AkameCore.h"
+class AKAME_API Debug
 {
 private:
 	struct _vert

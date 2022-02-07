@@ -3,6 +3,7 @@
 #include"Rendering/Camera.h"
 #include<ECS.h>
 #include<string>
+#include"Core/AkameCore.h"
 #include "Rendering/System/RenderingSystem.h"
 /*This class is a base class that provides the 
 *interface for defining call backs like

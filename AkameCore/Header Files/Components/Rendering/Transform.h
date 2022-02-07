@@ -7,7 +7,8 @@
 #include"Components/Components.h"
 #include"Physics/System/RigidBodySystem.h"
 #include"Core/Reflection/ReflectionUIHandler.h"
-class Transform:public Components
+#include"Core/AkameCore.h"
+class AKAME_API Transform:public Components
 {
 	glm::vec3 pxPoseInit;
 	glm::quat pxRotInit;

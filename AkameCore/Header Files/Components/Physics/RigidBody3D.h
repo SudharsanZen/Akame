@@ -5,6 +5,7 @@
 #include<vector>
 #include<cassert>
 #include"Components\Components.h"
+
 class ECS;
 struct Entity;
 namespace physx
@@ -20,7 +21,7 @@ namespace physics
 		STATIC,DYNAMIC
 	};
 
-	class RigidBody3D:public Components
+	class AKAME_API RigidBody3D:public Components
 	{
 
 		RigidBodyType rBodyType;

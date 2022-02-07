@@ -2,10 +2,11 @@
 #include"glm/glm/glm.hpp"
 #include"Rendering/Shader.h"
 #include"Components/Components.h"
+#include"Core/AkameCore.h"
 enum class LIGHT {DIRECTIONAL=0,POINT=1,SPOT=2};
 class LightSystem;
 
-class Lights:public Components
+class AKAME_API Lights:public Components
 {
 private:
 	LIGHT type;

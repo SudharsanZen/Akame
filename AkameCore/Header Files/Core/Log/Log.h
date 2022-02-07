@@ -5,10 +5,10 @@
 #include <spdlog/fmt/ostr.h>
 #pragma warning(pop)
 
+#include"Core/AkameCore.h"
 
 
-
-class Log
+class AKAME_API Log
 {
 public:
 	static void Init();

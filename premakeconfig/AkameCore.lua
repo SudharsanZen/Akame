@@ -1,6 +1,6 @@
 project "AkameCore"
     location"%{ComDir.AkameCore}"
-    kind "StaticLib"
+    kind "SharedLib"
     language "C++"
     cppdialect "C++17"
     targetdir "%{ComDir.AkameCore}/bin/%{cfg.buildcfg}"
@@ -47,7 +47,7 @@ project "AkameCore"
         AllDebugEnvPaths
     }
     filter "configurations:Debug"
-        defines {"DEBUG"}
+        defines {"DEBUG","AK_DLL","AK_EXPORT"}
         symbols "On"
 		links
 		{
@@ -55,7 +55,7 @@ project "AkameCore"
 		}
 
     filter "configurations:Release"
-        defines{"NDEBUG"}
+        defines{"NDEBUG","AK_DLL","AK_EXPORT"}
         optimize "On"
 		links
 		{

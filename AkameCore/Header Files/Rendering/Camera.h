@@ -1,8 +1,9 @@
 #pragma once
 
 #include"Math/EngineMath.h"
+#include"Core/AkameCore.h"
 typedef unsigned char GLboolean;
-class Camera
+class AKAME_API Camera
 {
 	
 	GLboolean ortho;	//set true if camera is orthographic, set false for perspective

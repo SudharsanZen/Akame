@@ -1,8 +1,8 @@
 #pragma once
 #include<string>
+#include"Core/AkameCore.h"
 
-
-class Texture
+class AKAME_API Texture
 {
 private:
 	

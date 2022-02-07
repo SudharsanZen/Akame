@@ -1,12 +1,12 @@
 #pragma once
 
 #include"ECS.h"
-
+#include"Core/AkameCore.h"
 class ECS;
 /*
 * This class handels the BehaviourComponent Attached to An entity
 */
-class BehaviourSystem :public System
+class AKAME_API BehaviourSystem :public System
 {
 	std::weak_ptr<ECS> ecs;
 	friend class Scene;

@@ -2,7 +2,7 @@
 #include"ECS.h"
 
 
-class SceneTransformManager :public System
+class AKAME_API SceneTransformManager :public System
 {
 	std::weak_ptr<ECS> ecs;
 

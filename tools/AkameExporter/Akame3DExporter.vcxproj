@@ -78,7 +78,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AK_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\AkameCore\vendor\glfw\include;..\..\AkameCore\vendor\single_include\nlohmann;..\..\AkameCore\vendor\glad-akame-;..\..\AkameCore\vendor;..\..\AkameCore\vendor\imGui;..\..\AkameCore\vendor\assimp\include;..\..\ECS\HeaderFiles;..\..\AkameCore\Header Files;..\..\AkameCore\vendor\pugixml\src;..\..\AkameCore\vendor\spdlog\include;..\..\AkameCore\vendor\PhysX\physx\include;..\..\AkameCore\vendor\PhysX\physx\source\physxextensions\src;..\..\AkameCore\vendor\PhysX\pxshared\include;..\..\AkameCore\vendor\PhysX\physx\source\foundation\include;..\..\AkameCore\vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -86,6 +86,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

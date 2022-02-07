@@ -7,7 +7,7 @@
 #include"Rendering/System/PSSMFBO.h"
 #define DIR_MAP_SIZE 2048
 #define FRUSTUM_SPLIT_NUM 3
-class LightSystem:public System
+class AKAME_API LightSystem:public System
 {
 private:
 	

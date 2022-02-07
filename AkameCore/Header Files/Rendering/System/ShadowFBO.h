@@ -1,8 +1,8 @@
 #pragma once
+#include"Core/AkameCore.h"
 
 
-
-class ShadowFBO
+class AKAME_API ShadowFBO
 {
 private:
 	unsigned int frameBuffer;

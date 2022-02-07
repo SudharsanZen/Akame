@@ -4,7 +4,7 @@
 #include"Components/Rendering/Transform.h"
 #include"Components/Rendering/Mesh.h"
 #include"Math/GlmMath.h"
-class MeshInstance
+class AKAME_API MeshInstance
 {
 private:
 	//Buffer object and Atrribute object iDs

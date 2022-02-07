@@ -2,11 +2,12 @@
 #include"Math/EngineMathConstants.h"
 #include<string>
 #include<memory>
+#include"Core/AkameCore.h"
 class Quaternion;
 glm::vec3 operator * (glm::vec3 const& vec3, Quaternion& q);
 glm::vec3 operator * ( Quaternion& q, glm::vec3 const& vec3);
 Quaternion operator *(const Quaternion& rhs, const Quaternion& lhs);
-class Quaternion
+class AKAME_API Quaternion
 {
 private:
 	

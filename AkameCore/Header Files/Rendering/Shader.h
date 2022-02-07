@@ -3,7 +3,8 @@
 #include<string>
 #include<map>
 #include"Math/EngineMath.h"
-class Shader
+#include"Core/AkameCore.h"
+class AKAME_API Shader
 {
 private:
 	void ParseUniforms();

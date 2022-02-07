@@ -5,7 +5,7 @@
 #include"Assets/AssetManager.h"
 #include"Components/Components.h"
 #include<unordered_map>
-class Material:public Components
+class AKAME_API Material:public Components
 {
 private:
 	unsigned int transformLocation;

@@ -4,7 +4,7 @@
 #include"Rendering/System/ShaderRenderPipeline.h"
 
 
-class SkeletalMeshRenderingPipeline:public ShaderRenderPipeline
+class AKAME_API SkeletalMeshRenderingPipeline:public ShaderRenderPipeline
 {
 public:
 	void OnPreRender(std::shared_ptr<Shader> shader, RenderingSystem* rsys, Camera cam, unsigned int frameBuffer=0)override;

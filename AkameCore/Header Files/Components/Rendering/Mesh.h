@@ -3,6 +3,7 @@
 #include<vector>
 #include"Math/GlmMath.h"
 #include"Components/Components.h"
+#include"Core/AkameCore.h"
 struct vert
 {
 	glm::vec3 pos;
@@ -12,14 +13,16 @@ struct vert
 	glm::vec3 biTangent;
 };
 
-class Mesh:public Components
+class AKAME_API Mesh:public Components
 {
 private:
 	static bool needsUpdate;
 	static std::vector<vert> vertexData;
 	static std::vector<unsigned int> indexList;
 	//Buffer object and Atrribute object iDs
-	static unsigned int VAO, VBO, IBO;
+	static unsigned int VAO;
+	static unsigned int IBO;
+	static unsigned int VBO;
 	static size_t topStack;
 
 	//number of IBO indices

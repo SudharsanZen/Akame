@@ -1,6 +1,7 @@
 #pragma once
 #include"Rendering/System/ShaderRenderPipeline.h"
-class DefaultRenderingPipeline:public ShaderRenderPipeline
+
+class AKAME_API DefaultRenderingPipeline:public ShaderRenderPipeline
 {
 private:
 	void  WindowsResizeCallBacks(int height, int width) override;

@@ -18,13 +18,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
@@ -40,16 +40,18 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
     <OutDir>bin\Debug\</OutDir>
     <IntDir>..\bin\Intermediate\Debug\AkameCore\</IntDir>
     <TargetName>AkameCore</TargetName>
-    <TargetExt>.lib</TargetExt>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
     <OutDir>bin\Release\</OutDir>
     <IntDir>..\bin\Intermediate\Release\AkameCore\</IntDir>
     <TargetName>AkameCore</TargetName>
-    <TargetExt>.lib</TargetExt>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -64,17 +66,16 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-    <Lib>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;imGui.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXCooking_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXExtensions_static_64.lib;pugixml.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>vendor\glfw\src\Debug;vendor\PhysX\physx\bin\win.x86_64.vc142.md\Debug;vendor\imGui\windows\Debug;vendor\assimp\lib\Debug;vendor\pugixml\src\bin\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
+      <ImportLibrary>bin\Debug\AkameCore.lib</ImportLibrary>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AK_DLL;AK_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\glfw\include;vendor\single_include\nlohmann;vendor\glad-akame-;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -82,16 +83,16 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-    </Link>
-    <Lib>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;imGui.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXCooking_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;PhysXExtensions_static_64.lib;pugixml.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>vendor\glfw\src\Release;vendor\PhysX\physx\bin\win.x86_64.vc142.md\Release;vendor\imGui\windows\Release;vendor\assimp\lib\Release;vendor\pugixml\src\bin\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
+      <ImportLibrary>bin\Release\AkameCore.lib</ImportLibrary>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Header Files\Animation\AnimationControllerSystem.h" />
@@ -112,6 +113,7 @@
     <ClInclude Include="Header Files\Components\Rendering\Material.h" />
     <ClInclude Include="Header Files\Components\Rendering\Mesh.h" />
     <ClInclude Include="Header Files\Components\Rendering\Transform.h" />
+    <ClInclude Include="Header Files\Core\AkameCore.h" />
     <ClInclude Include="Header Files\Core\Debug\Debug.h" />
     <ClInclude Include="Header Files\Core\Editor\ContentBrowsing\ContentBrowser.h" />
     <ClInclude Include="Header Files\Core\Editor\EditorUI.h" />

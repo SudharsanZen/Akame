@@ -27,8 +27,8 @@
     <ClCompile Include="ExporterUI.cpp" />
     <ClCompile Include="FileOpenSaveDialogBox.cpp" />
     <ClCompile Include="OS_interface.cpp" />
-    <ClCompile Include="Source.cpp" />
     <ClCompile Include="RefMEta.cpp" />
+    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\EngineAssets\AppIcons\Png\icon.ico">

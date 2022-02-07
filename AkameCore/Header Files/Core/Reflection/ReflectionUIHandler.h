@@ -5,6 +5,7 @@
 #include"Math/GlmMath.h"
 #include"Math/Quaternion.h"
 #include<list>
+#include"Core/AkameCore.h"
 #include <ECSTYPES.h>
 #define AK_ID(id_name) (#id_name,&id_name,ID_TYPE::SIMPLE())
 #define AK_ID_LIST(id_name) (#id_name,&id_name,ID_TYPE::SIMPLE_LIST())
@@ -20,7 +21,7 @@ namespace ID_TYPE
 	class SIMPLE_LIST {};
 	class COMPLEX_LIST {};
 };
-class ReflectionUIHandler
+class AKAME_API ReflectionUIHandler
 {
 	void DrawTitle(std::string name);
 	void DrawUIField(std::string name, int *val);

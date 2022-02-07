@@ -2,7 +2,7 @@
 #include<string>
 #include<Rendering/Texture.h>
 
-class ContentBrowser
+class AKAME_API ContentBrowser
 {
 private:
 	bool open;

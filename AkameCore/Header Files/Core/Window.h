@@ -2,9 +2,9 @@
 
 #include<string>
 #include<memory>
-
+#include"AkameCore.h"
 typedef struct GLFWwindow GLFWwindow;
-class Window
+class AKAME_API Window
 {
 protected:
 	

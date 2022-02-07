@@ -4,7 +4,7 @@
 
 #include<map>
 
-class EntityDescriptionSystem:public System
+class AKAME_API EntityDescriptionSystem:public System
 {
 private:
 	friend class Scene;

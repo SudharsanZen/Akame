@@ -3,7 +3,7 @@
 #include"Rendering/Texture.h"
 #include"Rendering/Shader.h"
 
-class DisplacementMap
+class AKAME_API DisplacementMap
 {
 private:
 	glm::vec3 diffColor;

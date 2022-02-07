@@ -14,7 +14,7 @@
 #include"Components/Rendering/Material.h"
 #include<sstream>
 #include"Assets/ShaderManager.h"
-class SkeletalMeshRenderingSystem: public System
+class AKAME_API SkeletalMeshRenderingSystem: public System
 {
 	friend class Scene;
 	std::weak_ptr<ECS> ecs;

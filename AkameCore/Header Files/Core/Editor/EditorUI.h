@@ -10,7 +10,7 @@
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
 class Scene;
-struct EntitySignatures
+struct AKAME_API EntitySignatures
 {
 private:
 	Scene& m_Scene;
@@ -26,7 +26,7 @@ public:
 	ComponentBitPosition m_Lights_pose;
 	ComponentBitPosition m_Material_pose;
 };
-class Editor
+class AKAME_API Editor
 {
 
 private:

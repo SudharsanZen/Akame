@@ -7,7 +7,7 @@
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
 
-class SceneHierarchyWindow
+class AKAME_API SceneHierarchyWindow
 {
 	friend class Editor;
 	friend class Exporter;

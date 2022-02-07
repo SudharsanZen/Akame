@@ -5,7 +5,7 @@
 #include"Core\Scene.h"
 #include"Core\Window.h"
 
-class LightAndShadowConfig
+class AKAME_API LightAndShadowConfig
 {
 private:
 	Scene& m_scene;

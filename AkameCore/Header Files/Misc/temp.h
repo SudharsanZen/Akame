@@ -1,7 +1,8 @@
 #pragma once
 #include"Core/Engine.h"
 #include<vector>
-class lines
+#include"Core/AkameCore.h"
+class AKAME_API lines
 {
 	unsigned int VBO, VAO;
 public:
@@ -72,9 +73,9 @@ void calTangentBiTangent(v& v0, v& v1, v& v2)
 	v2.biTangent = b;
 
 }
-void calTangentBiTangent(std::vector<vert>& v);
-std::vector<vert> generateSphereVertices(int numSegLat, int numSegLong, float radius, std::vector<unsigned int>& ind);
-std::vector<vert> generateSphereVertices(int numSegLat, int numSegLong, float radius);
-std::vector<vert> generateCubeVertices(int heightSeg=1, int widthSeg=1);
-std::vector<vert> generatePlaneVertices(int lengthSeg=1, int widthSeg=1);
-
+void AKAME_API calTangentBiTangent(std::vector<vert>& v);
+std::vector<vert> AKAME_API generateSphereVertices(int numSegLat, int numSegLong, float radius, std::vector<unsigned int>& ind);
+std::vector<vert> AKAME_API generateSphereVertices(int numSegLat, int numSegLong, float radius);
+std::vector<vert> AKAME_API generateCubeVertices(int heightSeg=1, int widthSeg=1);
+std::vector<vert> AKAME_API generatePlaneVertices(int lengthSeg=1, int widthSeg=1);
+				  

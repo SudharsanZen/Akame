@@ -13,7 +13,7 @@
 #include"Animation/SkeletalMeshRenderingSystem.h"
 class Camera;
 class LightSystem;
-class RenderingSystem :public System
+class AKAME_API RenderingSystem :public System
 {
 private:
 	unsigned int transformUBO;

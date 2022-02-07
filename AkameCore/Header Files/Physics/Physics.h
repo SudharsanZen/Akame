@@ -37,7 +37,7 @@ namespace physics
 	void _PxToTrans(physx::PxTransform pxt, Transform& targetTransform,float mix);
 
 	/*class to handle physics*/
-	class Physics
+	class AKAME_API Physics
 	{
 	private:
 		

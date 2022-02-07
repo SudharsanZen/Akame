@@ -8,7 +8,7 @@
 #include<json/single_include/nlohmann/json.hpp>
 
 namespace json = nlohmann;
-class ReflectionMeta
+class AKAME_API ReflectionMeta
 {
 	bool _reading = false;
 	bool _writing = false;

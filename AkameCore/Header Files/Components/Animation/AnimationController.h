@@ -2,8 +2,8 @@
 #include"ECS.h"
 #include"Components/Components.h"
 #include"SkeletalMesh.h"
-
-class AnimationClip
+#include"Core/AkameCore.h"
+class AKAME_API AnimationClip
 {
 private:
 	template <typename _keyValueType>

@@ -7,7 +7,7 @@
 #include"Components/Physics/RigidBody3D.h"
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
-class InspectorWindow
+class AKAME_API InspectorWindow
 {
 	Scene& m_Scene;
 	std::shared_ptr<ECS> m_ECS;

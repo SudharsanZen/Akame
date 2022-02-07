@@ -4,11 +4,11 @@
 #include"Assets/ShaderManager.h"
 namespace BasicShapes
 {
-	extern std::vector<vert> quadVert;
-	extern std::vector<unsigned int> quadIndices;
+	extern AKAME_API std::vector<vert> quadVert;
+	extern AKAME_API std::vector<unsigned int> quadIndices;
 }
 
-class DeferredRendererFragmentBuffer
+class AKAME_API DeferredRendererFragmentBuffer
 {
 	
 

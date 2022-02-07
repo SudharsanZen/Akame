@@ -6,7 +6,7 @@
 #include"Rendering\System\TiledRenderer.h"
 #include"Math\GlmMath.h"
 
-class DeferredPipeline :public ShaderRenderPipeline
+class AKAME_API DeferredPipeline :public ShaderRenderPipeline
 {
 	TiledRenderer drfb;
 	friend class Editor;

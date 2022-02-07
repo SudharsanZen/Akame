@@ -2,7 +2,8 @@
 #include"Rendering/System/LightSystem.h"
 #include"Rendering/DeferredRendererFragmentBuffer.h"
 #include"Assets/AssetManager.h"
-class TiledRenderer
+
+class AKAME_API TiledRenderer
 {
 	unsigned int progID;
 	

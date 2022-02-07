@@ -1,7 +1,7 @@
 #pragma once
 #include"Components/Rendering/Mesh.h"
 
-class FrameBuffer
+class AKAME_API FrameBuffer
 {
 private:
 	unsigned int framebuffer;

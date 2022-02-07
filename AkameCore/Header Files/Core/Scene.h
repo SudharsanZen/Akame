@@ -1,7 +1,4 @@
 #pragma once
-
-
-
 #include"Rendering/Camera.h"
 #include<functional>
 #include"ECS.h"
@@ -9,6 +6,7 @@
 #include"Rendering/System/SceneTransformManager.h"
 #include"Components/EntityDescriptor.h"
 #include "Core/Editor/EntityDescriptionSystem.h"
+#include "AkameCore.h"
 class SkeletalMeshRenderingSystem;
 class Window;
 class RenderingSystem;
@@ -19,7 +17,9 @@ namespace physics
 {
 	class RigidBodySystem;
 }
-class Scene
+
+
+class AKAME_API Scene
 {
 private:
 
@@ -134,8 +134,6 @@ inline T& Scene::AddComponent(Entity entityID)
 
 //specialization of AddComponent for BehaviourComponent for storing entityID along with the component
 
-
-
 //Remove added component
 
 template<typename T>
@@ -151,5 +149,4 @@ inline T& Scene::GetComponent(Entity entityID)
 {
 	return ecs->GetComponent<T>(entityID);
 }
-
 

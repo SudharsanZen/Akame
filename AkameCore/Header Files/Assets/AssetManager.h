@@ -5,7 +5,7 @@
 #include"Rendering/Shader.h"
 #include"Assets/ShaderManager.h"
 
-class AssetManager
+class AKAME_API AssetManager
 {
 private:
 	

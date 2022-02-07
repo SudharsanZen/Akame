@@ -4,6 +4,7 @@
 #include"Components/Components.h"
 #include"Math/EngineMath.h"
 #include<map>
+#include"Core/AkameCore.h"
 struct sk_vert
 {
 	glm::vec3 pos;
@@ -32,7 +33,7 @@ struct BoneInfo
 };
 
 
-class SkeletalMesh:public Components
+class AKAME_API SkeletalMesh:public Components
 {
 private:
 	/*******************************************************************
@@ -43,7 +44,9 @@ private:
 	static	bool							needsUpdate;		//is set to true if the vertex buffer needs to be updated
 	static	std::vector<sk_vert>			vertexData;			//global vertex list
 	static	std::vector<unsigned int>		indexList;			//global index list
-	static	unsigned int					VAO, VBO, IBO;		//Buffer object and Atrribute object iDs
+	static	unsigned int					VAO; 		//Buffer object and Atrribute object iDs
+	static	unsigned int					VBO;		//Buffer object and Atrribute object iDs
+	static	unsigned int					IBO;		//Buffer object and Atrribute object iDs
 
 
 	
@@ -59,7 +62,7 @@ private:
 
 	//only called when "needsUpdate" is true
 	//updates VBO and IBO when needed
-	static void setupMesh();
+	static  void setupMesh();
 
 	//entity id of animController that holds all the animation and bone information
 	Entity animController;

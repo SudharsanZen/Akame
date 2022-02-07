@@ -1,6 +1,7 @@
 #pragma once
 #include"Components/Rendering/Mesh.h"
-class DepthFrameBuffer
+
+class AKAME_API DepthFrameBuffer
 {
 
 private:

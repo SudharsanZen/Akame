@@ -1,5 +1,5 @@
 #pragma once
-
+#include"Core/AkameCore.h"
 /*! @} */
 
 /*! @brief One.
@@ -243,7 +243,7 @@
 
 
 class GLFWwindow;
-class Input
+class AKAME_API Input
 {
 private:
 	class keyState

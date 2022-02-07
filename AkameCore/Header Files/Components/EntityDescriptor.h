@@ -1,8 +1,8 @@
+#pragma once
 #include"ECS.h"
 #include"Components/Components.h"
-#pragma once
-
-class EntityDescriptor:public Components
+#include"Core/AkameCore.h"
+class AKAME_API EntityDescriptor:public Components
 {
 	std::string name;
 	std::string tag;

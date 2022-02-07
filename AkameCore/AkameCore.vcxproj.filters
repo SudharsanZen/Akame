@@ -222,6 +222,9 @@
     <ClInclude Include="Header Files\Core\Log\Log.h">
       <Filter>Header Files\Core\Log</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Core\Reflection\ReflectionMeta.h">
+      <Filter>Header Files\Core\Reflection</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Core\Reflection\ReflectionUIHandler.h">
       <Filter>Header Files\Core\Reflection</Filter>
     </ClInclude>
@@ -315,7 +318,7 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Core\Reflection\ReflectionMeta.h" />
+    <ClInclude Include="Header Files\Core\AkameCore.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp">
@@ -392,6 +395,9 @@
     </ClCompile>
     <ClCompile Include="Source Files\Core\Input.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Core\Reflection\ReflectionMeta.cpp">
+      <Filter>Source Files\Core\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Core\Reflection\ReflectionUIHandler.cpp">
       <Filter>Source Files\Core\Reflection</Filter>
@@ -489,6 +495,5 @@
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source Files\Core\Reflection\ReflectionMeta.cpp" />
   </ItemGroup>
 </Project>

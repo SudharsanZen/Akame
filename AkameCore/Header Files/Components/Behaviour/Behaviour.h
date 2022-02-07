@@ -2,7 +2,8 @@
 #include"ECS.h"
 #include"Core/Reflection/ReflectionUIHandler.h"
 #include"Components/EntityDescriptor.h"
-class Behaviour
+#include"Core\AkameCore.h"
+class AKAME_API Behaviour
 {
 	std::weak_ptr<ECS> ecs;
 	friend class BehaviourComponent;

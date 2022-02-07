@@ -4,7 +4,7 @@
 #include<map>
 #include<queue>
 class ShaderRenderPipeline;
-class ShaderManager
+class AKAME_API ShaderManager
 {
 	static std::map<std::string, std::vector<std::pair<int, std::string>>> shaderQueues;
 	static std::unordered_map<std::string,std::shared_ptr<Shader>> shaderList;

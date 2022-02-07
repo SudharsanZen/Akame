@@ -3,8 +3,9 @@
 #include<vector>
 #include<cassert>
 #include<iostream>
+#include"Core/AkameCore.h"
 template<class T>
-class AssetArray
+class AKAME_API AssetArray
 {
 
 	std::vector<long long> freelist;

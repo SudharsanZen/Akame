@@ -6,7 +6,7 @@
 #include"Assets/ShaderManager.h"
 #include"Components/Physics/RigidBody3D.h"
 struct ImGuiIO;
-class ViewPortWindow
+class AKAME_API ViewPortWindow
 {
 private:
 	Camera cam;

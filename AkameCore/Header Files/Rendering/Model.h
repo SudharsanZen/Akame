@@ -12,7 +12,7 @@ class Scene;
  * class is used for importing models from files into the scene*
  * constructor takes one argument of the current scene		   *
  ***************************************************************/
-class Model
+class AKAME_API Model
 {
 private:
 	Scene&							mCurrScene;

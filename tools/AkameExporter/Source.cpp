@@ -1,12 +1,12 @@
 
 #include"ExporterUI.h"
+#include"ECS.h"
 
 int main()
 {
 	
-	
 
-	
+	ComponentArray<Transform> arr;
 	AssetManager::assetRootPath = "../../../../Assets/";
 
 	Window window(800,800,"Akame Exporter");

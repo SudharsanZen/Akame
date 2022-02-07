@@ -7,7 +7,7 @@
 std::vector<glm::mat4> CalculatePSSMLightSpaceMats(Camera &cam,glm::vec3 l,int numOfFrsutums,float lambda,float shadowDist);
 std::vector<std::vector<glm::vec3>> CalculateFrustumCorners(Camera& cam, int numOfFrus,float lambda,float shadowDist);
 
-class PSSMFBO
+class AKAME_API PSSMFBO
 {
 private:
 	unsigned int fbo;
