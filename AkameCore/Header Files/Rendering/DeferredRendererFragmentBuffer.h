@@ -2,10 +2,12 @@
 #include"Components/Rendering/Mesh.h"
 #include"Camera.h"
 #include"Assets/ShaderManager.h"
+#include"Core/AkameCore.h"
 namespace BasicShapes
 {
-	extern AKAME_API std::vector<vert> quadVert;
-	extern AKAME_API std::vector<unsigned int> quadIndices;
+
+	AKAME_API extern  std::vector<vert> quadVert;
+	AKAME_API extern std::vector<unsigned int> quadIndices;
 }
 
 class DeferredRendererFragmentBuffer

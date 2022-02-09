@@ -71,6 +71,7 @@ int main()
 	boxMat.setTexture2D("material.diffuse", rootDir + "Media/pbr/crate/basecolor.jpg");
 	boxMat.setTexture2D("material.roughness", rootDir + "Media/pbr/crate/roughness.jpg");
 	boxMat.setTexture2D("material.normal", rootDir + "Media/pbr/crate/normal.jpg");
+
 	boxMat.setValue("noMetallic", 1);
 	boxMat.setValue("noRougness", 0);
 	boxMat.setValue("noAO", 1);

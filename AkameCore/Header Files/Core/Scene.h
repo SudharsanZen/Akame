@@ -1,12 +1,52 @@
 #pragma once
 #include"Rendering/Camera.h"
 #include<functional>
-#include"ECS.h"
-#include"Components/Behaviour/BehaviourComponent.h"
+#define DECLARE_ECS_SPECIALIZATION(type)						\
+	template<>													\
+	AKAME_API type& AddComponent<type>(Entity entityID);		\
+	template<>													\
+	AKAME_API void RemoveComponent<type>(Entity entityID);		\
+	template<>													\
+	AKAME_API type& GetComponent(Entity entityID);
+
+#ifdef AK_EXPORT
+	#include"ECS.h"
+	#define DEFINE_ECS_SPECIALIZATION(type)						\
+	template<>													\
+	type& Scene::AddComponent<type>(Entity entityID)		\
+	{															\
+		type& comp = ecs->AddComponent<type>(entityID);		\
+		comp.ecs = ecs;										\
+		return comp;											\
+	}															\
+	template<>													\
+	void Scene::RemoveComponent<type>(Entity entityID)			\
+	{															\
+		ecs->RemoveComponent<type>(entityID);					\
+	}															\
+	template<>													\
+	type& Scene::GetComponent<type>(Entity entityID)			\
+	{															\
+		return ecs->GetComponent<type>(entityID);				\
+	}
+#else
+	class ECS;
+	#include"ECSTYPES.h"
+#endif
+
+
 #include"Rendering/System/SceneTransformManager.h"
-#include"Components/EntityDescriptor.h"
+
 #include "Core/Editor/EntityDescriptionSystem.h"
 #include "AkameCore.h"
+#include"Components/EntityDescriptor.h"
+#include"Components/Behaviour/BehaviourComponent.h"
+#include"Components/Rendering/Mesh.h"
+#include"Components/Rendering/Material.h"
+#include"Components/Physics/RigidBody3D.h"
+#include"Components/Animation/SkeletalMesh.h"
+#include"Components/Animation/AnimationController.h"
+#include"Components/Lighting/Lights.h"
 class SkeletalMeshRenderingSystem;
 class Window;
 class RenderingSystem;
@@ -78,17 +118,23 @@ public:
 
 	//Adds a component to the Given entity
 	template<typename T>
-	T& AddComponent(Entity entityID);
-
-
-
+	AKAME_API T& AddComponent(Entity entityID);
 	//Remove added component
 	template<typename T>
-	void RemoveComponent(Entity entityID);
-
+	AKAME_API void RemoveComponent(Entity entityID);
 	//get added component with a given entityID
 	template<typename T>
-	T& GetComponent(Entity entityID);
+	AKAME_API T& GetComponent(Entity entityID);
+
+	DECLARE_ECS_SPECIALIZATION(Transform)
+	DECLARE_ECS_SPECIALIZATION(Mesh)
+	DECLARE_ECS_SPECIALIZATION(BehaviourComponent)
+	DECLARE_ECS_SPECIALIZATION(AnimationController)
+	DECLARE_ECS_SPECIALIZATION(physics::RigidBody3D)
+	DECLARE_ECS_SPECIALIZATION(SkeletalMesh)
+	DECLARE_ECS_SPECIALIZATION(Material)
+	DECLARE_ECS_SPECIALIZATION(EntityDescriptor)
+	DECLARE_ECS_SPECIALIZATION(Lights)
 
 	//set backGround color of the window
 	AKAME_API void backGroundColor(float r, float g, float b, float a);
@@ -98,30 +144,36 @@ public:
 	AKAME_API float getDeltaTime();
 };
 
+
+#ifdef AK_EXPORT
+
 template<typename T>
-inline T& Scene::AddComponent(Entity entityID)
+T& Scene::AddComponent(Entity entityID)
 {
 
 	T& comp=ecs->AddComponent<T>(entityID);
 	comp.ecs = ecs;
 	return comp;
 }
-
-//specialization of AddComponent for BehaviourComponent for storing entityID along with the component
-
 //Remove added component
-
 template<typename T>
-inline void Scene::RemoveComponent(Entity entityID)
+void Scene::RemoveComponent(Entity entityID)
 {
 	ecs->RemoveComponent<T>(entityID);
 }
-
 //get added component with a given entityID
-
 template<typename T>
-inline T& Scene::GetComponent(Entity entityID)
+T& Scene::GetComponent(Entity entityID)
 {
 	return ecs->GetComponent<T>(entityID);
 }
-
+DEFINE_ECS_SPECIALIZATION(Transform)
+DEFINE_ECS_SPECIALIZATION(Lights)
+DEFINE_ECS_SPECIALIZATION(Mesh)
+DEFINE_ECS_SPECIALIZATION(BehaviourComponent)
+DEFINE_ECS_SPECIALIZATION(AnimationController)
+DEFINE_ECS_SPECIALIZATION(physics::RigidBody3D)
+DEFINE_ECS_SPECIALIZATION(SkeletalMesh)
+DEFINE_ECS_SPECIALIZATION(Material)
+DEFINE_ECS_SPECIALIZATION(EntityDescriptor)
+#endif

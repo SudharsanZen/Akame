@@ -3,16 +3,11 @@
 #include"stb_image.h"
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
-#include"Components/Rendering/Mesh.h"
-#include"Components/Rendering/Material.h"
-#include"Components/Physics/RigidBody3D.h"
-#include"Components/Animation/SkeletalMesh.h"
 #include"Animation/SkeletalMeshRenderingSystem.h"
 #include"Core/Window.h"
 #include"Rendering/System/RenderingSystem.h"
 #include"Scripting/BehaviourSystem.h"
 #include"Physics/System/RigidBodySystem.h"
-#include"ECS.h"
 #include"Core/Log/Log.h"
 #include"Rendering/System/LightSystem.h"
 #include"misc/temp.h"

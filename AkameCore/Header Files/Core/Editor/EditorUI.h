@@ -10,6 +10,7 @@
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
 class Scene;
+
 struct EntitySignatures
 {
 private:

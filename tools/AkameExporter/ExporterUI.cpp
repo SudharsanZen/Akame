@@ -169,3 +169,15 @@ void Exporter::DrawUI()
 	lastTime = glfwGetTime();
 	m_Scene.deltaTime = deltaTime;
 }
+
+EDFExporter::EDFExporter(Scene& scene, Entity selected) :m_scene(scene)
+{
+	ecs = m_scene.ecs;
+}
+
+void EDFExporter::ExportEntity(Entity eid)
+{
+	if (eid == INVALID_ENTITY)
+		throw("Invalid entity!");
+
+}

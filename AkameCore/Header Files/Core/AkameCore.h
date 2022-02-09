@@ -15,5 +15,6 @@
 #elif AK_STATIC
 	#ifndef AK_EXPORT
 		#define AK_EXPORT
+		#define AK_EXTERN
 	#endif
 #endif
