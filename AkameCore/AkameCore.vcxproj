@@ -159,7 +159,6 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Header Files\Physics\ColliderShape.cpp" />
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkeletalMeshRenderingSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkinnedRendererPipeline.cpp" />

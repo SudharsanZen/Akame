@@ -1,4 +1,5 @@
 #pragma once
+#define NOMINMAX
 #include"ECSTYPES.h"
 #include<vector>
 #include<unordered_map>
@@ -22,9 +23,9 @@ struct ComponentAllocator
 	ComponentAllocator() = default;
 	template<class U> 
 	constexpr ComponentAllocator(const ComponentAllocator <U>&) noexcept {}
-	T* allocate(std::size_t n)
+	T* allocate(size_t n)
 	{
-		if (n > std::numeric_limits<std::size_t>::max() / sizeof(T))
+		if (n > (std::numeric_limits<size_t>::max() / sizeof(T)))
 			throw std::bad_array_new_length();
 		if (auto p = static_cast<T*>(std::malloc(n * sizeof(T))))
 		{
@@ -39,7 +40,7 @@ struct ComponentAllocator
 	{
 		new (ptr) U(std::forward<Params>(args)...);
 	}
-	void deallocate(T* p, std::size_t n) noexcept {
+	void deallocate(T* p, size_t n) noexcept {
 		
 		std::free(p);
 	}

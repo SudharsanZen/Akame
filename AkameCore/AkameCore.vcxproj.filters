@@ -449,6 +449,9 @@
     <ClCompile Include="Source Files\Rendering\Model.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Rendering\SceneTransformManager.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\Rendering\Shader.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
@@ -497,7 +500,5 @@
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Header Files\Physics\ColliderShape.cpp" />
-    <ClCompile Include="Source Files\Rendering\SceneTransformManager.cpp" />
   </ItemGroup>
 </Project>

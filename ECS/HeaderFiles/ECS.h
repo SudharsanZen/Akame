@@ -8,7 +8,6 @@ private:
 	
 	e_index maxEntities = 1000;
 	std::list<e_index> freeList;
-	std::vector<Signature> signature;
 	std::vector<std::vector<Entity>> entityList;
 
 
@@ -120,8 +119,8 @@ public:
 		
 		componentManager.RemoveComponent<T>(entity);
 
-		sigComp.set(componentManager.GetComponentBitPose<T>(), false);
-		systemManager.EntitySignatureChanged(entityID);
+		entity.signature->set(componentManager.GetComponentBitPose<T>(), false);
+		systemManager.EntitySignatureChanged(entity);
 	}
 
 	template<typename T>
