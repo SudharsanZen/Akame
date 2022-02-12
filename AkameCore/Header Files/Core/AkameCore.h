@@ -9,16 +9,13 @@
 			#define AKAME_API __declspec(dllimport)
 			#define AKAME_EXTERN extern
 		#endif
-	#else
-		#define AKAME_API 	
 	#endif
-#elif AK_STATIC
-	#ifndef AK_EXPORT
-		#define AK_EXPORT
-		#define AK_EXTERN
+
+	#ifdef AK_STATIC 
+		#define AKAME_API
+		#define AKAME_EXTERN
 	#endif
 #endif
-
 
 
 

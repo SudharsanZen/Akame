@@ -105,7 +105,7 @@ namespace physics
 
 	}
 
-	inline Physics::~Physics() { cleanPhysics(); }
+	Physics::~Physics() { cleanPhysics(); }
 
 	bool Physics::isAdvancing(physx::PxReal dt)
 	{
@@ -129,12 +129,12 @@ namespace physics
 		return true;
 	}
 
-	inline Physics::Physics() :Physics(1.0f / 60.0f) 
+	Physics::Physics() :Physics(1.0f / 60.0f) 
 	{
 
 	}
 
-	inline Physics::Physics(float stepSize)
+	Physics::Physics(float stepSize)
 	{ 
 		mStepSize = stepSize; 
 	}

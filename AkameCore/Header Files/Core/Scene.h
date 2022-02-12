@@ -9,9 +9,9 @@
 	template<>													\
 	AKAME_API type& GetComponent(Entity entityID);
 
-#ifdef AK_EXPORT
+#if defined(AK_EXPORT) || defined(AK_STATIC)
 #include"ECS.h"
-#define DEFINE_ECS_SPECIALIZATION_SCENE(type)							\
+#define DEFINE_ECS_SPECIALIZATION_SCENE(type)					\
 	template<>													\
 	type& Scene::AddComponent<type>(Entity entityID)			\
 	{															\
@@ -137,7 +137,7 @@ public:
 };
 
 
-#ifdef AK_EXPORT
+#if defined(AK_EXPORT) || defined(AK_STATIC)
 
 template<typename T>
 T& Scene::AddComponent(Entity entityID)

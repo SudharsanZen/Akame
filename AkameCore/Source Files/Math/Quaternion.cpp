@@ -23,7 +23,7 @@ Quaternion operator *(const Quaternion& rhs, const Quaternion& lhs)
 	Quaternion newQuat = (rhs.quaternion * lhs.quaternion);
 	return newQuat;
 }
-inline Quaternion::Quaternion() :Quaternion(glm::quat(1, 0, 0, 0)) 
+Quaternion::Quaternion() :Quaternion(glm::quat(1, 0, 0, 0)) 
 {
 
 }
