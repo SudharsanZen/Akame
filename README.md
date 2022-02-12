@@ -8,7 +8,7 @@ It was originally made for the development of Akame Engine, which is a game engi
 
 **NOTE:** Akame is still in it's very early-stage and currently only supports Windows, many of the functionalities may change in the future drastically!
 
-## Qucik Start
+## Quick Start
 Visual Studio 2019 is recommended.
 
 Make sure Python and CMake version 3.22.0 or higher is installed and is added to the System PATH before proceeding!
