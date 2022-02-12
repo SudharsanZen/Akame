@@ -1,10 +1,12 @@
 #include "Rendering\System\TiledRenderer.h"
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
 #include<iostream>
 #include<fstream>
 #include"Core/Log/Log.h"
 #include<sstream>
+#pragma warning(push, 0)
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#pragma warning(pop)
 
 TiledRenderer::TiledRenderer(std::string shaderLocation)
 {
@@ -128,7 +130,7 @@ void TiledRenderer::setUpShader(Camera& cam, std::shared_ptr<LightSystem> lsys)
 
     glUniform1i(GetUniformLocation("height"), height);
     glUniform1i(GetUniformLocation("width"), width);
-    glUniform1i(GetUniformLocation("numOfFrustum"), lsys->dirLightSpace.size());
+    glUniform1i(GetUniformLocation("numOfFrustum"), (int)lsys->dirLightSpace.size());
     glUniform3fv(GetUniformLocation("viewPos"), 1, glm::value_ptr(cam.transform.GetGlobalPosition()));
     glUniform1i(GetUniformLocation("NUM_POINT_LIGHT"), int(lsys->ptVector.size()));
     glUniformMatrix4fv(GetUniformLocation("projInv"), 1, GL_FALSE, glm::value_ptr(glm::inverse(cam.getProjectionMatrix())));
@@ -159,7 +161,7 @@ void TiledRenderer::setUpShader(Camera& cam, std::shared_ptr<LightSystem> lsys)
 void TiledRenderer::outPutToQaud()
 {
    
-    int x = glm::ceil((float)width / 32.0f), y = glm::ceil((float)height / 32.0f);
+    int x = static_cast<int>(glm::ceil((float)width / 32.0f)), y = static_cast<int>(glm::ceil((float)height / 32.0f));
   
     
     glDispatchCompute(x,y, 1);
@@ -233,7 +235,7 @@ char** TiledRenderer::readShaderFile(std::string currPath, int& len)
         ENGINE_CORE_ERROR("SHADER_CLASS::can't open File: " + currPath);
     }
     size_t contentLength = content.length();
-    unsigned int numOfChunks = ceil((float)contentLength / (float)(CODE_BLOCK_SIZE - 1));
+    unsigned int numOfChunks = static_cast<unsigned int>(ceil((float)contentLength / (float)(CODE_BLOCK_SIZE - 1)));
 
     char** code = new char* [numOfChunks];
     size_t pos = 0, i = 0;

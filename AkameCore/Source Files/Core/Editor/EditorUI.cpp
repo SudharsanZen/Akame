@@ -1,7 +1,6 @@
-#include<iostream>
 #include "Core\Editor\EditorUI.h"
-#include"glad/glad.h"
-#include"glfw/glfw3.h"
+#include<iostream>
+
 #include"Core\Input.h"
 #include<sstream>
 #include"Components/EntityDescriptor.h"
@@ -16,10 +15,16 @@
 #include"Core/Editor/ViewPort/ViewPortWindow.h"
 #include"Core/Editor/SettingsWindow/LightsAndShadows.h"
 #include"Assets/Asset.h"
+#include"ECS.h"
+#pragma warning(push, 0)
+#pragma warning( disable : 26495)
+#pragma warning( disable : 6031)
+#pragma warning( disable : 26812)
 #include<imGui\backends\imgui_impl_glfw.h>
 #include<imGui\backends\imgui_impl_opengl3.h>
-#include"ECS.h"
-
+#include<glad/glad.h>
+#include<glfw/glfw3.h>
+#pragma warning(pop)
 void Editor::initImGui()
 {
 	std::weak_ptr<GLFWwindow> context=m_Scene.window.mainWindow;
@@ -57,6 +62,7 @@ void Editor::initImGui()
 
 ImGuiIO& Editor::initGui()
 {
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& IO = ImGui::GetIO();
@@ -70,37 +76,6 @@ void Editor::defaultStyle(ImGuiIO& io)
 {
 	ImGuiStyle& style = ImGui::GetStyle();
 	io.Fonts->AddFontFromFileTTF((AssetManager::assetRootPath+"EngineAssets/liberation-sans/LiberationSans-Regular.ttf").c_str(),15.0f);
-	/*
-	//padding
-	style.WindowPadding = ImVec2(11.0f,10.0f);
-	style.FramePadding = ImVec2(4.0f,4.0f);
-	style.CellPadding = ImVec2(0.0f,1.0f);
-	style.ItemSpacing = ImVec2(8.0f,4.0f);
-	style.ItemInnerSpacing = ImVec2(4.0f,4.0f);
-	style.IndentSpacing = 6.0f;
-	style.ScrollbarSize = 15.0f;
-	style.GrabMinSize = 15.0f;
-	//borders
-	style.WindowBorderSize = 1.0f;
-	style.ChildBorderSize = 1.0f;
-	style.PopupBorderSize = 1.0f;
-	style.FrameBorderSize = 1.0f;
-	//rounding
-	style.FrameRounding = 2.0f;
-	style.WindowRounding = 2.0f;
-	style.ChildRounding = 1.0f;
-	style.PopupRounding = 2.0f;
-	style.ScrollbarRounding = 2.0f;
-	style.GrabRounding = 2.0f;
-	style.LogSliderDeadzone = 4.0f;
-	style.TabRounding = 4.0f;
-	//alignment
-	style.WindowTitleAlign = ImVec2(0.5f,0.5f);
-	style.WindowMenuButtonPosition = ImGuiDir_None;
-	style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
-	*/
-	// Sorry if there's any errors here, I translated this back by hand.
-	
 	
 
 	//imGuiIO.Fonts->AddFontFromFileTTF("../data/Fonts/Ruda-Bold.ttf", 15.0f, &config);
@@ -254,7 +229,7 @@ void Editor::DrawUI()
 {
 	std::shared_ptr<GLFWwindow> context = m_Scene.window.mainWindow;
 	
-	currTime = glfwGetTime();
+	currTime = static_cast<float>(glfwGetTime());
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 

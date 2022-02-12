@@ -83,7 +83,9 @@ int main()
 
 
 	scene.AddComponent<Mesh>(plane).CreateMesh(generatePlaneVertices());
-	scene.AddComponent<Transform>(plane).SetGlobalScale(glm::vec3(20.0f));
+	Transform &planePose=scene.AddComponent<Transform>(plane);
+	planePose.SetGlobalScale(glm::vec3(20.0f));
+	planePose.SetGlobalPosition(glm::vec3(0));
 	scene.AddComponent<Material>(plane)=planeMat;
 
 	physics::RigidBody3D& rbdy2 = scene.AddComponent<physics::RigidBody3D>(plane);
@@ -122,7 +124,7 @@ int main()
 				scene.AddComponent<Mesh>(box).CreateMesh(generateCubeVertices());
 				scene.SetEntityName(box, "cube (copy)");
 			}
-			float x=(rand()%10-5),y=(rand()%10-5);
+			float x=static_cast<float>((rand()%10-5)),y= static_cast<float>((rand()%10-5));
 			scene.AddComponent<Transform>(box).SetGlobalPosition(glm::vec3(x, 10, y));
 			
 		

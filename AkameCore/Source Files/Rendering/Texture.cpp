@@ -1,9 +1,11 @@
 #include "Rendering/Texture.h"
-#include"stb_image.h"
-#include"glad/glad.h"
-#include"GLFW/glfw3.h"
 #include"Core/Log/Log.h"
 #include<iostream>
+#pragma warning(push, 0)
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#include"stb_image.h"
+#pragma warning(pop)
 Texture::Texture(std::string dir)
 {
 	imageDir=dir;

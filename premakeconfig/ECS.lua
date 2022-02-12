@@ -2,6 +2,7 @@ project "ECS"
     location"%{wks.location}/ECS"
     kind "StaticLib"
     language "C++"
+    cppdialect "C++17"
     objdir "%{wks.location}/bin/Intermediate/%{cfg.buildcfg}/%{prj.name}"
     targetdir "%{prj.location}/%{cfg.system}/%{cfg.buildcfg}"
     files

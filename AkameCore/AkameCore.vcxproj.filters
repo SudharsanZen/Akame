@@ -192,6 +192,9 @@
     <ClInclude Include="Header Files\Core\Debug\Debug.h">
       <Filter>Header Files\Core\Debug</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Core\Editor\AkameWindowBase.h">
+      <Filter>Header Files\Core\Editor</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Core\Editor\ContentBrowsing\ContentBrowser.h">
       <Filter>Header Files\Core\Editor\ContentBrowsing</Filter>
     </ClInclude>
@@ -370,6 +373,9 @@
     </ClCompile>
     <ClCompile Include="Source Files\Core\Debug\Debug.cpp">
       <Filter>Source Files\Core\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Core\Editor\AkameWindowBase.cpp">
+      <Filter>Source Files\Core\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Core\Editor\ContentBrowser.cpp">
       <Filter>Source Files\Core\Editor</Filter>

@@ -1,10 +1,15 @@
 #pragma once
 // This ignores all warnings raised inside External headers
-#pragma warning(push, 0)
-#include <spdlog/spdlog.h>
-#include <spdlog/fmt/ostr.h>
-#pragma warning(pop)
 
+#ifdef AK_EXPOSE_SPD_LOG
+#pragma warning(push, 0)
+#pragma warning(disable : 26451)
+#pragma warning(disable : 26812)
+#pragma warning(disable : 26498)
+#pragma warning(disable : 26495)
+	#include <spdlog/spdlog.h>
+	#include <spdlog/fmt/ostr.h>
+#pragma warning(pop)
 #include"Core/AkameCore.h"
 
 
@@ -34,3 +39,4 @@ private:
 #define ENGINE_WARN(...)          Log::GetClientLogger()->warn(__VA_ARGS__)
 #define ENGINE_ERROR(...)         Log::GetClientLogger()->error(__VA_ARGS__)
 #define ENGINE_CRITICAL(...)      Log::GetClientLogger()->critical(__VA_ARGS__)
+#endif

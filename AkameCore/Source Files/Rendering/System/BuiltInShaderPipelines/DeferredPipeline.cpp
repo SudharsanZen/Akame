@@ -1,8 +1,14 @@
-#include<glad/glad.h>
-#include<glfw/glfw3.h>
-#include "Rendering/System/DeferredPipeline.h"
 #include<sstream>
-DeferredPipeline::DeferredPipeline(int height, int width) { drfb.updateBufferSize(height, width); }
+#include "Rendering/System/DeferredPipeline.h"
+#pragma warning(push, 0)
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#pragma warning(pop)
+
+DeferredPipeline::DeferredPipeline(int height, int width) 
+{ 
+	drfb.updateBufferSize(height, width); 
+}
 void DeferredPipeline::WindowsResizeCallBacks(int height, int width)
 {
 	drfb.updateBufferSize(height, width);
@@ -36,7 +42,7 @@ void DeferredPipeline::OnPreRender(std::shared_ptr<Shader> shader, RenderingSyst
 	drfb.setFloat("lambda",lsys->lambda);
 	drfb.setFloat("near",cam.getNear());
 	drfb.setFloat("far",lsys->shadowDistance);
-	drfb.setInt("shadowRes",lsys->dir_sMap.GetResolution());
+	drfb.setInt("shadowRes",(int)lsys->dir_sMap.GetResolution());
 	drfb.setVec3("viewDirection",cam.transform.forward());
 	lsys->dir_sMap.useTextureArray(6);
 	for (int i = 0; i < lsys->dirLightSpace.size(); i++)

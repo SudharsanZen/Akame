@@ -4,10 +4,11 @@
 #include"Rendering/Texture.h"
 #include"Rendering/FrameBuffer.h"
 #include"Assets/ShaderManager.h"
+#include"Core/Editor/AkameWindowBase.h"
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
 
-class SceneHierarchyWindow
+class SceneHierarchyWindow:public AkameWindowBase
 {
 	friend class Editor;
 	friend class Exporter;

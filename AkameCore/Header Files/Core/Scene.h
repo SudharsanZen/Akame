@@ -1,7 +1,7 @@
 #pragma once
 #include"Rendering/Camera.h"
 #include<functional>
-#define DECLARE_ECS_SPECIALIZATION(type)						\
+#define DECLARE_ECS_SPECIALIZATION_SCENE(type)					\
 	template<>													\
 	AKAME_API type& AddComponent<type>(Entity entityID);		\
 	template<>													\
@@ -10,13 +10,13 @@
 	AKAME_API type& GetComponent(Entity entityID);
 
 #ifdef AK_EXPORT
-	#include"ECS.h"
-	#define DEFINE_ECS_SPECIALIZATION(type)						\
+#include"ECS.h"
+#define DEFINE_ECS_SPECIALIZATION_SCENE(type)							\
 	template<>													\
-	type& Scene::AddComponent<type>(Entity entityID)		\
+	type& Scene::AddComponent<type>(Entity entityID)			\
 	{															\
-		type& comp = ecs->AddComponent<type>(entityID);		\
-		comp.ecs = ecs;										\
+		type& comp = ecs->AddComponent<type>(entityID);			\
+		comp.ecs = ecs;											\
 		return comp;											\
 	}															\
 	template<>													\
@@ -30,23 +30,15 @@
 		return ecs->GetComponent<type>(entityID);				\
 	}
 #else
-	class ECS;
-	#include"ECSTYPES.h"
+class ECS;
+#include"ECSTYPES.h"
 #endif
-
 
 #include"Rendering/System/SceneTransformManager.h"
 
 #include "Core/Editor/EntityDescriptionSystem.h"
 #include "AkameCore.h"
-#include"Components/EntityDescriptor.h"
 #include"Components/Behaviour/BehaviourComponent.h"
-#include"Components/Rendering/Mesh.h"
-#include"Components/Rendering/Material.h"
-#include"Components/Physics/RigidBody3D.h"
-#include"Components/Animation/SkeletalMesh.h"
-#include"Components/Animation/AnimationController.h"
-#include"Components/Lighting/Lights.h"
 class SkeletalMeshRenderingSystem;
 class Window;
 class RenderingSystem;
@@ -89,7 +81,7 @@ private:
 	friend class Exporter;
 	friend class InspectorWindow;
 	friend class Exporter;
-	friend class EntitySignatures;
+	friend struct EntitySignatures;
 	friend class EDFExporter;
 public:
 	
@@ -126,15 +118,15 @@ public:
 	template<typename T>
 	AKAME_API T& GetComponent(Entity entityID);
 
-	DECLARE_ECS_SPECIALIZATION(Transform)
-	DECLARE_ECS_SPECIALIZATION(Mesh)
-	DECLARE_ECS_SPECIALIZATION(BehaviourComponent)
-	DECLARE_ECS_SPECIALIZATION(AnimationController)
-	DECLARE_ECS_SPECIALIZATION(physics::RigidBody3D)
-	DECLARE_ECS_SPECIALIZATION(SkeletalMesh)
-	DECLARE_ECS_SPECIALIZATION(Material)
-	DECLARE_ECS_SPECIALIZATION(EntityDescriptor)
-	DECLARE_ECS_SPECIALIZATION(Lights)
+	DECLARE_ECS_SPECIALIZATION_SCENE(Transform)
+	DECLARE_ECS_SPECIALIZATION_SCENE(Mesh)
+	DECLARE_ECS_SPECIALIZATION_SCENE(BehaviourComponent)
+	DECLARE_ECS_SPECIALIZATION_SCENE(AnimationController)
+	DECLARE_ECS_SPECIALIZATION_SCENE(physics::RigidBody3D)
+	DECLARE_ECS_SPECIALIZATION_SCENE(SkeletalMesh)
+	DECLARE_ECS_SPECIALIZATION_SCENE(Material)
+	DECLARE_ECS_SPECIALIZATION_SCENE(EntityDescriptor)
+	DECLARE_ECS_SPECIALIZATION_SCENE(Lights)
 
 	//set backGround color of the window
 	AKAME_API void backGroundColor(float r, float g, float b, float a);
@@ -167,13 +159,13 @@ T& Scene::GetComponent(Entity entityID)
 {
 	return ecs->GetComponent<T>(entityID);
 }
-DEFINE_ECS_SPECIALIZATION(Transform)
-DEFINE_ECS_SPECIALIZATION(Lights)
-DEFINE_ECS_SPECIALIZATION(Mesh)
-DEFINE_ECS_SPECIALIZATION(BehaviourComponent)
-DEFINE_ECS_SPECIALIZATION(AnimationController)
-DEFINE_ECS_SPECIALIZATION(physics::RigidBody3D)
-DEFINE_ECS_SPECIALIZATION(SkeletalMesh)
-DEFINE_ECS_SPECIALIZATION(Material)
-DEFINE_ECS_SPECIALIZATION(EntityDescriptor)
+DEFINE_ECS_SPECIALIZATION_SCENE(Transform)
+DEFINE_ECS_SPECIALIZATION_SCENE(Lights)
+DEFINE_ECS_SPECIALIZATION_SCENE(Mesh)
+DEFINE_ECS_SPECIALIZATION_SCENE(BehaviourComponent)
+DEFINE_ECS_SPECIALIZATION_SCENE(AnimationController)
+DEFINE_ECS_SPECIALIZATION_SCENE(physics::RigidBody3D)
+DEFINE_ECS_SPECIALIZATION_SCENE(SkeletalMesh)
+DEFINE_ECS_SPECIALIZATION_SCENE(Material)
+DEFINE_ECS_SPECIALIZATION_SCENE(EntityDescriptor)
 #endif

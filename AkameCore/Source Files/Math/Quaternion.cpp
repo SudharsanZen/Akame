@@ -1,7 +1,9 @@
 #include "Math\Quaternion.h"
-#include<glm\glm\mat3x3.hpp>
-#include<glm\glm\glm.hpp>
-#include<glad\glad.h>
+#pragma warning(push, 0)
+	#include<glm\glm\mat3x3.hpp>
+	#include<glm\glm\glm.hpp>
+	#include<glad\glad.h>
+#pragma warning(pop)
 glm::vec3 operator * ( glm::vec3 const& vec3, Quaternion& q)
 {
 /*glm::quat newVec = quaternion * vec3 * glm::conjugate(quaternion);

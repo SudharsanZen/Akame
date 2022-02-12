@@ -1,12 +1,17 @@
 #include "Core\Editor\ContentBrowsing\ContentBrowser.h"
-#include"glad/glad.h"
-#include"glfw/glfw3.h"
-#include<imGui\backends\imgui_impl_glfw.h>
-#include<imGui\backends\imgui_impl_opengl3.h>
 #include<filesystem>
 #include<sstream>
 #include<Math/GlmMath.h>
 #include<Assets/AssetManager.h>
+#pragma warning(push, 0)
+#pragma warning( disable : 26495)
+#pragma warning( disable : 6031)
+#pragma warning( disable : 26812)
+#include<imGui\backends\imgui_impl_glfw.h>
+#include<imGui\backends\imgui_impl_opengl3.h>
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#pragma warning(pop)
 long long int folderIconID;
 long long int unknownfileIconID;
 std::string getNameFromPath(std::string path)
@@ -148,7 +153,7 @@ void ContentBrowser::DrawContentPanel()
     std::shared_ptr<Texture> folderIcon = AssetManager::GetTexture(folderIconID);
     std::shared_ptr<Texture> unknownFileIcon = AssetManager::GetTexture(unknownfileIconID);
 
-    int max_col = glm::ceil((ImGui::GetWindowWidth() / (iconSize+iconSize*0.3f)));
+    int max_col = static_cast<int>(glm::ceil((ImGui::GetWindowWidth() / (iconSize+iconSize*0.3f))));
 
     if (ImGui::BeginTable("DirectoryContent##11", max_col))
     {
@@ -171,7 +176,7 @@ void ContentBrowser::DrawContentPanel()
             if (entry.is_directory())
             {
                
-                if (ImGui::ImageButton((ImTextureID)folderIcon->textureID, ImVec2(iconSize, iconSize), ImVec2(1, 1), ImVec2(0, 0),0))
+                if (ImGui::ImageButton((ImTextureID)static_cast<int64_t>(folderIcon->textureID), ImVec2(iconSize, iconSize), ImVec2(1, 1), ImVec2(0, 0),0))
                 {
                     if (currPath[currPath.size() - 1] == '/')
                         currPath += name;
@@ -185,7 +190,7 @@ void ContentBrowser::DrawContentPanel()
             }
             else
             {
-                if (ImGui::ImageButton((ImTextureID)unknownFileIcon->textureID, ImVec2(iconSize, iconSize), ImVec2(1, 1), ImVec2(0, 0),0))
+                if (ImGui::ImageButton((ImTextureID)static_cast<int64_t>(unknownFileIcon->textureID), ImVec2(iconSize, iconSize), ImVec2(1, 1), ImVec2(0, 0),0))
                 {
                     selectedfileName = name;
                 }
@@ -212,10 +217,11 @@ void ContentBrowser::DrawUI()
     {
         float height = ImGui::GetWindowHeight()-50;
         float width = ImGui::GetWindowWidth();
-        ImGui::BeginChild("ContentHierarchy",ImVec2(currWidth,height),true);
+        if (ImGui::BeginChild("ContentHierarchy", ImVec2(currWidth, height), true))
+        {
             DrawContentHierarchyPannel();
-        ImGui::EndChild();
-        
+            ImGui::EndChild();
+        }
         ImGui::SameLine();
         //spliter button
 
@@ -233,16 +239,19 @@ void ContentBrowser::DrawUI()
         ImGui::SameLine();
 
 
-        ImGui::BeginChild("##ContentBrowserChild",ImVec2(width-currWidth,height));
+        if (ImGui::BeginChild("##ContentBrowserChild", ImVec2(width - currWidth, height)))
+        {
             ImGui::Separator();
-                ImGui::Text((currPath+"/" + selectedfileName).c_str());
+            ImGui::Text((currPath + "/" + selectedfileName).c_str());
             ImGui::Separator();
-            
-            ImGui::BeginChild("##cnt", ImVec2(ImGui::GetWindowWidth()-30, ImGui::GetWindowHeight()-10));
+
+            if (ImGui::BeginChild("##cnt", ImVec2(ImGui::GetWindowWidth() - 30, ImGui::GetWindowHeight() - 10)))
+            {
                 DrawContentPanel();
-            ImGui::End();
-            
-        ImGui::EndChild();
+                ImGui::EndChild();
+            }
+            ImGui::EndChild();
+        }
         ImGui::End();
     }
 }

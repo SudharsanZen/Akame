@@ -1,5 +1,7 @@
 #include"misc/temp.h"
+#pragma warning(push, 0)
 #include<glad/glad.h>
+#pragma warning(pop)
 
 
 void calTangentBiTangent(std::vector<vert>& v)

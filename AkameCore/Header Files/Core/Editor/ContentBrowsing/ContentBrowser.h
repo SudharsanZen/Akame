@@ -1,8 +1,8 @@
 #pragma once
 #include<string>
 #include<Rendering/Texture.h>
-
-class ContentBrowser
+#include"Core/Editor/AkameWindowBase.h"
+class ContentBrowser:public AkameWindowBase
 {
 private:
 	bool open;

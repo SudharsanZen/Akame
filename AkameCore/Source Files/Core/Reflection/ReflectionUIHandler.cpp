@@ -1,8 +1,12 @@
 #include "..\..\..\Header Files\Core\Reflection\ReflectionUIHandler.h"
-#include"glad/glad.h"
-#include"glfw/glfw3.h"
+#pragma warning(push, 0)
+#pragma warning( disable : 26495)
+#pragma warning( disable : 6031)
 #include<imGui\backends\imgui_impl_glfw.h>
 #include<imGui\backends\imgui_impl_opengl3.h>
+#include<glad/glad.h>
+#include<glfw/glfw3.h>
+#pragma warning(pop)
 #include<Core/Editor/ImGuiUtils.h>
 #include<vector>
 
@@ -73,7 +77,7 @@ void ReflectionUIHandler::DrawUIField(std::string name, glm::quat* val)
 void ReflectionUIHandler::DrawUIField(std::string name, std::string* val)
 {
 	char valc[100];
-	strcpy(valc,val->c_str());
+	strcpy_s(valc,val->c_str());
 
 	ImGui::InputText(("##"+name).c_str(),valc,100);
 	*val = valc;

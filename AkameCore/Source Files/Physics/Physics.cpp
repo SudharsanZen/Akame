@@ -1,8 +1,15 @@
 #include"Physics\Physics.h"
 #include<iostream>
+
+#pragma warning(push, 0)
+#pragma warning(disable : 26812)
+#pragma warning(disable : 26495)
+#pragma warning( disable : 26451)
+#pragma warning( disable : 33010)
 #include<PxPhysicsAPI.h>
-#include "snippetcommon/SnippetPrint.h"
-#include "snippetcommon/SnippetPVD.h"
+#include <snippetcommon/SnippetPrint.h>
+#include <snippetcommon/SnippetPVD.h>
+#pragma warning(pop)
 physx::PxDefaultErrorCallback gDefaultErrorCallback;
 physx::PxDefaultAllocator gDefaultAllocatorCallback;
 

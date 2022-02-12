@@ -72,7 +72,6 @@ public:
 		return std::tie(index, version) > std::tie(e.index, e.version);
 	}
 
-	friend std::ostream& operator <<(std::ostream& os, const Entity& ID);
 };
 
 

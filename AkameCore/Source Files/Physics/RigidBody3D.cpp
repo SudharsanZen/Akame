@@ -1,9 +1,15 @@
 #include "Components\Physics\RigidBody3D.h"
-#include<PxPhysicsAPI.h>
 #include"Physics/Physics.h"
 #include"ECS.h"
+#pragma warning(push, 0)
+#pragma warning( disable : 26812 )
+#pragma warning( disable : 26495)
+#pragma warning( disable : 26451)
+#pragma warning( disable : 33010)
+#include<PxPhysicsAPI.h>
+#pragma warning(pop)
 
-AKAME_API void physics::RigidBody3D::ASSERT_RB() 
+void physics::RigidBody3D::ASSERT_RB() 
 { 
 	assert(rigidbody && "rigidbody is not initialized, trying to access nullptr!"); 
 }
@@ -99,7 +105,11 @@ void physics::RigidBody3D::setRigidBodyType(RigidBodyType rbType, ColliderShape 
 	}
 	else if (rbType == RigidBodyType::STATIC)
 	{
-		physx::PxTransform entityTransform = _ToPxTrans(ecs.lock()->GetComponent<Transform>(eid));
+		Transform &visualTransform = ecs.lock()->GetComponent<Transform>(eid);
+		physx::PxTransform entityTransform = _ToPxTrans(visualTransform);
+		visualTransform.pxPoseInit=visualTransform.GetGlobalPosition();
+		visualTransform.pxRotInit=visualTransform.GetGlobalRotation().quaternion;
+		
 		physx::PxRigidStatic* act = (physicsPtr.lock()->mPhysics->createRigidStatic(entityTransform));
 		rigidbody = static_cast<physx::PxRigidActor*>(act);
 		setColliderShape(shape);

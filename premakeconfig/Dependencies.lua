@@ -1,7 +1,8 @@
 
 --[[GLFW--]]
 externalproject "glfw"
-	 location "%{IncludeDir.vendor}/glfw/src"
+	cppdialect "C++17"
+	 location "%{IncludeDir.vendor}/glfw/builds/src"
 	 kind "StaticLib"
 project "ALL_BUILD_DEP"
 	 location "%{IncludeDir.vendor}"
@@ -22,6 +23,7 @@ group "Dependencies/Physx"
 		externalproject (v)
 			location "%{IncludeDir.vendor}/PhysX/physx/compiler/vc16win64/sdk_source_bin"
 			kind "StaticLib"
+			cppdialect "C++17"
 			configurations {"Release" }
 
 			filter "configurations:Release"
@@ -47,8 +49,10 @@ group "Dependencies/Assimp"
 
 	externalproject ("assimp")
 				location "%{IncludeDir.vendor}/assimp/code"
+				cppdialect "C++17"
 				kind "StaticLib"
 	externalproject ("zlibstatic")
+				cppdialect "C++17"
 				location "%{IncludeDir.vendor}/assimp/contrib/zlib"
 				kind "StaticLib"
 	project "ALL_BUILD_ASSIMP"
@@ -62,6 +66,7 @@ group "Dependencies/pugixml"
 			location"%{IncludeDir.vendor}/pugixml/src"
 			kind "StaticLib"
 			language "C++"
+			cppdialect "C++17"
 			targetdir "%{prj.location}/bin/%{cfg.buildcfg}"
 			objdir "%{wks.location}/bin/Intermediate/%{cfg.buildcfg}/%{prj.name}"
 

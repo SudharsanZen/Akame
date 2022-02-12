@@ -3,10 +3,6 @@
 #include"Core/Editor/SceneHierarchyWindow/SceneHierarchyWindow.h"
 #include "Core\Editor\EditorUI.h"
 #include<Core/Editor/ImGuiUtils.h>
-#include<imGui\backends\imgui_impl_glfw.h>
-#include<imGui\backends\imgui_impl_opengl3.h>
-#include<glad\glad.h>
-#include<GLFW\glfw3.h>
 #include<iostream>
 #include"Core/Input.h"
 #include<sstream>
@@ -19,6 +15,15 @@
 #include"Components/Animation/AnimationController.h"
 #include"Core/Debug/Debug.h"
 #include"ECS.h"
+#pragma warning(push, 0)
+#pragma warning( disable : 26495)
+#pragma warning( disable : 6031)
+#pragma warning( disable : 26812)
+#include<imGui\backends\imgui_impl_opengl3.h>
+#include<imGui\backends\imgui_impl_glfw.h>
+#include<glad\glad.h>
+#include<GLFW\glfw3.h>
+#pragma warning(pop)
 
 glm::vec3 Mat3ToEuler(glm::mat3 rot)
 {
@@ -69,7 +74,7 @@ void InspectorWindow::DrawTransformComponent(Entity selected)
             m_Scene.cam.transform.SetGlobalPosition(camPose);
         }
         //t.SetLocalPosition(glm::vec3(lPose[0], lPose[1], lPose[2]));
-        if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
+        //if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
         {
             ImGui::Checkbox("show Local", &local);
             if (!local)
@@ -152,10 +157,11 @@ void InspectorWindow::DrawTransformComponent(Entity selected)
                 }
 
               
-                //ImGui::EndTabItem();
+               
             }
-            
+           
         }
+        //ImGui::EndTabBar();
         /*
         ImGui::Text("Globalposition: x:%f  y:%f  z:%f", pose.x, pose.y, pose.z);
         ImGui::Text("LocalPosition: x:%f  y:%f  z:%f", lpose.x, lpose.y, lpose.z);
@@ -176,8 +182,10 @@ void InspectorWindow::DrawLightComponent(Entity selected)
     
     if (!selected.signature->test(m_Lights_pose))
         return;
+   
     if (ImGui::CollapsingHeader("LightComponent", ImGuiTreeNodeFlags_DefaultOpen))
     {
+        
         Lights& t = m_Scene.GetComponent<Lights>(selected);
         LIGHT type = t.getType();
         ImGui::Text("Type");
@@ -233,9 +241,10 @@ void InspectorWindow::DrawLightComponent(Entity selected)
         float color[3] = { t.lightColor.x,t.lightColor.y,t.lightColor.z};
         ImGui::ColorEdit3("##Light Color",color);
         t.lightColor = glm::vec3(color[0],color[1],color[2]);
-        
+       
 
     }
+  
 }
 void InspectorWindow::DrawScriptComponent(Entity selected)
 {
@@ -282,7 +291,8 @@ void InspectorWindow::Draw(std::shared_ptr<SceneHierarchyWindow> sceneHierarchy)
             }
 
         }
-        ImGui::End();
+        
 
     }
+    ImGui::End();
 }

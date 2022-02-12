@@ -1,7 +1,11 @@
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
 #include "..\..\..\Header Files\Core\Debug\Debug.h"
 #include"Math/Quaternion.h"
+
+#pragma warning(push, 0)
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#pragma warning(pop)
+
 unsigned int Debug::vao=0;
 unsigned int Debug::vbo=0;
 std::vector<Debug::_vert> Debug::lineList;
@@ -100,7 +104,7 @@ void Debug::DrawDebug()
 	{
 		glBindVertexArray(vao);
 		glBindBuffer(GL_VERTEX_ARRAY, vbo);
-		glDrawArrays(GL_LINES, 0, lineList.size());
+		glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(lineList.size()));
 		glBindBuffer(GL_VERTEX_ARRAY, 0);
 		glBindVertexArray(0);
 	}

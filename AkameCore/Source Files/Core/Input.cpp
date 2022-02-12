@@ -1,10 +1,11 @@
-
 #include"Core/Window.h"
-#include<GLFW/glfw3.h>
+
 #include<memory>
 #include<iostream>
 #include "Core/Input.h"
-
+#pragma warning(push, 0)
+#include<GLFW/glfw3.h>
+#pragma warning(pop)
 
 Input::keyState Input::keyPressed[1024];
 
@@ -34,7 +35,7 @@ void Input::handleKeys(GLFWwindow* window, int key, int code, int action, int mo
 
 	if (key >= 0 && key < 1024)
 	{
-		float currKeyState = Input::keyPressed[key].currentState;
+		int currKeyState = Input::keyPressed[key].currentState;
 		if (action == GLFW_PRESS || action == GLFW_RELEASE)
 		{
 			Input::keyPressed[key].oldState = currKeyState;

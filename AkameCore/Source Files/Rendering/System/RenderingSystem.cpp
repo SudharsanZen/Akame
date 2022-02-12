@@ -1,17 +1,19 @@
-#include"glad/glad.h"
 #include"System.h"
 #include"Components/Rendering/Mesh.h"
 #include"Components/Rendering/Material.h"
 #include "ECS.h"
 #include"Rendering/System/LightSystem.h"
 #include "Rendering/System/RenderingSystem.h"
-#include"GLFW/glfw3.h"
 #include<sstream>
 #include"Rendering/Camera.h"
 #include"Rendering/System/DeferredPipeline.h"
 #include"Rendering/System/DefaultRenderingPipeline.h"
 #include"Core/Debug/Debug.h"
 #include"Animation/SkinnedRendererPipeline.h"
+#pragma warning(push, 0)
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#pragma warning(pop)
 //returns the point where the ray intersects the plane
 glm::vec3 rayPlaneIntersectionPoint(glm::vec3 rayOrigin,glm::vec3 rayDir,glm::vec3 planeNormal,glm::vec3 planePoint)
 {
@@ -239,9 +241,9 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 			auto const& entList = entMatList.second;
 			
 			
-			long int listSize=entMatList.second.size();
+			size_t listSize=entMatList.second.size();
 
-			long int row = ceil(float(listSize) / 1000.0f);
+			long int row = static_cast<long int>(ceil(static_cast<float>(listSize) / 1000.0f));
 			Material &m=E->GetComponent<Material>(entMatList.second[0]);
 			m.setUniformsOnce(shader,cam.transform.GetGlobalPosition());
 			for (long int r = 0; r < row; r++)
@@ -263,7 +265,7 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 					const Entity& ent = entList[i];
 
 					Mesh& mesh = E->GetComponent<Mesh>((*ent.componentIndex)[me], me);
-					m.setUniformEveryObject(curr_i, shader);
+					m.setUniformEveryObject(static_cast<int>(curr_i), shader);
 					mesh.renderMesh();
 					curr_i++;
 				}
@@ -294,13 +296,13 @@ void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
 		for (auto const& entMatList : shaderEntList.second)
 		{
 			auto const& entList = entMatList.second;
-			long int listSize = entList.size();
-			long int row = ceil(float(listSize) / 1000.0f);
-			for (long int r = 0; r < row; r++)
+			size_t listSize = entList.size();
+			size_t row = static_cast<int>(ceil(static_cast<float>(listSize) / 1000.0f));
+			for (size_t r = 0; r < row; r++)
 			{
 				long long int curr_i = 0;
 				std::vector<glm::mat4> matList;
-				for (long int i_mat = r * 1000; i_mat < (1 + r) * 1000 && i_mat < listSize; i_mat++)
+				for (size_t i_mat = r * 1000; i_mat < (1 + r) * 1000 && i_mat < listSize; i_mat++)
 				{
 
 					const Entity& ent = entList[i_mat];
@@ -310,12 +312,12 @@ void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
 				glBufferSubData(GL_UNIFORM_BUFFER, 0, mat4Size * matList.size(), &(matList[0][0].x));
 				curr_i++;
 				curr_i = 0;
-				for (long int i = r * 1000; i < (r + 1) * 1000 && i < listSize; i++)
+				for (size_t i = r * 1000; i < (r + 1) * 1000 && i < listSize; i++)
 				{
 					const Entity& ent = entList[i];
 
 					Mesh& mesh = E->GetComponent<Mesh>((*ent.componentIndex)[me], me);
-					shader->setUniformInteger(transformLocation, curr_i);
+					shader->setUniformInteger(transformLocation, static_cast<int>(curr_i));
 					mesh.renderMesh();
 					curr_i++;
 				}

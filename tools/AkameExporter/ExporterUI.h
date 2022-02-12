@@ -47,7 +47,7 @@ private:
 	void initImGui();
 	FrameBuffer fbo[5];
 	//returns the &io value
-	ImGuiIO& initGui();
+	ImGuiIO& initGui(Scene& scene);
 	float deltaTime, currTime, lastTime;
 	std::shared_ptr<SceneHierarchyWindow> m_SceneHierarchy;
 	std::shared_ptr<InspectorWindow> m_InspectorWindow;

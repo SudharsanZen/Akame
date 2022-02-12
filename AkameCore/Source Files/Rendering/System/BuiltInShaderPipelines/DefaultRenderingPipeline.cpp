@@ -1,7 +1,9 @@
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
 #include "Rendering\System\DefaultRenderingPipeline.h"
 #include<sstream>
+#pragma warning(push, 0)
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#pragma warning(pop)
 void DefaultRenderingPipeline::WindowsResizeCallBacks(int height, int width)
 {
 }
@@ -23,8 +25,8 @@ void DefaultRenderingPipeline::OnPreRender(std::shared_ptr<Shader> shader, Rende
 		shader->setUniformFloat("near", 0.1f);
 		shader->setUniformFloat("lambda", lsys->lambda);
 		shader->setUniformInteger("dir_sMap",6);
-		shader->setUniformInteger("numOfFrustum",lsys->dirLightSpace.size());
-		shader->setUniformFloat("shadowRes",lsys->dir_sMap.GetResolution());
+		shader->setUniformInteger("numOfFrustum", static_cast<unsigned int>(lsys->dirLightSpace.size()));
+		shader->setUniformFloat("shadowRes",static_cast<float>(lsys->dir_sMap.GetResolution()));
 		
 		lsys->dir_sMap.useTextureArray(6);
 		for (int i = 0; i < lsys->dirLightSpace.size(); i++)

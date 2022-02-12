@@ -21,7 +21,7 @@ private:
 public:
 	
 	AKAME_API PSSMFBO(int numOfFrustum, int res);
-	AKAME_API float GetResolution();
+	AKAME_API int GetResolution();
 	AKAME_API void bind();
 	AKAME_API void clearBuffer();
 

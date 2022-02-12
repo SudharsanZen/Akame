@@ -2,6 +2,7 @@ project "Test"
         location"%{wks.location}/Samples/Test"
         kind "ConsoleApp"
         language "C++"
+        cppdialect "C++17"
         targetdir "%{wks.location}/bin/%{cfg.buildcfg}/%{cfg.architecture}/Samples/"
         objdir "%{wks.location}/bin/Intermediate/%{cfg.buildcfg}/%{prj.name}"
         dependson{"imGui","glfw","AkameCore"}

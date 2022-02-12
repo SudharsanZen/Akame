@@ -5,10 +5,10 @@
 #include"Rendering/FrameBuffer.h"
 #include"Assets/ShaderManager.h"
 #include"Components/Physics/RigidBody3D.h"
-
+#include"Core/Editor/AkameWindowBase.h"
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
-class InspectorWindow
+class InspectorWindow:public AkameWindowBase
 {
 	Scene& m_Scene;
 	std::shared_ptr<ECS> m_ECS;

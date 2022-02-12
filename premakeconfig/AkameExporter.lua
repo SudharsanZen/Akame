@@ -31,7 +31,7 @@ project "Akame3DExporter"
 		links
 		{
 			"AkameCore.lib",
-            "glfw3.lib",
+            "glfw3dll.lib",
             "opengl32.lib",
             "imGui.lib",
             "PhysX_64.lib",
@@ -49,7 +49,7 @@ project "Akame3DExporter"
 
 
     filter "configurations:Debug"
-        defines {"DEBUG"}
+        defines {"DEBUG","AK_DLL"}
         symbols "On"
 		links
 		{
@@ -57,7 +57,8 @@ project "Akame3DExporter"
 		}
 
      filter "configurations:Release"
-        defines{"NDEBUG"}
+        defines{"NDEBUG","AK_DLL"}
+        
         optimize "On"
 		links
 		{

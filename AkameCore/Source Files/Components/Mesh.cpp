@@ -1,9 +1,12 @@
 
 #include<iostream>
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
 #include "Components/Rendering/Mesh.h"
 #include"Core/Log/Log.h"
+
+#pragma warning(push, 0)
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#pragma warning(pop)
 std::vector<vert> Mesh::vertexData=std::vector<vert>();
 std::vector<unsigned int> Mesh::indexList= std::vector<unsigned int>();
 bool Mesh::needsUpdate=false;
@@ -17,6 +20,12 @@ Mesh::Mesh()
 	min = glm::vec4(-1);
 	max = glm::vec4(1);
 	count = 0;
+	end_i = 0;
+	maxInd = 0;
+	minInd = 0;
+	numOfIndices = 0;
+	numOfVertices = 0;
+	start_i = 0;
 }
 
 Mesh::~Mesh()
@@ -41,7 +50,8 @@ void Mesh::renderMesh() const
 		return;
 	}
 	if(count)
-	glDrawRangeElements(GL_TRIANGLES,minInd, maxInd,count,GL_UNSIGNED_INT,(const void*)(start_i*sizeof(unsigned int)));
+	glDrawRangeElements(GL_TRIANGLES,static_cast<GLsizei>(minInd), static_cast<GLsizei>(maxInd), static_cast<GLsizei>(count),GL_UNSIGNED_INT,(const void*)((static_cast<GLuint>(start_i))*sizeof(unsigned int)));
+
 
 
 	
@@ -72,7 +82,7 @@ void Mesh::CreateMesh(std::vector<vert> &vertices, std::vector<GLuint> &indices)
 	min = glm::vec4(minPose,1);
 	max = glm::vec4(maxPose,1);
 
-	unsigned int prevVertSize = this->vertexData.size();
+	size_t prevVertSize = this->vertexData.size();
 	start_i = indexList.size();
 	minInd = prevVertSize;
 	maxInd = prevVertSize + vertices.size()-1;
@@ -83,7 +93,7 @@ void Mesh::CreateMesh(std::vector<vert> &vertices, std::vector<GLuint> &indices)
 		{
 			count++;
 			this->vertexData.push_back(vertices[i]);
-			this->indexList.push_back(i +prevVertSize);
+			this->indexList.push_back(i +static_cast<unsigned int>(prevVertSize));
 		}
 	}
 	else
@@ -95,7 +105,7 @@ void Mesh::CreateMesh(std::vector<vert> &vertices, std::vector<GLuint> &indices)
 		for (int i = 0; i < indices.size(); i++)
 		{
 			count++;
-			indexList.push_back(prevVertSize+indices[i]);
+			indexList.push_back(static_cast<unsigned int>(prevVertSize)+indices[i]);
 		}
 		
 	}

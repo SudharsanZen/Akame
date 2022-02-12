@@ -1,11 +1,6 @@
 #include"Core/Window.h"
 #include"Core/Editor/SceneHierarchyWindow/SceneHierarchyWindow.h"
 #include "Core\Editor\EditorUI.h"
-#include<imGui\backends\imgui_impl_glfw.h>
-#include<imGui\backends\imgui_impl_opengl3.h>
-#include<imgui/imgui_internal.h>
-#include<glad\glad.h>
-#include<GLFW\glfw3.h>
 #include<iostream>
 #include"Core/Input.h"
 #include<sstream>
@@ -16,7 +11,16 @@
 #include"Rendering/System/PSSMFBO.h"
 #include"Core/Debug/Debug.h"
 #include"ECS.h"
-
+#pragma warning(push, 0)
+#pragma warning( disable : 26495)
+#pragma warning( disable : 6031)
+#pragma warning( disable : 26812)
+#include<imGui\backends\imgui_impl_glfw.h>
+#include<imGui\backends\imgui_impl_opengl3.h>
+#include<imgui/imgui_internal.h>
+#include<glad\glad.h>
+#include<GLFW\glfw3.h>
+#pragma warning(pop)
 void SceneHierarchyWindow::Draw()
 {
     std::shared_ptr<ECS> e = m_Scene.ecs;
@@ -134,7 +138,7 @@ void SceneHierarchyWindow::DrawNode(Transform const& t, EntityDescriptor& edt, I
 {
 
     Entity selectedEntity(-1, -1);
-    int numOfChild = t.child.size();
+    size_t numOfChild = t.child.size();
     static int selection_mask = (1 << 2);
     int node_clicked = -1;
     ImGuiTreeNodeFlags node_flags = base_flags;
@@ -198,6 +202,10 @@ void SceneHierarchyWindow::DrawNode(Transform const& t, EntityDescriptor& edt, I
     }
 }
 
+
 SceneHierarchyWindow::SceneHierarchyWindow(Scene& s) :m_Scene(s)
 {
+    m_menuPosex = 0.0f;
+    m_menuPosey = 0.0f;
+    viewDebugInfo = false;
 }

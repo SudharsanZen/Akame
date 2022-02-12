@@ -4,9 +4,10 @@
 #include"Rendering/Texture.h"
 #include"Rendering/FrameBuffer.h"
 #include"Assets/ShaderManager.h"
+#include"Core/Editor/AkameWindowBase.h"
 #include"Components/Physics/RigidBody3D.h"
 struct ImGuiIO;
-class ViewPortWindow
+class ViewPortWindow:public AkameWindowBase
 {
 private:
 	Camera cam;
@@ -20,6 +21,7 @@ private:
 	bool closable = false;
 	friend class Exporter;
 	friend class Editor;
+
 public:
 	std::string windowName;
 	AKAME_API ViewPortWindow(Scene& scene, ImGuiIO& io, bool closable = true);

@@ -73,8 +73,8 @@ int main()
 	boxMat.setValue("noMetallic", 1);
 	boxMat.setValue("noRougness", 0);
 	boxMat.setValue("noAO", 1);
-	boxMat.setValue("metallic", 0.04);
-	boxMat.setValue("ambientocclusion", 0.04);
+	boxMat.setValue("metallic", 0.04f);
+	boxMat.setValue("ambientocclusion", 0.04f);
 	boxMat.setValue("normalStrength", 1);
 	Entity sphere = scene.CreateEntity();
 	Mesh& bm = scene.AddComponent<Mesh>(sphere);
@@ -124,7 +124,7 @@ int main()
 	Entity model = mLoader.LoadModelToScene(rootDir+"Media/Erika/Catwalk Walk Turn 180 Tight.fbx");
 	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
 	Transform& T = scene.GetComponent<Transform>(model);
-	T.SetGlobalScale(glm::vec3(0.02));
+	T.SetGlobalScale(glm::vec3(0.02f));
 	T.SetGlobalPosition(glm::vec3(0, 1, 0));
 
 

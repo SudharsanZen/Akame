@@ -1,16 +1,14 @@
 #include<iostream>
-#ifdef _MSC_VER
-#define NOMINMAX
-#include <windows.h>
-#endif // _MSC_VER
 #include "Core/window.h"
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
 #include"Core/Log/Log.h"
 #include"Core/Input.h"
 #include"Core/Debug/Debug.h"
 #include"Assets/AssetManager.h"
+#pragma warning(push, 0)
 #include"stb_image.h"
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#pragma warning(pop)
 Window::Window(int width,int height,std::string winName,Window *shareWindow)
 {
 	Log::Init();
@@ -24,11 +22,23 @@ Window::Window(int width,int height,std::string winName,Window *shareWindow)
 	share = shareWindow;
 	Input::flush();
 }
-
+void Window::SetCurrentContext(void* glfwContextPtr)
+{
+	glfwMakeContextCurrent((GLFWwindow*)glfwContextPtr);
+}
+GLFWwindow* Window::getCurrContext()
+{
+	return mainWindow.get();
+}
 Window::~Window()
 {
 	//Debug::DeleteBuffers();
 	glfwTerminate();
+}
+
+GLADloadproc Window::GetProcAddress()
+{
+	return (GLADloadproc)glfwGetProcAddress;
 }
 
 int Window::getBufferHeight()
@@ -95,7 +105,7 @@ bool Window::initialize()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
-	
+
 	//function to destroy GLFWwindow when smart_ptr runs out of scope
 	auto glfwWindowsDestroyer = [](GLFWwindow* ptr) {glfwDestroyWindow(ptr); };
 	

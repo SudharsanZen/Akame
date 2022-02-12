@@ -1,7 +1,9 @@
 #include "Rendering/System/LightSystem.h"
+#include<sstream>
+#pragma warning(push, 0)
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
-#include<sstream>
+#pragma warning(pop)
 
 float LightSystem::pssmXMultiplier = 1.45f;
 float LightSystem::pssmYMultiplier = 1.45f;

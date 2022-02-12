@@ -72,12 +72,12 @@ int main()
 	boxMat.setTexture2D("material.roughness", rootDir + "Media/pbr/crate/roughness.jpg");
 	boxMat.setTexture2D("material.normal", rootDir + "Media/pbr/crate/normal.jpg");
 
-	boxMat.setValue("noMetallic", 1);
-	boxMat.setValue("noRougness", 0);
+	boxMat.setValue("noMetallic", 1.0f);
+	boxMat.setValue("noRougness", 0.0f);
 	boxMat.setValue("noAO", 1);
-	boxMat.setValue("metallic", 0.04);
-	boxMat.setValue("ambientocclusion", 0.04);
-	boxMat.setValue("normalStrength", 1);
+	boxMat.setValue("metallic", 0.04f);
+	boxMat.setValue("ambientocclusion", 0.04f);
+	boxMat.setValue("normalStrength", 1.0f);
 	Entity sphere = scene.CreateEntity();
 	Mesh& bm = scene.AddComponent<Mesh>(sphere);
 	bm.CreateMesh(generateSphereVertices(16, 32, 0.5));
@@ -126,7 +126,7 @@ int main()
 	Entity model = mLoader.LoadModelToScene(rootDir + "Media/Erika/Catwalk Walk Turn 180 Tight.fbx");
 	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
 	Transform& T = scene.GetComponent<Transform>(model);
-	T.SetGlobalScale(glm::vec3(0.02));
+	T.SetGlobalScale(glm::vec3(0.02f));
 	T.SetGlobalPosition(glm::vec3(0, 1, 0));
 
 
@@ -171,7 +171,7 @@ int main()
 	boxMesh.CreateMesh(generateCubeVertices());
 	scene.AddComponent <Material> (box)=boxMat;
 	*/
-	scene.backGroundColor(0.1,0.1,0.1,0.1);
+	scene.backGroundColor(0.1f,0.1f,0.1f,0.1f);
 	while (!window.closeWindow())
 	{
 

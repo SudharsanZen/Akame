@@ -23,8 +23,8 @@ void AnimationController::updateBoneState(float deltaTime, std::shared_ptr<ECS> 
 		if (keyState.i_currPose + 1 < Keys.pose_count)
 		{
 			unsigned long long currPose = keyState.i_currPose;
-			float timeGap = (Keys.position[currPose + 1].time - Keys.position[currPose].time);
-			float interTime = currTime - Keys.position[currPose].time;
+			float timeGap = static_cast<float>(Keys.position[currPose + 1].time - Keys.position[currPose].time);
+			float interTime = static_cast<float>(currTime - Keys.position[currPose].time);
 
 			interTime = glm::clamp(interTime, minVal, timeGap);//avoid extrapolation
 			glm::vec3 currInterPose = glm::mix(Keys.position[currPose].value, Keys.position[currPose + 1].value, interTime / timeGap);
@@ -44,8 +44,8 @@ void AnimationController::updateBoneState(float deltaTime, std::shared_ptr<ECS> 
 		if (keyState.i_currRot + 1 < Keys.rot_count)
 		{
 			unsigned long long currPose = keyState.i_currRot;
-			float timeGap = (Keys.rotation[currPose + 1].time - Keys.rotation[currPose].time);
-			float interTime = currTime - Keys.rotation[currPose].time;
+			float timeGap = static_cast<float>(Keys.rotation[currPose + 1].time - Keys.rotation[currPose].time);
+			float interTime = static_cast<float>(currTime - Keys.rotation[currPose].time);
 			interTime = glm::clamp(interTime, minVal, timeGap);//avoid extrapolation
 			glm::quat currInterRot = glm::slerp(Keys.rotation[currPose].value, Keys.rotation[currPose + 1].value, (interTime / timeGap));
 			bTrans.SetLocalRotation(currInterRot);
@@ -64,8 +64,8 @@ void AnimationController::updateBoneState(float deltaTime, std::shared_ptr<ECS> 
 		if (keyState.i_currRot + 1 < Keys.scale_count)
 		{
 			unsigned long long currPose = keyState.i_currScale;
-			float timeGap = (Keys.scale[currPose + 1].time - Keys.scale[currPose].time);
-			float interTime = currTime - Keys.scale[currPose].time;
+			float timeGap = static_cast<float>(Keys.scale[currPose + 1].time - Keys.scale[currPose].time);
+			float interTime = static_cast<float>(currTime - Keys.scale[currPose].time);
 			interTime = glm::clamp(interTime, minVal, timeGap);//avoid extrapolation
 			glm::vec3 currInterScale = glm::mix(Keys.scale[currPose].value, Keys.scale[currPose + 1].value, (interTime / timeGap));
 			bTrans.SetLocalScale(currInterScale);
@@ -101,7 +101,7 @@ void AnimationController::setCurrentClip(AnimationClip clip)
 		bonesAnimStates[bonesPair.first] = AnimState();
 	}
 
-	clipDuration = clip.duration;
+	clipDuration = static_cast<float>(clip.duration);
 	currTime = 0;
 	normalizedTime = 0;
 	timePerTick = 1 / clip.ticksPerSec;
@@ -124,4 +124,5 @@ AnimationClip::AnimationClip()
 {
 	duration = 0;
 	ticksPerSec = 0;
+	numChannels = 0;
 }

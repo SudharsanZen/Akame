@@ -193,7 +193,7 @@ void app(int num=200)
 		if (stopRot)
 			acc += scene.getDeltaTime();
 
-		flyCam(scene.cam, scene.getDeltaTime());
+		//flyCam(scene.cam, scene.getDeltaTime());
 		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		scene.clearBuffer();
 		//scene.Render();

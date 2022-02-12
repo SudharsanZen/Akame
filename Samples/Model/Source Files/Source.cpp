@@ -88,9 +88,9 @@ int main()
 	boxMat.setTexture2D("material.normal", rootDir + "Media/pbr/crate/normal.jpg");
 	boxMat.setValue("noMetallic", 1);
 	boxMat.setValue("noAO", 1);
-	boxMat.setValue("metallic", 0.04);
-	boxMat.setValue("ambientocclusion", 0.04);
-	boxMat.setValue("normalStrength", 1);
+	boxMat.setValue("metallic", 0.04f);
+	boxMat.setValue("ambientocclusion", 0.04f);
+	boxMat.setValue("normalStrength", 1.0f);
 	Entity box = scene.CreateEntity();
 	Mesh& bm = scene.AddComponent<Mesh>(box);
 		bm.CreateMesh(generateSphereVertices(16, 32, 0.5));

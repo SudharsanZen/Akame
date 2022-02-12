@@ -29,7 +29,7 @@ IncludeDir["Physx"]=[[%{IncludeDir.vendor}/PhysX/physx/include;
 
 
 LibraryDir={}
-LibraryDir["GLFW"]="%{IncludeDir.vendor}/glfw/src/%{cfg.buildcfg}"
+LibraryDir["GLFW"]="%{IncludeDir.vendor}/glfw/builds/src/%{cfg.buildcfg}"
 LibraryDir["assimp"]="%{IncludeDir.vendor}/assimp/lib/%{cfg.buildcfg}"
 LibraryDir["AkameCore"]="%{wks.location}/AkameCore/bin/%{cfg.buildcfg}"
 LibraryDir["Physx"]="%{IncludeDir.vendor}/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg}"
@@ -37,7 +37,7 @@ LibraryDir["imGui"]="%{IncludeDir.vendor}/imGui/%{cfg.system}/%{cfg.buildcfg}"
 LibraryDir["pugixml"]="%{IncludeDir.vendor}/pugixml/src/bin/%{cfg.buildcfg}"
 
 LiblinksRelease={
-    "glfw3.lib",
+    "glfw3dll.lib",
     "opengl32.lib",
     "imGui.lib",
     "assimp-vc142-mt.lib",
@@ -52,7 +52,7 @@ LiblinksRelease={
     }
 
 LiblinksDebug={
-    "glfw3.lib",
+    "glfw3dll.lib",
     "opengl32.lib",
     "imGui.lib",
     "assimp-vc142-mtd.lib",
@@ -67,7 +67,7 @@ LiblinksDebug={
     }
 AllIncludeDir="%{IncludeDir.GLFW};%{IncludeDir.json};%{IncludeDir.glad};%{IncludeDir.vendor};%{IncludeDir.imGui};%{IncludeDir.assimp};%{IncludeDir.ECS};%{IncludeDir.AkameCore};%{IncludeDir.pugixml};%{IncludeDir.spdlog};"..IncludeDir["Physx"]
 
-AllDebugEnvPaths="PATH=$(SolutionDir)/AkameCore/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};$(SolutionDir)/AkameCore/vendor/assimp/bin/%{cfg.buildcfg}"
+AllDebugEnvPaths="PATH=$(SolutionDir)/AkameCore/vendor/PhysX/physx/bin/win.x86_64.vc142.md/%{cfg.buildcfg};$(SolutionDir)/AkameCore/vendor/assimp/bin/%{cfg.buildcfg};$(SolutionDir)/AkameCore/bin/%{cfg.buildcfg};$(SolutionDir)/AkameCore/vendor/glfw/builds/src/%{cfg.buildcfg}"
 
 startproject "Test"
 

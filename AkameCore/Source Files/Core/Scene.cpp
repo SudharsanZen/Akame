@@ -1,8 +1,5 @@
 #include"Core/Editor/EditorUI.h"
 #include "Core/Scene.h"
-#include"stb_image.h"
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
 #include"Animation/SkeletalMeshRenderingSystem.h"
 #include"Core/Window.h"
 #include"Rendering/System/RenderingSystem.h"
@@ -13,6 +10,11 @@
 #include"misc/temp.h"
 #include"Core/Debug/Debug.h"
 #include"Animation/AnimationControllerSystem.h"
+#pragma warning(push, 0)
+#include<stb_image.h>
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#pragma warning(pop)
 std::vector<std::shared_ptr<RenderingSystem>> listScene;
 
 
@@ -251,7 +253,7 @@ void Scene::clearBuffer()
 void Scene::Render()
 {
 	
-		currTime = glfwGetTime();
+		currTime = static_cast<float>(glfwGetTime());
 	//renderStuff
 		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		//call this in this same order

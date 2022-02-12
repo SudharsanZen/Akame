@@ -1,17 +1,20 @@
 #include "Rendering/Camera.h"
 #include"Core/Input.h"
+#pragma warning(push, 0)
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
+#pragma warning(pop)
 
 Camera::Camera():Camera(60,aspectRatio,0.1f,100.0f,false)
 {
+	camDir = glm::vec3(0, 0, -1);
 }
 
 Camera::Camera(float fovy, float aspectRatio, float nearz, float farz, GLboolean ortho)
 {
 	
 	//cameraTarget = transform.position+glm::vec3(0, 0, -3);
-	
+	camDir = glm::vec3(0, 0, -1);
 	this->fovy = glm::radians(fovy);
 	this->aspectRatio = aspectRatio;
 	this->nearz = nearz;
@@ -156,8 +159,8 @@ void flyCam(Camera& cam,float deltaTime)
 	if (Input::getMouseButton(GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS || !init)
 	{
 		init = true;
-		X += -(y - yPrev) * 0.5f;
-		Y += -(x - xPrev) * 0.5f;
+		X += -(static_cast<float>(y) - yPrev) * 0.5f;
+		Y += -(static_cast<float>(x) - xPrev) * 0.5f;
 		//if (abs(Y) >= 360.0f)
 			//Y =Y+((Y>0)?-1:1)*360.0f;
 		Y = abs(Y) >= 360.0f ? 0 : Y;
@@ -168,6 +171,6 @@ void flyCam(Camera& cam,float deltaTime)
 
 	
 
-	yPrev = y;
-	xPrev = x;
+	yPrev = static_cast<float>(y);
+	xPrev = static_cast<float>(x);
 }

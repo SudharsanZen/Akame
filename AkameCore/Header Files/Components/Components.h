@@ -13,8 +13,8 @@ protected:
 	friend class ComponentArray;
 	std::weak_ptr<ECS> ecs;
 	Entity eid;
-	e_index componentIndex;
-	e_index componentBitPose;
+	e_index componentIndex=-1;
+	e_index componentBitPose=-1;
 	
 };
 

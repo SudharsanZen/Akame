@@ -1,8 +1,10 @@
-#include"glad/glad.h"
-#include"GLFW/glfw3.h"
 #include"Rendering/System/ShadowFBO.h"
 #include"Core/Log/Log.h"
 #include<iostream>
+#pragma warning(push, 0)
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#pragma warning(pop)
 ShadowFBO::ShadowFBO(int height, int width)
 {
 	frameBuffer = 0;

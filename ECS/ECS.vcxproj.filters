@@ -31,12 +31,4 @@
       <Filter>HeaderFiles</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="SourceFiles\ECSTYPES.cpp">
-      <Filter>SourceFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="SourceFiles\Source.cpp">
-      <Filter>SourceFiles</Filter>
-    </ClCompile>
-  </ItemGroup>
 </Project>

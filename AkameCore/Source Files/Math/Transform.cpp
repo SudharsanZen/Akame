@@ -77,25 +77,25 @@ glm::mat4 Transform::getCalculatedTransform()
 Transform::Transform()
 {
 	eid = Entity(-1,-1);
+
 	baseScale = glm::vec3(1,1,1);
+	localScale = baseScale;
+
 	basePosition = glm::vec3(0,0,0);
 	localPosition = basePosition;
-	localScale = baseScale;
+	
+	localRotation = glm::quat(1,0,0,0);
+	baseRotation= glm::quat(1,0,0,0);
 
 	localToWorld =glm::mat4(1.0f);
 	worldToLocal =glm::mat4(1.0f);
 }
 
-Transform::Transform(float posX, float posY, float posZ)
+Transform::Transform(float posX, float posY, float posZ):Transform()
 {
-	baseScale = glm::vec3(1, 1, 1);
-	basePosition = glm::vec3(0, 0, 0);
-	localPosition = glm::vec3(posX,posY,posZ);
-	localScale = baseScale;
-
-	localToWorld = glm::mat4(1.0f);
-	worldToLocal = glm::mat4(1.0f);
+	localPosition = glm::vec3(posX, posY, posZ);
 }
+
 
 Transform::Transform(glm::vec3 vec) :Transform(vec.x, vec.y, vec.z) 
 {

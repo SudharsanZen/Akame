@@ -1,8 +1,10 @@
-#include"glad/glad.h"
-#include"GLFW/glfw3.h"
 #include"Core/Log/Log.h"
 #include"Rendering/System/PSSMFBO.h"
 #include"Rendering/System/LightSystem.h"
+#pragma warning(push, 0)
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#pragma warning(pop)
 void PSSMFBO::initialize()
 {
 	glGenFramebuffers(1,&fbo);
@@ -40,7 +42,7 @@ PSSMFBO::PSSMFBO(int numOfFrustum, int res)
 	initialize();
 }
 
-float PSSMFBO::GetResolution() 
+int PSSMFBO::GetResolution() 
 { 
 	return resolution;
 }
@@ -68,12 +70,12 @@ void PSSMFBO::useTextureArray(unsigned int unit)
 	glBindTexture(GL_TEXTURE_2D_ARRAY, shadowMapsArray); 
 }
 
-float CalSplitDistance(float farPlaneNum,float numOfFrustum, float znear, float zfar, float lambda)
+float CalSplitDistance(int farPlaneNum,int numOfFrustum, float znear, float zfar, float lambda)
 {
 	//float bias = 1.0f-((numOfFrustum-farPlaneNum)/(numOfFrustum))-(1.0f/numOfFrustum);
 	//lambda += bias;
-	float logrithimic = znear*pow(zfar/znear,farPlaneNum/numOfFrustum);
-	float uniform = znear + (zfar - znear) * (farPlaneNum / numOfFrustum);
+	float logrithimic = znear*pow(zfar/znear,(float)farPlaneNum/((float)numOfFrustum));
+	float uniform = znear + (zfar - znear) * ((float)farPlaneNum /((float)numOfFrustum));
 	float interPolatedValue = lambda*uniform+(1.0f-lambda)*logrithimic;
 	return interPolatedValue;
 }
@@ -131,7 +133,7 @@ std::vector<glm::mat4> CalculatePSSMLightSpaceMats(Camera& cam, glm::vec3  l, in
 	std::vector<glm::mat4> matList;
 	glm::vec3 lightDir = l;
 	glm::vec3 viewDir = cam.transform.forward();
-	glm::mat4 cp,cv,lv,lp;
+	glm::mat4 cp,cv;
 
 	glm::vec3 forward = glm::normalize(lightDir);
 	glm::vec3 pose =glm::vec3(0);

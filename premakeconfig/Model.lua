@@ -2,6 +2,7 @@ project "Model"
         location"%{wks.location}/Samples/Model"
         kind "ConsoleApp"
         language "C++"
+        cppdialect "C++17"
         targetdir "%{wks.location}/bin/%{cfg.buildcfg}/%{cfg.architecture}/Samples/"
         objdir "%{wks.location}/bin/Intermediate/%{cfg.buildcfg}/%{prj.name}"
         dependson{"imGui","glfw","AkameCore"}
@@ -33,11 +34,11 @@ project "Model"
 
 
         filter "configurations:Debug"
-            defines {"DEBUG"}
+            defines {"DEBUG","AK_DLL"}
             symbols "On"
 
         filter "configurations:Release"
-            defines{"NDEBUG"}
+            defines{"NDEBUG","AK_DLL"}
             optimize "On"
         filter { 'system:windows' }
             files { '%{wks.location}/resources.rc', "%{wks.location}/Assets/EngineAssets/AppIcons/**.ico"}

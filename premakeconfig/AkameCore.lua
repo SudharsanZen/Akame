@@ -29,7 +29,7 @@ project "AkameCore"
 
     links
     {
-        "glfw3.lib",
+        "glfw3dll.lib",
         "opengl32.lib",
         "imGui.lib",
         "PhysX_64.lib",
@@ -47,7 +47,7 @@ project "AkameCore"
         AllDebugEnvPaths
     }
     filter "configurations:Debug"
-        defines {"DEBUG","AK_DLL","AK_EXPORT"}
+        defines {"DEBUG","AK_DLL","AK_EXPORT","AK_EXPOSE_SPD_LOG"}
         symbols "On"
 		links
 		{
@@ -55,7 +55,7 @@ project "AkameCore"
 		}
 
     filter "configurations:Release"
-        defines{"NDEBUG","AK_DLL","AK_EXPORT"}
+        defines{"NDEBUG","AK_DLL","AK_EXPORT","AK_EXPOSE_SPD_LOG"}
         optimize "On"
 		links
 		{

@@ -1,5 +1,9 @@
 #include"Assets/ShaderManager.h"
-#include<pugixml.hpp>
+
+#pragma warning(push, 0)
+	#include<pugixml.hpp>
+#pragma warning(pop)
+
 #include"Core/Log/Log.h"
 #include"Assets/AssetManager.h"
 #include<iostream>

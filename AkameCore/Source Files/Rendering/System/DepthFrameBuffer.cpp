@@ -1,7 +1,9 @@
-#include<glad/glad.h>
+
 #include "Rendering/DepthFrameBuffer.h"
-#include"GLFW/glfw3.h"
+#pragma warning(push, 0)
+#include<glad/glad.h>
 #include <GLFW/glfw3.h>
+#pragma warning(pop)
 void DepthFrameBuffer::generateFrameBuffer()
 {
 	

@@ -1,20 +1,42 @@
-#include<filesystem>
+#include <Windows.h>
+#include <filesystem>
 #include "FileOpenSaveDialogBox.h"
-#include "Core\Editor\ContentBrowsing\ContentBrowser.h"
-#include"glad/glad.h"
-#include"glfw/glfw3.h"
-#include<imGui\backends\imgui_impl_glfw.h>
-#include<imGui\backends\imgui_impl_opengl3.h>
-#include<imgui/misc/cpp/imgui_stdlib.h>
-#include<sstream>
-#include<Math/GlmMath.h>
-#include<Assets/AssetManager.h>
-#include<Windows.h>
+#include "Core/Editor/ContentBrowsing/ContentBrowser.h"
+#include <sstream>
+#include <Math/GlmMath.h>
+#include <Assets/AssetManager.h>
+#include <glad/glad.h>
+#include <glfw/glfw3.h>
+#pragma warning(push, 0)
+#pragma warning(disable : 26495)
+#pragma warning(disable : 6031)
+#include <imGui/backends/imgui_impl_glfw.h>
+#include <imGui/backends/imgui_impl_opengl3.h>
+#include <imgui/misc/cpp/imgui_stdlib.h>
+#pragma warning(pop)
 long long int folderIcoTexID;
 long long int unknownfileIcoTexID;
+FileOpenSaveDialogBoxFlag operator |(FileOpenSaveDialogBoxFlag a, FileOpenSaveDialogBoxFlag b)
+{
+    return static_cast<FileOpenSaveDialogBoxFlag>(static_cast<uint64_t>(a) | static_cast<uint64_t>(b));
+}
+FileOpenSaveDialogBoxFlag operator &(FileOpenSaveDialogBoxFlag a, FileOpenSaveDialogBoxFlag b)
+{
+    return static_cast<FileOpenSaveDialogBoxFlag>(static_cast<uint64_t>(a) & static_cast<uint64_t>(b));
+}
 bool isFlagSet(FileOpenSaveDialogBoxFlag base_flag,FileOpenSaveDialogBoxFlag flag)
 {
     return ((base_flag & flag) == flag);
+}
+
+void FileOpenSaveDialogBox::reset() 
+{ 
+    open = false; m_path_is_set = false; 
+}
+
+std::string FileOpenSaveDialogBox::getCurrentPath() 
+{ 
+    return currPath; 
 }
 
 void FileOpenSaveDialogBox::setCurrentPath(std::string newPath)
@@ -34,6 +56,14 @@ FileOpenSaveDialogBox::FileOpenSaveDialogBox(std::string windowName, FileOpenSav
 bool FileOpenSaveDialogBox::Open()
 {
     return open;
+}
+bool FileOpenSaveDialogBox::isPathSet() 
+{ 
+    return m_path_is_set; 
+}
+void FileOpenSaveDialogBox::setOpen(bool openClose) 
+{ 
+    open = openClose; 
 }
 void FileOpenSaveDialogBox::DrawContentHierarchyPannel()
 {
@@ -129,7 +159,7 @@ void FileOpenSaveDialogBox::DrawContentPanel()
     std::shared_ptr<Texture> folderIcon = AssetManager::GetTexture(folderIcoTexID);
     std::shared_ptr<Texture> unknownFileIcon = AssetManager::GetTexture(unknownfileIcoTexID);
 
-    int max_col = glm::ceil((ImGui::GetWindowWidth() / (iconSize + iconSize * 0.3f)));
+    int max_col = (int)glm::ceil((ImGui::GetWindowWidth() / (iconSize + iconSize * 0.3f)));
 
     if (ImGui::BeginTable("FOSDB##11", max_col))
     {
@@ -148,7 +178,7 @@ void FileOpenSaveDialogBox::DrawContentPanel()
             ImGui::TableSetColumnIndex(curr_col);
 
             std::string name = entry.path().filename().string();
-            bool showFiles = (entry.is_directory() || (!entry.is_directory() && !isFlagSet(m_mode, ak_Folder_mode)));
+            bool showFiles = (entry.is_directory() || (!entry.is_directory() && !isFlagSet(m_mode, FileOpenSaveDialogBoxFlag::ak_Folder_mode)));
             if(showFiles)
             {
                 ImGui::Spacing();
@@ -159,7 +189,7 @@ void FileOpenSaveDialogBox::DrawContentPanel()
             if (entry.is_directory())
             {
 
-                if (ImGui::ImageButton((ImTextureID)folderIcon->textureID, ImVec2(iconSize, iconSize), ImVec2(1, 1), ImVec2(0, 0), 0))
+                if (ImGui::ImageButton((ImTextureID)((uint64_t)folderIcon->textureID), ImVec2(iconSize, iconSize), ImVec2(1, 1), ImVec2(0, 0), 0))
                 {
                     if (currPath[currPath.size() - 1] == '/')
                         currPath += name;
@@ -173,7 +203,7 @@ void FileOpenSaveDialogBox::DrawContentPanel()
             }
             else if(showFiles)
             {
-                if (ImGui::ImageButton((ImTextureID)unknownFileIcon->textureID, ImVec2(iconSize, iconSize), ImVec2(1, 1), ImVec2(0, 0), 0))
+                if (ImGui::ImageButton((ImTextureID)(uint64_t)unknownFileIcon->textureID, ImVec2(iconSize, iconSize), ImVec2(1, 1), ImVec2(0, 0), 0))
                 {
                     selectedfileName = name;
                 }
@@ -192,6 +222,10 @@ void FileOpenSaveDialogBox::DrawContentPanel()
         }
         ImGui::EndTable();
     }
+}
+void FileOpenSaveDialogBox::setMode(FileOpenSaveDialogBoxFlag mode) 
+{ 
+    m_mode = mode; 
 }
 void FileOpenSaveDialogBox::DrawUI()
 {

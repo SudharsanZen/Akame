@@ -2,6 +2,7 @@ project "imGui"
     location"%{wks.location}/AkameCore/vendor/imGui"
     kind "StaticLib"
     language "C++"
+    cppdialect "C++17"
     objdir "%{wks.location}/bin/Intermediate/%{cfg.buildcfg}/%{prj.name}"
     targetdir "%{prj.location}/%{cfg.system}/%{cfg.buildcfg}"
     dependson{"glfw"}

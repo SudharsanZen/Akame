@@ -54,3 +54,7 @@ public:
 		std::cout << "count:" << behvCount;
 	}*/
 };
+
+#ifdef AK_EXPORT
+DEFINE_ECS_SPECIALIZATION_BHV(BehaviourComponent)
+#endif

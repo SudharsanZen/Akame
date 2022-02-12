@@ -1,23 +1,32 @@
 #include "ExporterUI.h"
-#include "glad/glad.h"
-#include<GLFW/glfw3.h>
+#ifdef _MSC_VER
+#define NOMINMAX
+#include <windows.h>
+#endif // _MSC_VER
+
 #include<locale>
 #include<codecvt>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #define GLFW_EXPOSE_NATIVE_WGL
-#include<GLFW/glfw3native.h>
-#include<Windows.h>
+
 #include"Core/Editor/PropertiesWindow/InspectorWindow.h"
-#include<imGui\backends\imgui_impl_glfw.h>
-#include<imGui\backends\imgui_impl_opengl3.h>
-#include<misc/cpp/imgui_stdlib.h>
 #include"Core/Editor/SceneHierarchyWindow/SceneHierarchyWindow.h"
-#include<Windows.h>
 #include"Rendering/System/RenderingSystem.h"
 #include"Rendering/System/LightSystem.h"
 #include"Core/Editor/ViewPort/ViewPortWindow.h"
 #define EXPOSE_OS_INTERFACE
 #include"OS_interface.h"
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#include<GLFW/glfw3native.h>
+#pragma warning(push, 0)
+#pragma warning(disable : 26495)
+#pragma warning(disable : 6031)
+#include<imGui\backends\imgui_impl_glfw.h>
+#include<imGui\backends\imgui_impl_opengl3.h>
+#include<misc/cpp/imgui_stdlib.h>
+#include<imgui_internal.h>
+#pragma warning(pop)
 void Exporter::initImGui()
 {
 	std::weak_ptr<GLFWwindow> context = m_Scene.window.mainWindow;
@@ -45,12 +54,24 @@ void Exporter::initImGui()
 	}
 
 	// Setup Platform/Renderer bindings
-	ImGui_ImplGlfw_InitForOpenGL(context.lock().get(), true);
+	
+	ImGui_ImplGlfw_InitForOpenGL(m_Scene.window.getCurrContext(), true);
 	ImGui_ImplOpenGL3_Init("#version 150");
 }
 
-ImGuiIO& Exporter::initGui()
+ImGuiIO& Exporter::initGui(Scene &scene)
 {
+	
+
+	glfwMakeContextCurrent(scene.window.getCurrContext());
+	//load OpenGL function loader into glad
+	if (!gladLoadGLLoader(scene.window.GetProcAddress()))
+	{
+
+		glfwTerminate();
+		throw("can't do it pal!");
+	}
+	
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& IO = ImGui::GetIO();
@@ -60,17 +81,25 @@ ImGuiIO& Exporter::initGui()
 	return IO;
 }
 
-Exporter::Exporter(Scene& scene):m_Scene(scene),io(initGui())
+Exporter::Exporter(Scene& scene):m_Scene(scene),io(initGui(scene))
 {
+	
 	initImGui();
 	//m_Scene.renderSys->editorMode = true;
+	AkameWindowBase wind;
+	wind.SetImGuiContext(ImGui::GetCurrentContext());
 	m_SceneHierarchy = std::make_shared<SceneHierarchyWindow>(m_Scene);
+	
 	m_InspectorWindow = std::make_shared<InspectorWindow>(m_Scene,m_Scene.ecs);
-	m_FOSDB = std::make_shared<FileOpenSaveDialogBox>("Browse", ak_Open_Mode, AssetManager::assetRootPath);
+	m_FOSDB = std::make_shared<FileOpenSaveDialogBox>("Browse", FileOpenSaveDialogBoxFlag::ak_Open_Mode, AssetManager::assetRootPath);
+	
 	m_ViewPortWindow = std::make_shared<ViewPortWindow>(m_Scene, io,false);
 	m_ViewPortWindow->windowName ="ViewPort";
+	
+	ImGuiStyle& style = ImGui::GetStyle();
 	Editor::defaultStyle(io);
 	m_FOSDB->reset();
+
 }
 
 void Exporter::DrawUI()
@@ -142,7 +171,7 @@ void Exporter::DrawUI()
 	
 	if (m_Scene.window.mainWindow)
 	{
-		glfwGetFramebufferSize(m_Scene.window.mainWindow.get(), &display_w, &display_h);
+		glfwGetFramebufferSize(m_Scene.window.getCurrContext(), &display_w, &display_h);
 		glViewport(0, 0, display_w, display_h);
 	}
 	else
@@ -159,14 +188,14 @@ void Exporter::DrawUI()
 	//  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
 	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
-		GLFWwindow* backup_current_context = glfwGetCurrentContext();
+		GLFWwindow* backup_current_context = m_Scene.window.getCurrContext();
 		ImGui::UpdatePlatformWindows();
 		ImGui::RenderPlatformWindowsDefault();
 		glfwMakeContextCurrent(backup_current_context);
 	}
 
-	deltaTime = glfwGetTime()- lastTime;
-	lastTime = glfwGetTime();
+	deltaTime = static_cast<float>(glfwGetTime())- lastTime;
+	lastTime = static_cast<float>(glfwGetTime());
 	m_Scene.deltaTime = deltaTime;
 }
 

@@ -3,11 +3,13 @@
 #include "Rendering/Shader.h"
 #include<fstream>
 #include<math.h>
-#include<glad/glad.h>
 #include<math.h>
 #include"Core/Log/Log.h"
 #include"Assets/AssetManager.h"
 
+#pragma warning(push, 0)
+#include<glad/glad.h>
+#pragma warning(pop)
 void Shader::ParseUniforms()
 {
     //max allowed length of a uniform variable name

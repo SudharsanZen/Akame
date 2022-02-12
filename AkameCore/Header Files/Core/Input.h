@@ -242,7 +242,7 @@
 
 
 
-class GLFWwindow;
+struct GLFWwindow;
 class AKAME_API Input
 {
 private:
@@ -252,8 +252,8 @@ private:
 		int currentState=0;
 		int oldState=0;
 
-		bool up;
-		bool down;
+		bool up=false;
+		bool down=false;
 
 	};
 	static keyState keyPressed[1024];

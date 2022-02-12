@@ -1,8 +1,9 @@
-
 #include<iostream>
+#include "Rendering/MeshInstance.h"
+#pragma warning(push, 0)
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
-#include "Rendering/MeshInstance.h"
+#pragma warning(pop)
 MeshInstance::MeshInstance(std::vector<Transform>& t_List):transformList(t_List)
 {
 	//initialize all values to zero or null
@@ -40,12 +41,12 @@ void MeshInstance::renderMesh()
 	{
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-		glDrawElementsInstanced(GL_TRIANGLES, numOfIndices, GL_UNSIGNED_INT,nullptr,transformList.size());
+		glDrawElementsInstanced(GL_TRIANGLES, static_cast<GLsizei>(numOfIndices), GL_UNSIGNED_INT,nullptr,static_cast<GLsizei>(transformList.size()));
 	}
 	else
 	{
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glDrawArraysInstanced(GL_TRIANGLES, 0, numOfVertices, transformList.size());
+		glDrawArraysInstanced(GL_TRIANGLES, 0, static_cast<GLsizei>(numOfVertices), static_cast<GLsizei>(transformList.size()));
 	}
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -135,14 +136,14 @@ void MeshInstance::createMesh(const std::vector<vert>& vertices, const std::vect
 
 
 	//setting attribite pointer for each row of matrices with 4 component in each row
-	long long  vecSize = sizeof(glm::vec4);
+	GLsizei  vecSize = static_cast<GLsizei>(sizeof(glm::vec4));
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (const void*)(0));
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (const void*)(1 * vecSize));
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (const void*)(1 * (int64_t)vecSize));
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (const void*)(2 * vecSize));
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (const void*)(2 * (int64_t)vecSize));
 	glEnableVertexAttribArray(5);
-	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (const void*)(3 * vecSize));
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, vecSize * 4, (const void*)(3 * (int64_t)vecSize));
 	glEnableVertexAttribArray(6);
 
 	glVertexAttribDivisor(3, 1);

@@ -8,6 +8,7 @@
 #include"Physics/System/RigidBodySystem.h"
 #include"Core/Reflection/ReflectionUIHandler.h"
 #include"Core/AkameCore.h"
+#include"Components/Physics/RigidBody3D.h"
 class Transform:public Components
 {
 	glm::vec3 pxPoseInit;
@@ -40,6 +41,7 @@ class Transform:public Components
 	AKAME_API void updateChildBaseTransformDetails();
 	
 	friend class Camera;
+	friend class physics::RigidBody3D;
 	friend class ReflectionMeta;
 	template <typename T>
 	friend struct ComponentAllocator;
@@ -61,7 +63,7 @@ class Transform:public Components
 	AKAME_API Transform(float posX, float posY, float posZ);
 	AKAME_API Transform(glm::vec3 vec);;
 	AKAME_API Transform(const Transform &obj)=default;
-	AKAME_API Transform(Transform &&obj)=default;
+	AKAME_API Transform(Transform &&obj) noexcept =default;
 
 public:
 	

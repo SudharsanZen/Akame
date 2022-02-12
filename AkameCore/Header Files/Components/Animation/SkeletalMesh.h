@@ -18,17 +18,17 @@ struct sk_vert
 };
 struct BoneInfo
 {
-	int				id;			//bone index
-	Entity			eid;		//entity id of this bone
-	std::string		name;		//bone name
-	std::string		parentName;	//parent bone's name, left "" ((i.e) null string) if no parents exist
+	int				id=-1;					//bone index
+	Entity			eid=INVALID_ENTITY;		//entity id of this bone
+	std::string		name;					//bone name
+	std::string		parentName;				//parent bone's name, left "" ((i.e) null string) if no parents exist
 	
 
-	glm::vec3		pose;		//needs to be removed
-	glm::quat		rot;		//needs to be removed
-	glm::vec3		scale;		//needs to be removed
+	glm::vec3		pose;					//needs to be removed
+	glm::quat		rot;					//needs to be removed
+	glm::vec3		scale;					//needs to be removed
 	
-	glm::mat4		offsetMat;	//offsetMatrix to convert vertex configurations from mesh to bone's local space
+	glm::mat4		offsetMat;				//offsetMatrix to convert vertex configurations from mesh to bone's local space
 	
 };
 

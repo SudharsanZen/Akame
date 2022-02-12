@@ -1,16 +1,21 @@
 #include "Rendering/Model.h"
 #include<iostream>
-#include<glad/glad.h>
-#include<GLFW/glfw3.h>
-#include<assimp/Importer.hpp>
-#include<assimp/scene.h>
-#include<assimp/postprocess.h>
 #include"misc/temp.h"
 #include"Core/Log/Log.h"
 #include"Components/Animation/SkeletalMesh.h"
 #include"Animation/AnimationControllerSystem.h"
-#include<assimp/version.h>
 #include"Core/Scene.h"
+
+#pragma warning(push, 0)
+#pragma warning( disable : 26812)
+#pragma warning( disable : 26495)
+#include<assimp/version.h>
+#include<assimp/Importer.hpp>
+#include<assimp/scene.h>
+#include<assimp/postprocess.h>
+#include<glad/glad.h>
+#include<GLFW/glfw3.h>
+#pragma warning(pop)
 void set_material(Material &mat,aiMesh *mesh,const aiScene *mAiScene,std::string mDir)
 {
 	if (mesh->mMaterialIndex >= 0)
@@ -164,7 +169,7 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 	t.SetLocalPosition(glm::vec3(0,0,0));
 	t.SetLocalRotation(glm::quat(1,0,0,0));
 	mCurrScene.SetEntityName(meshid, meshName);
-	for (int i_bone = 0; i_bone < mesh->mNumBones; i_bone++)
+	for (unsigned int i_bone = 0; i_bone < mesh->mNumBones; i_bone++)
 	{
 		int boneId = -1;
 		auto &currBone=mesh->mBones[i_bone];
@@ -177,13 +182,13 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 		{
 			
 			BoneInfo b;
-			b.id = mBoneMap.size();
+			
+			b.id = static_cast<int>(mBoneMap.size());
 			b.name = currBone->mName.C_Str();
 			
 			aiVector3D pose;
 			aiVector3D scale;
 			aiQuaternion rot;
-			ai_real angle;
 			aiVector3D angles;
 			boneId = b.id;
 			currBone->mArmature->mTransformation.Decompose(scale,rot,pose);
@@ -213,7 +218,7 @@ Entity Model::processSkeletalMesh(Entity parent,aiMesh* mesh)
 		}
 		assert(boneId!=-1);
 		auto weights = currBone->mWeights;
-		for (int i_weight = 0; i_weight < currBone->mNumWeights; i_weight++)
+		for (unsigned int i_weight = 0; i_weight < currBone->mNumWeights; i_weight++)
 		{
 			int vertexId = weights[i_weight].mVertexId;
 			float weight = weights[i_weight].mWeight;
@@ -488,7 +493,7 @@ Entity Model::LoadModelToScene(std::string modelPath)
 					aClip.ticksPerSec = animList[i]->mTicksPerSecond;
 					aClip.numChannels=animList[i]->mNumChannels;
 					auto mChannel = animList[i]->mChannels;
-					for (int i_channel = 0; i_channel < aClip.numChannels; i_channel++)
+					for (unsigned int i_channel = 0; i_channel < aClip.numChannels; i_channel++)
 					{
 						AnimationClip::AnimKeys animkeys;
 						
@@ -500,7 +505,7 @@ Entity Model::LoadModelToScene(std::string modelPath)
 						//get animation keys for this the current node
 
 						//get pose keys
-						for (int i_key = 0; i_key < animkeys.pose_count; i_key++)
+						for (unsigned int i_key = 0; i_key < animkeys.pose_count; i_key++)
 						{
 							auto currKey = mChannel[i_channel]->mPositionKeys[i_key];
 							glm::vec3 pose = glm::vec3(currKey.mValue.x,currKey.mValue.y,currKey.mValue.z);
@@ -509,7 +514,7 @@ Entity Model::LoadModelToScene(std::string modelPath)
 						}
 
 						//get rotation keys
-						for (int i_key = 0; i_key < animkeys.rot_count; i_key++)
+						for (unsigned int i_key = 0; i_key < animkeys.rot_count; i_key++)
 						{
 							auto currKey = mChannel[i_channel]->mRotationKeys[i_key];
 							glm::quat rot = glm::quat(currKey.mValue.w,currKey.mValue.x, currKey.mValue.y, currKey.mValue.z);
@@ -518,7 +523,7 @@ Entity Model::LoadModelToScene(std::string modelPath)
 						}
 
 						//get scale keys
-						for (int i_key = 0; i_key < animkeys.scale_count; i_key++)
+						for (unsigned int i_key = 0; i_key < animkeys.scale_count; i_key++)
 						{
 							auto currKey = mChannel[i_channel]->mScalingKeys[i_key];
 							glm::vec3 scale = glm::vec3(currKey.mValue.x, currKey.mValue.y, currKey.mValue.z);
@@ -559,7 +564,7 @@ void Model::UpdateHierarchy(aiNode* rootNode)
 		t.SetLocalScale(bone.scale);
 		
 	}
-	for (int i = 0; i < rootNode->mNumChildren; i++)
+	for (unsigned int i = 0; i < rootNode->mNumChildren; i++)
 	{
 		UpdateHierarchy(rootNode->mChildren[i]);
 	}

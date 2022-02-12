@@ -4,8 +4,8 @@
 #include"Assets/ShaderManager.h"
 #include"Core\Scene.h"
 #include"Core\Window.h"
-
-class LightAndShadowConfig
+#include"Core/Editor/AkameWindowBase.h"
+class LightAndShadowConfig:public AkameWindowBase
 {
 private:
 	Scene& m_scene;

@@ -1,8 +1,10 @@
 #include "components/Animation/SkeletalMesh.h"
 #include<iostream>
+#include "Components/Rendering/Mesh.h"
+#pragma warning(push, 0)
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
-#include "Components/Rendering/Mesh.h"
+#pragma warning(pop)
 std::vector<sk_vert> SkeletalMesh::vertexData = std::vector<sk_vert>();
 std::vector<unsigned int> SkeletalMesh::indexList = std::vector<unsigned int>();
 bool SkeletalMesh::needsUpdate = false;
@@ -40,7 +42,7 @@ void SkeletalMesh::renderMesh() const
 		return;
 	}
 	if (count)
-		glDrawRangeElements(GL_TRIANGLES, minInd, maxInd, count, GL_UNSIGNED_INT, (const void*)(start_i * sizeof(unsigned int)));
+		glDrawRangeElements(GL_TRIANGLES, static_cast<GLsizei>(minInd), static_cast<GLsizei>(maxInd), static_cast<GLsizei>(count), GL_UNSIGNED_INT, (const void*)((start_i * sizeof(unsigned int)) ));
 
 
 
@@ -71,7 +73,7 @@ void SkeletalMesh::CreateMesh(std::vector<sk_vert>& vertices, std::vector<GLuint
 	min = glm::vec4(minPose, 1);
 	max = glm::vec4(maxPose, 1);
 
-	unsigned int prevVertSize = this->vertexData.size();
+	size_t prevVertSize = this->vertexData.size();
 	start_i = indexList.size();
 	minInd = prevVertSize;
 	maxInd = prevVertSize + vertices.size() - 1;
@@ -82,7 +84,7 @@ void SkeletalMesh::CreateMesh(std::vector<sk_vert>& vertices, std::vector<GLuint
 		{
 			count++;
 			this->vertexData.push_back(vertices[i]);
-			this->indexList.push_back(i + prevVertSize);
+			this->indexList.push_back(i + static_cast<unsigned int>(minInd));
 		}
 	}
 	else
@@ -94,7 +96,7 @@ void SkeletalMesh::CreateMesh(std::vector<sk_vert>& vertices, std::vector<GLuint
 		for (int i = 0; i < indices.size(); i++)
 		{
 			count++;
-			indexList.push_back(prevVertSize + indices[i]);
+			indexList.push_back(static_cast<unsigned int>(minInd) + indices[i]);
 		}
 
 	}
