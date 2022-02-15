@@ -34,10 +34,12 @@ private:
 	friend class ReflectionMeta;
 	friend class InspectorWindow;
 public:
-	
+	#ifdef AK_PRIVATE_EXPOSE_GETTER_SETTER
+	auto GetSignature() { return signature; }
+	#endif
 	e_index GetVersion() { return version; }
 	e_index GetIndex() { return index; }
-
+	
 
 	Entity():Entity(ECS_INVALID_INDEX,ECS_INVALID_INDEX)
 	{

@@ -7,45 +7,49 @@
 #include<Core\Reflection\ReflectionUIHandler.h>
 #include<json/single_include/nlohmann/json.hpp>
 
-namespace json = nlohmann;
+
 class ReflectionMeta
 {
+	friend class ModelExporter;
+
 	bool _reading = false;
 	bool _writing = false;
 
 	template<typename T>
-	void JsonToTypeCmpx(json::json& json, T* val)
+	void JsonToTypeCmpx(nlohmann::json& json, T* val)
 	{
 		ReflectionMeta meta;
 		meta.m_json_object = json;
 		meta.write(*val);
 	}
-	AKAME_API void JsonToTypeCmpx(json::json& json, Entity* val);
+	AKAME_API void JsonToTypeCmpx(nlohmann::json& json, Entity* val);
 
-	AKAME_API void JsonToTypeCmpx(json::json& json, Quaternion* quat);
-	AKAME_API void JsonToTypeCmpx(json::json& json, glm::vec3* vec3);
-	AKAME_API void JsonToTypeCmpx(json::json& json, glm::vec4* vec4);
-	AKAME_API void JsonToTypeCmpx(json::json& json, glm::quat* quat);
+	AKAME_API void JsonToTypeCmpx(nlohmann::json& json, Quaternion* quat);
+	AKAME_API void JsonToTypeCmpx(nlohmann::json& json, glm::vec3* vec3);
+	AKAME_API void JsonToTypeCmpx(nlohmann::json& json, glm::vec4* vec4);
+	AKAME_API void JsonToTypeCmpx(nlohmann::json& json, glm::quat* quat);
+	AKAME_API void JsonToTypeCmpx(nlohmann::json& json, glm::mat4* mat);
 
 
-	AKAME_API void typeToJsonCmpx(json::json& json, Quaternion* quat);
-	AKAME_API void typeToJsonCmpx(json::json& json, glm::vec3* vec3);
-	AKAME_API void typeToJsonCmpx(json::json& json, glm::vec4* vec4);
-	AKAME_API void typeToJsonCmpx(json::json& json, glm::quat* quat);
+	AKAME_API void typeToJsonCmpx(nlohmann::json& json, Quaternion* quat);
+	AKAME_API void typeToJsonCmpx(nlohmann::json& json, glm::vec3* vec3);
+	AKAME_API void typeToJsonCmpx(nlohmann::json& json, glm::vec4* vec4);
+	AKAME_API void typeToJsonCmpx(nlohmann::json& json, glm::quat* quat);
+	AKAME_API void typeToJsonCmpx(nlohmann::json& json, glm::mat4* mat);
 	template<typename T>
-	void typeToJsonCmpx(json::json& json, T* ptr)
+	void typeToJsonCmpx(nlohmann::json& json, T* ptr)
 	{
 		ReflectionMeta refMeta;
 		(refMeta.read(*ptr));
 		json = refMeta.m_json_object;
 	}
 
-	AKAME_API void typeToJsonCmpx(json::json& json, Entity* ptr);
+	AKAME_API void typeToJsonCmpx(nlohmann::json& json, Entity* ptr);
 
 
 public:
 
-	json::json m_json_object;
+	nlohmann::json m_json_object;
 	template<typename T>
 	void read(T& from)
 	{
@@ -91,7 +95,7 @@ public:
 		if (_reading)
 		{
 
-			json::json obj;
+			nlohmann::json obj;
 			typeToJsonCmpx(obj, ptr);
 			m_json_object[name] = obj;
 
@@ -115,11 +119,11 @@ public:
 
 		if (_reading)
 		{
-			json::json arrayObj = json::json::array_t();
+			nlohmann::json arrayObj = nlohmann::json::array_t();
 
 			for (auto& itr : *ptr)
 			{
-				json::json compObj;
+				nlohmann::json compObj;
 				typeToJsonCmpx(compObj, &itr);
 				arrayObj.push_back(compObj);
 			}
@@ -136,7 +140,7 @@ public:
 
 			for (auto& itr : m_json_object[name])
 			{
-				JsonToTypeCmpx(itr, &(*ptr)[curr_i]);
+				JsonToTypeCmpx(itr, &((*ptr)[curr_i]));
 				curr_i++;
 			}
 		}

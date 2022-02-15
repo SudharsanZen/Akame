@@ -158,8 +158,10 @@
     <ClInclude Include="Header Files\Rendering\System\TiledRenderer.h" />
     <ClInclude Include="Header Files\Rendering\Texture.h" />
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h" />
+    <ClInclude Include="Header Files\Core\SceneEntityListSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Header Files\Core\AkameCore.cpp" />
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkeletalMeshRenderingSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkinnedRendererPipeline.cpp" />
@@ -175,6 +177,7 @@
     <ClCompile Include="Source Files\Components\Material.cpp" />
     <ClCompile Include="Source Files\Components\Mesh.cpp" />
     <ClCompile Include="Source Files\Components\SkeletalMesh.cpp" />
+    <ClCompile Include="Source Files\Core\AkameCore.cpp" />
     <ClCompile Include="Source Files\Core\Debug\Debug.cpp" />
     <ClCompile Include="Source Files\Core\Editor\AkameWindowBase.cpp" />
     <ClCompile Include="Source Files\Core\Editor\ContentBrowser.cpp" />

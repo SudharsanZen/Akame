@@ -1,5 +1,5 @@
 #pragma once
-#include"ECS.h"
+
 #include"Components/Lighting/Lights.h"
 #include"Core/Log/Log.h"
 #include"Rendering/System/ShadowFBO.h"
@@ -7,6 +7,7 @@
 #include"Rendering/System/PSSMFBO.h"
 #define DIR_MAP_SIZE 2048
 #define FRUSTUM_SPLIT_NUM 3
+class ECS;
 class LightSystem:public System
 {
 private:

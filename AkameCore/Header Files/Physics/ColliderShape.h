@@ -29,7 +29,10 @@ namespace physics
 			colShape = shape;
 			dim = glm::vec3(d1,d2,d3);
 		}
-
+		glm::vec3 getColliderDimensions()
+		{
+			return dim;
+		}
 		Shapes getShapeType()
 		{
 			return colShape;

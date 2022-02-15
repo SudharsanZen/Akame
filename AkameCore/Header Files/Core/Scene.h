@@ -7,7 +7,9 @@
 	template<>													\
 	AKAME_API void RemoveComponent<type>(Entity entityID);		\
 	template<>													\
-	AKAME_API type& GetComponent(Entity entityID);
+	AKAME_API type& GetComponent<type>(Entity entityID);		\
+	template<>													\
+	AKAME_API bool IsComponentAttached<type>(Entity entityID);  
 
 #if defined(AK_EXPORT) || defined(AK_STATIC)
 #include"ECS.h"
@@ -28,6 +30,11 @@
 	type& Scene::GetComponent<type>(Entity entityID)			\
 	{															\
 		return ecs->GetComponent<type>(entityID);				\
+	}															\
+	template<>													\
+	bool Scene::IsComponentAttached<type>(Entity entityID)		\
+	{															\
+		return ecs->IsComponentAttached<type>(entityID);		\
 	}
 #else
 class ECS;
@@ -45,6 +52,7 @@ class RenderingSystem;
 class BehaviourSystem;
 class LightSystem;
 class AnimationControllerSystem;
+class SceneEntityListSystem;
 namespace physics 
 {
 	class RigidBodySystem;
@@ -57,6 +65,7 @@ private:
 
 	std::shared_ptr<ECS> ecs;
 	
+	std::shared_ptr<SceneEntityListSystem> e_list_system;
 	std::shared_ptr<RenderingSystem> renderSys;
 	std::shared_ptr<BehaviourSystem> behaviourSys;
 	std::shared_ptr<LightSystem> lightSys;
@@ -84,7 +93,17 @@ private:
 	friend struct EntitySignatures;
 	friend class EDFExporter;
 public:
-	
+#ifdef AK_PRIVATE_GETTER_SETTER
+	template<typename _sysType>
+	std::shared_ptr<_sysType> GetSystem()
+	{
+		return ecs->systemManager.GetSystemPtr<_sysType>();
+	}
+	std::shared_ptr<ECS> GetECS()
+	{
+		return ecs;
+	}
+#endif
 	AKAME_API void groupEntWithShader();
 	AKAME_API void vsyncOn(bool status);
 	//fn will be called when Scene::Render() is called. this method will be dprecated
@@ -117,6 +136,8 @@ public:
 	//get added component with a given entityID
 	template<typename T>
 	AKAME_API T& GetComponent(Entity entityID);
+	template<typename T>
+	AKAME_API bool IsComponentAttached(Entity entityID);
 
 	DECLARE_ECS_SPECIALIZATION_SCENE(Transform)
 	DECLARE_ECS_SPECIALIZATION_SCENE(Mesh)
@@ -146,6 +167,11 @@ T& Scene::AddComponent(Entity entityID)
 	T& comp=ecs->AddComponent<T>(entityID);
 	comp.ecs = ecs;
 	return comp;
+}
+template<typename T>
+bool Scene::IsComponentAttached(Entity eid)
+{
+	ecs->IsComponentAttached<T>(eid);
 }
 //Remove added component
 template<typename T>

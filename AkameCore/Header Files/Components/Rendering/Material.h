@@ -36,6 +36,7 @@ private:
 	friend class SkeletalMeshRenderingSystem;
 	friend class ECS;
 	friend class ComponentArray<Material>;
+	friend class ModelExporter;
 	AKAME_API void setUniformsOnce(std::shared_ptr<Shader> shader, glm::vec3& viewPose);
 	AKAME_API void setUniformOnceSkeletalMesh(std::shared_ptr<Shader> shader,Camera cam);
 	AKAME_API void setUniformEveryObject(int index,std::shared_ptr<Shader> shader);

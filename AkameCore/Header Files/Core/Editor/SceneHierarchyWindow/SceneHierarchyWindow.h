@@ -21,6 +21,7 @@ class SceneHierarchyWindow:public AkameWindowBase
 	AKAME_API void Draw();
 	AKAME_API void DrawNode(Transform const& t, EntityDescriptor& edt, ImGuiTreeNodeFlags const& base_flags);
 public:
+	AKAME_API Entity GetFirstSelection();
 	AKAME_API SceneHierarchyWindow(Scene& s);
 	
 };

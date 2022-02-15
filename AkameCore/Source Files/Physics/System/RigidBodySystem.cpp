@@ -37,7 +37,12 @@ void physics::RigidBodySystem::Run(float deltaTime)
 		{
 
 			RigidBody3D& rb3d = e->GetComponent<RigidBody3D>(ent);
-
+			if (rb3d.rigidbody && RigidBodyType::DYNAMIC == rb3d.rBodyType)
+			{
+				physx::PxRigidDynamic* drb = static_cast<physx::PxRigidDynamic*>(rb3d.rigidbody);
+				physx::PxVec3 currVel=drb->getLinearVelocity();
+				rb3d.velocity = glm::vec3(currVel.x,currVel.y,currVel.z);
+			}
 			Transform& transform = e->GetComponent<Transform>(ent);
 			transform.pxPoseInit = transform.GetGlobalPosition();
 			transform.pxRotInit = transform.GetGlobalRotation().quaternion;

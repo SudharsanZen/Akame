@@ -1,4 +1,5 @@
 #include "Rendering/System/LightSystem.h"
+#include"ECS.h"
 #include<sstream>
 #pragma warning(push, 0)
 #include<glad/glad.h>

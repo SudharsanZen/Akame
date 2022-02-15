@@ -1,11 +1,11 @@
 #pragma once
 #include"Math/EngineMathConstants.h"
 #include"Math/Quaternion.h"
-#include<list>
+#include<vector>
 #include<algorithm>
-#include"ECS.h"
 #include"Components/Components.h"
 #include"Physics/System/RigidBodySystem.h"
+#include"Core/Reflection/ReflectionMeta.h"
 #include"Core/Reflection/ReflectionUIHandler.h"
 #include"Core/AkameCore.h"
 #include"Components/Physics/RigidBody3D.h"
@@ -15,7 +15,7 @@ class Transform:public Components
 	glm::quat pxRotInit;
 	Entity parent=Entity(-1,-1);
 	std::shared_ptr<std::set<e_index>> transformUpdateList;
-	std::list<Entity> child;
+	std::vector<Entity> child;
 	//global parent transform
 	glm::vec3 basePosition;
 	glm::vec3 baseScale;
@@ -28,15 +28,18 @@ class Transform:public Components
 	glm::mat4 localToWorld;
 	glm::mat4 worldToLocal;
 	glm::mat4 transformMat;
-	/*
+	
 	AK_SERIALIZABLES
 	(
-		AK_ID(localPosition)
-		AK_ID(localScale)
-		AK_ID(localRotation)
+		AK_ID_COMPX(localPosition)
+		AK_ID_COMPX(localScale)
+		AK_ID_COMPX(localRotation)
+		AK_ID_COMPX(baseRotation)
+		AK_ID_COMPX(baseScale)
+		AK_ID_COMPX(basePosition)
 		AK_ID_COMPX_LIST(child)
 		AK_ID_COMPX(parent)
-	)*/
+	)
 	AKAME_API glm::mat4 formTransformMatrix(glm::vec3 position, Quaternion rotation, glm::vec3 scale);
 	AKAME_API void updateChildBaseTransformDetails();
 	
@@ -85,7 +88,7 @@ public:
 
 	AKAME_API void SetGlobalScale(glm::vec3 scale);
 
-	AKAME_API std::list<Entity>& getChildList();
+	AKAME_API std::vector<Entity>& getChildList();
 
 	AKAME_API Transform& getParentTransform();
 

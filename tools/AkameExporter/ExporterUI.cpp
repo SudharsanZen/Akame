@@ -27,6 +27,9 @@
 #include<misc/cpp/imgui_stdlib.h>
 #include<imgui_internal.h>
 #pragma warning(pop)
+
+#include"ModelExporter.h"
+
 void Exporter::initImGui()
 {
 	std::weak_ptr<GLFWwindow> context = m_Scene.window.mainWindow;
@@ -149,7 +152,34 @@ void Exporter::DrawUI()
 					modelLoader.LoadModelToScene(importPath);
 
 				}
+				ImGui::SameLine();
+				
 			}
+			if (exportPath != "")
+			{
+				
+					
+					Entity selection = m_SceneHierarchy->GetFirstSelection();
+				if (selection != INVALID_ENTITY)
+				{
+					if (ImGui::Button("Export File"))
+					{
+						ModelExporter exp(m_Scene);
+						size_t lastSlash = exportPath.find_last_of("\\");
+						size_t dotPose = exportPath.find_last_of(".");
+						if (lastSlash == std::string::npos || dotPose == std::string::npos)
+						{
+							std::cout << "improper path!:" << "Line:" << __LINE__ << " FILE:" << __FILE__;
+							return;
+						}
+
+						std::string directory = exportPath.substr(0, lastSlash + 1);
+						std::string fileName = exportPath.substr(lastSlash + 1, dotPose - lastSlash - 1);
+						exp.ExportEntity(selection, directory, fileName);
+					}
+				}
+			}
+			
 			ImGui::End();
 		}
 	}

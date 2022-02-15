@@ -3,7 +3,6 @@
 #include"Math/GlmMath.h"
 #include<memory>
 #include<set>
-#include"ECS.h"
 #include"Rendering/FrameBuffer.h"
 #include"Rendering/System/ShadowFBO.h"
 #include"Rendering/System/TiledRenderer.h"
@@ -13,6 +12,8 @@
 #include"Animation/SkeletalMeshRenderingSystem.h"
 class Camera;
 class LightSystem;
+class ECS;
+#include"ECSTYPES.h"
 class RenderingSystem :public System
 {
 private:

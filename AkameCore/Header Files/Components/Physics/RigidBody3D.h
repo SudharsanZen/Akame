@@ -7,6 +7,7 @@
 #include"Components\Components.h"
 
 class ECS;
+class ModelExporter;
 struct Entity;
 namespace physx
 {
@@ -27,7 +28,7 @@ namespace physics
 		RigidBodyType rBodyType;
 		ColliderShape colliderShape;
 		std::weak_ptr<Physics> physicsPtr;
-
+		glm::vec3 velocity;
 		physx::PxRigidActor* rigidbody;
 
 		AKAME_API void ASSERT_RB();
@@ -36,7 +37,7 @@ namespace physics
 		AKAME_API void detachAllAttachedShapes();
 
 		friend class RigidBodySystem;
-
+		friend class ::ModelExporter;
 	public:
 		AKAME_API RigidBody3D();
 

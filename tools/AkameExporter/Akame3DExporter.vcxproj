@@ -57,7 +57,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>DEBUG;AK_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;AK_DLL;AK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\AkameCore\vendor\glfw\include;..\..\AkameCore\vendor\single_include\nlohmann;..\..\AkameCore\vendor\glad-akame-;..\..\AkameCore\vendor;..\..\AkameCore\vendor\imGui;..\..\AkameCore\vendor\assimp\include;..\..\ECS\HeaderFiles;..\..\AkameCore\Header Files;..\..\AkameCore\vendor\pugixml\src;..\..\AkameCore\vendor\spdlog\include;..\..\AkameCore\vendor\PhysX\physx\include;..\..\AkameCore\vendor\PhysX\physx\source\physxextensions\src;..\..\AkameCore\vendor\PhysX\pxshared\include;..\..\AkameCore\vendor\PhysX\physx\source\foundation\include;..\..\AkameCore\vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -78,7 +78,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>NDEBUG;AK_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;AK_DLL;AK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\AkameCore\vendor\glfw\include;..\..\AkameCore\vendor\single_include\nlohmann;..\..\AkameCore\vendor\glad-akame-;..\..\AkameCore\vendor;..\..\AkameCore\vendor\imGui;..\..\AkameCore\vendor\assimp\include;..\..\ECS\HeaderFiles;..\..\AkameCore\Header Files;..\..\AkameCore\vendor\pugixml\src;..\..\AkameCore\vendor\spdlog\include;..\..\AkameCore\vendor\PhysX\physx\include;..\..\AkameCore\vendor\PhysX\physx\source\physxextensions\src;..\..\AkameCore\vendor\PhysX\pxshared\include;..\..\AkameCore\vendor\PhysX\physx\source\foundation\include;..\..\AkameCore\vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -102,14 +102,14 @@
   <ItemGroup>
     <ClInclude Include="ExporterUI.h" />
     <ClInclude Include="FileOpenSaveDialogBox.h" />
+    <ClInclude Include="ModelExporter.h" />
     <ClInclude Include="OS_Interface.h" />
-    <ClInclude Include="RefMEta.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ExporterUI.cpp" />
     <ClCompile Include="FileOpenSaveDialogBox.cpp" />
+    <ClCompile Include="ModelExporter.cpp" />
     <ClCompile Include="OS_interface.cpp" />
-    <ClCompile Include="RefMEta.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>

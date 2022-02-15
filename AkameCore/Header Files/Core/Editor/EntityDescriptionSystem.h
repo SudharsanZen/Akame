@@ -1,14 +1,14 @@
 #pragma once
 
 #include"components/EntityDescriptor.h"
-
+#include"ECSTYPES.h"
 #include<map>
 
 class EntityDescriptionSystem:public System
 {
 private:
 	friend class Scene;
-	bool m_needs_update;
+	bool m_needs_update=false;
 	void updateList();
 	std::weak_ptr<ECS> ecs;
 public:

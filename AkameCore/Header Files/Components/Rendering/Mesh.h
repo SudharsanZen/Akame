@@ -32,11 +32,15 @@ private:
 	glm::vec4 max,min;
 	friend class RenderingSystem;
 	friend class Editor;
+	friend class ModelExporter;
 	friend class SceneHierarchyWindow;
 	friend class LightAndShadowConfig;
 	
 public:
-
+#if defined(AK_PRIVATE_GETTER_SETTER) || defined(AK_EXPORT) 
+	AKAME_API std::vector<vert>& getVertData() { return vertexData; }
+	AKAME_API std::vector<unsigned int>& getIndexData() { return indexList; }
+#endif
 	AKAME_API Mesh();
 
 	AKAME_API ~Mesh();

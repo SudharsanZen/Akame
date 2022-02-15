@@ -4,9 +4,6 @@
 
 int main()
 {
-	
-
-	ComponentArray<Transform> arr;
 	AssetManager::assetRootPath = "../../../../Assets/";
 
 	Window window(800,800,"Akame Exporter");
@@ -31,6 +28,7 @@ int main()
 
 
 	Transform &t=scene.AddComponent<Transform>(pl);
+
 	Mesh& plm = scene.AddComponent<Mesh>(pl);
 	scene.AddComponent<Material>(pl) = mat;
 	plm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);

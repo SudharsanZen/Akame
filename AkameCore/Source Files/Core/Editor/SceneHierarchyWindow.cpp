@@ -203,6 +203,16 @@ void SceneHierarchyWindow::DrawNode(Transform const& t, EntityDescriptor& edt, I
 }
 
 
+Entity SceneHierarchyWindow::GetFirstSelection()
+{
+    if (selected.size() > 0)
+    {
+        return *(selected.begin());
+    }
+    else
+        return INVALID_ENTITY;
+}
+
 SceneHierarchyWindow::SceneHierarchyWindow(Scene& s) :m_Scene(s)
 {
     m_menuPosex = 0.0f;

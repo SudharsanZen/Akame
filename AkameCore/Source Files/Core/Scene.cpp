@@ -14,6 +14,7 @@
 #include<stb_image.h>
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
+#include"Core/SceneEntityListSystem.h"
 #pragma warning(pop)
 std::vector<std::shared_ptr<RenderingSystem>> listScene;
 
@@ -143,6 +144,7 @@ void Scene::InitEcs()
 
 	//register system and it's signature
 	renderSys=ecs->RegisterSystem<RenderingSystem>();
+	e_list_system=ecs->RegisterSystem<SceneEntityListSystem>();
 	behaviourSys=ecs->RegisterSystem<BehaviourSystem>();
 	physicsSys = ecs->RegisterSystem<physics::RigidBodySystem>();
 	lightSys = ecs->RegisterSystem<LightSystem>();
@@ -166,6 +168,7 @@ void Scene::InitEcs()
 	//registering system signature
 	ecs->SetSystemSignature<EntityDescriptionSystem>(entityDescriptor);
 	ecs->SetSystemSignature<RenderingSystem>(renderSysSig);
+	ecs->SetSystemSignature<SceneEntityListSystem>(Signature());
 	ecs->SetSystemSignature<BehaviourSystem>(behSysSig);
 	ecs->SetSystemSignature<physics::RigidBodySystem>(physicsSysSig);
 	ecs->SetSystemSignature<LightSystem>(lightingSysSig);
@@ -254,7 +257,7 @@ void Scene::Render()
 {
 	
 		currTime = static_cast<float>(glfwGetTime());
-	//renderStuff
+		//renderStuff
 		cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
 		//call this in this same order
 		EDS->updateMap();

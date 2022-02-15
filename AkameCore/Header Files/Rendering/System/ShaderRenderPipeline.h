@@ -1,7 +1,6 @@
 #pragma once
 #include"Rendering/Shader.h"
 #include"Rendering/Camera.h"
-#include<ECS.h>
 #include<string>
 #include"Core/AkameCore.h"
 #include "Rendering/System/RenderingSystem.h"

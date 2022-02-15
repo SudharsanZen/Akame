@@ -7,8 +7,8 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #pragma warning(pop)
-std::vector<vert> Mesh::vertexData=std::vector<vert>();
-std::vector<unsigned int> Mesh::indexList= std::vector<unsigned int>();
+std::vector<vert> Mesh::vertexData = std::vector<vert>();
+std::vector<unsigned int> Mesh::indexList = std::vector<unsigned int>();
 bool Mesh::needsUpdate=false;
 //Buffer object and Atrribute object iDs
 unsigned int Mesh::VAO=GL_INVALID_VALUE, Mesh::VBO= GL_INVALID_VALUE, Mesh::IBO= GL_INVALID_VALUE;
@@ -117,6 +117,7 @@ void Mesh::CreateMesh(std::vector<vert> &vertices, std::vector<GLuint> &indices)
 	
 
 	numOfIndices = this->indexList.size();
+	end_i = numOfIndices - 1;
 	numOfVertices = this->vertexData.size();
 	needsUpdate = true;
 	

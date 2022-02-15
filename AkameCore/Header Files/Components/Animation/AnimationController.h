@@ -52,7 +52,12 @@ public:
 		unsigned long long  i_currPose=0;
 		unsigned long long  i_currRot=0;
 		unsigned long long  i_currScale=0;
-
+		AK_SERIALIZABLES
+		(
+			AK_ID(i_currPose)
+			AK_ID(i_currRot)
+			AK_ID(i_currScale)
+		)
 		AKAME_API void reset();
 	};
 

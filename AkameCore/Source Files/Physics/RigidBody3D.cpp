@@ -39,11 +39,13 @@ physics::RigidBody3D::RigidBody3D()
 	eid = Entity(-1, -1);
 	rBodyType = RigidBodyType::STATIC;
 	rigidbody = NULL;
+	velocity = glm::vec3(0);
 }
 
 physics::RigidBody3D::RigidBody3D(RigidBodyType rbType, ColliderShape shape)
 {
 	setRigidBodyType(rbType, shape);
+	velocity = glm::vec3(0);
 }
 
 void physics::RigidBody3D::setColliderShape(ColliderShape shape)

@@ -4,6 +4,7 @@
 #include"Components/Components.h"
 #include"Math/EngineMath.h"
 #include<map>
+#include"Core/Reflection/ReflectionMeta.h"
 #include"Core/AkameCore.h"
 struct sk_vert
 {
@@ -29,7 +30,17 @@ struct BoneInfo
 	glm::vec3		scale;					//needs to be removed
 	
 	glm::mat4		offsetMat;				//offsetMatrix to convert vertex configurations from mesh to bone's local space
-	
+	AK_SERIALIZABLES
+		(
+			AK_ID(id)
+			AK_ID_COMPX(eid)
+			AK_ID(name)
+			AK_ID(parentName)
+			AK_ID_COMPX(pose)
+			AK_ID_COMPX(rot)
+			AK_ID_COMPX(scale)
+			AK_ID_COMPX(offsetMat)
+		)
 };
 
 
@@ -59,7 +70,7 @@ private:
 	friend class AnimationSystem;
 	friend class SkeletalMeshRenderingSystem;
 	friend class Model;
-
+	friend class ModelExporter;
 	//only called when "needsUpdate" is true
 	//updates VBO and IBO when needed
 	AKAME_API static  void setupMesh();
@@ -68,7 +79,10 @@ private:
 	Entity animController;
 
 public:
-	
+#if defined(AK_PRIVATE_GETTER_SETTER) || defined(AK_EXPORT) 
+	AKAME_API std::vector<sk_vert>& getVertData() { return vertexData; }
+	AKAME_API std::vector<unsigned int>& getIndexData() { return indexList; }
+#endif
 	AKAME_API Entity GetAnimControllerID();
 	AKAME_API SkeletalMesh();
 

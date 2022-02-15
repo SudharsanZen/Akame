@@ -22,7 +22,7 @@
 	template<>													\
 	AKAME_API type& GetComponent<type>();
 
-#ifdef AK_EXPORT
+#if defined(AK_EXPORT) || defined(AK_STATIC)
 #include"ECS.h"
 #define DEFINE_ECS_SPECIALIZATION_BHV(type)						\
 	template<>													\
@@ -118,7 +118,7 @@ public:
 	AKAME_API Entity CreateEntity();
 };
 
-#ifdef AK_EXPORT
+#if defined(AK_EXPORT) || defined(AK_STATIC)
 
 template<typename T>
 T& Behaviour::GetComponent()

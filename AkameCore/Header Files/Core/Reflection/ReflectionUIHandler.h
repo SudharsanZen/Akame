@@ -12,8 +12,8 @@
 #define AK_ID_COMPX(id_name) (#id_name,&id_name,ID_TYPE::COMPLEX())
 #define AK_ID_COMPX_LIST(id_name) (#id_name,&id_name,ID_TYPE::COMPLEX_LIST())
 
-#define AK_SERIALIZABLES(x)		void _serialize_data(ReflectionMeta& r){r x;}
-#define AK_SHOW_IN_INSPECTOR(x) void _draw_data(ReflectionUIHandler& r){r x;}
+#define AK_SERIALIZABLES(x)		AKAME_API void _serialize_data(ReflectionMeta& r){r x;}
+#define AK_SHOW_IN_INSPECTOR(x) AKAME_API void _draw_data(ReflectionUIHandler& r){r x;}
 namespace ID_TYPE
 {
 	class SIMPLE {};

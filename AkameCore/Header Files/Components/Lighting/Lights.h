@@ -28,6 +28,14 @@ private:
 	
 	AKAME_API void notifyLightSystemToUpdate();
 public:
+	AK_SERIALIZABLES
+	(
+		AK_ID_COMPX(lightDirection)
+		AK_ID_COMPX(lightColor)
+		AK_ID_COMPX(ambient)
+		AK_ID_COMPX(pointLightConstants)
+		AK_ID(pointLightRadius)
+	)
 	AKAME_API float calPointLightRadius(glm::vec3 C, float intensity);
 	AKAME_API float getPointLightRadius();
 	AKAME_API Lights();

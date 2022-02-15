@@ -1,5 +1,5 @@
 #include"Components/Rendering/Transform.h"
-#include"ECS.h"
+
 
 
 class SceneTransformManager :public System

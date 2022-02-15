@@ -2,6 +2,7 @@
 
 #include"Components/Components.h"
 #include"Core/AkameCore.h"
+#include"Core/Reflection/ReflectionMeta.h"
 class EntityDescriptor:public Components
 {
 	std::string name;
@@ -13,7 +14,11 @@ class EntityDescriptor:public Components
 	friend class EntityDescriptionSystem;
 public:
 	
-
+	AK_SERIALIZABLES
+	(
+		AK_ID(name)
+		AK_ID(tag)
+	)
 	AKAME_API EntityDescriptor();
 
 	AKAME_API void SetTag(std::string str);

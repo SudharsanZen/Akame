@@ -1,12 +1,12 @@
 #include"Core/Reflection/ReflectionMeta.h"
 
-void ReflectionMeta::JsonToTypeCmpx(json::json& json, Entity* val)
+void ReflectionMeta::JsonToTypeCmpx(nlohmann::json& json, Entity* val)
 {
 	val->index = json["index"];
 	val->version = json["version"];
 }
 
-void ReflectionMeta::JsonToTypeCmpx(json::json& json, Quaternion* quater)
+void ReflectionMeta::JsonToTypeCmpx(nlohmann::json& json, Quaternion* quater)
 {
 	quater->quaternion.x = json["x"];
 	quater->quaternion.y = json["y"];
@@ -14,7 +14,7 @@ void ReflectionMeta::JsonToTypeCmpx(json::json& json, Quaternion* quater)
 	quater->quaternion.w = json["w"];
 }
 
-void ReflectionMeta::JsonToTypeCmpx(json::json& json, glm::vec3* vec3)
+void ReflectionMeta::JsonToTypeCmpx(nlohmann::json& json, glm::vec3* vec3)
 {
 	vec3->x = json["x"];
 	vec3->y = json["y"];
@@ -22,7 +22,7 @@ void ReflectionMeta::JsonToTypeCmpx(json::json& json, glm::vec3* vec3)
 
 }
 
-void ReflectionMeta::JsonToTypeCmpx(json::json& json, glm::vec4* vec4)
+void ReflectionMeta::JsonToTypeCmpx(nlohmann::json& json, glm::vec4* vec4)
 {
 	vec4->x = json["x"];
 	vec4->y = json["y"];
@@ -30,7 +30,7 @@ void ReflectionMeta::JsonToTypeCmpx(json::json& json, glm::vec4* vec4)
 	vec4->w = json["w"];
 }
 
-void ReflectionMeta::JsonToTypeCmpx(json::json& json, glm::quat* quat)
+void ReflectionMeta::JsonToTypeCmpx(nlohmann::json& json, glm::quat* quat)
 {
 	quat->x = json["x"];
 	quat->y = json["y"];
@@ -38,23 +38,29 @@ void ReflectionMeta::JsonToTypeCmpx(json::json& json, glm::quat* quat)
 	quat->w = json["w"];
 }
 
-void ReflectionMeta::typeToJsonCmpx(json::json& json, Quaternion* quat)
+void ReflectionMeta::JsonToTypeCmpx(nlohmann::json& json, glm::mat4* mat)
+{
+	for (int i = 0; i < 16; i++)
+		(*mat)[i / 4][i % 4]=json[i];
+}
+
+void ReflectionMeta::typeToJsonCmpx(nlohmann::json& json, Quaternion* quat)
 {
 	typeToJsonCmpx(json, &quat->quaternion);
 }
 
-void ReflectionMeta::typeToJsonCmpx(json::json& json, glm::vec3* vec3)
+void ReflectionMeta::typeToJsonCmpx(nlohmann::json& json, glm::vec3* vec3)
 {
-	json::json obj;
+	nlohmann::json obj;
 	obj["x"] = vec3->x;
 	obj["y"] = vec3->y;
 	obj["z"] = vec3->z;
 	json = obj;
 }
 
-void ReflectionMeta::typeToJsonCmpx(json::json& json, glm::vec4* vec4)
+void ReflectionMeta::typeToJsonCmpx(nlohmann::json& json, glm::vec4* vec4)
 {
-	json::json obj;
+	nlohmann::json obj;
 	obj["x"] = vec4->x;
 	obj["y"] = vec4->y;
 	obj["z"] = vec4->z;
@@ -62,9 +68,9 @@ void ReflectionMeta::typeToJsonCmpx(json::json& json, glm::vec4* vec4)
 	json = obj;
 }
 
-void ReflectionMeta::typeToJsonCmpx(json::json& json, glm::quat* quat)
+void ReflectionMeta::typeToJsonCmpx(nlohmann::json& json, glm::quat* quat)
 {
-	json::json obj;
+	nlohmann::json obj;
 	obj["x"] = quat->x;
 	obj["y"] = quat->y;
 	obj["z"] = quat->z;
@@ -72,9 +78,17 @@ void ReflectionMeta::typeToJsonCmpx(json::json& json, glm::quat* quat)
 	json = obj;
 }
 
-void ReflectionMeta::typeToJsonCmpx(json::json& json, Entity* ptr)
+void ReflectionMeta::typeToJsonCmpx(nlohmann::json& json, glm::mat4* mat)
 {
-	json::json ent;
+	nlohmann::json j_mat;
+	for (int i = 0; i < 16; i++)
+		j_mat[i] = (*mat)[i / 4][i % 4];
+	json = j_mat;
+}
+
+void ReflectionMeta::typeToJsonCmpx(nlohmann::json& json, Entity* ptr)
+{
+	nlohmann::json ent;
 	ent["index"] = ptr->index;
 	ent["version"] = ptr->version;
 	json = ent;
@@ -92,6 +106,6 @@ void ReflectionMeta::print_formatted()
 
 void ReflectionMeta::from_string(std::string searialized_class)
 {
-	m_json_object = json::json::parse(searialized_class);
+	m_json_object = nlohmann::json::parse(searialized_class);
 }
 

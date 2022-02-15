@@ -1,6 +1,6 @@
 #pragma once
 
-#include"ECS.h"
+
 #include"Core/AkameCore.h"
 class ECS;
 /*

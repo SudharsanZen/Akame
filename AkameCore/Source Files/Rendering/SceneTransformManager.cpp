@@ -1,5 +1,5 @@
 #include"Rendering/System/SceneTransformManager.h"
-
+#include"ECS.h"
 SceneTransformManager::SceneTransformManager()
 {
 	updateTransformList = std::make_shared<std::set<e_index>>();

@@ -1,5 +1,5 @@
 #include "Components\Rendering\Transform.h"
-
+#include"ECS.h"
 //graphics framework uses left handsided 3d-coordinate system
 
 
@@ -166,7 +166,7 @@ void Transform::SetGlobalScale(glm::vec3 scale)
 	localScale = scale / baseScale;
 }
 
-std::list<Entity>& Transform::getChildList()
+std::vector<Entity>& Transform::getChildList()
 {
 	return child;
 }

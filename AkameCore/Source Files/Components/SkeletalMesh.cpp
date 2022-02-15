@@ -18,10 +18,16 @@ SkeletalMesh::SkeletalMesh()
 {
 	//initialize all values to zero or null
 
+
 	min = glm::vec4(-1);
 	max = glm::vec4(1);
-	animController = Entity(-1,-1);
 	count = 0;
+	end_i = 0;
+	maxInd = 0;
+	minInd = 0;
+	numOfIndices = 0;
+	numOfVertices = 0;
+	start_i = 0;
 }
 
 SkeletalMesh::~SkeletalMesh()
@@ -75,6 +81,7 @@ void SkeletalMesh::CreateMesh(std::vector<sk_vert>& vertices, std::vector<GLuint
 
 	size_t prevVertSize = this->vertexData.size();
 	start_i = indexList.size();
+	
 	minInd = prevVertSize;
 	maxInd = prevVertSize + vertices.size() - 1;
 	if (indices.size() == 0)
@@ -106,8 +113,9 @@ void SkeletalMesh::CreateMesh(std::vector<sk_vert>& vertices, std::vector<GLuint
 
 
 
-
+	
 	numOfIndices = this->indexList.size();
+	end_i = numOfIndices-1;
 	numOfVertices = this->vertexData.size();
 	needsUpdate = true;
 

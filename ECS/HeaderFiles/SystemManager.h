@@ -24,7 +24,14 @@ public:
 
 		return system;
 	}
+	template<typename T>
+	std::shared_ptr<T> GetSystemPtr()
+	{
+		ComponentID SID = typeid(T).name();
 
+		assert(systems.find(SID) != systems.end() && "trying to fetch a non existing system!");
+		return std::static_pointer_cast<T>(systems[SID]);
+	}
 	template<typename T>
 	void SetSystemSignature(Signature signature)
 	{
