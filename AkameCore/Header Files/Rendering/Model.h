@@ -2,6 +2,7 @@
 #include<string>
 #include"Components/Rendering/Mesh.h"
 #include"Components/Animation/SkeletalMesh.h"
+#include"Components/Animation/AnimationController.h"
 #include<map>
 
 struct aiMesh;
@@ -27,14 +28,15 @@ private:
 	std::map<std::string, BoneInfo>	mBoneMap;		//bone name to boneInfo map
 	std::vector<Entity>				mSkMeshList;	//list of skeletal mesh entities if exists
 
-	
-	AKAME_API void	processNode(Entity parent, aiNode* node);			//process each node frommAiScene and create an entity for that node in mScene
+	std::vector<std::shared_ptr<AnimationClip>> m_animation_clips;
+
+	AKAME_API void	processNode(Entity parent, aiNode* node);		//process each node frommAiScene and create an entity for that node in mScene
 	AKAME_API Entity	processSkeletalMesh(Entity parent, aiMesh* mesh);
 	AKAME_API Entity	processMesh(Entity parent, aiMesh* mesh);
 
 	//this code should be removed (rendered useless)
 	AKAME_API void	UpdateHierarchy(aiNode *rootNode);
-
+	friend class ModelExporter;
 public:
 
 	//requires current scene as parameter

@@ -148,8 +148,8 @@ void Exporter::DrawUI()
 			{
 				if (ImGui::Button("Import File"))
 				{
-					Model modelLoader(m_Scene);
-					modelLoader.LoadModelToScene(importPath);
+					currModel=std::make_shared<Model>(m_Scene);
+					currModel->LoadModelToScene(importPath);
 
 				}
 				ImGui::SameLine();
@@ -176,6 +176,8 @@ void Exporter::DrawUI()
 						std::string directory = exportPath.substr(0, lastSlash + 1);
 						std::string fileName = exportPath.substr(lastSlash + 1, dotPose - lastSlash - 1);
 						exp.ExportEntity(selection, directory, fileName);
+						exp.ExportAnimationClips(*currModel);
+						
 					}
 				}
 			}

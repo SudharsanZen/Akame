@@ -26,11 +26,12 @@ class ModelExporter
 	void ComponentSerializerHelper(Entity eid, nlohmann::json& components);
 	void ExportEntity(Entity eid);
 	bool EntityHasChild(Entity eid);
+
 public:
 	ModelExporter(Scene& scene);
 
 	void ExportEntity(Entity eid,std::string path,std::string fileName="entity");
-
+	void ExportAnimationClips(Model& model);
 
 };
 

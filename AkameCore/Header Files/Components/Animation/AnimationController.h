@@ -2,14 +2,20 @@
 #include"Components/Components.h"
 #include"SkeletalMesh.h"
 #include"Core/AkameCore.h"
+#include"Core/Reflection/ReflectionMeta.h"
 class AnimationClip
 {
 private:
+	friend class ReflectionMeta;
 	template <typename _keyValueType>
 	struct Key
 	{
 		double time;
 		_keyValueType value;
+		Key()
+		{
+			this->time = 0;
+		}
 		Key(double time,_keyValueType value)
 		{
 			this->time = time;
@@ -25,11 +31,14 @@ private:
 		std::vector<Key<glm::vec3>> position;
 		std::vector<Key<glm::quat>> rotation;
 		std::vector<Key<glm::vec3>> scale;
+
 	};
 
 	unsigned int numChannels;
 	std::string clipName="Clip";
 	friend class Model;
+	friend class ModelExporter;
+	friend class ReflectionMeta;
 	friend class AnimationController;
 	//duration in ticks 
 	double duration;

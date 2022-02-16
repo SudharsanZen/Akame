@@ -7,6 +7,7 @@
 #include"Core/SceneEntityListSystem.h"
 #include<fstream>
 #include<direct.h>
+#include<Rendering/Model.h>
 
 template <typename _compType>
 void ModelExporter::ComponentSerializerHelper(Entity eid,nlohmann::json &components)
@@ -251,4 +252,56 @@ void ModelExporter::ExportEntity(Entity start,std::string forlderPath,std::strin
 	
 	file << m_entity_arr;
 	file.close();
+}
+
+void ModelExporter::ExportAnimationClips(Model& model)
+{
+	for (size_t i = 0; i < model.m_animation_clips.size(); i++)
+	{
+		std::stringstream ss;
+
+		ss << m_folderPath << m_fileName << "\\AnimationClips";
+		makeFolder(m_folderPath + m_fileName);
+		makeFolder(ss.str());
+		ss << "\\" << m_fileName<<i<< ".aClip";
+		nlohmann::json aClip;
+		std::ofstream file(ss.str());
+		std::string binRelLocation = m_fileName + "\\AnimationClips\\" + m_fileName + ".aClip.bin";
+		std::ofstream clipBin(m_folderPath+binRelLocation, std::ios::binary | std::ios::out);
+		aClip["name"] = model.m_animation_clips[i]->clipName;
+		aClip["numChannels"] = model.m_animation_clips[i]->numChannels;
+		aClip["duration"] = model.m_animation_clips[i]->duration;
+		aClip["ticksPerSec"] = model.m_animation_clips[i]->ticksPerSec;
+		aClip["bone_name_key_map"] = nlohmann::json::array_t();
+		aClip["bin_file"] = binRelLocation;
+		size_t offset = 0;
+		for (auto& bonekeys : model.m_animation_clips[i]->boneNameKeysMap)
+		{
+			nlohmann::json bone_name_key;
+			bone_name_key["bone_name"] = bonekeys.first;
+			size_t poseSize = bonekeys.second.position.size() * sizeof(bonekeys.second.position[0]);
+			size_t rotSize = bonekeys.second.position.size() * sizeof(bonekeys.second.rotation[0]);
+			size_t scaleSize = bonekeys.second.position.size() * sizeof(bonekeys.second.scale[0]);
+			bone_name_key["poseSize"] = poseSize;
+			bone_name_key["rotSize"] = rotSize;
+			bone_name_key["scaleSize"] = scaleSize;
+			bone_name_key["poseOffset"] = offset;
+			bone_name_key["rotOffset"] = offset + poseSize;
+			bone_name_key["scaleOffset"] = offset + poseSize + rotSize;
+
+			offset = poseSize+rotSize+scaleSize;
+			
+			clipBin.write((char*)&(bonekeys.second.position), poseSize);
+			clipBin.write((char*)&(bonekeys.second.rotation), rotSize);
+			clipBin.write((char*)&(bonekeys.second.scale), scaleSize);
+			
+			aClip["bone_name_key_map"].push_back(bone_name_key);
+		}
+		clipBin.close();
+		file << aClip;
+		file.close();
+		AK_ASSERT(file.good() && "can't save animation clip");
+		AK_ASSERT(clipBin.good() && "can't save animation clip's binary!");
+
+	}
 }

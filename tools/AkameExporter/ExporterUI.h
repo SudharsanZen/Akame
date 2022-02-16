@@ -41,7 +41,7 @@ private:
 	bool drawLights = false;
 
 	ImGuiIO& io;
-
+	std::shared_ptr<Model> currModel;
 	Scene& m_Scene;
 	//initializes imGui
 	void initImGui();
