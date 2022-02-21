@@ -66,7 +66,7 @@ int main()
 	}
 	Scene scene(window);
 	scene.cam.setFar(1000);
-
+	/*
 	Material boxMat("DEFERRED");
 	boxMat.setTexture2D("material.diffuse", rootDir + "Media/pbr/crate/basecolor.jpg");
 	boxMat.setTexture2D("material.roughness", rootDir + "Media/pbr/crate/roughness.jpg");
@@ -78,6 +78,7 @@ int main()
 	boxMat.setValue("metallic", 0.04f);
 	boxMat.setValue("ambientocclusion", 0.04f);
 	boxMat.setValue("normalStrength", 1.0f);
+	
 	Entity sphere = scene.CreateEntity();
 	Mesh& bm = scene.AddComponent<Mesh>(sphere);
 	bm.CreateMesh(generateSphereVertices(16, 32, 0.5));
@@ -122,13 +123,15 @@ int main()
 	d.ambientLigting(0.1f, 0.1f, 0.1f);
 
 	scene.AddComponent<Transform>(dir);
+
 	Model mLoader(scene);
+	/*
 	Entity model = mLoader.LoadModelToScene(rootDir + "Media/Erika/Catwalk Walk Turn 180 Tight.fbx");
 	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
 	Transform& T = scene.GetComponent<Transform>(model);
 	T.SetGlobalScale(glm::vec3(0.02f));
 	T.SetGlobalPosition(glm::vec3(0, 1, 0));
-
+	
 
 
 
@@ -151,7 +154,7 @@ int main()
 	scene.AddComponent<Material>(sky) = matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 
-
+	*/
 
 	//Editor is experimental, do not use this
 	Editor e(scene);

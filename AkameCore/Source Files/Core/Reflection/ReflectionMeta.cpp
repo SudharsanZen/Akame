@@ -1,7 +1,21 @@
 #include"Core/Reflection/ReflectionMeta.h"
-
+#include"Core/Serialization/SceneSerialization.h"
+ReflectionMeta::ReflectionMeta(SceneDeserializer* deserializer)
+{
+	m_deser = deserializer;
+}
+ReflectionMeta::ReflectionMeta()
+{
+	m_deser= nullptr;
+}
 void ReflectionMeta::JsonToTypeCmpx(nlohmann::json& json, Entity* val)
 {
+	if (m_deser != nullptr)
+	{
+		Entity old_id(json["index"],json["version"]);
+		*val=m_deser->GetNewEntity(old_id);
+		return;
+	}
 	val->index = json["index"];
 	val->version = json["version"];
 }

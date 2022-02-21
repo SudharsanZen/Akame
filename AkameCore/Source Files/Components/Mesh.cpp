@@ -2,7 +2,7 @@
 #include<iostream>
 #include "Components/Rendering/Mesh.h"
 #include"Core/Log/Log.h"
-
+#include<filesystem>
 #pragma warning(push, 0)
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
@@ -13,10 +13,24 @@ bool Mesh::needsUpdate=false;
 //Buffer object and Atrribute object iDs
 unsigned int Mesh::VAO=GL_INVALID_VALUE, Mesh::VBO= GL_INVALID_VALUE, Mesh::IBO= GL_INVALID_VALUE;
 size_t Mesh::topStack=0;
+bool Mesh::IsModel() 
+{ 
+	return isModel; 
+}
+void Mesh::IsModel(bool is_model)
+{
+	isModel = is_model;
+}
+AKAME_API void Mesh::SetModelPath(std::string loc)
+{
+	std::filesystem::path path = loc;
+	AK_ASSERT(std::filesystem::is_regular_file(loc) && "invalid file!");
+	modelPath = loc;
+}
 Mesh::Mesh()
 {
 	//initialize all values to zero or null
-	
+	isModel = false;
 	min = glm::vec4(-1);
 	max = glm::vec4(1);
 	count = 0;
@@ -31,6 +45,7 @@ Mesh::Mesh()
 Mesh::~Mesh()
 {
 	//clearMesh();
+
 }
 
 unsigned int Mesh::getVAO() 
@@ -46,7 +61,7 @@ void Mesh::renderMesh() const
 	//if all the buffers were successfully generated, then render the mesh
 	if (IBO== GL_INVALID_VALUE|| VBO==GL_INVALID_VALUE || VAO== GL_INVALID_VALUE)
 	{
-		ENGINE_CORE_CRITICAL("Mesh::renderMesh(): can't render");
+		AK_ASSERT(true && "buffers were not generated! can't render mesh!");
 		return;
 	}
 	if(count)
@@ -116,9 +131,9 @@ void Mesh::CreateMesh(std::vector<vert> &vertices, std::vector<GLuint> &indices)
 
 	
 
-	numOfIndices = this->indexList.size();
-	end_i = numOfIndices - 1;
-	numOfVertices = this->vertexData.size();
+	numOfIndices = indices.size();
+	end_i = this->indexList.size()- 1;
+	numOfVertices = vertices.size();
 	needsUpdate = true;
 	
 }

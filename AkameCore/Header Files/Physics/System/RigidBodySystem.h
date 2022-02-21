@@ -4,7 +4,7 @@
 class Scene;
 class ECS;
 class System;
-
+class SceneDeserializer;
 namespace physics
 {
 	class Physics;
@@ -14,6 +14,7 @@ namespace physics
 		std::shared_ptr<Physics> mPhysics;
 		std::weak_ptr<ECS> ecs;
 		friend class ::Scene;
+		friend class ::SceneDeserializer;
 		float accumulator = 0.0f;
 		float mixAmt = 0.0f;
 	public:

@@ -8,6 +8,7 @@
 
 class ECS;
 class ModelExporter;
+class SceneDeserializer;
 struct Entity;
 namespace physx
 {
@@ -37,6 +38,7 @@ namespace physics
 		AKAME_API void detachAllAttachedShapes();
 
 		friend class RigidBodySystem;
+		friend class ::SceneDeserializer;
 		friend class ::ModelExporter;
 	public:
 		AKAME_API RigidBody3D();

@@ -32,12 +32,19 @@ private:
 	glm::vec4 max,min;
 	friend class RenderingSystem;
 	friend class Editor;
+	friend class SceneDeserializer;
 	friend class ModelExporter;
 	friend class SceneHierarchyWindow;
 	friend class LightAndShadowConfig;
 	
+	bool isModel;
+	std::string modelPath;
 public:
+	
 #if defined(AK_PRIVATE_GETTER_SETTER) || defined(AK_EXPORT) 
+	AKAME_API bool IsModel();
+	AKAME_API void IsModel(bool is_model);
+	AKAME_API void SetModelPath(std::string loc);
 	AKAME_API std::vector<vert>& getVertData() { return vertexData; }
 	AKAME_API std::vector<unsigned int>& getIndexData() { return indexList; }
 #endif

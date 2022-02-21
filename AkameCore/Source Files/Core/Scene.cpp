@@ -56,6 +56,13 @@ void Scene::vsyncOn(bool status)
 //constructor initia
 Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 {
+	InitScene();
+	listScene.push_back(renderSys);
+}
+
+
+void Scene::InitScene()
+{
 	ENGINE_CORE_INFO("INITIALIZING SCENE");
 	//initialize fn to an lambda function with no body
 	fn = []() {};
@@ -64,7 +71,7 @@ Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 	lastTime = 0;
 
 	stbi_set_flip_vertically_on_load(true);
-	color = glm::vec4(0,0,0,1);
+	color = glm::vec4(0, 0, 0, 1);
 	cam.setFieldOfView(60.0f);
 	cam.transform.SetGlobalPosition(glm::vec3(5, 5, 5));
 	cam.transform.SetLocalRotation(Quaternion::rotationAroundAxisVector(-135, worldUp));
@@ -74,16 +81,13 @@ Scene::Scene(Window &mainWindow) :cam(60, 1, 0.1f, 1000), window(mainWindow)
 	{
 		AssetManager::init();
 	}
-	glfwSwapInterval(0);
-	renderSys->updateFrameBufferSize(mainWindow.getBufferHeight(),mainWindow.getBufferWidth());
-	mainWindow.setBufferSizeCallBackFunction(callBack);
-	listScene.push_back(renderSys);
+	//glfwSwapInterval(0);
+	renderSys->updateFrameBufferSize(window.getBufferHeight(), window.getBufferWidth());
+	window.setBufferSizeCallBackFunction(callBack);
+	
 	renderSys->height = window.getBufferHeight();
 	renderSys->width = window.getBufferWidth();
 }
-
-
-
 
 //call this before Scene::Render() in the main window loop 
 

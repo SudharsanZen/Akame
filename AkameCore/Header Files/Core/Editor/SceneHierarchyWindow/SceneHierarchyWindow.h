@@ -14,7 +14,7 @@ class SceneHierarchyWindow:public AkameWindowBase
 	friend class Exporter;
 	friend class InspectorWindow;
 	std::set<Entity> selected;
-	Scene& m_Scene;
+	Scene& m_scene;
 	bool viewDebugInfo;
 	
 	float m_menuPosex, m_menuPosey;

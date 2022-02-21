@@ -57,7 +57,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>DEBUG;AK_DLL;AK_EXPORT;AK_EXPOSE_SPD_LOG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;AK_DLL;AK_EXPORT;AK_EXPOSE_SPD_LOG;AK_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>vendor\glfw\include;vendor\single_include\nlohmann;vendor\glad-akame-;vendor;vendor\imGui;vendor\assimp\include;..\ECS\HeaderFiles;Header Files;vendor\pugixml\src;vendor\spdlog\include;vendor\PhysX\physx\include;vendor\PhysX\physx\source\physxextensions\src;vendor\PhysX\pxshared\include;vendor\PhysX\physx\source\foundation\include;vendor\PhysX\physx\snippets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -100,6 +100,7 @@
     <ClInclude Include="Header Files\Assets\Asset.h" />
     <ClInclude Include="Header Files\Assets\AssetArray.h" />
     <ClInclude Include="Header Files\Assets\AssetManager.h" />
+    <ClInclude Include="Header Files\Assets\MeshManager.h" />
     <ClInclude Include="Header Files\Assets\ShaderManager.h" />
     <ClInclude Include="Header Files\Components\Animation\AnimationController.h" />
     <ClInclude Include="Header Files\Components\Animation\SkeletalMesh.h" />
@@ -126,9 +127,12 @@
     <ClInclude Include="Header Files\Core\Engine.h" />
     <ClInclude Include="Header Files\Core\Input.h" />
     <ClInclude Include="Header Files\Core\Log\Log.h" />
+    <ClInclude Include="Header Files\Core\OS\OS_Interface.h" />
+    <ClInclude Include="Header Files\Core\Serialization\ModelExporter.h" />
     <ClInclude Include="Header Files\Core\Reflection\ReflectionMeta.h" />
     <ClInclude Include="Header Files\Core\Reflection\ReflectionUIHandler.h" />
     <ClInclude Include="Header Files\Core\Scene.h" />
+    <ClInclude Include="Header Files\Core\Serialization\SceneSerialization.h" />
     <ClInclude Include="Header Files\Core\Window.h" />
     <ClInclude Include="Header Files\Math\EngineMath.h" />
     <ClInclude Include="Header Files\Math\EngineMathConstants.h" />
@@ -162,12 +166,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Header Files\Core\AkameCore.cpp" />
+    <ClCompile Include="Source Files\Core\OS_interface.cpp" />
+    <ClCompile Include="Source Files\Core\ModelExporter.cpp" />
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkeletalMeshRenderingSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkinnedRendererPipeline.cpp" />
     <ClCompile Include="Source Files\Assets\Asset.cpp" />
     <ClCompile Include="Source Files\Assets\AssetArray.cpp" />
     <ClCompile Include="Source Files\Assets\AssetManager.cpp" />
+    <ClCompile Include="Source Files\Assets\MeshManager.cpp" />
     <ClCompile Include="Source Files\Assets\ShaderManager.cpp" />
     <ClCompile Include="Source Files\Components\AnimationController.cpp" />
     <ClCompile Include="Source Files\Components\Behaviour.cpp" />
@@ -192,6 +199,7 @@
     <ClCompile Include="Source Files\Core\Reflection\ReflectionMeta.cpp" />
     <ClCompile Include="Source Files\Core\Reflection\ReflectionUIHandler.cpp" />
     <ClCompile Include="Source Files\Core\Scene.cpp" />
+    <ClCompile Include="Source Files\Core\SceneSerialization.cpp" />
     <ClCompile Include="Source Files\Core\Window.cpp" />
     <ClCompile Include="Source Files\Log\Log.cpp" />
     <ClCompile Include="Source Files\Math\EngineMathConstants.cpp" />

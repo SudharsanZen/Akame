@@ -91,7 +91,9 @@ private:
 	friend class InspectorWindow;
 	friend class Exporter;
 	friend struct EntitySignatures;
+	friend class SceneDeserializer;
 	friend class EDFExporter;
+	AKAME_API void InitScene();
 public:
 #ifdef AK_PRIVATE_GETTER_SETTER
 	template<typename _sysType>
@@ -111,6 +113,7 @@ public:
 	//main camera
 	Camera cam;
 	AKAME_API Scene(Window& mainWindow);
+
 	
 	//call this to render a frame
 	AKAME_API void clearBuffer();

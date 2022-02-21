@@ -143,15 +143,20 @@ namespace physics
 	void Physics::cleanPhysics()
 	{
 		PX_RELEASE(mScene);
+		mScene = NULL;
 		PX_RELEASE(mPhysics);
+		mPhysics = NULL;
 		PX_RELEASE(mDispatcher);
+		mDispatcher = NULL;
 		if (mPvd)
 		{
 			physx::PxPvdTransport* transport = mPvd->getTransport();
 			mPvd->release();	
 			mPvd = NULL;
 			PX_RELEASE(transport);
+			transport = NULL;
 		}
 		PX_RELEASE(mFoundation);
+		mFoundation = NULL;
 	}
 }

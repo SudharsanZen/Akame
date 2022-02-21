@@ -50,9 +50,8 @@ long long AssetManager::createTexture(std::string location)
 {
 	if (!fileExists(location))
 	{
+		ENGINE_CORE_ERROR("CAN'T FIND TEXTURE:" + location);
 		location = AssetManager::getAssetRoot() + "EngineAssets/errorTex.png";
-		ENGINE_CORE_ERROR("CAN'T FIND TEXTURE:"+location);
-		
 	}
 	std::string mapStr = mapString(location);
 	auto itr = texLocIndexList.find(mapStr);

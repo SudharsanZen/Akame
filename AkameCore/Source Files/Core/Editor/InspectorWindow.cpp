@@ -59,7 +59,7 @@ void InspectorWindow::DrawTransformComponent(Entity selected)
     
     if (ImGui::CollapsingHeader("Transform Component",ImGuiTreeNodeFlags_DefaultOpen))
     {
-        Transform& t = m_Scene.GetComponent<Transform>(selected);
+        Transform& t = m_scene.GetComponent<Transform>(selected);
         glm::vec3 pose = t.GetGlobalPosition();
         glm::vec3 lpose = t.GetLocalPosition();
         glm::vec3 scale = t.GetGlobalScale();
@@ -70,8 +70,8 @@ void InspectorWindow::DrawTransformComponent(Entity selected)
         float lRotQuat[4] = { lrot.quaternion.w,lrot.quaternion.x,lrot.quaternion.y,lrot.quaternion.z};
         if (ImGui::Button("go_To_Selection"))
         {
-            glm::vec3 camPose = pose - m_Scene.cam.transform.forward() * 5.0f;
-            m_Scene.cam.transform.SetGlobalPosition(camPose);
+            glm::vec3 camPose = pose - m_scene.cam.transform.forward() * 5.0f;
+            m_scene.cam.transform.SetGlobalPosition(camPose);
         }
         //t.SetLocalPosition(glm::vec3(lPose[0], lPose[1], lPose[2]));
         //if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
@@ -186,7 +186,7 @@ void InspectorWindow::DrawLightComponent(Entity selected)
     if (ImGui::CollapsingHeader("LightComponent", ImGuiTreeNodeFlags_DefaultOpen))
     {
         
-        Lights& t = m_Scene.GetComponent<Lights>(selected);
+        Lights& t = m_scene.GetComponent<Lights>(selected);
         LIGHT type = t.getType();
         ImGui::Text("Type");
         ImGui::Separator();
@@ -252,12 +252,12 @@ void InspectorWindow::DrawScriptComponent(Entity selected)
         return;
     if (ImGui::CollapsingHeader("ScriptableComponent", ImGuiTreeNodeFlags_DefaultOpen))
     {
-        std::shared_ptr<Behaviour> bh = m_Scene.GetComponent<BehaviourComponent>(selected).behaviour;
+        std::shared_ptr<Behaviour> bh = m_scene.GetComponent<BehaviourComponent>(selected).behaviour;
         ReflectionUIHandler uiHandle;
         bh->_draw_data(uiHandle);
     }
 }
-InspectorWindow::InspectorWindow(Scene& m_Scene, std::shared_ptr<ECS> ecs) :m_Scene(m_Scene)
+InspectorWindow::InspectorWindow(Scene& m_scene, std::shared_ptr<ECS> ecs) :m_scene(m_scene)
 {
     m_ECS = ecs;
 

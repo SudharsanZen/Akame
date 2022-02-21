@@ -1,6 +1,6 @@
 #pragma once
 #include"Math/GlmMath.h"
-
+class SceneDeserializer;
 namespace physics
 {
 	enum class Shapes
@@ -12,6 +12,7 @@ namespace physics
 		Shapes colShape;
 		glm::vec3 dim;
 		friend class RigidBody3D;
+		friend class SceneDeserializer;
 
 	public:
 		

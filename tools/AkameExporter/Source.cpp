@@ -1,11 +1,10 @@
 
 #include"ExporterUI.h"
 
-
 int main()
 {
 	AssetManager::assetRootPath = "../../../../Assets/";
-	AK_ASSERT(false && "this will fail!");
+
 	Window window(800,800,"Akame Exporter");
 	if (!window.initialize())
 	{

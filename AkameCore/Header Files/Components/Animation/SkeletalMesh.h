@@ -77,11 +77,18 @@ private:
 
 	//entity id of animController that holds all the animation and bone information
 	Entity animController;
-
+	bool m_isModel;
+	std::string m_model_path;
+	friend class SceneDeserializer;
 public:
+	
 #if defined(AK_PRIVATE_GETTER_SETTER) || defined(AK_EXPORT) 
-	AKAME_API std::vector<sk_vert>& getVertData() { return vertexData; }
-	AKAME_API std::vector<unsigned int>& getIndexData() { return indexList; }
+	AKAME_API std::vector<sk_vert>& getVertData();
+	AKAME_API std::vector<unsigned int>& getIndexData();
+	AKAME_API bool IsModel();
+	AKAME_API void IsModel(bool isModel);
+	AKAME_API void SetModelPath(std::string modelPath);
+	AKAME_API void SetAnimControllerID(Entity eid);
 #endif
 	AKAME_API Entity GetAnimControllerID();
 	AKAME_API SkeletalMesh();

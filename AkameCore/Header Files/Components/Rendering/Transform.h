@@ -57,7 +57,7 @@ class Transform:public Components
 	friend class ComponentArray;
 	friend class physics::RigidBodySystem;
 	friend class InspectorWindow;
-
+	friend class SceneDeserializer;
 	AKAME_API void _addToUpdateTransformList();
 	AKAME_API void destroyChildren();
 

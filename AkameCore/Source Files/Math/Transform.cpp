@@ -179,7 +179,7 @@ Transform& Transform::getParentTransform()
 
 Entity Transform::getParentId()
 {
-	assert(parent != Entity(-1, -1) && "trying to access non existing parent transform, this transform doesn't have any parent");
+	//assert(parent != Entity(-1, -1) && "trying to access non existing parent transform, this transform doesn't have any parent");
 	return parent;
 }
 

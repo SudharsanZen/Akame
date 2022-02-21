@@ -7,11 +7,12 @@
 #include<Core\Reflection\ReflectionUIHandler.h>
 #include<json/single_include/nlohmann/json.hpp>
 
-
+class  SceneDeserializer;
 class ReflectionMeta
 {
 	friend class ModelExporter;
-
+	friend class SceneDeserializer;
+	SceneDeserializer *m_deser;
 	bool _reading = false;
 	bool _writing = false;
 
@@ -48,7 +49,8 @@ class ReflectionMeta
 
 
 public:
-
+	ReflectionMeta();
+	ReflectionMeta(SceneDeserializer* deserializer);
 	nlohmann::json m_json_object;
 	template<typename T>
 	void read(T& from)

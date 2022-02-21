@@ -1,8 +1,9 @@
-#include"Core/AkameCore.h"
+
 #include<sstream>
 #include"Core/Log/Log.h"
 #include<Windows.h>
-AKAME_API void  _AKWASSERT(char const* _Message, char const* _File, unsigned _Line)
+#include"Core/AkameCore.h"
+void _AKWASSERT(char const* _Message, char const* _File, unsigned _Line)
 {
 	
 	std::stringstream message;

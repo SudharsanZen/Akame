@@ -1,20 +1,23 @@
 #define AK_PRIVATE_GETTER_SETTER
 #include"ECS.h"
 #include<string>
-#include "ModelExporter.h"
 #include"Components/EntityDescriptor.h"
-#include"Core/Scene.h"
 #include"Core/SceneEntityListSystem.h"
 #include<fstream>
 #include<direct.h>
 #include<Rendering/Model.h>
-
+#include "Core/Serialization/ModelExporter.h"
 template <typename _compType>
 void ModelExporter::ComponentSerializerHelper(Entity eid,nlohmann::json &components)
 {
 	std::string typeName = typeid(_compType).name();
 	if (m_scene.IsComponentAttached<_compType>(eid))
 		components[typeName] = Serialize(m_scene.GetComponent<_compType>(eid));
+}
+
+void ModelExporter::SetExportBinary(bool exp_stat)
+{
+	m_export_binary = exp_stat;
 }
 
 void ModelExporter::makeFolder(std::string path)
@@ -60,13 +63,31 @@ nlohmann::json ModelExporter::Serialize(BehaviourComponent& data)
 }
 nlohmann::json ModelExporter::Serialize(SkeletalMesh& data)
 {
+	
 	nlohmann::json j_mesh;
-	j_mesh["fileLocation:"] = m_fileName + "/SkMeshData/" + m_fileName + ".skmesh";
-
+	
+	ReflectionMeta helper;
+	nlohmann::json animContEid;
+	helper.typeToJsonCmpx(animContEid, &data.GetAnimControllerID());
+	j_mesh["animCont"] = animContEid;
 	j_mesh["maxVert:"] = data.maxInd - data.minInd + 1;
 	j_mesh["maxIndex:"] = data.end_i - data.start_i + 1;
-
+	//if the model has already been converted to Akame's format and already stored on disk,
+	//set m_export_binary to false so that the mesh's binary data is not exported again
+	//when set to false, this only serializes the mesh's vertex\index length and the .skmesh's location on the disk
+	if (!m_export_binary && data.m_isModel)
+	{
+		std::string relPath = std::filesystem::relative(data.m_model_path, AssetManager::assetRootPath).generic_string();
+		j_mesh["fileLocation:"] = relPath;
+		return j_mesh;
+	}
+	if (!data.m_isModel)
+	{
+	
+	}
 	m_mesh_count++;
+	j_mesh["fileLocation:"] = m_fileName + "/SkMeshData/" + std::to_string(m_mesh_count) + ".skmesh";
+	
 	std::stringstream ss;
 
 	
@@ -84,7 +105,8 @@ nlohmann::json ModelExporter::Serialize(SkeletalMesh& data)
 	}
 	for (size_t i_ind = data.start_i; i_ind <= data.end_i; i_ind++)
 	{
-		file.write((char*)(&indexData[i_ind]), sizeof(unsigned int));
+		unsigned int originalIndex = indexData[i_ind] -data.minInd;
+		file.write((char*)(&originalIndex), sizeof(unsigned int));
 	}
 	file.close();
 	AK_ASSERT(file.good() && "error while writing to file!");
@@ -94,12 +116,22 @@ nlohmann::json ModelExporter::Serialize(SkeletalMesh& data)
 nlohmann::json ModelExporter::Serialize(Mesh& data)
 {
 	nlohmann::json j_mesh;
-	j_mesh["fileLocation:"] = m_fileName+"/MeshData/"+m_fileName + ".mesh";
-
-	j_mesh["maxVert:"] =data.maxInd-data.minInd+1;
+	j_mesh["maxVert:"] = data.maxInd - data.minInd + 1;
 	j_mesh["maxIndex:"] = data.end_i - data.start_i + 1;
 
+	//if the model has already been converted to Akame's format and already stored on disk,
+	//set m_export_binary to false so that the mesh's binary data is not exported again
+	//when set to false, this only serializes the mesh's vertex\index length and the .mesh's location on the disk
+	if (!m_export_binary && data.isModel)
+	{
+		std::string relPath = std::filesystem::relative(data.modelPath, AssetManager::assetRootPath).generic_string();
+		j_mesh["fileLocation:"] = relPath;
+	}
 	m_mesh_count++;
+	j_mesh["fileLocation:"] = m_fileName+"/MeshData/"+ std::to_string(m_mesh_count) + ".mesh";
+	
+
+	
 	std::stringstream ss;
 
 	ss << m_folderPath << m_fileName<<"/MeshData";
@@ -116,7 +148,8 @@ nlohmann::json ModelExporter::Serialize(Mesh& data)
 	}
 	for (size_t i_ind = data.start_i; i_ind <= data.end_i; i_ind++)
 	{
-		file.write((char*)(&indexData[i_ind]),sizeof(unsigned int));
+		unsigned int originalIndex = (indexData[i_ind] - data.minInd);
+		file.write((char*)(&originalIndex),sizeof(unsigned int));
 	}
 	file.close();
 	AK_ASSERT(file.good() && "error while writing to file!");
@@ -179,7 +212,7 @@ nlohmann::json ModelExporter::Serialize(AnimationController& data)
 		ref.read(boneinfo);
 		j_bone_list.push_back(ref.m_json_object);
 	}
-	j_anim_cont["boneList"] = j_bone_list;
+	j_anim_cont["bone_info_list"] = j_bone_list;
 
 	nlohmann::json j_bone_map;
 	for (auto& boneinfomap : (*data.boneMap))
@@ -188,7 +221,7 @@ nlohmann::json ModelExporter::Serialize(AnimationController& data)
 		ref.read(boneinfomap.second);
 		j_bone_map[boneinfomap.first]=ref.m_json_object;
 	}
-	j_anim_cont["boneList"] = j_bone_map;
+	j_anim_cont["bone_info_map"] = j_bone_map;
 
 	return j_anim_cont;
 }
@@ -216,6 +249,8 @@ nlohmann::json ModelExporter::Serialize(physics::RigidBody3D& data)
 void ModelExporter::ExportEntity(Entity eid)
 {
 	m_entity_arr.push_back(EntitySerializer(eid));
+	if (m_serializer_mode)
+		return;
 	if (EntityHasChild(eid))
 	{
 		Transform& t = m_scene.GetComponent<Transform>(eid);
@@ -235,11 +270,30 @@ bool ModelExporter::EntityHasChild(Entity eid)
 	}
 	return false;
 }
+void ModelExporter::SaveToFilePath(std::string path, std::string fileName,std::string ext=".edf")
+{
+	std::ofstream file(path + fileName + ext);
+	nlohmann::json edf;
+	auto t = std::time(nullptr);
+	auto tm = *std::localtime(&t);
+
+	std::ostringstream oss;
+	oss << std::put_time(&tm, "%d-%m-%Y %H-%M-%S");
+	edf["ak_header"]["time"] = oss.str();
+	edf["ak_header"]["source"] = "ak_exp";
+	edf["ak_header"]["file_name"] = m_fileName;
+	edf["entities"] = m_entity_arr;
+	file << edf;
+	file.close();
+	AK_ASSERT(file.good() && "error exporting to file, export failed!");
+}
 ModelExporter::ModelExporter(Scene& scene) :m_scene(scene)
 {
 	m_entity_arr = nlohmann::json::array_t();
 	m_mesh_count = 0;
 	m_ecs = scene.GetECS();
+	m_serializer_mode = false;
+	m_export_binary = true;
 }
 
 void ModelExporter::ExportEntity(Entity start,std::string forlderPath,std::string fileName)
@@ -247,11 +301,10 @@ void ModelExporter::ExportEntity(Entity start,std::string forlderPath,std::strin
 	m_fileName = fileName;
 	m_folderPath = forlderPath;
 	m_entity_arr.clear();
-	std::ofstream file(forlderPath+fileName+".edf");
-	ExportEntity(start);
 	
-	file << m_entity_arr;
-	file.close();
+	ExportEntity(start);
+	SaveToFilePath(forlderPath,fileName);
+	
 }
 
 void ModelExporter::ExportAnimationClips(Model& model)

@@ -15,7 +15,7 @@
 #include"Rendering/System/LightSystem.h"
 #include"Core/Editor/ViewPort/ViewPortWindow.h"
 #define EXPOSE_OS_INTERFACE
-#include"OS_interface.h"
+#include"Core/OS/OS_Interface.h"
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include<GLFW/glfw3native.h>
@@ -28,7 +28,7 @@
 #include<imgui_internal.h>
 #pragma warning(pop)
 
-#include"ModelExporter.h"
+#include"Core/Serialization/ModelExporter.h"
 
 void Exporter::initImGui()
 {

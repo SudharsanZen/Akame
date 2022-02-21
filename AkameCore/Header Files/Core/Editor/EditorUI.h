@@ -14,7 +14,7 @@ class Scene;
 struct EntitySignatures
 {
 private:
-	Scene& m_Scene;
+	Scene& m_scene;
 public:
 	AKAME_API EntitySignatures(Scene& scene);
 	ComponentBitPosition m_Transform_pose;
@@ -39,7 +39,7 @@ private:
 
 	ImGuiIO& io;
 	
-	Scene &m_Scene;
+	Scene &m_scene;
 	//initializes imGui
 	AKAME_API void initImGui();
 	FrameBuffer fbo[5];
@@ -59,7 +59,7 @@ private:
 	friend class Exporter;
 public:
 	
-	AKAME_API Editor(Scene& m_Scene);
+	AKAME_API Editor(Scene& m_scene);
 	//draw UI onto the screen
 	AKAME_API void DrawUI();//call after redering scene objects else the UI will be put behind other renderings
 	AKAME_API ~Editor();

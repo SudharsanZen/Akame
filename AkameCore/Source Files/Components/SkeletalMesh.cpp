@@ -12,7 +12,41 @@ bool SkeletalMesh::needsUpdate = false;
 unsigned int SkeletalMesh::VAO = GL_INVALID_VALUE, SkeletalMesh::VBO = GL_INVALID_VALUE, SkeletalMesh::IBO = GL_INVALID_VALUE;
 
 
-AKAME_API Entity SkeletalMesh::GetAnimControllerID() { return animController; }
+std::vector<sk_vert>& SkeletalMesh::getVertData() 
+{ 
+	return vertexData; 
+}
+
+std::vector<unsigned int>& SkeletalMesh::getIndexData()
+{ 
+	return indexList; 
+}
+
+bool SkeletalMesh::IsModel()
+{
+	return m_isModel;
+}
+
+void SkeletalMesh::IsModel(bool isModel) 
+{ 
+	m_isModel = isModel; 
+}
+
+void SkeletalMesh::SetModelPath(std::string modelPath) 
+{
+	AK_ASSERT(std::filesystem::is_regular_file(modelPath) && "invalid file!");
+	m_model_path = modelPath;
+}
+
+void SkeletalMesh::SetAnimControllerID(Entity eid)
+{
+	animController = eid;
+}
+
+Entity SkeletalMesh::GetAnimControllerID() 
+{ 
+	return animController; 
+}
 
 SkeletalMesh::SkeletalMesh()
 {
@@ -44,7 +78,7 @@ void SkeletalMesh::renderMesh() const
 	//if all the buffers were successfully generated, then render the mesh
 	if (IBO == GL_INVALID_VALUE || VBO == GL_INVALID_VALUE || VAO == GL_INVALID_VALUE)
 	{
-		std::cout << "can't render";
+		AK_ASSERT(true && "buffers were not generated! can't render mesh!");
 		return;
 	}
 	if (count)

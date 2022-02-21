@@ -1,6 +1,6 @@
 #include "Core\Editor\EditorUI.h"
 #include<iostream>
-
+#include"Core/OS/OS_Interface.h"
 #include"Core\Input.h"
 #include<sstream>
 #include"Components/EntityDescriptor.h"
@@ -16,6 +16,7 @@
 #include"Core/Editor/SettingsWindow/LightsAndShadows.h"
 #include"Assets/Asset.h"
 #include"ECS.h"
+#include"Core/Serialization/SceneSerialization.h"
 #pragma warning(push, 0)
 #pragma warning( disable : 26495)
 #pragma warning( disable : 6031)
@@ -27,7 +28,7 @@
 #pragma warning(pop)
 void Editor::initImGui()
 {
-	std::weak_ptr<GLFWwindow> context=m_Scene.window.mainWindow;
+	std::weak_ptr<GLFWwindow> context=m_scene.window.mainWindow;
 	
 	fbo[0].updateTextureSize(512,512);
 	fbo[1].updateTextureSize(512,512);
@@ -146,19 +147,35 @@ void Editor::Menu()
 		if (ImGui::BeginMenu("New"))
 		{
 			ImGui::MenuItem("Project");
-			ImGui::MenuItem("Level");
+			ImGui::MenuItem("Scene");
 			ImGui::EndMenu();
 		}
 		
 		if (ImGui::BeginMenu("Open"))
 		{
 			ImGui::MenuItem("Project");
-			ImGui::MenuItem("Level");
+			if (ImGui::MenuItem("Scene"))
+			{
+				SceneDeserializer des(m_scene);
+				des.Load(true);
+			}
 			ImGui::EndMenu();
+		}
+		if (ImGui::MenuItem("Import File"))
+		{
+			SceneDeserializer des(m_scene);
+			const char* filter_edf = "Akame Entity Definition(*edf)\0 * edf\0";
+			std::string path = OpenFileDialog(filter_edf,"edf");
+			if(path!="")
+				des.LoadFrom(path);
 		}
 		ImGui::Separator();
 		ImGui::MenuItem("save");
-		ImGui::MenuItem("save as");
+		if (ImGui::MenuItem("save as"))
+		{
+			SceneSerializer ser(m_scene);
+			ser.Save();
+		}
 		ImGui::Separator();
 		if (ImGui::BeginMenu("Recent Files"))
 		{
@@ -185,7 +202,7 @@ void Editor::Menu()
 		{
 			if (ImGui::MenuItem("ViewPort"))
 			{
-				std::shared_ptr<ViewPortWindow> vp = std::make_shared<ViewPortWindow>(m_Scene, io);
+				std::shared_ptr<ViewPortWindow> vp = std::make_shared<ViewPortWindow>(m_scene, io);
 				std::stringstream ss;
 				ss << m_ViewPortWindow.size();
 				vp->windowName = "Scene##" + ss.str();
@@ -203,19 +220,19 @@ void Editor::createNewScriptProject()
 
 }
 
-Editor::Editor(Scene &m_Scene):io(initGui()),m_Scene(m_Scene)
+Editor::Editor(Scene &m_scene):io(initGui()),m_scene(m_scene)
 {
 	
-	std::weak_ptr<GLFWwindow> context = m_Scene.window.mainWindow;
-	m_Scene.renderSys->editorMode = true;
+	std::weak_ptr<GLFWwindow> context = m_scene.window.mainWindow;
+	m_scene.renderSys->editorMode = true;
 	initImGui();
 	defaultStyle(io);
-	m_SceneHierarchy = std::make_shared<SceneHierarchyWindow>(m_Scene);
-	m_InspectorWindow= std::make_shared<InspectorWindow>(m_Scene,m_Scene.ecs);
-	m_LightsAndShadows = std::make_shared<LightAndShadowConfig>(m_Scene);
-	m_ViewPortWindow.push_back(std::make_shared<ViewPortWindow>(m_Scene,io));
+	m_SceneHierarchy = std::make_shared<SceneHierarchyWindow>(m_scene);
+	m_InspectorWindow= std::make_shared<InspectorWindow>(m_scene,m_scene.ecs);
+	m_LightsAndShadows = std::make_shared<LightAndShadowConfig>(m_scene);
+	m_ViewPortWindow.push_back(std::make_shared<ViewPortWindow>(m_scene,io));
 	m_ViewPortWindow[0]->windowName = "Scene##0";
-	m_ViewPortWindow.push_back(std::make_shared<ViewPortWindow>(m_Scene,io));
+	m_ViewPortWindow.push_back(std::make_shared<ViewPortWindow>(m_scene,io));
 	m_ViewPortWindow[1]->windowName = "Scene##1";
 	deltaTime	= 0.0f;
 	lastTime	= 0.0f;
@@ -227,7 +244,7 @@ Editor::Editor(Scene &m_Scene):io(initGui()),m_Scene(m_Scene)
 
 void Editor::DrawUI()
 {
-	std::shared_ptr<GLFWwindow> context = m_Scene.window.mainWindow;
+	std::shared_ptr<GLFWwindow> context = m_scene.window.mainWindow;
 	
 	currTime = static_cast<float>(glfwGetTime());
 	ImGui_ImplOpenGL3_NewFrame();
@@ -246,12 +263,12 @@ void Editor::DrawUI()
 	m_InspectorWindow->Draw(m_SceneHierarchy);
 	//draw viewPortWindow-------
 
-		m_Scene.EDS->updateMap();
-		m_Scene.lightSys->Update();
-		m_Scene.behaviourSys->Update(deltaTime);
-		m_Scene.animSys->Run();
-		m_Scene.animContSys->update(deltaTime);
-		m_Scene.transformManager->UpdateTransforms();
+		m_scene.EDS->updateMap();
+		m_scene.lightSys->Update();
+		m_scene.behaviourSys->Update(deltaTime);
+		m_scene.animSys->Run();
+		m_scene.animContSys->update(deltaTime);
+		m_scene.transformManager->UpdateTransforms();
 		
 		Debug::updateBufferContent();
 		bool viewPortListUpdate=false;
@@ -271,7 +288,7 @@ void Editor::DrawUI()
 			m_ViewPortWindow = newViewPortList;
 		}
 		Debug::FlushDebugInformation();
-		m_Scene.physicsSys->Run(deltaTime);
+		m_scene.physicsSys->Run(deltaTime);
 
 	//---------------------------
 	/*
@@ -343,7 +360,7 @@ void Editor::DrawUI()
 	}
 
 	deltaTime = currTime - lastTime;
-	m_Scene.deltaTime = deltaTime;
+	m_scene.deltaTime = deltaTime;
 	lastTime = currTime;
 	if (io.KeysDown[KEY_LEFT_CONTROL])
 	{
@@ -365,9 +382,9 @@ Editor::~Editor()
 	ImGui::SaveIniSettingsToDisk(iniName.c_str());
 }
 
-EntitySignatures::EntitySignatures(Scene& scene) :m_Scene(scene)
+EntitySignatures::EntitySignatures(Scene& scene) :m_scene(scene)
 {
-	auto m_ECS=m_Scene.ecs;
+	auto m_ECS=m_scene.ecs;
 
 	m_Transform_pose = m_ECS->GetComponentBitPose<Transform>();
 	m_Descriptor_pose = m_ECS->GetComponentBitPose<EntityDescriptor>();

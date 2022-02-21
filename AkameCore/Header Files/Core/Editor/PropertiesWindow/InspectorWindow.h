@@ -10,7 +10,7 @@ struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
 class InspectorWindow:public AkameWindowBase
 {
-	Scene& m_Scene;
+	Scene& m_scene;
 	std::shared_ptr<ECS> m_ECS;
 
 	ComponentBitPosition m_Transform_pose;
@@ -27,7 +27,7 @@ class InspectorWindow:public AkameWindowBase
 	AKAME_API void DrawLightComponent(Entity selected);;
 	AKAME_API void DrawScriptComponent(Entity selected);
 public:
-	AKAME_API InspectorWindow(Scene& m_Scene, std::shared_ptr<ECS> ecs);
+	AKAME_API InspectorWindow(Scene& m_scene, std::shared_ptr<ECS> ecs);
 
 	AKAME_API void Draw(std::shared_ptr<SceneHierarchyWindow>);
 };

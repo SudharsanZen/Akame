@@ -102,14 +102,10 @@
   <ItemGroup>
     <ClInclude Include="ExporterUI.h" />
     <ClInclude Include="FileOpenSaveDialogBox.h" />
-    <ClInclude Include="ModelExporter.h" />
-    <ClInclude Include="OS_Interface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ExporterUI.cpp" />
     <ClCompile Include="FileOpenSaveDialogBox.cpp" />
-    <ClCompile Include="ModelExporter.cpp" />
-    <ClCompile Include="OS_interface.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
