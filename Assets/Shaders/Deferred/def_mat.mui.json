@@ -1,0 +1,14 @@
+{
+    "uniforms":
+    {
+        "material.diffuse": "tex",
+        "material.roughness":"tex",
+        "material.metallic":"tex",
+        "material.normal":"tex",
+        "material.ambientocclusion":"tex",
+        "material.ambientColor":"vec3",
+        "material.diffuseColor":"vec3",
+        "material.specularColor":"vec3",
+        "material.shininess":"float"
+    }
+}

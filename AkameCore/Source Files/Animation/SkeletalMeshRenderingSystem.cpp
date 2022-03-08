@@ -23,10 +23,10 @@ void SkeletalMeshRenderingSystem::renderMeshes(RenderingSystem* rendSys, Camera 
 
 void SkeletalMeshRenderingSystem::RenderSkeletalMeshQueue(RenderingSystem* rendSys,Camera cam)
 {
-	auto& shaderList = ShaderManager::shaderQueues["SKINNED"];
-	for (int i = 0; i < shaderList.size(); i++)
+	auto& m_shaderList = ShaderManager::m_shaderQueues["SKINNED"];
+	for (int i = 0; i < m_shaderList.size(); i++)
 	{
-		RenderEntitiesWithShader(rendSys,shaderList[i].second, cam);
+		RenderEntitiesWithShader(rendSys,m_shaderList[i].second, cam);
 	}
 }
 
@@ -44,9 +44,9 @@ void SkeletalMeshRenderingSystem::RenderEntitiesWithShader(RenderingSystem* rend
 	if (ShaderManager::checkForPipeline(shaderName))
 	{
 
-		std::shared_ptr<ShaderRenderPipeline> rendPipe = ShaderManager::shaderRenderPipeline[shaderName];
+		std::shared_ptr<ShaderRenderPipeline> rendPipe = ShaderManager::m_shaderRenderPipeline[shaderName];
 		rendPipe->OnPreRender(skRend,rendSys,cam);
-		if (ShaderManager::shaderList.find(shaderName) == ShaderManager::shaderList.end())
+		if (ShaderManager::m_shaderList.find(shaderName) == ShaderManager::m_shaderList.end())
 		{
 			ENGINE_CORE_ERROR("SkeletalMeshRenderingSystem::SHADER NAME is invalid, can't find shader in shaderConf.XML");
 			return;

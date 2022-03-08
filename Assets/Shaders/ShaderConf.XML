@@ -22,6 +22,7 @@
 <Shader name="DEFERRED" queue="GEOMETRY+0">
     <Vertex path="deferred/frameBufferTargets.vert"/>
     <Fragment path="deferred/frameBufferTargets.frag"/>
+    <MaterialUI path="deferred/def_mat.mui.json"/>
 </Shader>
 <Shader name="SHADOW_DIRECTIONAL" queue="NULL">
     <Vertex path="LightingAndShadows/dir_shadowMap.vert"/>

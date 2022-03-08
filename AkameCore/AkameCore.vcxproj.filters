@@ -55,8 +55,14 @@
     <Filter Include="Header Files\Core\Log">
       <UniqueIdentifier>{6AA8D402-D614-90FD-9F08-285B0B34B265}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core\OS">
+      <UniqueIdentifier>{EA330EE1-D6C2-97AA-7FE1-ABA56B4FA850}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Core\Reflection">
       <UniqueIdentifier>{3381D61E-1F3C-C6CA-C8F3-3E15B48D105B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Core\Serialization">
+      <UniqueIdentifier>{663CD4D5-D21F-E315-DB22-11524785A966}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Math">
       <UniqueIdentifier>{9A6C445D-0683-42F3-4FFA-CD14BB4F137B}</UniqueIdentifier>
@@ -150,6 +156,9 @@
     <ClInclude Include="Header Files\Assets\AssetManager.h">
       <Filter>Header Files\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Assets\MeshManager.h">
+      <Filter>Header Files\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Assets\ShaderManager.h">
       <Filter>Header Files\Assets</Filter>
     </ClInclude>
@@ -228,6 +237,9 @@
     <ClInclude Include="Header Files\Core\Log\Log.h">
       <Filter>Header Files\Core\Log</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Core\OS\OS_Interface.h">
+      <Filter>Header Files\Core\OS</Filter>
+    </ClInclude>
     <ClInclude Include="Header Files\Core\Reflection\ReflectionMeta.h">
       <Filter>Header Files\Core\Reflection</Filter>
     </ClInclude>
@@ -236,6 +248,15 @@
     </ClInclude>
     <ClInclude Include="Header Files\Core\Scene.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Core\SceneEntityListSystem.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Core\Serialization\ModelExporter.h">
+      <Filter>Header Files\Core\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Core\Serialization\SceneSerialization.h">
+      <Filter>Header Files\Core\Serialization</Filter>
     </ClInclude>
     <ClInclude Include="Header Files\Core\Window.h">
       <Filter>Header Files\Core</Filter>
@@ -324,13 +345,6 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Header Files\Core\SceneEntityListSystem.h">
-      <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Header Files\Assets\MeshManager.h" />
-    <ClInclude Include="Header Files\Core\Serialization\SceneSerialization.h" />
-    <ClInclude Include="Header Files\Core\Serialization\ModelExporter.h" />
-    <ClInclude Include="Header Files\Core\OS\OS_Interface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp">
@@ -349,6 +363,9 @@
       <Filter>Source Files\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Assets\AssetManager.cpp">
+      <Filter>Source Files\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Assets\MeshManager.cpp">
       <Filter>Source Files\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Assets\ShaderManager.cpp">
@@ -377,6 +394,9 @@
     </ClCompile>
     <ClCompile Include="Source Files\Components\SkeletalMesh.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Core\AkameCore.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Core\Debug\Debug.cpp">
       <Filter>Source Files\Core\Debug</Filter>
@@ -411,6 +431,12 @@
     <ClCompile Include="Source Files\Core\Input.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Core\ModelExporter.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Core\OS_interface.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
     <ClCompile Include="Source Files\Core\Reflection\ReflectionMeta.cpp">
       <Filter>Source Files\Core\Reflection</Filter>
     </ClCompile>
@@ -418,6 +444,9 @@
       <Filter>Source Files\Core\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Core\Scene.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Core\SceneSerialization.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source Files\Core\Window.cpp">
@@ -513,11 +542,5 @@
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Header Files\Core\AkameCore.cpp" />
-    <ClCompile Include="Source Files\Core\AkameCore.cpp" />
-    <ClCompile Include="Source Files\Assets\MeshManager.cpp" />
-    <ClCompile Include="Source Files\Core\SceneSerialization.cpp" />
-    <ClCompile Include="Source Files\Core\ModelExporter.cpp" />
-    <ClCompile Include="Source Files\Core\OS_interface.cpp" />
   </ItemGroup>
 </Project>

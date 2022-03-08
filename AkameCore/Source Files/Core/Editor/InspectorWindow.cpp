@@ -257,8 +257,50 @@ void InspectorWindow::DrawScriptComponent(Entity selected)
         bh->_draw_data(uiHandle);
     }
 }
+void InspectorWindow::DrawMaterialComponent(Entity selected)
+{
+    std::shared_ptr<Texture> diff_def = AssetManager::GetTexture(m_defaultDiff);
+    if (!selected.signature->test(m_Material_pose))
+        return;
+    if (ImGui::CollapsingHeader("MaterialComponent", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        Material& mat = m_scene.GetComponent<Material>(selected);
+        auto paramList = ShaderManager::GetShaderUIDefinition(mat.SHADER_NAME);
+        if (paramList)
+        {
+            ImGui::BeginTable("MaterialTable", 2);
+            int elem = 2;
+            for (MaterialParam &mparam : *paramList)
+            {
+               
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+                if (mparam.type == "tex")
+                {
+                    ImGui::Text(mparam.name.c_str()); 
+                    auto itr = mat.uniformToTexDetails->find(mparam.name);
+                  
+                    if (itr!=mat.uniformToTexDetails->end())
+                    {
+                        ImGui::TextWrapped(itr->second.location.c_str());
+                        ImGui::TableNextColumn();
+                        ImGui::Image((ImTextureID*)AssetManager::GetTexture((*itr).second.assetIndex)->textureID,ImVec2(100,100));  
+                    }
+                    else
+                    {
+                        ImGui::TableNextColumn();
+                        ImGui::Image((ImTextureID*)diff_def->textureID,ImVec2(100,100));
+                    }
+                }
+               
+            }
+            ImGui::EndTable();
+        }
+    }
+}
 InspectorWindow::InspectorWindow(Scene& m_scene, std::shared_ptr<ECS> ecs) :m_scene(m_scene)
 {
+    m_defaultDiff=AssetManager::createTexture(AssetManager::assetRootPath + "EngineAssets/defaultdiff.jpg");
     m_ECS = ecs;
 
     m_Transform_pose = m_ECS->GetComponentBitPose<Transform>();
@@ -288,6 +330,8 @@ void InspectorWindow::Draw(std::shared_ptr<SceneHierarchyWindow> sceneHierarchy)
                 DrawLightComponent(selected);
 
                 DrawScriptComponent(selected);
+
+                DrawMaterialComponent(selected);
             }
 
         }

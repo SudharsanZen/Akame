@@ -12,7 +12,7 @@ class InspectorWindow:public AkameWindowBase
 {
 	Scene& m_scene;
 	std::shared_ptr<ECS> m_ECS;
-
+	long long m_defaultDiff;
 	ComponentBitPosition m_Transform_pose;
 	ComponentBitPosition m_Descriptor_pose;
 	ComponentBitPosition m_Mesh_pose;
@@ -24,8 +24,9 @@ class InspectorWindow:public AkameWindowBase
 	ComponentBitPosition m_Material_pose;
 	
 	AKAME_API void DrawTransformComponent(Entity selected);
-	AKAME_API void DrawLightComponent(Entity selected);;
+	AKAME_API void DrawLightComponent(Entity selected);
 	AKAME_API void DrawScriptComponent(Entity selected);
+	AKAME_API void DrawMaterialComponent(Entity selected);
 public:
 	AKAME_API InspectorWindow(Scene& m_scene, std::shared_ptr<ECS> ecs);
 

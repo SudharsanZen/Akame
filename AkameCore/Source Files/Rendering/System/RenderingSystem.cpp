@@ -60,7 +60,7 @@ void RenderingSystem::updateUniformBuffer(Camera& cam)
 
 void RenderingSystem::attachAllBuiltInSRP()
 {
-	ShaderManager::shaderRenderPipeline.clear();
+	ShaderManager::m_shaderRenderPipeline.clear();
 	ShaderManager::AttachShaderPipeline<DeferredPipeline>("DEFERRED",height,width);
 	ShaderManager::AttachShaderPipeline<RM_SKY_BOXPipeline>("SPHERE");
 	ShaderManager::AttachShaderPipeline<DefaultRenderingPipeline>("DEFAULT");
@@ -162,7 +162,7 @@ void RenderingSystem::Run(Camera& cam, unsigned int frameBuffer)
 void RenderingSystem::emptyDrawList()
 {
 	//initialize the draw list with empty vectors for each shader name
-	for (auto const& pair : ShaderManager::shaderList)
+	for (auto const& pair : ShaderManager::m_shaderList)
 	{
 		drawList[pair.first] = std::map<unsigned long long ,std::vector<Entity>>();
 	}
@@ -185,7 +185,7 @@ void RenderingSystem::AfterDestroyEntity()
 void RenderingSystem::updateFrameBufferSize(int height, int width)
 {
 	//call all the call back function of all the registered ShaderRenderPipline classes for each shader
-	for (auto& SRP : ShaderManager::shaderRenderPipeline)
+	for (auto& SRP : ShaderManager::m_shaderRenderPipeline)
 	{
 		SRP.second->WindowsResizeCallBacks(height,width);
 		
@@ -228,7 +228,7 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 		if (pipeReg)
 		{
 			//if registered then call the pre render call back function
-			shdPipe = ShaderManager::shaderRenderPipeline[SHADERNAME];
+			shdPipe = ShaderManager::m_shaderRenderPipeline[SHADERNAME];
 			shdPipe->OnPreRender(shader, this, cam,frameBuffer);
 		}
 		e_index tran = transformArray->componentBitPose;;
@@ -304,7 +304,6 @@ void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
 				std::vector<glm::mat4> matList;
 				for (size_t i_mat = r * 1000; i_mat < (1 + r) * 1000 && i_mat < listSize; i_mat++)
 				{
-
 					const Entity& ent = entList[i_mat];
 					Transform& t = transformArray->GetData((*ent.componentIndex)[tran]);
 					matList.push_back(t.transformMat);
@@ -330,7 +329,7 @@ void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
 //renders all entities with all shaders registered under this queue type
 void RenderingSystem::RenderQueue(std::string QUEUENAME,Camera cam, unsigned int frameBuffer)
 {
-	auto const& sQ = ShaderManager::shaderQueues[QUEUENAME];
+	auto const& sQ = ShaderManager::m_shaderQueues[QUEUENAME];
 	for (int i = 0; i < sQ.size(); i++)
 	{
 		RenderAllEntitiesWithShader(sQ[i].second, cam,frameBuffer);

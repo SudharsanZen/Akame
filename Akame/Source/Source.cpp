@@ -12,7 +12,7 @@
 #include <crtdbg.h>
 #include"Core/Debug/Debug.h"
 #include<Rendering/DeferredRendererFragmentBuffer.h>
-
+#include"Core/Serialization/SceneSerialization.h"
 class rotateBehv :public Behaviour
 {
 	float angle = 180.0f;
@@ -175,6 +175,8 @@ int main()
 	scene.AddComponent <Material> (box)=boxMat;
 	*/
 	scene.backGroundColor(0.1f,0.1f,0.1f,0.1f);
+	SceneDeserializer sd(scene);
+	sd.LoadFrom(AssetManager::assetRootPath+"Media\\ExportTest\\Scenes\\test6.ascene");
 	while (!window.closeWindow())
 	{
 

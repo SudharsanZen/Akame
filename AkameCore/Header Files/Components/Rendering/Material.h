@@ -5,6 +5,7 @@
 #include"Assets/AssetManager.h"
 #include"Components/Components.h"
 #include<unordered_map>
+
 class Material:public Components
 {
 private:
@@ -37,6 +38,9 @@ private:
 	friend class ECS;
 	friend class ComponentArray<Material>;
 	friend class ModelExporter;
+	friend class InspectorWindow;
+
+
 	AKAME_API void setUniformsOnce(std::shared_ptr<Shader> shader, glm::vec3& viewPose);
 	AKAME_API void setUniformOnceSkeletalMesh(std::shared_ptr<Shader> shader,Camera cam);
 	AKAME_API void setUniformEveryObject(int index,std::shared_ptr<Shader> shader);

@@ -21,7 +21,7 @@ private:
 	unsigned int texFormat;
 	friend class ContentBrowser;
 	friend class FileOpenSaveDialogBox;
-	
+	friend class InspectorWindow;
 public:
 	AKAME_API void reset();
 	AKAME_API void loadImage();

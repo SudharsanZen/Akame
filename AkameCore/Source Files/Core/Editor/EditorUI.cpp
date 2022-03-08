@@ -213,6 +213,8 @@ void Editor::Menu()
 		ImGui::EndMenu();
 	}
 	ImGui::EndMainMenuBar();
+
+
 }
 
 void Editor::createNewScriptProject()
@@ -331,6 +333,12 @@ void Editor::DrawUI()
 	}
 	ImGui::End();
 	*/
+		if (ImGui::Begin("stats"))
+		{
+			ImGui::Text("Time:%f ms", deltaTime * 1000.0f);
+			ImGui::Text("fps:%d", static_cast<int>(1.0f / (deltaTime+0.0000001f)));
+		}
+		ImGui::End();
 	ImGui::Render();
 	int display_w=0, display_h=0;
 	std::shared_ptr<GLFWwindow> windowContext = context;

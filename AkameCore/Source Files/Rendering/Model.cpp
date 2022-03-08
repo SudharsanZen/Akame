@@ -345,7 +345,7 @@ Entity Model::processMesh(Entity parent,aiMesh* mesh)
 	
 	
 	mCurrScene.AddComponent<Material>(meshid) = mat;
-	mCurrScene.AddComponent<Mesh>(meshid).CreateMesh(finalVert);
+	mCurrScene.AddComponent<Mesh>(meshid).CreateMesh(vertices,indices);
 	return meshid;
 }
 
