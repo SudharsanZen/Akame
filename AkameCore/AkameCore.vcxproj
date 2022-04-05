@@ -138,7 +138,9 @@
     <ClInclude Include="Header Files\Math\EngineMath.h" />
     <ClInclude Include="Header Files\Math\EngineMathConstants.h" />
     <ClInclude Include="Header Files\Math\GlmMath.h" />
+    <ClInclude Include="Header Files\Math\Octree.h" />
     <ClInclude Include="Header Files\Math\Quaternion.h" />
+    <ClInclude Include="Header Files\Math\Shapes.h" />
     <ClInclude Include="Header Files\Misc\StopWatch.h" />
     <ClInclude Include="Header Files\Misc\temp.h" />
     <ClInclude Include="Header Files\Physics\ColliderShape.h" />
@@ -149,6 +151,7 @@
     <ClInclude Include="Header Files\Rendering\DepthFrameBuffer.h" />
     <ClInclude Include="Header Files\Rendering\DisplacementMap.h" />
     <ClInclude Include="Header Files\Rendering\FrameBuffer.h" />
+    <ClInclude Include="Header Files\Rendering\FrustumCuller.h" />
     <ClInclude Include="Header Files\Rendering\MeshInstance.h" />
     <ClInclude Include="Header Files\Rendering\Model.h" />
     <ClInclude Include="Header Files\Rendering\Shader.h" />
@@ -165,6 +168,7 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source Files\Math\Octree.cpp" />
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkeletalMeshRenderingSystem.cpp" />
     <ClCompile Include="Source Files\Animation\SkinnedRendererPipeline.cpp" />
@@ -203,6 +207,7 @@
     <ClCompile Include="Source Files\Log\Log.cpp" />
     <ClCompile Include="Source Files\Math\EngineMathConstants.cpp" />
     <ClCompile Include="Source Files\Math\Quaternion.cpp" />
+    <ClCompile Include="Source Files\Math\Shapes.cpp" />
     <ClCompile Include="Source Files\Math\Transform.cpp" />
     <ClCompile Include="Source Files\Physics\Physics.cpp" />
     <ClCompile Include="Source Files\Physics\RigidBody3D.cpp" />
@@ -211,6 +216,7 @@
     <ClCompile Include="Source Files\Rendering\DeferedRendererFragmentBuffer.cpp" />
     <ClCompile Include="Source Files\Rendering\DisplacementMap.cpp" />
     <ClCompile Include="Source Files\Rendering\FrameBuffer.cpp" />
+    <ClCompile Include="Source Files\Rendering\FrustumCuller.cpp" />
     <ClCompile Include="Source Files\Rendering\MeshInstance.cpp" />
     <ClCompile Include="Source Files\Rendering\Model.cpp" />
     <ClCompile Include="Source Files\Rendering\SceneTransformManager.cpp" />

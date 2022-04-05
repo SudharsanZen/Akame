@@ -345,6 +345,9 @@
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h">
       <Filter>Header Files\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Math\Octree.h" />
+    <ClInclude Include="Header Files\Math\Shapes.h" />
+    <ClInclude Include="Header Files\Rendering\FrustumCuller.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp">
@@ -542,5 +545,8 @@
     <ClCompile Include="Source Files\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Math\Octree.cpp" />
+    <ClCompile Include="Source Files\Math\Shapes.cpp" />
+    <ClCompile Include="Source Files\Rendering\FrustumCuller.cpp" />
   </ItemGroup>
 </Project>
