@@ -66,7 +66,7 @@ private:
 	std::shared_ptr<ECS> ecs;
 	
 	std::shared_ptr<SceneEntityListSystem> e_list_system;
-	std::shared_ptr<RenderingSystem> renderSys;
+
 	std::shared_ptr<BehaviourSystem> behaviourSys;
 	std::shared_ptr<LightSystem> lightSys;
 	std::shared_ptr<physics::RigidBodySystem> physicsSys;
@@ -95,6 +95,7 @@ private:
 	friend class EDFExporter;
 	AKAME_API void InitScene();
 public:
+	std::shared_ptr<RenderingSystem> renderSys;
 #ifdef AK_PRIVATE_GETTER_SETTER
 	template<typename _sysType>
 	std::shared_ptr<_sysType> GetSystem()

@@ -32,7 +32,7 @@ void ReflectionUIHandler::DrawUIField(std::string name, double* val)
 void ReflectionUIHandler::DrawUIField(std::string name, glm::vec3* val)
 {
 
-	std::string names[] = {"x","y","z"};
+	std::string names[] = {name+":x",name+":y",name+":z"};
 	
 	dragFloat3(names,(float*)val,80);
 }
@@ -40,7 +40,7 @@ void ReflectionUIHandler::DrawUIField(std::string name, glm::vec3* val)
 void ReflectionUIHandler::DrawUIField(std::string name, glm::vec4* val)
 {
 	
-	std::string names[] = { "x","y","z","w"};
+	std::string names[] = { name+":x",name+":y",name+":z",name+":w"};
 
 	dragFloat4(names, (float*)val, 80);
 }

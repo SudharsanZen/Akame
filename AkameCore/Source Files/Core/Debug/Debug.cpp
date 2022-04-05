@@ -65,6 +65,55 @@ void Debug::DrawBB(glm::vec3 min, glm::vec3 max, glm::mat4 transform, glm::vec3 
 
 
 }
+AKAME_API void Debug::DrawBB(glm::vec3 min, glm::vec3 max, glm::vec3 color)
+{
+	_vert v1, v2, v3, v4, v5, v6, v7, v8;
+	v1 = { glm::vec4(max,1),color };
+	v2 = { glm::vec4(max.x,min.y,max.z,1),color };
+	v3 = { glm::vec4(min.x,min.y,max.z,1),color };
+	v4 = { glm::vec4(min.x,max.y,max.z,1),color };
+
+	v5 = { glm::vec4(min,1),color };
+	v6 = { glm::vec4(min.x,max.y,min.z,1),color };
+	v7 = { glm::vec4(max.x,max.y,min.z,1),color };
+	v8 = { glm::vec4(max.x,min.y,min.z,1),color };
+
+	lineList.push_back(v1);
+	lineList.push_back(v2);
+
+	lineList.push_back(v2);
+	lineList.push_back(v3);
+
+	lineList.push_back(v3);
+	lineList.push_back(v4);
+
+	lineList.push_back(v4);
+	lineList.push_back(v1);
+
+	lineList.push_back(v5);
+	lineList.push_back(v6);
+
+	lineList.push_back(v6);
+	lineList.push_back(v7);
+
+	lineList.push_back(v7);
+	lineList.push_back(v8);
+
+	lineList.push_back(v8);
+	lineList.push_back(v5);
+
+	lineList.push_back(v1);
+	lineList.push_back(v7);
+
+	lineList.push_back(v2);
+	lineList.push_back(v8);
+
+	lineList.push_back(v3);
+	lineList.push_back(v5);
+
+	lineList.push_back(v4);
+	lineList.push_back(v6);
+}
 void Debug::CreateBuffers()
 {
 	if (!(vbo && vao))

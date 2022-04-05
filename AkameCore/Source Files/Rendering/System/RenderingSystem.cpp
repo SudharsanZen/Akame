@@ -147,7 +147,7 @@ void RenderingSystem::Run(Camera& cam, unsigned int frameBuffer)
 
 	
 	ShaderManager::GetShader("LINES_DEBUG")->useShaderProgram();
-	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 	if(!editorMode)
 		Debug::updateBufferContent();
 	Debug::DrawDebug();

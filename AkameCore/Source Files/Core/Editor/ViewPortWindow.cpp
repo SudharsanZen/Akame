@@ -11,7 +11,7 @@
 #include"Core/Window.h"
 #include"ECS.h"
 
-ViewPortWindow::ViewPortWindow(Scene& scene, ImGuiIO& io, bool closable) :m_scene(scene), cam(60, 1, 0.1f, 1000), m_io(io)
+ViewPortWindow::ViewPortWindow(Scene& scene, ImGuiIO& io, bool closable) :m_scene(scene), cam(60, 1, 0.1f, 5000), m_io(io)
 {
 	this->closable = closable;
 	cam.transform.SetGlobalPosition(glm::vec3(5, 5, 5));
@@ -80,7 +80,7 @@ void ViewPortWindow::flyCamScene(Camera& cam, float deltaTime,bool capture)
 	{
 		if (m_io.KeyShift)
 		{
-			speed *= 5;
+			speed *= 10;
 		}
 		if (m_io.KeysDown[KEY_W])
 		{

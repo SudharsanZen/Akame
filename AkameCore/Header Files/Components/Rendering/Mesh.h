@@ -43,10 +43,13 @@ public:
 	
 #if defined(AK_PRIVATE_GETTER_SETTER) || defined(AK_EXPORT) 
 	AKAME_API bool IsModel();
+	AKAME_API glm::vec3 GetHalfExtent() { return (max - min) / 2.0f; }
 	AKAME_API void IsModel(bool is_model);
 	AKAME_API void SetModelPath(std::string loc);
 	AKAME_API std::vector<vert>& getVertData() { return vertexData; }
 	AKAME_API std::vector<unsigned int>& getIndexData() { return indexList; }
+	AKAME_API glm::vec3 GetMin() { return min; }
+	AKAME_API glm::vec3 GetMax() { return max; }
 #endif
 	AKAME_API Mesh();
 
