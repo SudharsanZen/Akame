@@ -11,14 +11,14 @@ private:
 	std::unordered_map<ComponentID, std::shared_ptr<System>> systems;
 	friend class ECS;
 public:
-	template<typename T>
-	std::shared_ptr<T>	RegisterSystem()
+	template<typename T, typename ...Args>
+	std::shared_ptr<T>	RegisterSystem(Args&&... args)
 	{
 		ComponentID SID = typeid(T).name();
 		
 		assert(systems.find(SID) == systems.end() && "attempt to register system more than once!");
 
-		std::shared_ptr<T> system = std::make_shared<T>();
+		std::shared_ptr<T> system = std::make_shared<T>(std::forward<Args>(args)...);
 
 		systems.insert({SID,system});
 

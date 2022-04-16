@@ -99,14 +99,17 @@ int main()
 	scene.AddComponent<Material>(box) = boxMat;
 	scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 	Material mat("GRIDS");
+	mat.set_cullable(false);
 	Entity pl = scene.CreateEntity();
 
 
 	scene.AddComponent<Transform>(pl);
 	Mesh& plm = scene.AddComponent<Mesh>(pl);
 	scene.AddComponent<Material>(pl) = mat;
+	
 	plm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	Material matS("SPHERE");
+	matS.set_cullable(false);
 	Entity sky = scene.CreateEntity();
 
 

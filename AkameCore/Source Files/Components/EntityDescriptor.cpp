@@ -1,5 +1,6 @@
 #include "Core/Editor/EntityDescriptionSystem.h"
 #include"ECS.h"
+#include "..\..\Header Files\Components\EntityDescriptor.h"
 EntityDescriptor::EntityDescriptor()
 {
 	tag = "defualt";
@@ -26,3 +27,4 @@ void EntityDescriptor::reset()
 	tag = "default";
 	name = "Entity";
 }
+

@@ -139,7 +139,7 @@ int main()
 	
 
 	std::vector<Entity> cubeList;
-	float m = 21;
+	float m = 1000;
 	float dist = 100.0f;
 	std::shared_ptr<OctTree> oct=std::make_shared<OctTree>(m_scene);
 	float totalObj = m*m*m;
@@ -147,7 +147,7 @@ int main()
 	float distperobj = dist/m;
 	int* level=new int;
 	*level=3;
-	for (int i = 0; i < m*m*m; i++)
+	for (int i = 0; i < m*m; i++)
 	{
 
 		Entity cube = m_scene.CreateEntity();
@@ -155,20 +155,20 @@ int main()
 		Transform& t = m_scene.AddComponent<Transform>(cube);
 		t.SetGlobalScale(glm::vec3(2.0f));
 		t.SetGlobalRotation(Quaternion(0,0,0));
-		float nX = (float)((int)(i/m)%(int)(m))*distperobj-half;
-		float nY = static_cast<int>(i / (m * m)) * distperobj - half;
-		float nZ = static_cast<int>(i%static_cast<int>(m))*distperobj-half;
-		t.SetGlobalPosition(glm::vec3(nX,nY,nZ));
+		///float nX = (float)((int)(i/m)%(int)(m))*distperobj-half;
+		///float nY = static_cast<int>(i / (m * m)) * distperobj - half;
+		///float nZ = static_cast<int>(i%static_cast<int>(m))*distperobj-half;
+		t.SetGlobalPosition(glm::vec3((int)(i/(int)m)*2,0,((i)%(int)m) * 2.0f));
 		Mesh &cM=m_scene.AddComponent<Mesh>(cube);
 		m_scene.AddComponent<Material>(cube)=cmat;
 		cM.CreateMesh(generateCubeVertices());
-		auto& beh=m_scene.AddComponent<BehaviourComponent>(cube);
-		beh.setBehaviour<strafeRandom>(i%360,level);
+		//auto& beh=m_scene.AddComponent<BehaviourComponent>(cube);
+		//beh.setBehaviour<strafeRandom>(i%360,level);
 		//if(nX>0&& nZ>0 && nY>0)
 
 	}
 	
-
+	/*
 	Material matS("SPHERE");
 	Entity sky = m_scene.CreateEntity();
 
@@ -178,7 +178,7 @@ int main()
 	Mesh& skym = m_scene.AddComponent<Mesh>(sky);
 	m_scene.AddComponent<Material>(sky) = matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
-	/*
+	
 	Material mat("GRIDS");
 	Entity plane= m_scene.CreateEntity();
 
@@ -195,13 +195,18 @@ int main()
 	//Editor is experimental, do not use this
 	Editor edt(m_scene);
 	m_scene.OnStart();
-	m_scene.vsyncOn(true);
+	m_scene.vsyncOn(false);
 	float deltaTime = 0;
 	OctTreeNode::SetMaxLevel(*level);
 	for (const Entity& ent : rSys->entities)
 	{
 		oct->insert(ent);
 	}
+	for (const Entity& ent : rSys->entities)
+	{
+		oct->remove_entity(ent);
+	}
+	
 	Camera m_cam(60,1,0.1f,1000.0f);
 	m_cam.setCameraPosition(0,0,0);
 	FrustumCuller frustum(m_cam);
@@ -209,14 +214,14 @@ int main()
 	beh.setBehaviour<DummyCamController>(m_cam);
 	while (!window.closeWindow())
 	{
-		auto& list = frustum.get_culled(oct);
+		/*auto& list = frustum.get_culled(oct);
 		for (int i = 0; i < list.size(); i++)
 		{
 			Mesh& m = m_scene.GetComponent<Mesh>(list[i]);
 			Transform& t = m_scene.GetComponent<Transform>(list[i]);
 			glm::mat4 trans = t.transformMatrix();
 			Debug::DrawBB(m.GetMin(),m.GetMax(),trans,glm::vec3(1,0,0));
-		}
+		}*/
 		//oct.DrawTreeSphere();
 		//oct.DrawTreeBox();
 		deltaTime = m_scene.getDeltaTime();
@@ -235,7 +240,6 @@ int main()
 
 		edt.DrawUI();
 
-		
 		m_scene.swapBuffers();
 
 	}

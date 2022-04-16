@@ -7,6 +7,7 @@ class EntityDescriptor:public Components
 {
 	std::string name;
 	std::string tag;
+
 	bool selected=false;
 
 	friend class SceneHierarchyWindow;
@@ -26,5 +27,6 @@ public:
 	AKAME_API void SetName(std::string str);
 	AKAME_API std::string GetName();
 	AKAME_API void reset();
+
 };
 

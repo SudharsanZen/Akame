@@ -2,9 +2,10 @@
 #include"Core/Log/Log.h"
 #include"Rendering/Camera.h"
 unsigned long long shaderCount = 0;
+bool Material::remake_draw_list = true;
 Material::Material() :Material("DEFAULT") 
 {
-
+	remake_draw_list = true;
 }
 //set the texture uniform and it's value
 Material::Material(std::string shaderName)
@@ -20,7 +21,7 @@ Material::Material(std::string shaderName)
 	diffColor = glm::vec3(1, 1, 1);
 	specularColor = glm::vec3(1, 1, 1);
 	ambientIntensity = 0.2f;
-	
+	remake_draw_list = true;
 	
 }
 

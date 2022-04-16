@@ -9,7 +9,10 @@
 #include"Rendering/System/DeferredPipeline.h"
 #include"Rendering/System/DefaultRenderingPipeline.h"
 #include"Core/Debug/Debug.h"
+#include"Utilities/joined_vector.h"
 #include"Animation/SkinnedRendererPipeline.h"
+#include"Components/EntityDescriptor.h"
+#include"Rendering/FrustumCuller.h"
 #pragma warning(push, 0)
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
@@ -25,21 +28,77 @@ void RenderingSystem::GroupEntityWithCommonShader()
 {
 	std::shared_ptr<ECS> e = ecs.lock();
 	emptyDrawList();
+	static_tree->_free();
 	for (auto const& ent : entities)
 	{
-		Material &m= e->GetComponent<Material>(ent);
+		Material& m = e->GetComponent<Material>(ent);
 		std::string shdName = m.SHADER_NAME;
+
+		//insert into common drawlist
 		if (drawList.find(shdName) == drawList.end())
 		{
-			drawList["ERROR"][0].push_back(ent);
+			drawList["ERROR"][0].push_back(&ent);
 		}
 		else
 		{
-			drawList[shdName][*m.materialID].push_back(ent);
+			drawList[shdName][*m.materialID].push_back(&ent);
+		}
+
+	
+		if (m.is_static_entity() && m.is_cullable_entity())
+		{
+			static_tree->insert(ent);
+		}
+		else
+		{
+
+			if (dynamic_drawList.find(shdName) == dynamic_drawList.end())
+			{
+				dynamic_drawList["ERROR"][0].push_back(&ent);
+			}
+			else
+			{
+				dynamic_drawList[shdName][*m.materialID].push_back(&ent);
+			}
 		}
 	
 	}
 	
+}
+inline auto RenderingSystem::get_static_list(std::string SHADERNAME, unsigned long long material_id)
+{
+	return static_drawList.find(SHADERNAME) != static_drawList.end() ?
+		(
+			(static_drawList[SHADERNAME].find(material_id) != static_drawList[SHADERNAME].end()) ?
+			&(static_drawList[SHADERNAME][material_id]) : nullptr
+			) : nullptr;
+}
+inline auto RenderingSystem::get_dynamic_list(std::string SHADERNAME, unsigned long long material_id)
+{
+	return dynamic_drawList.find(SHADERNAME) != dynamic_drawList.end() ?
+		(
+			(dynamic_drawList[SHADERNAME].find(material_id) != dynamic_drawList[SHADERNAME].end()) ?
+			&(dynamic_drawList[SHADERNAME][material_id]) : nullptr
+			) : nullptr;
+}
+template<typename _list>
+void RenderingSystem::get_sorted_render_list(DrawList& d_List,_list& entity_list)
+{
+	emptyStaticDrawList();
+	std::shared_ptr<ECS> e = ecs.lock();
+	for (auto const& ent : entity_list)
+	{
+		Material& m = e->GetComponent<Material>(*ent);
+		std::string shdName = m.SHADER_NAME;
+		if (d_List.find(shdName) == d_List.end())
+		{
+			d_List["ERROR"][0].push_back(ent);
+		}
+		else
+		{
+			d_List[shdName][*m.materialID].push_back(ent);
+		}
+	}
 }
 
 
@@ -74,7 +133,7 @@ bool RenderingSystem::EditorMode()
 	return editorMode; 
 }
 
-RenderingSystem::RenderingSystem()
+RenderingSystem::RenderingSystem(Scene& scene):static_tree(std::make_shared<OctTree>(scene))
 {
 	glGenBuffers(1,&transformUBO);
 	glBindBuffer(GL_UNIFORM_BUFFER,transformUBO);
@@ -99,6 +158,8 @@ RenderingSystem::RenderingSystem()
 
 void RenderingSystem::Run(Camera& cam, unsigned int frameBuffer)
 {
+
+
 	glBindFramebuffer(GL_FRAMEBUFFER,frameBuffer);
 	if (Mesh::needsUpdate)
 	{
@@ -109,13 +170,19 @@ void RenderingSystem::Run(Camera& cam, unsigned int frameBuffer)
 	transformArray = (ComponentArray<Transform>*)(ecs.lock()->componentManager.compIDtoArray[typeid(Transform).name()].get());
 
 	std::shared_ptr<LightSystem> lsys=lightsystem.lock();
-	if (m_update_Event)
+	if (m_update_Event || Material::remake_draw_list)
 	{
 		m_update_Event = false;
+		Material::remake_draw_list = false;
 		GroupEntityWithCommonShader();
 	}
+
 	updateUniformBuffer(cam);
-	
+	FrustumCuller frustum_culler(cam);
+
+	auto& static_rend_list = frustum_culler.get_culled(static_tree);
+	get_sorted_render_list(static_drawList, static_rend_list);
+
 	std::shared_ptr<ECS> E = ecs.lock();
 	std::shared_ptr<Shader> shader;
 
@@ -126,7 +193,7 @@ void RenderingSystem::Run(Camera& cam, unsigned int frameBuffer)
 	lsys->dir_sMap.bind();
 	lsys->dir_sMap.clearBuffer();
 	lsys->BindDirectionalLightShadowMap(shader,cam);
-		RenderAllMesh(shader,cam);
+		RenderAllEntitiesPSSM(shader,cam);
 	//directional shadow maps for skeletal meshes
 	shader = ShaderManager::GetShader("SK_DIR_SHADOW");
 	lsys->BindDirectionalLightShadowMap(shader, cam);
@@ -164,7 +231,20 @@ void RenderingSystem::emptyDrawList()
 	//initialize the draw list with empty vectors for each shader name
 	for (auto const& pair : ShaderManager::m_shaderList)
 	{
-		drawList[pair.first] = std::map<unsigned long long ,std::vector<Entity>>();
+		dynamic_drawList[pair.first] = std::map<unsigned long long ,std::vector<const Entity*>>();
+	}
+	for (auto const& pair : ShaderManager::m_shaderList)
+	{
+		drawList[pair.first] = std::map<unsigned long long, std::vector<const Entity*>>();
+	}
+
+}
+
+void RenderingSystem::emptyStaticDrawList()
+{
+	for (auto const& pair : ShaderManager::m_shaderList)
+	{
+		static_drawList[pair.first] = std::map<unsigned long long, std::vector<const Entity*>>();
 	}
 }
 
@@ -238,13 +318,21 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 		glBindBufferBase(GL_UNIFORM_BUFFER, 8, transformUBO);
 		for (auto const& entMatList : drawList[SHADERNAME])
 		{
-			auto const& entList = entMatList.second;
 			
-			
-			size_t listSize=entMatList.second.size();
+			std::vector<const Entity*> empty2;
+			auto const staticList = get_static_list(SHADERNAME, entMatList.first);
+			auto const dynamicList = get_dynamic_list(SHADERNAME, entMatList.first);
+			auto const& s_list = (staticList)?*staticList:empty;
+			auto const& d_list = (dynamicList)?*dynamicList:empty2;
+			auto const& entList = joined_vector(s_list,d_list);
 
+			
+			
+			size_t listSize=entList.size();
+			if (entList.size() == 0)
+				continue;
 			long int row = static_cast<long int>(ceil(static_cast<float>(listSize) / 1000.0f));
-			Material &m=E->GetComponent<Material>(entMatList.second[0]);
+			Material &m=E->GetComponent<Material>(*entList[0]);
 			m.setUniformsOnce(shader,cam.transform.GetGlobalPosition());
 			for (long int r = 0; r < row; r++)
 			{
@@ -253,7 +341,7 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 				for (long int i_mat = r*1000; i_mat < (1+r)*1000 && i_mat < entList.size(); i_mat++)
 				{
 					
-					const Entity& ent = entList[i_mat];
+					const Entity& ent = *(entList[i_mat]);
 					Transform& t = transformArray->GetData((*ent.componentIndex)[tran]);
 					matList.push_back(t.transformMat);
 				}
@@ -262,7 +350,7 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 				curr_i = 0;
 				for (long int i = r*1000; i < (r+1)*1000 && i< entList.size(); i++)
 				{
-					const Entity& ent = entList[i];
+					const Entity& ent = *(entList[i]);
 
 					Mesh& mesh = E->GetComponent<Mesh>((*ent.componentIndex)[me], me);
 					m.setUniformEveryObject(static_cast<int>(curr_i), shader);
@@ -280,6 +368,7 @@ void RenderingSystem::RenderAllEntitiesWithShader(std::string SHADERNAME,Camera 
 	}
 	
 }
+
 //render all object under the given shader
 void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
 {
@@ -295,7 +384,8 @@ void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
 		
 		for (auto const& entMatList : shaderEntList.second)
 		{
-			auto const& entList = entMatList.second;
+		
+			auto const& entList = (entMatList.second);
 			size_t listSize = entList.size();
 			size_t row = static_cast<int>(ceil(static_cast<float>(listSize) / 1000.0f));
 			for (size_t r = 0; r < row; r++)
@@ -304,7 +394,7 @@ void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
 				std::vector<glm::mat4> matList;
 				for (size_t i_mat = r * 1000; i_mat < (1 + r) * 1000 && i_mat < listSize; i_mat++)
 				{
-					const Entity& ent = entList[i_mat];
+					const Entity& ent = *entList[i_mat];
 					Transform& t = transformArray->GetData((*ent.componentIndex)[tran]);
 					matList.push_back(t.transformMat);
 				}
@@ -313,7 +403,7 @@ void RenderingSystem::RenderAllMesh(std::shared_ptr<Shader> shader,Camera cam)
 				curr_i = 0;
 				for (size_t i = r * 1000; i < (r + 1) * 1000 && i < listSize; i++)
 				{
-					const Entity& ent = entList[i];
+					const Entity& ent = *entList[i];
 
 					Mesh& mesh = E->GetComponent<Mesh>((*ent.componentIndex)[me], me);
 					shader->setUniformInteger(transformLocation, static_cast<int>(curr_i));
@@ -336,3 +426,82 @@ void RenderingSystem::RenderQueue(std::string QUEUENAME,Camera cam, unsigned int
 	}
 }
 
+
+void RenderingSystem::RenderAllEntitiesPSSM(std::shared_ptr<Shader> shader, Camera cam)
+{
+	std::shared_ptr<ECS> E = ecs.lock();
+	e_index tran = transformArray->componentBitPose;;
+	e_index me = meshArray->componentBitPose;
+	unsigned int transformLocation = shader->getUniformLocation("t_index");
+	glBindVertexArray(Mesh::VAO);
+	glBindBufferBase(GL_UNIFORM_BUFFER, 8, transformUBO);
+	auto& light_sys = lightsystem.lock();
+	PSSMCuller pssm_culler	(
+							cam,
+							glm::normalize(light_sys->drVector[0].lightDir),
+							FRUSTUM_SPLIT_NUM,light_sys->lambda,
+							light_sys->shadowDistance
+							);
+	auto &_static_draw_list = pssm_culler.get_culled(static_tree);
+	for (auto const& shaderEntList : dynamic_drawList)
+	{
+
+		for (auto const& entMatList : shaderEntList.second)
+		{
+
+			auto const& entList = (entMatList.second);
+			size_t listSize = entList.size();
+			size_t row = static_cast<int>(ceil(static_cast<float>(listSize) / 1000.0f));
+			for (size_t r = 0; r < row; r++)
+			{
+				long long int curr_i = 0;
+				std::vector<glm::mat4> matList;
+				for (size_t i_mat = r * 1000; i_mat < (1 + r) * 1000 && i_mat < listSize; i_mat++)
+				{
+					const Entity& ent = *entList[i_mat];
+					Transform& t = transformArray->GetData((*ent.componentIndex)[tran]);
+					matList.push_back(t.transformMat);
+				}
+				glBufferSubData(GL_UNIFORM_BUFFER, 0, mat4Size * matList.size(), &(matList[0][0].x));
+				curr_i++;
+				curr_i = 0;
+				for (size_t i = r * 1000; i < (r + 1) * 1000 && i < listSize; i++)
+				{
+					const Entity& ent = *entList[i];
+
+					Mesh& mesh = E->GetComponent<Mesh>((*ent.componentIndex)[me], me);
+					shader->setUniformInteger(transformLocation, static_cast<int>(curr_i));
+					mesh.renderMesh();
+					curr_i++;
+				}
+			}
+		}
+	}
+	auto const& entList = _static_draw_list;
+	size_t listSize = entList.size();
+	size_t row = static_cast<int>(ceil(static_cast<float>(listSize) / 1000.0f));
+	for (size_t r = 0; r < row; r++)
+	{
+		long long int curr_i = 0;
+		std::vector<glm::mat4> matList;
+		for (size_t i_mat = r * 1000; i_mat < (1 + r) * 1000 && i_mat < listSize; i_mat++)
+		{
+			const Entity& ent = *entList[i_mat];
+			Transform& t = transformArray->GetData((*ent.componentIndex)[tran]);
+			matList.push_back(t.transformMat);
+		}
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, mat4Size * matList.size(), &(matList[0][0].x));
+		curr_i++;
+		curr_i = 0;
+		for (size_t i = r * 1000; i < (r + 1) * 1000 && i < listSize; i++)
+		{
+			const Entity& ent = *entList[i];
+
+			Mesh& mesh = E->GetComponent<Mesh>((*ent.componentIndex)[me], me);
+			shader->setUniformInteger(transformLocation, static_cast<int>(curr_i));
+			mesh.renderMesh();
+			curr_i++;
+		}
+	}
+	glBindVertexArray(0);
+}

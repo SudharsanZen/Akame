@@ -1,6 +1,7 @@
 #include"Core/Log/Log.h"
 #include"Rendering/System/PSSMFBO.h"
 #include"Rendering/System/LightSystem.h"
+
 #pragma warning(push, 0)
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
@@ -212,4 +213,72 @@ std::vector<glm::mat4> CalculatePSSMLightSpaceMats(Camera& cam, glm::vec3  l, in
 
 
 	return matList;
+}
+
+std::vector<AABB> Calculate_PSSM_AABB_Bounds(Camera& cam, glm::vec3  l, int numOfFrustums, float lambda, float shadowDist)
+{
+
+	std::vector<AABB> aabb_list;
+	glm::vec3 lightDir = l;
+	glm::vec3 viewDir = cam.transform.forward();
+	glm::mat4 cp, cv;
+
+	glm::vec3 forward = glm::normalize(lightDir);
+	glm::vec3 pose = glm::vec3(0);
+	glm::vec3 up = normalize(glm::cross(forward, -worldRight));
+	glm::vec3 right = normalize(glm::cross(forward, up));
+	glm::vec3 center = pose + forward * 10.0f;
+
+
+
+
+	float nearz = cam.getNear();
+	float farz = cam.getFar();
+	cp = cam.getProjectionMatrix();
+	cv = cam.getViewMatrix();
+	std::vector<std::vector<glm::vec3>> frustumList = CalculateFrustumCorners(cam, numOfFrustums, lambda, shadowDist);
+	for (int i = 0; i < frustumList.size(); i++)
+	{
+
+		std::vector<glm::vec3> currFrustum = frustumList[i];
+		glm::vec3 max = glm::vec4(currFrustum[0], 1);
+		glm::vec3 min = max;
+		for (int i_vert = 0; i_vert < currFrustum.size(); i_vert++)
+		{
+
+
+			glm::vec3 curr = glm::vec4(currFrustum[i_vert], 1);
+
+			if (max.x < curr.x)
+				max.x = curr.x;
+			if (max.y < curr.y)
+				max.y = curr.y;
+			if (max.z < curr.z)
+				max.z = curr.z;
+
+			if (min.x > curr.x)
+				min.x = curr.x;
+			if (min.y > curr.y)
+				min.y = curr.y;
+			if (min.z > curr.z)
+				min.z = curr.z;
+
+		}
+
+		float x = 1, y = 1;
+		if (i < 2)
+		{
+			x *= LightSystem::pssmXMultiplier;
+			y *= LightSystem::pssmYMultiplier;
+		}
+
+		glm::vec3 minb = min; minb.x *= x; minb.y *= y;
+		glm::vec3 maxb = max; maxb.x *= x; maxb.y *= y;
+		AABB bound(minb, maxb);
+
+		aabb_list.push_back(bound);
+	}
+
+
+	return aabb_list;
 }

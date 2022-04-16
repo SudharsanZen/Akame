@@ -166,6 +166,7 @@
     <ClInclude Include="Header Files\Rendering\System\TiledRenderer.h" />
     <ClInclude Include="Header Files\Rendering\Texture.h" />
     <ClInclude Include="Header Files\Scripting\BehaviourSystem.h" />
+    <ClInclude Include="Header Files\Utilities\joined_vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Math\Octree.cpp" />

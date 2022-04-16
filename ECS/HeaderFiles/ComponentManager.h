@@ -77,7 +77,7 @@ public:
 		GetComponentArray<T>()->RemoveData(entity);
 	}
 	template<typename T>
-	T& GetComponent(Entity entity)
+	T& GetComponent(const Entity &entity)
 	{
 		return GetComponentArray<T>()->GetData(entity);
 	}

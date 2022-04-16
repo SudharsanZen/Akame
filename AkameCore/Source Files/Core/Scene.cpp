@@ -147,7 +147,7 @@ void Scene::InitEcs()
 	animCont.set(ecs->GetComponentBitPose<AnimationController>());
 
 	//register system and it's signature
-	renderSys=ecs->RegisterSystem<RenderingSystem>();
+	renderSys=ecs->RegisterSystem<RenderingSystem>(*this);
 	e_list_system=ecs->RegisterSystem<SceneEntityListSystem>();
 	behaviourSys=ecs->RegisterSystem<BehaviourSystem>();
 	physicsSys = ecs->RegisterSystem<physics::RigidBodySystem>();

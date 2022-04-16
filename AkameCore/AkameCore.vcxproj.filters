@@ -348,6 +348,7 @@
     <ClInclude Include="Header Files\Math\Octree.h" />
     <ClInclude Include="Header Files\Math\Shapes.h" />
     <ClInclude Include="Header Files\Rendering\FrustumCuller.h" />
+    <ClInclude Include="Header Files\Utilities\joined_vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp">

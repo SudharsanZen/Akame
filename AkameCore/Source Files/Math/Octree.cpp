@@ -46,15 +46,18 @@ OctTreeNode::OctTreeNode(Scene& m_scene) :m_scene(m_scene), child(8, nullptr)
 	setChildToNull();
 	origin = glm::vec3(0);
 	halfExtent = glm::vec3(250);
+	const_cast<AABB*>(&aabb)->set_half_extents_origin(origin,halfExtent);
 
 }
 
 OctTreeNode::OctTreeNode(Scene& m_scene, glm::vec3 origin, glm::vec3 halfExt, int currLevel, int maxLevel) :OctTreeNode(m_scene)
 {
+
 	this->origin = origin;
 	halfExtent = halfExt;
 	this->currLevel = currLevel;
 	setChildToNull();
+	const_cast<AABB*>(&aabb)->set_half_extents_origin(origin, halfExtent);
 }
 
 bool OctTreeNode::isPointInOctane(glm::vec3 point)
@@ -97,7 +100,7 @@ EntityOBBDetails OctTreeNode::getEntityDetails(Entity const& eid)
 	return details;
 }
 
-bool OctTreeNode::isOBBInOctant(EntityOBBDetails& details)
+bool OctTreeNode::isOBBInOctant(const EntityOBBDetails& details)
 {
 	for (int i = 0; i < 8; i++)
 		if (!isPointInOctane(details.OBB_verts[i]))
@@ -116,6 +119,7 @@ bool OctTreeNode::isOBBInOctant(EntityOBBDetails& details, glm::vec3 min, glm::v
 bool OctTreeNode::insert(const Entity& eid)
 {
 	EntityOBBDetails detials = getEntityDetails(eid);
+	
 	return _insert(detials);
 
 }
@@ -155,7 +159,7 @@ AABB OctTreeNode::GetOctaneAABB(Octant octant)
 	glm::vec3 n_min = n_origin - (halfExtent / 2.0f);
 	glm::vec3 n_max = n_origin + halfExtent / 2.0f;
 
-	return { n_origin,halfExtent / 2.0f,n_min,n_max };
+	return AABB(n_min,n_max);
 }
 
 bool OctTreeNode::isOBBInOctant(EntityOBBDetails& details, AABB octant)
@@ -180,7 +184,7 @@ bool OctTreeNode::_insert(EntityOBBDetails& details)
 	}
 	if (isOBBInOctant(details))
 	{
-		entityList.push_back(details);
+		entityList.insert(details);
 		return true;
 	}
 	return false;
@@ -189,6 +193,40 @@ bool OctTreeNode::_insert(EntityOBBDetails& details)
 OctTreeNode::~OctTreeNode()
 {
 	_free_tree();
+}
+
+AKAME_API OctTreeNode* OctTreeNode::find(const EntityOBBDetails& e_det)
+{
+	OctTreeNode* ptr = nullptr;
+	for (int i = 0; i < 8; i++)
+	{
+		
+		if (child[i] != nullptr && child[i]->isOBBInOctant(e_det))
+		{
+			if (ptr=child[i]->find(e_det))
+				return ptr;
+		}
+	}
+
+	if (isOBBInOctant(e_det))
+	{
+		auto itr = entityList.find(e_det);
+		if (itr != entityList.end())
+			ptr = this;
+		
+		
+	}
+	return ptr;
+}
+
+AKAME_API bool OctTreeNode::remove_entity(const EntityOBBDetails& e_det)
+{
+	auto itr=entityList.find(e_det);
+	if (itr != entityList.end())
+	{
+		entityList.erase(itr);
+	}
+	return false;	
 }
 
 void OctTreeNode::_free_tree()
@@ -206,8 +244,14 @@ void OctTreeNode::_free_tree()
 	currLevel = 0;
 }
 
+AKAME_API size_t OctTree::size()
+{
+	return m_size;
+}
+
 OctTree::OctTree(Scene& m_scene) :m_scene(m_scene)
 {
+	m_size = 0;
 	head = nullptr;
 }
 
@@ -247,6 +291,7 @@ Octant OctTree::GetOpposite(Octant curr)
 
 bool OctTree::insert(const Entity& eid)
 {
+	m_size++;
 	if (head == nullptr)
 	{
 		head = new OctTreeNode(m_scene);
@@ -346,6 +391,14 @@ bool OctTree::insert(const Entity& eid)
 	return true;
 }
 
+OctTreeNode* OctTree::find(const Entity& eid)
+{
+	if (head)
+		return head->find(head->getEntityDetails(eid));
+	else
+		return nullptr;
+}
+
 void OctTree::DrawTreeBox()
 {
 	if (head != nullptr)
@@ -356,6 +409,27 @@ void OctTree::DrawTreeSphere()
 {
 	if (head)
 		head->DebugDrawSPHERE();
+}
+
+bool OctTree::remove_entity(const Entity& eid)
+{
+	//removes the given entity from tree, returns true if removed successfully
+	//returns false if no such entity is in the tree
+	OctTreeNode* node = find(eid);
+	EntityOBBDetails ed = head->getEntityDetails(eid);
+	if (node != nullptr)
+	{
+		if(m_size!=0)
+			m_size--;
+		else
+		{
+			AK_ASSERT("The code was not supposed to reach here!");
+			m_size = 0;
+		}
+		return node->remove_entity(ed);
+	}
+	else
+		return false;
 }
 
 OctTree::~OctTree()

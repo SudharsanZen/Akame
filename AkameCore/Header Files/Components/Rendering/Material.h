@@ -9,6 +9,10 @@
 class Material:public Components
 {
 private:
+	//remake drawlists in Rendering system
+	AKAME_API static bool remake_draw_list;
+	bool is_static = true;
+	bool is_cullable = true;
 	unsigned int transformLocation;
 	unsigned int transformIndexLocation;
 	std::shared_ptr<unsigned long long> materialID;
@@ -64,12 +68,31 @@ public:
 		this->uniformTofloat = mat.uniformTofloat;
 		this->ambientIntensity = mat.ambientIntensity;
 		this->SHADER_NAME = mat.SHADER_NAME;
-		
+		this->is_static = mat.is_static;
+		this->is_cullable = mat.is_cullable;
+		remake_draw_list = true;
 		return *this;
 	}
 	
 
-	
+	AKAME_API void set_static(bool is_static)
+	{
+		remake_draw_list = true;
+		this->is_static = is_static;
+	}
+	AKAME_API void set_cullable(bool is_cullable)
+	{
+		remake_draw_list = true;
+		this->is_cullable = is_cullable;
+	}
+	AKAME_API bool is_cullable_entity()
+	{
+		return is_cullable;
+	}
+	AKAME_API bool is_static_entity()
+	{
+		return is_static;
+	}
 
 	AKAME_API void reset();
 

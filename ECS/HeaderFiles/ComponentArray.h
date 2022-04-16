@@ -62,7 +62,7 @@ private:
 public:
 	T& InsertData(Entity entity);
 	void RemoveData(Entity entity);
-	T& GetData(Entity entity);
+	T& GetData(const Entity &entity);
 	T& GetData(e_index entity);
 	void EntityDestroyed(Entity entity) override;
 };
@@ -111,7 +111,7 @@ inline void ComponentArray<T>::RemoveData(Entity entity)
 }
 
 template<typename T>
-inline T& ComponentArray<T>::GetData(Entity entity)
+inline T& ComponentArray<T>::GetData(const Entity &entity)
 {
 	// TODO: insert return statement here
 	assert(entity.signature->test(componentBitPose) && "no such component is registered on the given entity!");

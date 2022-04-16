@@ -14,7 +14,7 @@ private:
 	
 
 	//checks if the entity is valid and returns the value from the list
-	Entity& GetEntityFromList(Entity entity)
+	Entity& GetEntityFromList(const Entity &entity)
 	{
 		e_index a = entityList.size();
 		assert((entity.index < (a* maxEntities)) && "entity index out of range");
@@ -102,7 +102,7 @@ public:
 
 	
 	template<typename T>
-	T& GetComponent(Entity entity)
+	T& GetComponent(const Entity &entity)
 	{
 		Entity& listValue = GetEntityFromList(entity);
 		return componentManager.GetComponent<T>(listValue);
@@ -123,10 +123,10 @@ public:
 		systemManager.EntitySignatureChanged(entity);
 	}
 
-	template<typename T>
-	std::shared_ptr<T> RegisterSystem()
+	template<typename T,typename ...Args>
+	std::shared_ptr<T> RegisterSystem(Args&&... args)
 	{
-		return systemManager.RegisterSystem<T>();
+		return systemManager.RegisterSystem<T>(std::forward<Args>(args)...);
 	}
 
 	template<typename T>
