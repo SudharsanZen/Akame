@@ -2,15 +2,6 @@
 #include"Core/Debug/Debug.h"
 
 #define SQUARE(x) (x)*(x) 
-float PLANE::getDistanceOfPointFromPlane(glm::vec3 point)
-{
-	return glm::dot(normal, point - pop);
-}
-
-float PLANE::getDistanceOfPointFromPlane(glm::vec3 point, float displace)
-{
-	return glm::dot(normal, point - (pop + normal * displace));
-}
 
 VIEW_FRUSTUM::VIEW_FRUSTUM(Camera& m_cam) :m_near_vert(4), m_far_vert(4), m_camera(m_cam)
 {
@@ -75,19 +66,8 @@ void VIEW_FRUSTUM::CalcFrustumParameters()
 
 }
 
-
-bool VIEW_FRUSTUM::check_SPHERE_Intersection(AABB& aabb)
-{
-	glm::vec3 origin = (aabb.max + aabb.min) / 2.0f + aabb.origin;
-	float radius = glm::length((aabb.max - aabb.min)) / 2.0f;
-	//Debug::DrawCircle(origin, worldLeft, 0.2f, glm::vec3(0, 1, 0));
-	return	(m_bottom_plane.getDistanceOfPointFromPlane(origin, radius) < 0) &&
-		(m_top_plane.getDistanceOfPointFromPlane(origin, radius) < 0) &&
-		(m_left_plane.getDistanceOfPointFromPlane(origin, radius) < 0) &&
-		(m_right_plane.getDistanceOfPointFromPlane(origin, radius) < 0) &&
-		(m_far_plane.getDistanceOfPointFromPlane(origin, radius) < 0) &&
-		(m_near_plane.getDistanceOfPointFromPlane(origin, radius) < 0);
-}
+//call this to check if if an AABB is within the frustum 
+//(The AABB will considered/transformed into a sphere bound that encloses the whole AABB)
 
 void VIEW_FRUSTUM::DrawFrustum()
 {
@@ -167,86 +147,33 @@ void FRUSTUM::DrawFrustum()
 		}
 	}
 }
-bool FRUSTUM::check_SPHERE_Intersection(AABB& aabb)
-{
-	glm::vec3 origin = (aabb.max + aabb.min) / 2.0f + aabb.origin;
-	float radius = glm::length((aabb.max - aabb.min)) / 2.0f;
-	//Debug::DrawCircle(origin, worldLeft, 0.2f, glm::vec3(0, 1, 0));
-	return	(m_bottom_plane.getDistanceOfPointFromPlane(origin, radius) < 0) &&
-		(m_top_plane.getDistanceOfPointFromPlane(origin, radius) < 0) &&
-		(m_left_plane.getDistanceOfPointFromPlane(origin, radius) < 0) &&
-		(m_right_plane.getDistanceOfPointFromPlane(origin, radius) < 0) &&
-		(m_far_plane.getDistanceOfPointFromPlane(origin, radius) < 0) &&
-		(m_near_plane.getDistanceOfPointFromPlane(origin, radius) < 0);
-}
-AABB::AABB()
-{
-	origin = glm::vec3(0);
-	half_extent = glm::vec3(0);
-	min = glm::vec3(0);
-	max = glm::vec3(0);
-
-}
-
-AABB::AABB(glm::vec3 min, glm::vec3 max)
-{
-	set_min_max(min, max);
-}
-
-void AABB::set_min_max(glm::vec3 min, glm::vec3 max)
-{
-	this->min = min;
-	this->max = max;
-	origin = (max+min)/2.0f;
-	half_extent = glm::abs(max-origin);
-}
-
-void AABB::set_half_extents_origin(glm::vec3 origin, glm::vec3 half_extent)
-{
-	this->origin = origin;
-	this->half_extent=half_extent;
-
-	min = origin-half_extent;
-	max = origin+half_extent;
-}
-
 FRUSTUM AABB::get_frustum()
 {
 	PLANE far_p = {
-			worldForward,
-			max
+		worldForward,
+		max
 	};
-	PLANE near_p= {
+	PLANE near_p = {
 		-far_p.normal,
-			min
+		min
 	};
 	PLANE right_p = {
-			worldRight,
-			max
+		worldRight,
+		max
 	};
 	PLANE left_p = {
-			-right_p.normal,
-			min
+		-right_p.normal,
+		min
 	};
-	PLANE top_p= {
+	PLANE top_p = {
 		worldUp,
-			max
+		max
 	};
 	PLANE bottom_p = {
 		-top_p.normal,
 		min
 	};
-	return FRUSTUM(far_p,near_p,right_p,left_p,top_p,bottom_p);
-}
-
-bool AABB::is_point_within(glm::vec3 point)
-{
-	return
-		(
-			point.x <= max.x && point.x >= min.x &&
-			point.y <= max.y && point.y >= min.y &&
-			point.z <= max.z && point.z >= min.z
-		);
+	return FRUSTUM(far_p, near_p, right_p, left_p, top_p, bottom_p);
 }
 
 bool AABB::is_sphere_within(glm::vec3 point,float r)
@@ -259,22 +186,3 @@ bool AABB::is_sphere_within(glm::vec3 point,float r)
 	return (sqaured_dist<=SQUARE(r));
 }
 
-bool AABB::check_aabb_intersection(const AABB& b1, const AABB& b2)
-{
-	return
-		(
-			abs(b1.origin.x-b2.origin.x) < b1.half_extent.x+b2.half_extent.x &&
-			abs(b1.origin.y-b2.origin.y) < b1.half_extent.y+b2.half_extent.y &&
-			abs(b1.origin.z-b2.origin.z) < b1.half_extent.z+b2.half_extent.z
-		);
-}
-
-bool AABB::check_aabb_intersection(const AABB& b2) const
-{
-	return
-		(
-			abs(origin.x - b2.origin.x) < half_extent.x + b2.half_extent.x &&
-			abs(origin.y - b2.origin.y) < half_extent.y + b2.half_extent.y &&
-			abs(origin.z - b2.origin.z) < half_extent.z + b2.half_extent.z
-		);
-}

@@ -1,4 +1,5 @@
 #define _CRTDBG_MAP_ALLOC
+#define AK_PRIVATE_GETTER_SETTER
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -14,26 +15,47 @@
 
 #include"Rendering/DeferredRendererFragmentBuffer.h"
 #include"Core/Editor/EditorUI.h"
-class strafe :public Behaviour
+
+class rotate :public Behaviour
 {
-	float acc = 0;
-	float offSet;
+
 public:
-	strafe(float off)
+	rotate()
 	{
-		offSet = off;
+		
 	}
 	void OnStart() override
 	{
 	}
 	void Update(float deltaTime) override
 	{
-		acc += deltaTime;
+
+		
 		Transform& t = GetComponent<Transform>();
+
 		Lights& l = GetComponent<Lights>();
 	
+		Quaternion rot = t.GetGlobalRotation();
 		glm::vec3 pose = t.GetGlobalPosition();
-		t.SetGlobalPosition(glm::vec3(pose.x, 1.0f*fabs(sin(offSet + acc)), pose.z));
+		float speed = 10;
+		t.SetGlobalRotation(rot*Quaternion(speed*deltaTime,speed*deltaTime,speed*deltaTime));
+
+		Mesh& m = GetComponent<Mesh>();
+		auto _min = m.GetMin();
+		auto _max = m.GetMax();
+		auto off_set_origin = (_min+_max)/2.0f;
+
+		glm::vec3 origin = t.transformMatrix()*glm::vec4(off_set_origin,1);
+		auto half_extent_s = glm::abs(_max-off_set_origin)*t.GetGlobalScale();
+
+		Debug::DrawRay(origin, t.forward()*half_extent_s.x, 1, glm::vec3(0, 0, 1));
+		Debug::DrawRay(origin, t.up() * half_extent_s.y, 1, glm::vec3(0, 1, 0));
+		Debug::DrawRay(origin, t.right() * half_extent_s.z, 1, glm::vec3(1, 0, 0));
+		float x = fabs(fabs(t.right().x*half_extent_s.x)+fabs(t.up().x*half_extent_s.y)+fabs(t.forward().x*half_extent_s.z));
+		float y = fabs(fabs(t.right().y*half_extent_s.x)+fabs(t.up().y*half_extent_s.y)+fabs(t.forward().y*half_extent_s.z));
+		float z = fabs(fabs(t.right().z*half_extent_s.x)+fabs(t.up().z*half_extent_s.y)+fabs(t.forward().z*half_extent_s.z));
+		glm::vec3 half_extent = glm::vec3(x,y,z);
+		Debug::DrawBB(origin-half_extent,origin+half_extent,glm::vec3(0,1,0));
 	}
 };
 void app(int num=200)
@@ -108,8 +130,7 @@ void app(int num=200)
 	planeShape.setColliderShape(physics::Shapes::PLANE, 30, 30);
 	rbdy2.setRigidBodyType(physics::RigidBodyType::STATIC, planeShape);
 
-
-
+	
 	Mesh& plane2M = scene.AddComponent<Mesh>(plane2);
 	plane2M.CreateMesh(generatePlaneVertices());
 	scene.AddComponent<Transform>(plane2);
@@ -118,7 +139,7 @@ void app(int num=200)
 	
 
 	
-	/*Material mat("GRIDS");
+	Material mat("GRIDS");
 	Entity pl = scene.CreateEntity();
 
 
@@ -126,7 +147,7 @@ void app(int num=200)
 	Mesh &plm=scene.AddComponent<Mesh>(pl);
 	scene.AddComponent<Material>(pl)= mat;
 	plm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
-	Material matS("SPHERE");
+	/*Material matS("SPHERE");
 	Entity sky = scene.CreateEntity();
 
 
@@ -140,8 +161,14 @@ void app(int num=200)
 	const int rt = (int)sqrt(num);
 	
 	std::vector<Entity> lightsVec;
-	std::vector<vert> cv = generateCubeVertices();
-	for (int i = 0; i < num; i++)
+	auto b = generateCubeVertices();
+	for (int i = 0; i < b.size(); i++)
+	{
+		b[i].pos.x *= 2.0f;
+		b[i].pos.x -= 4.0f;
+		
+	}
+	for (int i = 0; i < 1; i++)
 	{
 		float off = (float)(rt - 1);
 
@@ -162,11 +189,12 @@ void app(int num=200)
 		Mesh& bm = scene.AddComponent<Mesh>(box);
 		int curr = (i / rt) % 2;
 		//if (curr == 1)
-			bm.CreateMesh(cv);
+			bm.CreateMesh(b);
 		//if (curr == 0)
 			//bm.CreateMesh(generateSphereVertices(16, 32, 0.5));
 		Transform& t = scene.AddComponent<Transform>(box);
-		t.SetGlobalPosition(glm::vec3(2.0f * (i / rt) - off, 0.5f, (2.0f) * (i % rt) - off));
+		t.SetGlobalPosition(glm::vec3(0*2.0f * (i / rt) - off*0.0f, 0.5f, 0*(2.0f) * (i % rt) - off*0.0f));
+		t.SetGlobalScale(glm::vec3(5));
 
 		if (curr == 0)
 		{
@@ -176,7 +204,7 @@ void app(int num=200)
 		}
 		else
 			scene.AddComponent<Material>(box) = boxMat;
-
+		scene.AddComponent<BehaviourComponent>(box).setBehaviour<rotate>();
 		scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 	}
 	//Editor is experimental, do not use this

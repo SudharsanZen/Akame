@@ -3,10 +3,16 @@
 #include"Components/Rendering/Mesh.h"
 #include"Core/Scene.h"
 int OctTreeNode::maxLevel =5;
+int OctTreeNode::minLevel =0;
 void OctTreeNode::SetMaxLevel(int level)
 {
 	maxLevel = level;
 
+}
+
+AKAME_API void OctTreeNode::SetMinLevel(int level)
+{
+	minLevel=level;
 }
 
 void OctTreeNode::DebugDrawBB()
@@ -46,7 +52,7 @@ OctTreeNode::OctTreeNode(Scene& m_scene) :m_scene(m_scene), child(8, nullptr)
 	setChildToNull();
 	origin = glm::vec3(0);
 	halfExtent = glm::vec3(250);
-	const_cast<AABB*>(&aabb)->set_half_extents_origin(origin,halfExtent);
+	aabb.set_half_extents_origin(origin,halfExtent);
 
 }
 
@@ -57,7 +63,7 @@ OctTreeNode::OctTreeNode(Scene& m_scene, glm::vec3 origin, glm::vec3 halfExt, in
 	halfExtent = halfExt;
 	this->currLevel = currLevel;
 	setChildToNull();
-	const_cast<AABB*>(&aabb)->set_half_extents_origin(origin, halfExtent);
+	aabb.set_half_extents_origin(origin, halfExtent);
 }
 
 bool OctTreeNode::isPointInOctane(glm::vec3 point)
@@ -78,30 +84,52 @@ bool OctTreeNode::isPointInOctane(glm::vec3 min, glm::vec3 max, glm::vec3 point)
 
 EntityOBBDetails OctTreeNode::getEntityDetails(Entity const& eid)
 {
-	Mesh& mesh = m_scene.GetComponent<Mesh>(eid);
-	Transform& trans = m_scene.GetComponent<Transform>(eid);
+	Transform& t = m_scene.GetComponent<Transform>(eid);
+	Mesh& m = m_scene.GetComponent<Mesh>(eid);
 	EntityOBBDetails details;
-	details.min = mesh.GetMin();
-	details.max = mesh.GetMax();
-	details.transform = trans.transformMatrix();
-	details.position = trans.GetGlobalPosition();
+	details.transform = t.transformMatrix();
+	details.position = t.GetGlobalPosition();
+
+	//find AABB enclosing the OBB of entity 'eid'
+	auto _min = m.GetMin();
+	auto _max = m.GetMax();
+
+	auto off_set_origin = (_min + _max) / 2.0f;
+	glm::vec3 origin = t.transformMatrix() * glm::vec4(off_set_origin, 1);
+	
+	auto half_extent_s = glm::abs(_max - off_set_origin) * t.GetGlobalScale();
+	
+	auto _right = t.right();
+	auto _up = t.up();
+	auto _forward = t.forward();
+	
+	float x = fabs(fabs(_right.x * half_extent_s.x) + fabs(_up.x * half_extent_s.y) + fabs(_forward.x * half_extent_s.z));
+	float y = fabs(fabs(_right.y * half_extent_s.x) + fabs(_up.y * half_extent_s.y) + fabs(_forward.y * half_extent_s.z));
+	float z = fabs(fabs(_right.z * half_extent_s.x) + fabs(_up.z * half_extent_s.y) + fabs(_forward.z * half_extent_s.z));
+	
+	//set AABB enclosing the OBB of the entity
+	details.aabb.set_half_extents_origin(origin, glm::vec3(x, y, z));
+	
+	
+
 	details.eid = eid;
 	std::vector<glm::vec3> verts(8, glm::vec3(0));
-	verts[1] = details.transform * glm::vec4(details.max, 1);
-	verts[2] = details.transform * glm::vec4(details.max.x, details.min.y, details.max.z, 1);
-	verts[3] = details.transform * glm::vec4(details.min.x, details.min.y, details.max.z, 1);
-	verts[4] = details.transform * glm::vec4(details.min.x, details.max.y, details.max.z, 1);
-	verts[5] = details.transform * glm::vec4(details.min, 1);
-	verts[6] = details.transform * glm::vec4(details.min.x, details.max.y, details.min.z, 1);
-	verts[7] = details.transform * glm::vec4(details.max.x, details.max.y, details.min.z, 1);
-	verts[0] = details.transform * glm::vec4(details.max.x, details.min.y, details.min.z, 1);
+	verts[1] = details.transform * glm::vec4(_max, 1);
+	verts[2] = details.transform * glm::vec4(_max.x, _min.y, _max.z, 1);
+	verts[3] = details.transform * glm::vec4(_min.x, _min.y, _max.z, 1);
+	verts[4] = details.transform * glm::vec4(_min.x, _max.y, _max.z, 1);
+	verts[5] = details.transform * glm::vec4(_min, 1);
+	verts[6] = details.transform * glm::vec4(_min.x, _max.y, _min.z, 1);
+	verts[7] = details.transform * glm::vec4(_max.x, _max.y, _min.z, 1);
+	verts[0] = details.transform * glm::vec4(_max.x, _min.y, _min.z, 1);
 
-	details.OBB_verts = verts;
+	details.OBB_verts= std::move(verts);
 	return details;
 }
 
 bool OctTreeNode::isOBBInOctant(const EntityOBBDetails& details)
 {
+	Debug::DrawBB(details.aabb.min,details.aabb.max,glm::vec3(0,1,0));
 	for (int i = 0; i < 8; i++)
 		if (!isPointInOctane(details.OBB_verts[i]))
 			return false;
@@ -157,7 +185,7 @@ AABB OctTreeNode::GetOctaneAABB(Octant octant)
 	}
 	glm::vec3 n_origin = origin + (originOff / 2.0f);
 	glm::vec3 n_min = n_origin - (halfExtent / 2.0f);
-	glm::vec3 n_max = n_origin + halfExtent / 2.0f;
+	glm::vec3 n_max = n_origin + (halfExtent / 2.0f);
 
 	return AABB(n_min,n_max);
 }
@@ -354,6 +382,7 @@ bool OctTree::insert(const Entity& eid)
 		EntityOBBDetails details = head->getEntityDetails(eid);
 		int currLevel = head->currLevel;
 		int maxLevel = head->maxLevel;
+
 		OctTreeNode* parent = nullptr;
 		for (int i = 0; i < 8; i++)
 		{
@@ -366,14 +395,14 @@ bool OctTree::insert(const Entity& eid)
 
 		if (parent == nullptr)
 		{
-			float dist = -1.0f;
+			float dist = FLT_MAX;
 			Octant curr;
 			AABB currBB;
 			for (int i = 0; i < 8; i++)
 			{
-				glm::vec3 meshOrigin = (details.transform * glm::vec4((details.max + details.min) / 2.0f, 1));
+				glm::vec3 meshOrigin = details.aabb.origin;
 				float _dist = glm::length(bblist[i].origin - meshOrigin);
-				if (dist < -0.1f || dist>_dist)
+				if (dist>_dist)
 				{
 					curr = static_cast<Octant>(i);
 					dist = _dist;

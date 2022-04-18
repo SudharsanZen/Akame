@@ -57,6 +57,7 @@ private:
 	*/
 	AKAME_API void attachAllBuiltInSRP();
 public:
+	float time_taken;
 	std::shared_ptr<OctTree> static_tree;
 	//fill the drawList map with relevant entities to their respective shaders
 	AKAME_API bool EditorMode();

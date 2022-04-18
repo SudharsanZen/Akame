@@ -92,12 +92,16 @@ int main()
 	boxMat.setValue("ambientocclusion", 0.04f);
 	boxMat.setValue("normalStrength", 1.0f);
 	Entity box = scene.CreateEntity();
+	
 	Mesh& bm = scene.AddComponent<Mesh>(box);
+	
 		bm.CreateMesh(generateSphereVertices(16, 32, 0.5));
 		Transform &t=	scene.AddComponent<Transform>(box);
 		t.SetGlobalPosition(glm::vec3(0, 10, 0));
-	scene.AddComponent<Material>(box) = boxMat;
+	(scene.AddComponent<Material>(box) = boxMat).set_static(false);
 	scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
+	
+	/*
 	Material mat("GRIDS");
 	mat.set_cullable(false);
 	Entity pl = scene.CreateEntity();
@@ -117,9 +121,9 @@ int main()
 	scene.AddComponent<Transform>(sky);
 	Mesh& skym = scene.AddComponent<Mesh>(sky);
 	scene.AddComponent<Material>(sky) = matS;
-	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
+	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);*/
 	std::vector<Entity> lights;
-	int m = 0;
+	int m = 10;
 	int maxi = 20;
 	for (int i = 0; i < m; i++)
 	{

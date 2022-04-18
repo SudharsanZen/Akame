@@ -337,6 +337,9 @@ void Editor::DrawUI()
 		{
 			ImGui::Text("Time:%f ms", deltaTime * 1000.0f);
 			ImGui::Text("fps:%d", static_cast<int>(1.0f / (deltaTime+0.0000001f)));
+			ImGui::Text("Time Culling:%f ms",m_scene.renderSys->time_taken);
+			
+
 		}
 		ImGui::End();
 	ImGui::Render();

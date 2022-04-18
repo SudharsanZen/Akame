@@ -52,7 +52,7 @@ int main()
 	spMat.setValue("ambientocclusion", 1);
 	spMat.setValue("noMetallic", 0);
 	spMat.setValue("normalStrength", 1);
-
+	spMat.set_static(false);
 	
 
 
@@ -65,6 +65,7 @@ int main()
 	boxMat.setValue("noMetallic", 1);
 	boxMat.setValue("metallic", 0.04f);
 	boxMat.setValue("normalStrength", 1);
+	boxMat.set_static(false);
 
 	Material planeMat("DEFERRED");
 	planeMat.setTexture2D("material.diffuse", rootDir + "Media/pbr/rust/diffuse.png");
@@ -144,8 +145,8 @@ int main()
 
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.clearBuffer();
-		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
-		scene.Render();
+		//scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
+		//scene.Render();
 		editor.DrawUI();
 		scene.swapBuffers();
 

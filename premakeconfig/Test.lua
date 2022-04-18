@@ -34,11 +34,11 @@ project "Test"
 
 
         filter "configurations:Debug"
-            defines {"DEBUG"}
+            defines {"DEBUG","AK_DLL"}
             symbols "On"
 
         filter "configurations:Release"
-            defines{"NDEBUG"}
+            defines{"NDEBUG","AK_DLL"}
             optimize "On"
         filter { 'system:windows' }
             files { '%{wks.location}/resources.rc', "%{wks.location}/Assets/EngineAssets/AppIcons/**.ico"}

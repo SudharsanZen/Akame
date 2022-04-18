@@ -12,6 +12,7 @@
 #include"Utilities/joined_vector.h"
 #include"Animation/SkinnedRendererPipeline.h"
 #include"Components/EntityDescriptor.h"
+#include"misc/StopWatch.h"
 #include"Rendering/FrustumCuller.h"
 #pragma warning(push, 0)
 #include<glad/glad.h>
@@ -159,7 +160,7 @@ RenderingSystem::RenderingSystem(Scene& scene):static_tree(std::make_shared<OctT
 void RenderingSystem::Run(Camera& cam, unsigned int frameBuffer)
 {
 
-
+	time_taken = 0;
 	glBindFramebuffer(GL_FRAMEBUFFER,frameBuffer);
 	if (Mesh::needsUpdate)
 	{
@@ -179,10 +180,13 @@ void RenderingSystem::Run(Camera& cam, unsigned int frameBuffer)
 
 	updateUniformBuffer(cam);
 	FrustumCuller frustum_culler(cam);
-
+	StopWatch st;
+	st.start();
 	auto& static_rend_list = frustum_culler.get_culled(static_tree);
+	
 	get_sorted_render_list(static_drawList, static_rend_list);
-
+	st.end();
+	time_taken+=st.get_ms();
 	std::shared_ptr<ECS> E = ecs.lock();
 	std::shared_ptr<Shader> shader;
 
@@ -214,6 +218,7 @@ void RenderingSystem::Run(Camera& cam, unsigned int frameBuffer)
 
 	
 	ShaderManager::GetShader("LINES_DEBUG")->useShaderProgram();
+	//glEnable(GL_DEPTH_TEST);
 	glDisable(GL_DEPTH_TEST);
 	if(!editorMode)
 		Debug::updateBufferContent();
@@ -442,7 +447,11 @@ void RenderingSystem::RenderAllEntitiesPSSM(std::shared_ptr<Shader> shader, Came
 							FRUSTUM_SPLIT_NUM,light_sys->lambda,
 							light_sys->shadowDistance
 							);
+	StopWatch st;
+	st.start();
 	auto &_static_draw_list = pssm_culler.get_culled(static_tree);
+	st.end();
+	time_taken += st.get_ms();
 	for (auto const& shaderEntList : dynamic_drawList)
 	{
 

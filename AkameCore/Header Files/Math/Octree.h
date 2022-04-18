@@ -41,6 +41,7 @@ private:
 		glm::vec3 color;
 	};
 	static int maxLevel;
+	static int minLevel;
 	int currLevel;
 	OctTreeNode* parent;
 	std::vector<OctTreeNode*> child;
@@ -50,8 +51,9 @@ private:
 	Scene& m_scene;
 	std::set<EntityOBBDetails> entityList;
 public:
-	const AABB aabb;
+	AABB aabb;
 	AKAME_API static void SetMaxLevel(int level);
+	AKAME_API static void SetMinLevel(int level);
 	AKAME_API void DebugDrawBB();
 	AKAME_API void DebugDrawSPHERE();
 	AKAME_API void DebugDrawBB(Camera& camera);

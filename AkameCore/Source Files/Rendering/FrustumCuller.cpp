@@ -7,20 +7,12 @@ void FrustumCuller::_get_culled_in_node(OctTreeNode* node)
 	if (node)
 	{
 		AABB octant_aabb;
-		octant_aabb.max = node->halfExtent;
-		octant_aabb.min = -node->halfExtent;
-		octant_aabb.origin = node->origin;
-		octant_aabb.half_extent = node->halfExtent;
-		if (m_view_frustum.check_SPHERE_Intersection(octant_aabb))
+		octant_aabb.set_half_extents_origin(node->origin,node->halfExtent);
+		if (m_view_frustum.check_AABB_Intersection(octant_aabb))
 		{
 			for (auto& e_det : node->entityList)
 			{
-				AABB entity_obb;
-				entity_obb.max = e_det.max;
-				entity_obb.min = e_det.min;
-				entity_obb.origin = e_det.position;
-
-				if (m_view_frustum.check_SPHERE_Intersection(entity_obb))
+				if (m_view_frustum.check_AABB_Intersection(e_det.aabb))
 					_render_list.push_back(&(e_det.eid));
 			}
 
@@ -34,13 +26,14 @@ void FrustumCuller::_get_culled_in_node(OctTreeNode* node)
 
 FrustumCuller::FrustumCuller(Camera& m_cam) :m_cam(m_cam), m_view_frustum(m_cam)
 {
-
+	
 }
 
 std::vector<const Entity*>& FrustumCuller::get_culled(std::shared_ptr<OctTree> octree)
 {
-	m_view_frustum.DrawFrustum();
+
 	m_view_frustum.CalcFrustumParameters();
+	m_view_frustum.DrawFrustum();
 	m_octreee = octree;
 	_render_list.clear();
 	_render_list.reserve(octree->size());
@@ -66,7 +59,7 @@ void PSSMCuller::_get_culled_in_node(OctTreeNode* node)
 	{
 		for (auto& ent : node->entityList)
 			for (int j = 0; j < bound_list.size(); j++)
-				if (AABB(ent.min, ent.max).check_aabb_intersection(bound_list[j]))
+				if (ent.aabb.check_aabb_intersection(bound_list[j]))
 				{
 					_render_list.push_back(&(ent.eid));
 					break;
