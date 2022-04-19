@@ -47,7 +47,7 @@ public:
 		Lights& l = GetComponent<Lights>();
 		//Debug::DrawCircle(t.GetGlobalPosition(),worldUp,l.getPointLightRadius(),glm::vec3(1,0,0),20);
 		glm::vec3 pose = t.GetGlobalPosition();
-		t.SetGlobalPosition(glm::vec3(pose.x,pose.y, sin(offSet + acc) * 3.0f));
+		t.SetGlobalPosition(glm::vec3(pose.x,2, sin(offSet + acc) * 3.0f));
 	}
 };
 
@@ -65,21 +65,48 @@ int main()
 	Scene scene(window);
 	scene.cam.setFar(1000);
 
+
+
+	Material planeMat("DEFERRED");
+	planeMat.setTexture2D("material.diffuse", rootDir + "Media/pbr/rust/diffuse.png");
+	planeMat.setTexture2D("material.roughness", rootDir + "Media/pbr/rust/roughness.png");
+	planeMat.setTexture2D("material.normal", rootDir + "Media/pbr/rust/normal.png");
+	planeMat.setTexture2D("material.metallic", rootDir + "Media/pbr/rust/metallic.png");
+	planeMat.setValue("noAO", 1);
+	planeMat.setValue("noRoughness", 0);
+	planeMat.setValue("ambientocclusion", 1);
+	planeMat.setValue("noMetallic", 0);
+	planeMat.setValue("normalStrength", 1);
+
+	Entity plane = scene.CreateEntity();
+	scene.AddComponent<Mesh>(plane).CreateMesh(generatePlaneVertices());
+	Transform &planeT=scene.AddComponent<Transform>(plane);
+	planeT.SetGlobalScale(glm::vec3(500));
+	planeT.SetGlobalPosition(glm::vec3(0,-0.1f,0));
+	scene.AddComponent<Material>(plane)=planeMat;
 	Entity dir = scene.CreateEntity();
 	Lights d = Lights(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
-	d.setDirection(-90, 0, 0);
+	d.setDirection(-75, -30, 0);
 	d.setIntensity(1);
 	d.setPointLightConst(1, 10, 10);
 	scene.AddComponent<Lights>(dir)=d;
 	scene.AddComponent<Transform>(dir);
 	Model mLoader(scene);
-	Entity model=mLoader.LoadModelToScene("D:/Projects/GameEngine/Assets/sponza/sponza.fbx");
+	Entity model1=mLoader.LoadModelToScene(AssetManager::assetRootPath + "\\Media\\large-scale -models\\1.obj");
+	Entity sponza=mLoader.LoadModelToScene(AssetManager::assetRootPath+"\\Media\\Sponza-master\\Sponza\\Sponza.fbx");
+	Transform& sponzaT = scene.GetComponent<Transform>(sponza);
+	sponzaT.SetGlobalPosition(glm::vec3(32,0,-150));
 	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
-	Transform &T=scene.GetComponent<Transform>(model);
-	T.SetGlobalScale(glm::vec3(0.5));
-	T.SetGlobalPosition(glm::vec3(0,12,0));
+	Transform &T=scene.GetComponent<Transform>(model1);
+	T.SetGlobalScale(glm::vec3(2));
+	T.SetGlobalPosition(glm::vec3(0, -1.660f,0));
 
+	Entity model2 = mLoader.LoadModelToScene(rootDir + "Media/Erika/Catwalk Walk Turn 180 Tight.fbx");
+	//scene.AddComponent<BehaviourComponent>(bag).setBehaviour<rotateBehv>();
+	Transform& aT = scene.GetComponent<Transform>(model2);
+	aT.SetGlobalScale(glm::vec3(0.04f));
+	aT.SetGlobalPosition(glm::vec3(25, 0, 4));
 	
 	
 	Material boxMat("DEFERRED");
@@ -101,7 +128,7 @@ int main()
 	(scene.AddComponent<Material>(box) = boxMat).set_static(false);
 	scene.GetComponent<Transform>(box).SetGlobalRotation(Quaternion(0, 0, 0));
 	
-	/*
+	
 	Material mat("GRIDS");
 	mat.set_cullable(false);
 	Entity pl = scene.CreateEntity();
@@ -121,7 +148,7 @@ int main()
 	scene.AddComponent<Transform>(sky);
 	Mesh& skym = scene.AddComponent<Mesh>(sky);
 	scene.AddComponent<Material>(sky) = matS;
-	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);*/
+	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	std::vector<Entity> lights;
 	int m = 10;
 	int maxi = 20;

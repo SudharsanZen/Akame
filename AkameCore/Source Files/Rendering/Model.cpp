@@ -410,7 +410,8 @@ Entity Model::LoadModelToScene(std::string modelPath)
 		ENGINE_CORE_ERROR(errstr);
 		return Entity(-1,-1);
 	}
-	mDir = modelPath.substr(0, modelPath.find_last_of('/'))+"/";
+	std::filesystem::path model_path(modelPath);
+	mDir = model_path.parent_path().string()+"/";
 	Entity parent=mCurrScene.CreateEntity();
 	mCurrScene.AddComponent<Transform>(parent);
 

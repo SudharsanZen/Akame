@@ -197,7 +197,8 @@ void RenderingSystem::Run(Camera& cam, unsigned int frameBuffer)
 	lsys->dir_sMap.bind();
 	lsys->dir_sMap.clearBuffer();
 	lsys->BindDirectionalLightShadowMap(shader,cam);
-		RenderAllEntitiesPSSM(shader,cam);
+		//RenderAllEntitiesPSSM(shader,cam);
+		RenderAllMesh(shader,cam);
 	//directional shadow maps for skeletal meshes
 	shader = ShaderManager::GetShader("SK_DIR_SHADOW");
 	lsys->BindDirectionalLightShadowMap(shader, cam);
