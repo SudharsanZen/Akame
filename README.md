@@ -9,9 +9,9 @@ It was originally made for the development of Akame Engine, which is a game engi
 **NOTE:** Akame is still in it's very early-stage and currently only supports Windows, many of the functionalities may change in the future drastically!
 
 ## Quick Start
-Visual Studio 2019 is recommended.
 
-Make sure Python and CMake version 3.22.0 or higher is installed and is added to the System PATH before proceeding!
+Visual Studio 2019 or above is recommended.
+**IMPORTANT:** Make sure Python and CMake version 3.22.0 or higher is installed and is added to the System PATH before proceeding!
 
 <ins>**1.Downloading The Repository:**</ins>
 
@@ -20,7 +20,7 @@ First Start by cloning the repository with `git clone --recursive https://github
 <ins>**2.Configure And Build The Project with Release Configuration:**</ins>
 1. Run the [generate_projects.bat](https://github.com/SudharsanZen/Akame/blob/main/generate_projects.bat), this just generates all the dependency, samples and framework projects and integrates all the projects that are needed into one solution (Akame.sln).
 2. Open Akame.sln and build solution with Release-Config.
-
+3. Try building and running the [sample projects](https://github.com/SudharsanZen/Akame/tree/main/Samples).
 
 # Akame
 
@@ -84,7 +84,7 @@ and now we are ready to create 'Entities' (directional light and sphere)
 
 **Now here come's the part of creating a mesh (Sphere).
 for an Entity to become a renderable mesh, we need to add three components to it:**
-  * **Material**  : This component is an interface to select the desired Shaders Defined in the [ShaderConf.XML](https://github.com/SudharsanZen/Akame/blob/main/Assets/Shaders/ShaderConf.XML)and set material-properties\Shader-Uniforms to be used.
+  * **Material**  : This component is an interface to select the desired Shaders registered in the [ShaderConf.XML](https://github.com/SudharsanZen/Akame/blob/main/Assets/Shaders/ShaderConf.XML)and set material-properties\Shader-Uniforms to be used.
   * **Transform** : This component is used to describe and modify the position and orientation of an Entity.
   * **Mesh**      : This component is used to transfer mesh/vertex data to the rendering System.
 
