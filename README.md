@@ -10,7 +10,7 @@ It was originally made for the development of Akame Engine, which is a game engi
 
 ## Quick Start
 
-**Visual Studio 2019 or above is recommended.**
+**Visual Studio 2019 (only)**
 
 **IMPORTANT:** Make sure Python and CMake version 3.22.0 or higher is installed and is added to the System PATH before proceeding!
 
