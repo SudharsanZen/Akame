@@ -23,7 +23,7 @@ private:
 	std::weak_ptr<SkeletalMeshRenderingSystem> animSys;
 	ComponentArray<Transform>* transformArray;
 	ComponentArray<Mesh>* meshArray;
-	using DrawList = std::unordered_map<std::string, std::map<unsigned long long, std::vector<const Entity*>>>;
+	using DrawList = std::unordered_map<std::string, std::unordered_map<unsigned long long, std::vector<const Entity*>>>;
 	//map that holds list of entities under a particular shader
 	DrawList dynamic_drawList;
 	DrawList static_drawList;

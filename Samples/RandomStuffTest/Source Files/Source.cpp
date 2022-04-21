@@ -74,8 +74,8 @@ public:
 		(
 			AK_ID_COMPX(pose)
 			AK_ID_COMPX(angle)
-			AK_ID_COMPX(fov)
-			AK_ID_COMPX(far)
+			AK_ID(fov)
+			AK_ID(far)
 		)
 	DummyCamController(Camera& m_cam) :m_cam(m_cam)
 	{
@@ -98,7 +98,12 @@ public:
 
 
 };
-
+template<typename T>
+class shared_ptr
+{
+	T* _raw_ptr;
+	int count=0;
+};
 
 
 

@@ -33,7 +33,7 @@ std::vector<const Entity*>& FrustumCuller::get_culled(std::shared_ptr<OctTree> o
 {
 
 	m_view_frustum.CalcFrustumParameters();
-	m_view_frustum.DrawFrustum();
+	//m_view_frustum.DrawFrustum();
 	m_octreee = octree;
 	_render_list.clear();
 	_render_list.reserve(octree->size());

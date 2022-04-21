@@ -181,9 +181,9 @@ void RenderingSystem::Run(Camera& cam, unsigned int frameBuffer)
 	updateUniformBuffer(cam);
 	FrustumCuller frustum_culler(cam);
 	StopWatch st;
-	st.start();
+
 	auto& static_rend_list = frustum_culler.get_culled(static_tree);
-	
+	st.start();
 	get_sorted_render_list(static_drawList, static_rend_list);
 	st.end();
 	time_taken+=st.get_ms();
@@ -237,11 +237,11 @@ void RenderingSystem::emptyDrawList()
 	//initialize the draw list with empty vectors for each shader name
 	for (auto const& pair : ShaderManager::m_shaderList)
 	{
-		dynamic_drawList[pair.first] = std::map<unsigned long long ,std::vector<const Entity*>>();
+		dynamic_drawList[pair.first] = std::unordered_map<unsigned long long ,std::vector<const Entity*>>();
 	}
 	for (auto const& pair : ShaderManager::m_shaderList)
 	{
-		drawList[pair.first] = std::map<unsigned long long, std::vector<const Entity*>>();
+		drawList[pair.first] = std::unordered_map<unsigned long long, std::vector<const Entity*>>();
 	}
 
 }
@@ -250,7 +250,7 @@ void RenderingSystem::emptyStaticDrawList()
 {
 	for (auto const& pair : ShaderManager::m_shaderList)
 	{
-		static_drawList[pair.first] = std::map<unsigned long long, std::vector<const Entity*>>();
+		static_drawList[pair.first] = std::unordered_map<unsigned long long, std::vector<const Entity*>>();
 	}
 }
 
