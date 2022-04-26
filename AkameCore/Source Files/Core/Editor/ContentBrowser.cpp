@@ -14,6 +14,8 @@
 #pragma warning(pop)
 long long int folderIconID;
 long long int unknownfileIconID;
+#define EXPOSE_OS_INTERFACE
+#include"Core/OS/OS_Interface.h"
 std::string getNameFromPath(std::string path)
 {
    

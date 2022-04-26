@@ -8,6 +8,7 @@
 #include<locale>
 #include<codecvt>
 #include<iostream>
+#include"core/Log/Log.h"
 #ifdef _WIN32
 #include<Windows.h>
 #endif // _WIN32
@@ -72,4 +73,96 @@ std::string OpenFileDialog(const char* filter, const char* initdir)
 	}
 #endif // _WIN32
 	return "";
+}
+
+DirectoryWatcher::DirectoryWatcher(const char* dir):m_dir(dir)
+{
+	m_watch_dir = true;
+	m_dir_changed = false;
+#ifdef _WIN32
+	for (int i = 0; i < sizeof(m_watcher_handle) / sizeof(HANDLE); i++)
+	{
+		m_watcher_handle[i] = NULL;
+	}
+#endif
+}
+
+bool DirectoryWatcher::is_watching()
+{
+	return m_watch_dir;
+}
+
+void  DirectoryWatcher::reset_state()
+{
+	m_dir_changed = false;
+}
+
+bool DirectoryWatcher::directory_changed()
+{
+	return m_dir_changed;
+}
+
+void DirectoryWatcher::terminate()
+{
+	m_watch_dir = false;
+#ifdef _WIN32
+	AK_ASSERT(m_watcher_handle[1] != NULL && "termation handle is null, can't signal event!");
+	if (!SetEvent(m_watcher_handle[0]))
+		ENGINE_CORE_CRITICAL("DirectoryWatcher::SetEvent Failed!");
+#endif
+}
+
+void DirectoryWatcher::operator()()
+{
+#ifdef _WIN32
+	m_watcher_handle[0] = CreateEvent(NULL, TRUE, FALSE, NULL);
+	m_watcher_handle[1] = FindFirstChangeNotificationA(m_dir, false, FILE_NOTIFY_CHANGE_FILE_NAME);
+	m_watcher_handle[2] = FindFirstChangeNotificationA(m_dir, false, FILE_NOTIFY_CHANGE_DIR_NAME);
+
+
+
+
+
+	AK_ASSERT(m_watcher_handle[0] != NULL && "shome shing wong! terminate event handle is NULL!");
+	AK_ASSERT(m_watcher_handle[1] != INVALID_HANDLE_VALUE && "shome shing wong! file name change notification handle is invalid!");
+	AK_ASSERT(m_watcher_handle[2] != INVALID_HANDLE_VALUE && "shome shing wong! directory name change notification handle is invalid!");
+
+	while (m_watch_dir)
+	{
+
+		std::cout << "waiting for notification...\n";
+		DWORD status = WaitForMultipleObjects(3, m_watcher_handle, FALSE, INFINITE);
+
+		switch (status)
+		{
+			case WAIT_OBJECT_0:
+				std::cout << "closing file watcher";
+				return;
+				break;
+			case WAIT_OBJECT_0 + 1:
+
+				m_dir_changed = true;
+				if (FindNextChangeNotification(m_watcher_handle[1]) == FALSE)
+				{
+					ExitProcess(GetLastError());
+				}
+				break;
+
+			case WAIT_OBJECT_0 + 2:
+
+				m_dir_changed = true;
+				if (FindNextChangeNotification(m_watcher_handle[2]) == FALSE)
+				{
+					printf("\n ERROR: FindNextChangeNotification function failed.\n");
+					ExitProcess(GetLastError());
+				}
+				break;
+			default:
+				ENGINE_CORE_ERROR("DirectoryWatcher::invalid status!");
+				return;
+
+		}
+
+	}
+#endif
 }
