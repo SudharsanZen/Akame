@@ -7,6 +7,7 @@
 #include"Core\Scene.h"
 #include"Core\Window.h"
 #include"Core/Editor/ContentBrowsing/ContentBrowser.h"
+#include"Core/Editor/ProjectGenerator.h"
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
 class Scene;
@@ -31,6 +32,7 @@ class Editor
 {
 
 private:
+
 	std::string iniName;
 	//float lx=-125, ly=45, lz=0;
 	float lx=-90, ly=0, lz=0;
@@ -38,7 +40,7 @@ private:
 	bool drawLights=false;
 
 	ImGuiIO& io;
-	
+	ProjectGenerator m_proj_gen;
 	Scene &m_scene;
 	//initializes imGui
 	AKAME_API void initImGui();

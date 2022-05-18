@@ -1,4 +1,8 @@
+#define AK_PRIVATE_GETTER_SETTER
 #include"Core/Window.h"
+#include"Core/ScriptExporter.h"
+#include"Scripting/ScriptableSystem.h"
+#include"Components/Behaviour/ScriptComponent.h"
 #include "Core/Editor/PropertiesWindow/InspectorWindow.h"
 #include"Core/Editor/SceneHierarchyWindow/SceneHierarchyWindow.h"
 #include "Core\Editor\EditorUI.h"
@@ -25,6 +29,14 @@
 #include<GLFW\glfw3.h>
 #pragma warning(pop)
 
+template<typename _comp_type>
+void InspectorWindow::AddComponentHelper(Entity selected)
+{
+    if (!selected.signature->test(m_scene.GetBitPose<_comp_type>()))
+        m_scene.AddComponent<_comp_type>(selected);
+    else
+        ENGINE_CORE_WARN("Component already present!");
+}
 glm::vec3 Mat3ToEuler(glm::mat3 rot)
 {
     //look http://eecs.qmul.ac.uk/~gslabaugh/publications/euler.pdf for how this works
@@ -298,6 +310,17 @@ void InspectorWindow::DrawMaterialComponent(Entity selected)
         }
     }
 }
+AKAME_API void InspectorWindow::DrawScriptableComponent(Entity selected)
+{
+    if (!selected.signature->test(m_scene.GetBitPose<ScriptComponent>()))
+        return;
+    if (ImGui::CollapsingHeader("ScriptableComponent", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        std::shared_ptr<Behaviour> bh = m_scene.GetComponent<ScriptComponent>(selected).behaviour;
+        ReflectionUIHandler uiHandle;
+        bh->_draw_data(uiHandle);
+    }
+}
 InspectorWindow::InspectorWindow(Scene& m_scene, std::shared_ptr<ECS> ecs) :m_scene(m_scene)
 {
     m_defaultDiff=AssetManager::createTexture(AssetManager::assetRootPath + "EngineAssets/defaultdiff.jpg");
@@ -319,6 +342,10 @@ void InspectorWindow::Draw(std::shared_ptr<SceneHierarchyWindow> sceneHierarchy)
     {
         if (sceneHierarchy->selected.size() > 0)
         {
+            if (ImGui::Button("RELOAD SCRIPTS"))
+            {
+                m_scene.scriptSys->reload = true;
+            }
 
             Entity selected = *(sceneHierarchy->selected.begin());
 
@@ -332,11 +359,34 @@ void InspectorWindow::Draw(std::shared_ptr<SceneHierarchyWindow> sceneHierarchy)
                 DrawScriptComponent(selected);
 
                 DrawMaterialComponent(selected);
+                DrawScriptableComponent(selected);
             }
 
-        }
-        
+#define ADD_COMPONENT(x) if(ImGui::MenuItem(#x))m_scene.AddComponent<##x>(selected);
+            if (ImGui::BeginMenu("Add Component"))
+            {
+                ADD_COMPONENT(Transform);
+                ADD_COMPONENT(Lights);
+                bool needs_update;
+                for (auto s_name : ScriptObjectFactory::get_name_list_vec())
+                {
+                    if (ImGui::MenuItem(s_name.c_str()))
+                    {
+                        needs_update = true;
+                        auto &sc_comp=m_scene.AddComponent<ScriptComponent>(selected);
+                        sc_comp.comp_name = s_name;
 
+                    }
+                }
+                if (needs_update)
+                    m_scene.scriptSys->update_new_additions();
+            }
+           
+            ImGui::EndMenu();
+          
+           
+        }
+       
     }
     ImGui::End();
 }

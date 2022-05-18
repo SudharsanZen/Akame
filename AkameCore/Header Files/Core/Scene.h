@@ -45,6 +45,7 @@ class ECS;
 
 #include "Core/Editor/EntityDescriptionSystem.h"
 #include "AkameCore.h"
+#include"Scripting/ScriptableSystem.h"
 #include"Components/Behaviour/BehaviourComponent.h"
 class SkeletalMeshRenderingSystem;
 class Window;
@@ -74,6 +75,7 @@ private:
 	std::shared_ptr<EntityDescriptionSystem> EDS;
 	std::shared_ptr<SkeletalMeshRenderingSystem> animSys;
 	std::shared_ptr<AnimationControllerSystem> animContSys;
+	std::shared_ptr<ScriptableSystem> scriptSys;
 	glm::vec4 color;
 	Window &window;
 
@@ -105,6 +107,11 @@ public:
 	std::shared_ptr<ECS> GetECS()
 	{
 		return ecs;
+	}
+	template<typename _ty>
+	ComponentBitPosition GetBitPose()
+	{
+		return ecs->GetComponentBitPose<_ty>();
 	}
 #endif
 	AKAME_API void groupEntWithShader();

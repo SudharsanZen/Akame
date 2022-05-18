@@ -85,6 +85,7 @@ int main()
 	scene.GetComponent<Transform>(sphere).SetGlobalRotation(Quaternion(0, 0, 0));
 	scene.vsyncOn(true);
 	Material planeMat("DEFERRED");
+
 	planeMat.setTexture2D("material.diffuse", rootDir + "Media/pbr/rust/diffuse.png");
 	planeMat.setTexture2D("material.roughness", rootDir + "Media/pbr/rust/roughness.png");
 	planeMat.setTexture2D("material.normal", rootDir + "Media/pbr/rust/normal.png");
@@ -114,7 +115,7 @@ int main()
 	Lights& d = scene.AddComponent<Lights>(dir);
 	d.setType(LIGHT::DIRECTIONAL);
 	d.setColor(1, 1, 1);
-	d.setDirection(1, -1, 0);
+	d.setDirection(-90, 0, 0);
 	d.setIntensity(1);
 	d.setPointLightConst(1, 2, 10);
 	d.ambientLigting(0.1f, 0.1f, 0.1f);
@@ -132,7 +133,7 @@ int main()
 	
 	Material mat("GRIDS");
 	Entity pl = scene.CreateEntity();
-
+	mat.set_static(false);
 	
 	scene.AddComponent<Transform>(pl);
 	Mesh& plm = scene.AddComponent<Mesh>(pl);
@@ -140,6 +141,7 @@ int main()
 	plm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	
     Material matS("SPHERE");
+	matS.set_static(false);
 	Entity sky = scene.CreateEntity();
 	
 
@@ -152,7 +154,7 @@ int main()
 
 
 	//Editor is experimental, do not use this
-	//Editor e(window, scene);
+	Editor e(scene);
 
 	float acc = 0;
 	scene.OnStart();
@@ -177,9 +179,9 @@ int main()
 		acc += scene.getDeltaTime() / 3;
 		flyCam(scene.cam, scene.getDeltaTime());
 		scene.clearBuffer();
-		scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
-		scene.Render();
-		//e.DrawUI();
+		//scene.cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());
+		//scene.Render();
+		e.DrawUI();
 
 		scene.swapBuffers();
 

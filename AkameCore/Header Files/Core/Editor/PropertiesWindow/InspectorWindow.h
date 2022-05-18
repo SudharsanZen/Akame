@@ -22,11 +22,13 @@ class InspectorWindow:public AkameWindowBase
 	ComponentBitPosition m_BehaviourComp_pose;
 	ComponentBitPosition m_Lights_pose;
 	ComponentBitPosition m_Material_pose;
-	
+	template<typename _comp_name>
+	void AddComponentHelper(Entity selected);
 	AKAME_API void DrawTransformComponent(Entity selected);
 	AKAME_API void DrawLightComponent(Entity selected);
 	AKAME_API void DrawScriptComponent(Entity selected);
 	AKAME_API void DrawMaterialComponent(Entity selected);
+	AKAME_API void DrawScriptableComponent(Entity selected);
 public:
 	AKAME_API InspectorWindow(Scene& m_scene, std::shared_ptr<ECS> ecs);
 

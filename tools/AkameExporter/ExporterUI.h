@@ -15,6 +15,7 @@
 #include"Core/Editor/EditorUI.h"
 #include"FileOpenSaveDialogBox.h"
 
+
 struct ImGuiIO;
 typedef int ImGuiTreeNodeFlags;
 class Scene;
@@ -32,6 +33,7 @@ class Exporter
 {
 
 private:
+
 	std::string exportPath;
 	std::string importPath;
 	std::string iniName;

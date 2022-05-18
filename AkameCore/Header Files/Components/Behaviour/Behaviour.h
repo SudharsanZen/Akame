@@ -70,9 +70,10 @@ class Behaviour
 {
 	std::weak_ptr<ECS> ecs;
 	friend class BehaviourComponent;
-	virtual void _serialize_data(ReflectionMeta& r) {  }
-	virtual void _draw_data(ReflectionUIHandler& r) { }
+	virtual void _serialize_data(ReflectionMeta& r) {};
+	virtual void _draw_data(ReflectionUIHandler& r) {};
 	friend class InspectorWindow;
+	friend class ScriptComponent;
 protected:
 
 	Entity entityID;
@@ -83,8 +84,8 @@ public:
 	
 	
 	virtual ~Behaviour() = default;
-	virtual void OnStart() = 0;
-	virtual void Update(float deltaTime) = 0;
+	virtual void OnStart() {};
+	virtual void Update(float deltaTime) {};
 
 
 	template<typename T>

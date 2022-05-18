@@ -190,8 +190,16 @@ void Editor::Menu()
 	{
 		if (ImGui::BeginMenu("Scriptable Project"))
 		{
-			ImGui::MenuItem("Create New");
-			ImGui::MenuItem("Set Current");
+			if (ImGui::MenuItem("Create New"))
+				m_proj_gen.show_window();
+			if (ImGui::MenuItem("Set Current"))
+			{
+				std::string init_dir = AssetManager::assetRootPath + "../";
+				init_dir += "Assets\\Scripts";
+				std::string proj_dir=SelectFolderDialog(init_dir.c_str());
+				m_scene.scriptSys->set_watch_directory(proj_dir);
+
+			}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMenu();
@@ -222,7 +230,7 @@ void Editor::createNewScriptProject()
 
 }
 
-Editor::Editor(Scene &m_scene):io(initGui()),m_scene(m_scene)
+Editor::Editor(Scene &m_scene):io(initGui()),m_scene(m_scene),m_proj_gen(m_scene)
 {
 	
 	std::weak_ptr<GLFWwindow> context = m_scene.window.mainWindow;
@@ -236,6 +244,7 @@ Editor::Editor(Scene &m_scene):io(initGui()),m_scene(m_scene)
 	m_ViewPortWindow[0]->windowName = "Scene##0";
 	m_ViewPortWindow.push_back(std::make_shared<ViewPortWindow>(m_scene,io));
 	m_ViewPortWindow[1]->windowName = "Scene##1";
+	m_proj_gen.hide_window();
 	deltaTime	= 0.0f;
 	lastTime	= 0.0f;
 	currTime	= 0.0f;
@@ -257,7 +266,7 @@ void Editor::DrawUI()
 	
 	Menu();
 	ImGui::DockSpaceOverViewport();
-
+	m_proj_gen.Draw();
 	ImGui::ShowDemoWindow();
 	m_LightsAndShadows->Draw();
 	m_SceneHierarchy->Draw();
@@ -268,6 +277,7 @@ void Editor::DrawUI()
 		m_scene.EDS->updateMap();
 		m_scene.lightSys->Update();
 		m_scene.behaviourSys->Update(deltaTime);
+		m_scene.scriptSys->Update(deltaTime);
 		m_scene.animSys->Run();
 		m_scene.animContSys->update(deltaTime);
 		m_scene.transformManager->UpdateTransforms();

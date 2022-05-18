@@ -18,7 +18,8 @@
 
 #include"Math/Octree.h"
 #include"Rendering/FrustumCuller.h"
-
+#include<windows.h>
+#include"Core/ScriptExporter.h"
 class strafeRandom:public Behaviour
 {
 
@@ -68,21 +69,21 @@ class DummyCamController:public Behaviour
 	glm::vec3 pose;
 	glm::vec3 angle;
 	float fov;
-	float far;
+	float far_z;
 public:
 	AK_SHOW_IN_INSPECTOR
 		(
 			AK_ID_COMPX(pose)
 			AK_ID_COMPX(angle)
 			AK_ID(fov)
-			AK_ID(far)
+			AK_ID(far_z)
 		)
 	DummyCamController(Camera& m_cam) :m_cam(m_cam)
 	{
 		pose = glm::vec3(0);
 		angle = glm::vec3(0);
 		fov = 11;
-		far = 1000;
+		far_z = 1000;
 	}
 
 	void Update(float detlatime) override
@@ -90,7 +91,7 @@ public:
 		m_cam.setCameraPosition(pose);
 		m_cam.setCameraRotation(angle);
 		m_cam.setFieldOfView(fov);
-		m_cam.setFar(far);
+		m_cam.setFar(far_z);
 	}
 	void OnStart()override
 	{
@@ -154,6 +155,7 @@ int main()
 	*level=5;
 	OctTreeNode::SetMaxLevel(5);
 	OctTreeNode::SetMinLevel(-4);
+	
 	for (int i = 0; i < m*m; i++)
 	{
 
@@ -197,9 +199,15 @@ int main()
 	
 	*/
 
-	
-	
+	std::string dll_loc = AssetManager::assetRootPath + "Scripts/test/bin/Release/x86_64/Samples/Scriptables.dll";
+	LoadLibraryA(dll_loc.c_str());
+	Behaviour* ptr=nullptr;
+	ScriptObjectFactory::create_ptr("Rotate",&ptr);
+	ScriptObjectFactory::free_all();
 
+	
+	for (auto str : ScriptObjectFactory::get_name_list_vec())
+		std::cout <<"\n"<<str << "\n";
 	//Editor is experimental, do not use this
 	Editor edt(m_scene);
 	m_scene.OnStart();
@@ -215,10 +223,6 @@ int main()
 	beh.setBehaviour<DummyCamController>(m_cam);
 	while (!window.closeWindow())
 	{
-
-
-
-
 		deltaTime = m_scene.getDeltaTime();
 		//flyCam(m_scene.cam,m_scene.getDeltaTime());
 		//m_scene.m_cam.setAspectRation((float)window.getBufferWidth() / (float)window.getBufferHeight());

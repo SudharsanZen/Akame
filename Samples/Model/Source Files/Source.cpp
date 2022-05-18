@@ -141,6 +141,8 @@ int main()
 	plm.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
 	Material matS("SPHERE");
 	matS.set_cullable(false);
+
+	/*
 	Entity sky = scene.CreateEntity();
 
 
@@ -149,6 +151,7 @@ int main()
 	Mesh& skym = scene.AddComponent<Mesh>(sky);
 	scene.AddComponent<Material>(sky) = matS;
 	skym.CreateMesh(BasicShapes::quadVert, BasicShapes::quadIndices);
+	*/
 	std::vector<Entity> lights;
 	int m = 10;
 	int maxi = 20;

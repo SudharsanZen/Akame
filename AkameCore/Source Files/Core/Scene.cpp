@@ -15,6 +15,7 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include"Core/SceneEntityListSystem.h"
+#include"Components/Behaviour/ScriptComponent.h"
 #pragma warning(pop)
 std::vector<std::shared_ptr<RenderingSystem>> listScene;
 
@@ -114,6 +115,7 @@ void Scene::InitEcs()
 	ecs->RegisterComponent<EntityDescriptor>();
 	ecs->RegisterComponent<SkeletalMesh>();
 	ecs->RegisterComponent<AnimationController>();
+	ecs->RegisterComponent<ScriptComponent>();
 
 	//create system signature
 	Signature renderSysSig;
@@ -146,6 +148,9 @@ void Scene::InitEcs()
 	Signature animCont;
 	animCont.set(ecs->GetComponentBitPose<AnimationController>());
 
+	Signature scriptSig;
+	scriptSig.set(ecs->GetComponentBitPose<ScriptComponent>());
+
 	//register system and it's signature
 	renderSys=ecs->RegisterSystem<RenderingSystem>(*this);
 	e_list_system=ecs->RegisterSystem<SceneEntityListSystem>();
@@ -156,6 +161,7 @@ void Scene::InitEcs()
 	EDS = ecs->RegisterSystem<EntityDescriptionSystem>();
 	animSys = ecs->RegisterSystem<SkeletalMeshRenderingSystem>();
 	animContSys = ecs->RegisterSystem<AnimationControllerSystem>();
+	scriptSys = ecs->RegisterSystem<ScriptableSystem>();
 
 	//setting some member attributes of the systems
 	behaviourSys->ecs = ecs;
@@ -167,6 +173,7 @@ void Scene::InitEcs()
 	transformManager->ecs = ecs;
 	animSys->ecs = ecs;
 	animContSys->ecs = ecs;
+	scriptSys->ecs = ecs;
 	EDS->ecs = ecs;
 
 	//registering system signature
@@ -179,6 +186,7 @@ void Scene::InitEcs()
 	ecs->SetSystemSignature<SceneTransformManager>(transformSig);
 	ecs->SetSystemSignature<SkeletalMeshRenderingSystem>(animSig);
 	ecs->SetSystemSignature<AnimationControllerSystem>(animCont);
+	ecs->SetSystemSignature<ScriptableSystem>(scriptSig);
 
 
 }
@@ -232,6 +240,7 @@ void Scene::release()
 	physicsSys.reset();
 	ecs.reset();
 	behaviourSys.reset();
+	scriptSys.reset();
 	renderSys.reset();
 	lightSys.reset();
 	EDS.reset();
@@ -267,6 +276,7 @@ void Scene::Render()
 		EDS->updateMap();
 		lightSys->Update();
 		behaviourSys->Update(deltaTime);
+		scriptSys->Update(deltaTime);
 		animSys->Run();
 		animContSys->update(deltaTime);
 		transformManager->UpdateTransforms();

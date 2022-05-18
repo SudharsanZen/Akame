@@ -349,6 +349,10 @@
     <ClInclude Include="Header Files\Math\Shapes.h" />
     <ClInclude Include="Header Files\Rendering\FrustumCuller.h" />
     <ClInclude Include="Header Files\Utilities\joined_vector.h" />
+    <ClInclude Include="Header Files\Core\Editor\ProjectGenerator.h" />
+    <ClInclude Include="Header Files\Core\ScriptExporter.h" />
+    <ClInclude Include="Header Files\Components\Behaviour\ScriptComponent.h" />
+    <ClInclude Include="Header Files\Scripting\ScriptableSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source Files\Animation\AnimationControllerSystem.cpp">
@@ -549,5 +553,9 @@
     <ClCompile Include="Source Files\Math\Octree.cpp" />
     <ClCompile Include="Source Files\Math\Shapes.cpp" />
     <ClCompile Include="Source Files\Rendering\FrustumCuller.cpp" />
+    <ClCompile Include="Source Files\Core\Editor\ProjectGenerator.cpp" />
+    <ClCompile Include="Source Files\Core\ScriptExporter.cpp" />
+    <ClCompile Include="Source Files\Components\ScriptComponent.cpp" />
+    <ClCompile Include="Source Files\Scripting\ScriptableSystem.cpp" />
   </ItemGroup>
 </Project>
