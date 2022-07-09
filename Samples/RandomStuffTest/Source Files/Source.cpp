@@ -202,12 +202,10 @@ int main()
 	std::string dll_loc = AssetManager::assetRootPath + "Scripts/test/bin/Release/x86_64/Samples/Scriptables.dll";
 	LoadLibraryA(dll_loc.c_str());
 	Behaviour* ptr=nullptr;
-	ScriptObjectFactory::create_ptr("Rotate",&ptr);
-	ScriptObjectFactory::free_all();
+
 
 	
-	for (auto str : ScriptObjectFactory::get_name_list_vec())
-		std::cout <<"\n"<<str << "\n";
+
 	//Editor is experimental, do not use this
 	Editor edt(m_scene);
 	m_scene.OnStart();

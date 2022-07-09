@@ -7,7 +7,7 @@
 #include<Core\Reflection\ReflectionUIHandler.h>
 #include<json/single_include/nlohmann/json.hpp>
 
-class  SceneDeserializer;
+class SceneDeserializer;
 class ReflectionMeta
 {
 	friend class ModelExporter;
